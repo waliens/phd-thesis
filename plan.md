@@ -14,6 +14,7 @@
     2. Specificities of images and datasets in digital pathology 
         1. Whole-slide images
         2. Image acquisition
+            * Patient  
             * Biopsy and smearing
             * Staining
             * Scanning
