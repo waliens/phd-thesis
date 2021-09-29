@@ -30,7 +30,7 @@ def make_target(include):
 
 
 def latexmk_cline(name, target):
-    return ["latexmk", "-cd", "-gg", "-f", "-interaction=batchmode", "-jobname={}".format(name), "-pdf", target]
+    return ["latexmk", "-cd", "-f", "-interaction=batchmode", "-jobname={}".format(name), "-pdf", target]
 
 
 def latexmk_clean():
