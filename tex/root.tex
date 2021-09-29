@@ -1,0 +1,58 @@
+\documentclass[paper=a4,fonstsize=11pt]{book}
+
+\usepackage{ifthen}
+
+
+\newboolean{compall}
+\setboolean{compall}{true}
+
+
+\begin{document}
+
+\ifthenelse{\boolean{compall}}{
+Front page
+Acknowledgement
+Table of content	
+}{}
+
+\ifthenelse{\not \isundefined{\chapintro} \or \boolean{compall}}{
+Chapitre 1 -- Introduction
+}{}
+
+\ifthenelse{\not \isundefined{\chapbackml} \or \boolean{compall}}{
+Chapitre 2 -- Background machine learning
+}{}
+
+\ifthenelse{\not \isundefined{\chapbackdp} \or \boolean{compall}}{
+Chapitre 3 -- Background digital pathology
+}{}
+
+\ifthenelse{\not \isundefined{\chapcomp} \or \boolean{compall}}{
+Chapitre 4 -- Comparison
+}{}
+
+\ifthenelse{\not \isundefined{\chapmtask} \or \boolean{compall}}{
+Chapitre 5 -- Multi-task
+}{}
+
+\ifthenelse{\not \isundefined{\chapsdist} \or \boolean{compall}}{
+Chapitre 6 -- Self-distillation
+}{}
+
+\ifthenelse{\not \isundefined{\chapbiaflows} \or \boolean{compall}}{
+Chapitre 7 -- Biaflows
+}{}
+
+\ifthenelse{\not \isundefined{\chapappendix} \or \boolean{compall}}{
+Chapitre 8 -- Appenbix	
+}{}
+
+\ifthenelse{\boolean{compall}}{
+Table of figure
+Bibliography	
+}{}
+
+
+
+
+\end{document}
