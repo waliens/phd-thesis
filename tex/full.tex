@@ -2,22 +2,34 @@
 \pagestyle{empty}
 
 \include{frontback/frontpage}
+
+\pagenumbering{roman}
+\pagestyle{plain}
+
+\makeatletter\@openrightfalse
+
 \include{frontback/jury}
-\include{frontback/acknowledgement}
-
-\newpage
-
+\include{frontback/acknowledgments}
 \tableofcontents
+
+\@openrighttrue\makeatother 
 
 \cleardoublepage
 \pagenumbering{arabic}
+\pagestyle{thesisSimple}
 
 % CHAPTERS
 \include{chapters/ch1_intro}
+
+\part{Background}
 \include{chapters/ch2_backml}
 \include{chapters/ch3_backdp}
+
+\part{Transfer learning and digital pathology}
 \include{chapters/ch4_comp}
 \include{chapters/ch5_mtask}
+
+\part{Image segmentation}
 \include{chapters/ch6_sdist}
 \include{chapters/ch7_biaflows}
 

@@ -276,14 +276,12 @@
 {\centering
  \interlinepenalty \@M
  \normalfont
- \rule{1\linewidth}{5pt}
- \Huge \rmfamily\bfseries #2 \normalfont
- \rule{1\linewidth}{1pt}
- \par \vspace{20pt}
- \ifnum \c@secnumdepth >-2\relax
+  \ifnum \c@secnumdepth >-2\relax
    \huge\sffamily\mdseries \partname\nobreakspace\thepart
    \par
  \fi
+ \par \vspace{20pt}
+ \Huge \rmfamily\bfseries #2 \normalfont
 }%
 \@endpart}
 
@@ -311,7 +309,7 @@
 		\ifnum \c@secnumdepth >\m@ne
 		\if@mainmatter
 \colorbox{chap-bg}{%
-\begin{minipage}{.1\textwidth}
+\begin{minipage}{.15\textwidth}
     {\color{secondary}\scalebox{6}{\thechapter}}
 \end{minipage}% This must go next to `\end{minipage}`
 \begin{minipage}{.9\textwidth}
@@ -341,16 +339,15 @@
 \colorbox{chap-bg}{%
 \begin{minipage}{.99\linewidth}
     \centering
-    \rule[2em]{0.8\linewidth}{.5pt}
-    \par\nobreak \vspace{-2em}
-    \chapterinbetweenskip
-	\interlinepenalty\@M
 	\chapterfont #1
+    \chapterinbetweenskip
+    \interlinepenalty\@M
+    \par\nobreak
+    \rule[2em]{0.8\linewidth}{.5pt}
 	\chapterbelowskip
 \end{minipage}
 }
 	}
-	\thispagestyle{\chapter@p@gestyle}
 }
 
 
@@ -453,6 +450,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 
 \newcommand{\blank@p@gestyle}{empty}
 \newcommand{\chapter@p@gestyle}{empty}
+
 \NewDocumentCommand{\blankpagestyle}{ m }{%
 	\ClassWarning{\classname}{\string\blankpagestyle\space is
 	obsolete,\MessageBreak use \string\setblankpagestyle \space  
