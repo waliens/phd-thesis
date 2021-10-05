@@ -1,8 +1,9 @@
 % 
 \pagestyle{empty}
 
-\input{frontpage.tex}
-\input{acknowledgement.tex}
+\include{frontback/frontpage}
+\include{frontback/jury}
+\include{frontback/acknowledgement}
 
 \newpage
 
@@ -12,17 +13,17 @@
 \pagenumbering{arabic}
 
 % CHAPTERS
-\input{ch1_intro.tex}
-\input{ch2_backml.tex}
-\input{ch3_backdp.tex}
-\input{ch4_comp.tex}
-\input{ch5_mtask.tex}
-\input{ch6_sdist.tex}
-\input{ch7_biaflows.tex}
+\include{chapters/ch1_intro}
+\include{chapters/ch2_backml}
+\include{chapters/ch3_backdp}
+\include{chapters/ch4_comp}
+\include{chapters/ch5_mtask}
+\include{chapters/ch6_sdist}
+\include{chapters/ch7_biaflows}
 
 % APPENDIX
 \appendix
-\input{ch8_appendix.tex}
+\include{chapters/ch8_appendix}
 
 \newpage
 
