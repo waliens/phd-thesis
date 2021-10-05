@@ -1,10 +1,17 @@
+% 
+\pagestyle{empty}
 
 \input{frontpage.tex}
-
 \input{acknowledgement.tex}
+
+\newpage
 
 \tableofcontents
 
+\cleardoublepage
+\pagenumbering{arabic}
+
+% CHAPTERS
 \input{ch1_intro.tex}
 \input{ch2_backml.tex}
 \input{ch3_backdp.tex}
@@ -13,8 +20,11 @@
 \input{ch6_sdist.tex}
 \input{ch7_biaflows.tex}
 
+% APPENDIX
 \appendix
 \input{ch8_appendix.tex}
+
+\newpage
 
 \listoffigures
 \listoftables
