@@ -29,19 +29,36 @@ def make_target(include):
         return tmp_target_filename
 
 
-def latexmk_cline(name, target):
-    return ["latexmk", "-cd", "-f", "-interaction=batchmode", "-jobname={}".format(name), "-pdf", target]
-
+def latexmk_cline(name, target, gg=False):
+    cmd = ["latexmk", "-cd", "-f", "-interaction=batchmode", "-jobname={}".format(name), "-pdf", target]
+    if gg:
+        cmd.insert(3, "-gg")
+    return cmd
 
 def latexmk_clean():
     return ["latexmk", "-c"]
+
+
+def grep(filename, regex):
+    with open(filename, "r", encoding="utf8") as file:
+        line = "a"
+        matching_lines = list()
+        while len(line) > 0:
+            try:
+                line = file.readline()
+                if re.match(regex, line) is not None:                
+                    matching_lines.append(line.strip())
+            except UnicodeError:
+                pass
+        return matching_lines
 
 
 def compile(argv):
     parser = ArgumentParser()
     parser.add_argument("chap", nargs="?", default=None)
     parser.add_argument("-c", "--clean", action="store_true", dest="clean")
-    parser.set_defaults(clean=False)
+    parser.add_argument("-gg", action="store_true", dest="gg")
+    parser.set_defaults(clean=False, gg=False)
     args, others = parser.parse_known_args(argv)
 
     if args.chap is None:
@@ -61,7 +78,13 @@ def compile(argv):
 
     target_fname = make_target(target_file)
     try:
-        proc = subprocess.run(latexmk_cline(name=jobname, target=target_fname))
+        proc = subprocess.run(latexmk_cline(name=jobname, target=target_fname, gg=args.gg))
+
+        if proc.returncode != 0:
+            print("==== ERROR SUMMARY ====")
+            for error in grep("{}.log".format(jobname), re.compile(r"^! ")):
+                print(error)
+            print("=======================")
 
         if proc.returncode == 0 and args.clean:
             print("-- Clean up... ", end="")
