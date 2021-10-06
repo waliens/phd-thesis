@@ -266,23 +266,26 @@
 % PART STYLE
 %----------------------------------------------------------------------------------------
 \def\@part[#1]#2{%
-\ifnum \c@secnumdepth >-2\relax
-  \refstepcounter{part}%
-  \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
-\else
-  \addcontentsline{toc}{part}{#1}%
-\fi
-\markboth{}{}%
-{\centering
- \interlinepenalty \@M
- \normalfont
   \ifnum \c@secnumdepth >-2\relax
-   \huge\sffamily\mdseries \partname\nobreakspace\thepart
-   \par
- \fi
- \par \vspace{20pt}
- \Huge \rmfamily\bfseries #2 \normalfont
-}%
+    \refstepcounter{part}%
+    \addcontentsline{toc}{part}{\thepart\hspace{1em}#1}%
+  \else
+    \addcontentsline{toc}{part}{#1}%
+  \fi
+  \markboth{}{}%
+  {
+    \thispagestyle{\part@p@gestyle}
+    \centering
+    \interlinepenalty \@M
+    \normalfont
+    \ifnum \c@secnumdepth >-2\relax
+      \color{secondary}
+      \huge\sffamily\mdseries \partname\nobreakspace\thepart
+      \par
+    \fi
+    \par \vspace{20pt}
+    \begin{center} \Huge \rmfamily\bfseries #2 \normalfont \end{center}
+  }%
 \@endpart}
 
 %----------------------------------------------------------------------------------------
@@ -449,6 +452,7 @@ KOMA-script documentation for details.}]{fancyhdr}
 
 \newcommand{\blank@p@gestyle}{empty}
 \newcommand{\chapter@p@gestyle}{empty}
+\newcommand{\part@p@gestyle}{empty}
 
 \NewDocumentCommand{\blankpagestyle}{ m }{%
   \ClassWarning{\classname}{\string\blankpagestyle\space is
