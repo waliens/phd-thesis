@@ -41,37 +41,37 @@
 % Addchap provides unnumbered chapters with an entry in the table of contents 
 %as well as an updated header
 \ProvideDocumentCommand{\addchap}{ s o m }{%
-	\chapter*{#3}%
-	\markboth{}{}%
-	\IfBooleanTF{#1}{%
-	}{%
-		\IfNoValueTF{#2}{%
-			\addchaptertocentry{#3}%
-			\markboth{\MakeMarkcase{#3}}{\MakeMarkcase{#3}}%
-		}{%
-			\addchaptertocentry{#2}%
-			\markboth{\MakeMarkcase{#2}}{\MakeMarkcase{#2}}%
-		}%
-	}%
+  \chapter*{#3}%
+  \markboth{}{}%
+  \IfBooleanTF{#1}{%
+  }{%
+    \IfNoValueTF{#2}{%
+      \addchaptertocentry{#3}%
+      \markboth{\MakeMarkcase{#3}}{\MakeMarkcase{#3}}%
+    }{%
+      \addchaptertocentry{#2}%
+      \markboth{\MakeMarkcase{#2}}{\MakeMarkcase{#2}}%
+    }%
+  }%
 }%
 
 \ProvideDocumentCommand{\addsec}{ s o m }{%
-	\section*{#3}%
-	\markright{}%
-	\IfBooleanTF{#1}{%
-	}{%
-		\IfNoValueTF{#2}{%
-			\addcontentsline{toc}{section}{#3}%
-			\markright{\MakeMarkcase{#3}}%%
-		}{%
-			\addcontentsline{toc}{section}{#2}%
-			\markright{\MakeMarkcase{#2}}%
-		}%
-	}%
+  \section*{#3}%
+  \markright{}%
+  \IfBooleanTF{#1}{%
+  }{%
+    \IfNoValueTF{#2}{%
+      \addcontentsline{toc}{section}{#3}%
+      \markright{\MakeMarkcase{#3}}%%
+    }{%
+      \addcontentsline{toc}{section}{#2}%
+      \markright{\MakeMarkcase{#2}}%
+    }%
+  }%
 }%
 
 %----------------------------------------------------------------------------------------
-%	CLASS OPTIONS
+% CLASS OPTIONS
 %----------------------------------------------------------------------------------------
 
 \ifbool{parskip}{\RequirePackage{parskip}} % If the parskip option is passed to 
@@ -80,19 +80,19 @@
 
 \ifbool{listtoc}{% If the liststotoc option has been passed to the class, add 
 %the lists to the table of contents
-	\patchcmd{\listoftables}{\@starttoc{lot}}{%
-		\addchaptertocentry{\listtablename}\@starttoc{lot}%
-	}{}{}%
-	\patchcmd{\listoffigures}{\@starttoc{lof}}{%
-		\addchaptertocentry{\listfigurename}\@starttoc{lof}%
-	}{}{}%
+  \patchcmd{\listoftables}{\@starttoc{lot}}{%
+    \addchaptertocentry{\listtablename}\@starttoc{lot}%
+  }{}{}%
+  \patchcmd{\listoffigures}{\@starttoc{lof}}{%
+    \addchaptertocentry{\listfigurename}\@starttoc{lof}%
+  }{}{}%
 }
 
 \ifbool{toctoc}{% If the toctotoc options has been passed to the class, add the 
 %table of contents to the table of contents
-	\patchcmd{\tableofcontents}{\@starttoc{toc}%
+  \patchcmd{\tableofcontents}{\@starttoc{toc}%
 }{%
-	\addchaptertocentry{\contentsname}\@starttoc{toc}}{}{}%
+  \addchaptertocentry{\contentsname}\@starttoc{toc}}{}{}%
 }
 
 \patchcmd{\tableofcontents}{\MakeUppercase}{\MakeMarkcase}{}{}
@@ -106,29 +106,29 @@
 %reduced to single spacing. This option is only useful, if the spacing of the 
 %document has been changed to onehalfspacing or doublespacing.
 \ifbool{nolistspace}{
-	\patchcmd{\listoffigures}{%
-		\@starttoc{lof}
-	}{%
-		\begingroup%
-		\singlespace\@starttoc{lof}\endgroup%
-	}{}{}%
-	\patchcmd{\listoftables}{%
-		\@starttoc{lot}
-	}{%
-		\begingroup%
-		\singlespace\@starttoc{lot}\endgroup%
-	}{}{}%
-	\patchcmd{\tableofcontents}{%
-		\@starttoc{toc}
-	}{%
-		\begingroup%
-		\singlespace\@starttoc{toc}\endgroup%
-	}{}{}%
+  \patchcmd{\listoffigures}{%
+    \@starttoc{lof}
+  }{%
+    \begingroup%
+    \singlespace\@starttoc{lof}\endgroup%
+  }{}{}%
+  \patchcmd{\listoftables}{%
+    \@starttoc{lot}
+  }{%
+    \begingroup%
+    \singlespace\@starttoc{lot}\endgroup%
+  }{}{}%
+  \patchcmd{\tableofcontents}{%
+    \@starttoc{toc}
+  }{%
+    \begingroup%
+    \singlespace\@starttoc{toc}\endgroup%
+  }{}{}%
 }{}
 
 
 %----------------------------------------------------------------------------------------
-%	REQUIRED PACKAGES
+% REQUIRED PACKAGES
 %----------------------------------------------------------------------------------------
 
 \RequirePackage{babel} % Required for automatically changing names of document 
@@ -181,7 +181,7 @@
 \usetikzlibrary{matrix,chains,positioning,decorations.pathreplacing,arrows}
 
 %----------------------------------------------------------------------------------------
-%	DEFINE CUSTOM THESIS INFORMATION COMMANDS
+% DEFINE CUSTOM THESIS INFORMATION COMMANDS
 %----------------------------------------------------------------------------------------
 
 \NewDocumentCommand{\thesistitle} { o m }{%
@@ -203,9 +203,9 @@
 
 \newcommand{\checktoopen}{% New command to move content to the next page which 
 %prints to the next odd page if twosided mode is active  
-	\if@openright\cleardoublepage\else\clearpage\fi
-	\ifdef{\phantomsection}{\phantomsection}{}% The \phantomsection command is 
-	%necessary for hyperref to jump to the correct page
+  \if@openright\cleardoublepage\else\clearpage\fi
+  \ifdef{\phantomsection}{\phantomsection}{}% The \phantomsection command is 
+  %necessary for hyperref to jump to the correct page
 }
 
 \NewDocumentCommand{\bhrule}{}{\typeout{--------------------}}
@@ -219,12 +219,12 @@
 \setcounter{tocdepth}{3} % The depth to which the document sections are printed 
 %to the table of contents
 \ProvideDocumentCommand{\addchaptertocentry}{ m }{%
-	\addcontentsline{toc}{chapter}{#1}%
+  \addcontentsline{toc}{chapter}{#1}%
 }
 
 
 %----------------------------------------------------------------------------------------
-%	COLORS
+% COLORS
 %----------------------------------------------------------------------------------------
 
 % color palette
@@ -263,7 +263,7 @@
 
 
 %----------------------------------------------------------------------------------------
-%	PART STYLE
+% PART STYLE
 %----------------------------------------------------------------------------------------
 \def\@part[#1]#2{%
 \ifnum \c@secnumdepth >-2\relax
@@ -286,7 +286,7 @@
 \@endpart}
 
 %----------------------------------------------------------------------------------------
-%	CHAPTER STYLE
+% CHAPTER STYLE
 %----------------------------------------------------------------------------------------
 
 
@@ -297,17 +297,17 @@
 % Simple interface for the user  to customize the chapter titles 
 \ProvideDocumentCommand{\abovechapterskip}{}{\vspace*{20pt}}
 \ProvideDocumentCommand{\chapterbelowskip}{}{\vspace*{50pt}}
-\ProvideDocumentCommand{\chapterinbetweenskip}{}{\vspace*{0pt}}
+\ProvideDocumentCommand{\chapterinbetweenskip}{}{\vspace*{5pt}}
 \ProvideDocumentCommand{\autodot}{}{}
 \ProvideDocumentCommand{\mdtChapapp}{}{}
 \ProvideDocumentCommand{\chapteralign}{}{\raggedright}
 \ProvideDocumentCommand{\chapterfont}{}{\Huge\rmfamily\bfseries}
 \ProvideDocumentCommand{\chapterprefixfont}{}{\large\sffamily\mdseries}
 \DeclareDocumentCommand{\@makechapterhead}{ m }{
-	\abovechapterskip
-	{\parindent \z@ \chapteralign \normalfont
-		\ifnum \c@secnumdepth >\m@ne
-		\if@mainmatter
+  \abovechapterskip
+  {\parindent \z@ \chapteralign \normalfont
+    \ifnum \c@secnumdepth >\m@ne
+    \if@mainmatter
 \colorbox{chap-bg}{%
 \begin{minipage}{.15\textwidth}
     {\color{secondary}\scalebox{6}{\thechapter}}
@@ -315,44 +315,43 @@
 \begin{minipage}{.9\textwidth}
     \centering
     \chapterprefixfont  \@chapapp \space \par\nobreak %\vspace{-2em}
-    \rule[2em]{0.8\linewidth}{.5pt}
+    \rule[2em]{\linewidth}{.5pt}
     \par\nobreak \vspace{-2em}
-    \chapterinbetweenskip
-	\interlinepenalty\@M
-	\chapterfont #1
+  \interlinepenalty\@M
+  \chapterfont #1
 \end{minipage}
 }
-    	\fi
-		\fi
+      \fi
+    \fi
 
-	\chapterbelowskip
-	}
-	\thispagestyle{\chapter@p@gestyle}
+  \chapterbelowskip
+  }
+  \thispagestyle{\chapter@p@gestyle}
 }
 \def\@makeschapterhead#1{
-	\abovechapterskip
-	{\parindent \z@ \chapteralign
-%		\normalfont
-%		\interlinepenalty\@M
-%		\chapterfont  #1 \par\nobreak
-%		\chapterbelowskip
+  \abovechapterskip
+  {\parindent \z@ \chapteralign
+%   \normalfont
+%   \interlinepenalty\@M
+%   \chapterfont  #1 \par\nobreak
+%   \chapterbelowskip
 \colorbox{chap-bg}{%
-\begin{minipage}{.99\linewidth}
-    \centering
-	\chapterfont #1
-    \chapterinbetweenskip
-    \interlinepenalty\@M
-    \par\nobreak
-    \rule[2em]{0.8\linewidth}{.5pt}
-	\chapterbelowskip
+\begin{minipage}{\linewidth}
+  \centering
+  \chapterfont #1
+  \chapterinbetweenskip
+  \interlinepenalty\@M
+  \par\nobreak
+  \rule[2em]{\linewidth}{.5pt}
+  \chapterbelowskip
 \end{minipage}
 }
-	}
+  }
 }
 
 
 %----------------------------------------------------------------------------------------
-%	FOREWORD
+% FOREWORD
 %----------------------------------------------------------------------------------------
 % https://texdoc.org/serve/tcolorbox.pdf/0
 % #1: tcolorbox options
@@ -385,7 +384,7 @@
 
 
 %----------------------------------------------------------------------------------------
-%	NUMBERING
+% NUMBERING
 %----------------------------------------------------------------------------------------
 %\numberwithin{theorem}{chapter}
 %\numberwithin{property}{chapter}
@@ -397,20 +396,20 @@
 
 
 %----------------------------------------------------------------------------------------
-%	MARGINS
+% MARGINS
 %----------------------------------------------------------------------------------------
 
 \RequirePackage{geometry}
 \geometry{
-	headheight=4ex,
-	includehead,
-	includefoot
+  headheight=4ex,
+  includehead,
+  includefoot
 }
 
 \raggedbottom
 
 %----------------------------------------------------------------------------------------
-%	PENALTIES
+% PENALTIES
 %----------------------------------------------------------------------------------------
 
 \doublehyphendemerits=10000 % No consecutive line hyphens
@@ -420,31 +419,31 @@
 \interfootnotelinepenalty=9999 % Almost never break footnotes
 
 %----------------------------------------------------------------------------------------
-%	HEADERS AND FOOTERS
+% HEADERS AND FOOTERS
 %----------------------------------------------------------------------------------------
 
 \RequirePackage[markcase=used]{scrlayer-scrpage}
 \providepairofpagestyles{thesisSimple}{%
-	\clearpairofpagestyles%
-	\automark[chapter]{chapter}
-	\ihead{\headmark}% Inner header
-	\ohead[\pagemark]{\pagemark}% Outer header
+  \clearpairofpagestyles%
+  \automark[chapter]{chapter}
+  \ihead{\headmark}% Inner header
+  \ohead[\pagemark]{\pagemark}% Outer header
 }
 \ifoot{}% Inner footer
 \ofoot{}% Outer footer
 \pagestyle{thesisSimple}
 \providepairofpagestyles[thesisSimple]{thesis}{%
-	\automark*[section]{}%
+  \automark*[section]{}%
 }
 \providepairofpagestyles[thesisSimple]{review}{%
-	\ofoot[\shorttitle/\authorname]{\shorttitle/\authorname}
-	\ifoot[\today]{\today}
+  \ofoot[\shorttitle/\authorname]{\shorttitle/\authorname}
+  \ifoot[\today]{\today}
 }
 \pagestyle{thesis}
 \ifbool{headsepline}{\KOMAoption{headsepline}{true}}{}
 \PreventPackageFromLoading[\ClassError{\classname}{Package `fancyhdr' is
 incompatible\MessageBreak with this class}{The pagesyles are defined 
-	using package `scrlayer-scrpage', please consult the\MessageBreak 
+  using package `scrlayer-scrpage', please consult the\MessageBreak 
 KOMA-script documentation for details.}]{fancyhdr}
 
 
@@ -452,9 +451,9 @@ KOMA-script documentation for details.}]{fancyhdr}
 \newcommand{\chapter@p@gestyle}{empty}
 
 \NewDocumentCommand{\blankpagestyle}{ m }{%
-	\ClassWarning{\classname}{\string\blankpagestyle\space is
-	obsolete,\MessageBreak use \string\setblankpagestyle \space  
-	instead}\renewcommand{\blank@p@gestyle}{}{#1}
+  \ClassWarning{\classname}{\string\blankpagestyle\space is
+  obsolete,\MessageBreak use \string\setblankpagestyle \space  
+  instead}\renewcommand{\blank@p@gestyle}{}{#1}
 }
 \NewDocumentCommand{\setblankpagestyle}{ m 
 }{\renewcommand{\blank@p@gestyle}{#1}}
@@ -463,15 +462,15 @@ KOMA-script documentation for details.}]{fancyhdr}
 
 \DeclareDocumentCommand\cleardoublepage{}{\clearpage\if@twoside 
 \ifodd\c@page\else
-	\hbox{}
-	\thispagestyle{\blank@p@gestyle}
-	\newpage
-	\if@twocolumn\hbox{}\newpage\fi\fi\fi%
+  \hbox{}
+  \thispagestyle{\blank@p@gestyle}
+  \newpage
+  \if@twocolumn\hbox{}\newpage\fi\fi\fi%
 }
 
 
 %----------------------------------------------------------------------------------------
-%	ABSTRACT PAGE DESIGN
+% ABSTRACT PAGE DESIGN
 %----------------------------------------------------------------------------------------
 
 \DeclareDocumentCommand{\abstractauthorfont}{}{}
@@ -481,72 +480,72 @@ KOMA-script documentation for details.}]{fancyhdr}
 \providecaptionname{german,ngerman,austrian,naustrian}{\byname}{von}
 \providecaptionname{american,australian,british,canadian,english,newzealand,UKenglish,USenglish}{\byname}{by}
 \ifbool{consistentlayout}{
-	\DeclareDocumentEnvironment{abstract}{ O{} }{%
-		\addchap*{\abstractname}%
-		{\chapteralign\normalsize\abstractauthorfont \authorname \par}% Author 
-		%name
-		\vspace{\baselineskip}
-		{\chapteralign\parbox{.7\linewidth}{\chapteralign\normalsize\itshape\abstracttitlefont\@title}\par}%
-		% Thesis title
-		\bigskip\noindent\ignorespaces
-	}%
-	{}%end alt-abstract
+  \DeclareDocumentEnvironment{abstract}{ O{} }{%
+    \addchap*{\abstractname}%
+    {\chapteralign\normalsize\abstractauthorfont \authorname \par}% Author 
+    %name
+    \vspace{\baselineskip}
+    {\chapteralign\parbox{.7\linewidth}{\chapteralign\normalsize\itshape\abstracttitlefont\@title}\par}%
+    % Thesis title
+    \bigskip\noindent\ignorespaces
+  }%
+  {}%end alt-abstract
 }{%
-	\DeclareDocumentEnvironment{abstract}{ O{\null\vfill} }{
-		\checktoopen
-		\tttypeout{\abstractname}
-		#1%added to be able to have abstract more than one page long
-		\thispagestyle{plain}
-		\begin{center}
-			{\normalsize \MakeUppercase{\univname} \par}% University name in 
-			%capitals
-			\bigskip
-			{\huge\textit{\abstractname} \par}
-			\bigskip
-			{\normalsize \facname \par}% Faculty name
-			{\normalsize \deptname \par}% Department name
-			\bigskip
-			{\normalsize \degreename\par}% Degree name
-			\bigskip
-			{\normalsize\bfseries \@title \par}% Thesis title
-			\medskip
-			{\normalsize \byname{} \authorname \par}% Author name
-			\bigskip
-		\end{center}
-	}
-	{
-		\vfill\null
-	}
+  \DeclareDocumentEnvironment{abstract}{ O{\null\vfill} }{
+    \checktoopen
+    \tttypeout{\abstractname}
+    #1%added to be able to have abstract more than one page long
+    \thispagestyle{plain}
+    \begin{center}
+      {\normalsize \MakeUppercase{\univname} \par}% University name in 
+      %capitals
+      \bigskip
+      {\huge\textit{\abstractname} \par}
+      \bigskip
+      {\normalsize \facname \par}% Faculty name
+      {\normalsize \deptname \par}% Department name
+      \bigskip
+      {\normalsize \degreename\par}% Degree name
+      \bigskip
+      {\normalsize\bfseries \@title \par}% Thesis title
+      \medskip
+      {\normalsize \byname{} \authorname \par}% Author name
+      \bigskip
+    \end{center}
+  }
+  {
+    \vfill\null
+  }
 }
 
 \DeclareDocumentEnvironment{extraAbstract}{ O{\null\vfill} }{
-	\checktoopen
-	\tttypeout{\abstractname}
-	#1%added to be able to have abstract more than one page long
-	\thispagestyle{empty}
-	\begin{center}
-		{\normalsize \MakeUppercase{\univname} \par}% University name in 
-		%capitals
-		\bigskip
-		{\huge\textit{\abstractname} \par}
-		\bigskip
-		{\normalsize \facname \par}% Faculty name
-		{\normalsize \deptname \par}% Department name
-		\bigskip
-		{\normalsize \degreename\par}% Degree name
-		\bigskip
-		{\normalsize\bfseries \@title \par}% Thesis title
-		\medskip
-		{\normalsize \byname{} \authorname \par}% Author name
-		\bigskip
-	\end{center}
+  \checktoopen
+  \tttypeout{\abstractname}
+  #1%added to be able to have abstract more than one page long
+  \thispagestyle{empty}
+  \begin{center}
+    {\normalsize \MakeUppercase{\univname} \par}% University name in 
+    %capitals
+    \bigskip
+    {\huge\textit{\abstractname} \par}
+    \bigskip
+    {\normalsize \facname \par}% Faculty name
+    {\normalsize \deptname \par}% Department name
+    \bigskip
+    {\normalsize \degreename\par}% Degree name
+    \bigskip
+    {\normalsize\bfseries \@title \par}% Thesis title
+    \medskip
+    {\normalsize \byname{} \authorname \par}% Author name
+    \bigskip
+  \end{center}
 }
 {
-	\vfill\null
+  \vfill\null
 }
 
 %----------------------------------------------------------------------------------------
-%	ACKNOWLEDGEMENTS PAGE DESIGN
+% ACKNOWLEDGEMENTS PAGE DESIGN
 %----------------------------------------------------------------------------------------
 
 \usepackage{xcolor}
@@ -560,25 +559,25 @@ KOMA-script documentation for details.}]{fancyhdr}
  % Acknowledgement text for Germanic countries
 
 \ifbool{consistentlayout}{
-	\DeclareDocumentEnvironment{acknowledgements}{}{%
-		\tttypeout{\acknowledgementname}
-		\addchap*{\acknowledgementname}
-	}
+  \DeclareDocumentEnvironment{acknowledgements}{}{%
+    \tttypeout{\acknowledgementname}
+    \addchap*{\acknowledgementname}
+  }
 }
 {
-	\DeclareDocumentEnvironment{acknowledgements}{}{%
-		\checktoopen
-		\tttypeout{\acknowledgementname}
-		\thispagestyle{plain}
-		\begin{center}{\huge\textit{\acknowledgementname}\par}\end{center}
-	}
-	{
-		\vfil\vfil\null
-	}
+  \DeclareDocumentEnvironment{acknowledgements}{}{%
+    \checktoopen
+    \tttypeout{\acknowledgementname}
+    \thispagestyle{plain}
+    \begin{center}{\huge\textit{\acknowledgementname}\par}\end{center}
+  }
+  {
+    \vfil\vfil\null
+  }
 }
 
 %----------------------------------------------------------------------------------------
-%	DECLARATION PAGE DESIGN
+% DECLARATION PAGE DESIGN
 %----------------------------------------------------------------------------------------
 
 \newcommand{\authorshipname}{Declaration of Authorship}
@@ -588,45 +587,45 @@ KOMA-script documentation for details.}]{fancyhdr}
  Erkl\"arung} % Declaration of Authorship text for Germanic countries
 
 \ifbool{consistentlayout}{
-	\DeclareDocumentEnvironment{declaration}{}{
-		\addchap*{\authorshipname}
-		}{}%
+  \DeclareDocumentEnvironment{declaration}{}{
+    \addchap*{\authorshipname}
+    }{}%
 }{
-	\DeclareDocumentEnvironment{declaration}{}{
-		\checktoopen
-		\tttypeout{\authorshipname}
-		\thispagestyle{plain}
-		\null\vfil
-		{\noindent\huge\bfseries\authorshipname\par\vspace{10pt}}
-	}{}
+  \DeclareDocumentEnvironment{declaration}{}{
+    \checktoopen
+    \tttypeout{\authorshipname}
+    \thispagestyle{plain}
+    \null\vfil
+    {\noindent\huge\bfseries\authorshipname\par\vspace{10pt}}
+  }{}
 }
 
 %----------------------------------------------------------------------------------------
-%	DEDICATION PAGE DESIGN
+% DEDICATION PAGE DESIGN
 %----------------------------------------------------------------------------------------
 
 \ifbool{consistentlayout}{
-	\DeclareDocumentCommand{\dedicatory}{
-		m O{\vspace*{.7\textheight} }  }{
-			\checktoopen\tttypeout{Dedicatory}
-			\markboth{}{}
-			#2
-			{\hfill\parbox{.4\textwidth}{\flushright#1\par}}
-		}
+  \DeclareDocumentCommand{\dedicatory}{
+    m O{\vspace*{.7\textheight} }  }{
+      \checktoopen\tttypeout{Dedicatory}
+      \markboth{}{}
+      #2
+      {\hfill\parbox{.4\textwidth}{\flushright#1\par}}
+    }
 }{
-	\newcommand\dedicatory[1]{
-		\checktoopen
-		\tttypeout{Dedicatory}
-		\null\vfil
-		\thispagestyle{plain}
-		\begin{center}{\Large\slshape #1}\end{center}
-		\vfil\null
-	}
+  \newcommand\dedicatory[1]{
+    \checktoopen
+    \tttypeout{Dedicatory}
+    \null\vfil
+    \thispagestyle{plain}
+    \begin{center}{\Large\slshape #1}\end{center}
+    \vfil\null
+  }
 }
 
 
 %----------------------------------------------------------------------------------------
-%	PHYSICAL CONSTANTS PAGE DESIGN
+% PHYSICAL CONSTANTS PAGE DESIGN
 %----------------------------------------------------------------------------------------
 
 \newcommand{\constantsname}{Physical Constants}
@@ -636,18 +635,18 @@ Constants}
  Konstanten}
 
 \NewDocumentEnvironment{constants}{ m }{%
-	\ifbool{nolistspace}{\begingroup\singlespacing}{}
-	\ifbool{listtoc}{\addchap{\constantsname}}{\addchap*{\constantsname}}
-	\begin{longtable}{#1}
-	}{%
-	\end{longtable}
-	\addtocounter{table}{-1}% Don't count this table as one of the document 
-	%tables
-	\ifbool{nolistspace}{\endgroup}{}
+  \ifbool{nolistspace}{\begingroup\singlespacing}{}
+  \ifbool{listtoc}{\addchap{\constantsname}}{\addchap*{\constantsname}}
+  \begin{longtable}{#1}
+  }{%
+  \end{longtable}
+  \addtocounter{table}{-1}% Don't count this table as one of the document 
+  %tables
+  \ifbool{nolistspace}{\endgroup}{}
 }
 
 %----------------------------------------------------------------------------------------
-%	SYMBOLS PAGE DESIGN
+% SYMBOLS PAGE DESIGN
 %----------------------------------------------------------------------------------------
 
 \newcommand{\symbolsname}{List of Symbols}
@@ -655,19 +654,19 @@ Constants}
 \providecaptionname{ngerman,german,austrian,naustrian}{\symbolsname}{Symbolverzeichnis}
 
 \NewDocumentEnvironment{symbols}{ m }{%
-	\ifbool{nolistspace}{\begingroup\singlespacing}{}
-	\ifbool{listtoc}{\addchap{\symbolsname}}{\addchap*{\symbolsname}}
-	\begin{longtable}{#1}
-	}{%
-	\end{longtable}
-	\addtocounter{table}{-1}% Don't count this table as one of the document 
-	%tables
-	\ifbool{nolistspace}{\endgroup}{}
+  \ifbool{nolistspace}{\begingroup\singlespacing}{}
+  \ifbool{listtoc}{\addchap{\symbolsname}}{\addchap*{\symbolsname}}
+  \begin{longtable}{#1}
+  }{%
+  \end{longtable}
+  \addtocounter{table}{-1}% Don't count this table as one of the document 
+  %tables
+  \ifbool{nolistspace}{\endgroup}{}
 }
 
 
 %----------------------------------------------------------------------------------------
-%	NUMBERING
+% NUMBERING
 %----------------------------------------------------------------------------------------
 \newtheorem{definition}{Definition}[section]
 \newtheorem{proposition}{Proposition}[section]
@@ -677,7 +676,7 @@ Constants}
 
 
 %----------------------------------------------------------------------------------------
-%	ALGORITHMS
+% ALGORITHMS
 %----------------------------------------------------------------------------------------
 \newcommand{\algoCommentFormat}[1]{\footnotesize\ttfamily\textcolor{somber1}{#1}}
 \SetCommentSty{algoCommentFormat}
@@ -694,7 +693,7 @@ Constants}
 %\makeatother
 
 %----------------------------------------------------------------------------------------
-%	SUBFIGURES
+% SUBFIGURES
 %----------------------------------------------------------------------------------------
 \RequirePackage{caption} 
 \captionsetup[subfigure]{width=0.9\linewidth}
@@ -722,9 +721,9 @@ linktocpage=true,
 
 \pdfstringdefDisableCommands{% If there is an explicit linebreak in a section 
 %heading (or anything printed to the pdf-bookmarks), it is replaced by a space
-	\let\\\space%
+  \let\\\space%
 }
-	}
+  }
 }{%nothing
 }
 
