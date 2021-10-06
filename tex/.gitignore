@@ -1,0 +1,14 @@
+*.bbl
+*.aux
+*-blx.bib
+*_latexmk
+*.blg
+*.fls
+*.log
+*.lof
+*.lot
+*.toc
+*.pdf
+*.run.xml
+.bash_history
+*.out
