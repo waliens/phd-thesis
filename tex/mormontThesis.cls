@@ -421,9 +421,10 @@
 \RequirePackage[markcase=used]{scrlayer-scrpage}
 \providepairofpagestyles{thesisSimple}{%
   \clearpairofpagestyles%
-  \automark[chapter]{chapter}
-  \ihead{\headmark}% Inner header
-  \ohead[\pagemark]{\pagemark}% Outer header
+  \automark[chapter]{section}
+  \lohead{\headmark}
+  \rehead{\headmark}
+  \ohead[\pagemark]{\pagemark}
 }
 \ifoot{}% Inner footer
 \ofoot{}% Outer footer
