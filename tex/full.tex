@@ -3,19 +3,29 @@
 
 \include{frontback/frontpage}
 
-\pagenumbering{roman}
-\pagestyle{plain}
+% =========== %
+% FRONTMATTER %
+% =========== %
+\frontmatter
 
-\makeatletter\@openrightfalse
+\begingroup
+
+\makeatletter
+\@twosidefalse
+\makeatother
 
 \include{frontback/jury}
+
 \include{frontback/acknowledgments}
+
 \tableofcontents
 
-\@openrighttrue\makeatother 
+\endgroup
 
-\cleardoublepage
-\pagenumbering{arabic}
+% ========== %
+% MAINMATTER %
+% ========== %
+\mainmatter
 \pagestyle{thesisSimple}
 
 % CHAPTERS
@@ -33,7 +43,11 @@
 \include{chapters/ch6_sdist}
 \include{chapters/ch7_biaflows}
 
-% APPENDIX
+% ========== %
+% BACKMATTER %
+% ========== %
+\backmatter
+
 \appendix
 \include{chapters/ch8_appendix}
 
