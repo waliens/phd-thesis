@@ -165,7 +165,9 @@
 \usepackage[acronym]{glossaries}
 \usepackage{tocloft}
 \renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % for parts
+\renewcommand{\cftpartfont}{\color{secondary}\normalsize\bf}
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % for chapters
+\renewcommand{\@cftmaketoctitle}{}
 
 \RequirePackage{xcolor}
 \RequirePackage[many]{tcolorbox}
@@ -232,7 +234,7 @@
 \colorlet{primary-lgt}{primary!50!white}
 \definecolor{secondary}{RGB}{176,43,59} 
 \colorlet{secondary-lgt}{secondary!50!white}
-\definecolor{ternary}{RGB}{131,154,40} 
+\definecolor{ternary}{RGB}{131,154,40}
 \colorlet{ternary-lgt}{ternary!50!white}
 
 \definecolor{dodgerblue}{rgb}{0.12, 0.56, 1.0}
@@ -279,12 +281,12 @@
     \interlinepenalty \@M
     \normalfont
     \ifnum \c@secnumdepth >-2\relax
-      \color{secondary}
-      \huge\sffamily\mdseries \partname\nobreakspace\thepart
+      {\color{secondary}
+      \huge\sffamily\mdseries \partname\nobreakspace\thepart}
       \par
     \fi
     \par \vspace{20pt}
-    \begin{center} \Huge \rmfamily\bfseries #2 \normalfont \end{center}
+    \begin{center} \color{black} \Huge \rmfamily\bfseries #2 \normalfont \end{center}
   }%
 \@endpart}
 
@@ -293,7 +295,7 @@
 %----------------------------------------------------------------------------------------
 
 
-\colorlet{chap-bg}{white}
+%\colorlet{chap-bg}{white}
 %\colorlet{chap-bg}{black!10} % light gray
 
 
@@ -311,7 +313,6 @@
   {\parindent \z@ \chapteralign \normalfont
     \ifnum \c@secnumdepth >\m@ne
     \if@mainmatter
-\colorbox{chap-bg}{%
 \begin{minipage}{.15\textwidth}
     {\color{secondary}\scalebox{6}{\thechapter}}
 \end{minipage}% This must go next to `\end{minipage}`
@@ -323,7 +324,6 @@
   \interlinepenalty\@M
   \chapterfont #1
 \end{minipage}
-}
       \fi
     \fi
 
@@ -334,21 +334,14 @@
 \def\@makeschapterhead#1{
   \abovechapterskip
   {\parindent \z@ \chapteralign
-%   \normalfont
-%   \interlinepenalty\@M
-%   \chapterfont  #1 \par\nobreak
-%   \chapterbelowskip
-\colorbox{chap-bg}{%
-\begin{minipage}{\linewidth}
+  \begin{minipage}{\linewidth}
   \centering
   \chapterfont #1
   \chapterinbetweenskip
   \interlinepenalty\@M
   \par\nobreak
   \rule[2em]{\linewidth}{.5pt}
-  \chapterbelowskip
-\end{minipage}
-}
+  \end{minipage}
   }
 }
 
@@ -714,9 +707,9 @@ bookmarksopen=true,
 bookmarksopenlevel=0,
 hypertexnames=false,
 colorlinks=true,% Set to false to disable coloring links
-citecolor=somber1,% The color of citations
-linkcolor=somber2,% The color of references to document elements (sections, %figures, etc)
-urlcolor=somber3,% The color of hyperlinks (URLs)
+citecolor=primary,% The color of citations
+linkcolor=primary,% The color of references to document elements (sections, %figures, etc)
+urlcolor=primary,% The color of hyperlinks (URLs)
 pdfstartview={FitV},
 unicode,
 breaklinks=true,
