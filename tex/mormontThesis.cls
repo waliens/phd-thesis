@@ -418,25 +418,12 @@
 % HEADERS AND FOOTERS
 %----------------------------------------------------------------------------------------
 
-\RequirePackage[markcase=used]{scrlayer-scrpage}
-\providepairofpagestyles{thesisSimple}{%
-  \clearpairofpagestyles%
-  \automark[chapter]{section}
-  \lohead{\headmark}
-  \rehead{\headmark}
-  \ohead[\pagemark]{\pagemark}
-}
+\RequirePackage[markcase=noupper]{scrlayer-scrpage}
+
 \ifoot{}% Inner footer
 \ofoot{}% Outer footer
-\pagestyle{thesisSimple}
-\providepairofpagestyles[thesisSimple]{thesis}{%
-  \automark*[section]{}%
-}
-\providepairofpagestyles[thesisSimple]{review}{%
-  \ofoot[\shorttitle/\authorname]{\shorttitle/\authorname}
-  \ifoot[\today]{\today}
-}
-\pagestyle{thesis}
+
+
 \ifbool{headsepline}{\KOMAoption{headsepline}{true}}{}
 \PreventPackageFromLoading[\ClassError{\classname}{Package `fancyhdr' is
 incompatible\MessageBreak with this class}{The pagesyles are defined 
