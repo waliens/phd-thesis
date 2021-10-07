@@ -69,11 +69,11 @@ def compile(argv):
         if not (is_int(args.chap) or args.chap in set(CHAPTERS)):
             raise ValueError("-- Invalid chapter reference '{}'".format(args.chap))
         chapt_folder = os.path.join(os.getcwd(), "chapters")
-        matches = [fname for fname in os.listdir() if str(args.chap) in fname and fname.endswith(".tex")]
+        matches = [fname for fname in os.listdir(chapt_folder) if str(args.chap) in fname and fname.endswith(".tex")]
         if len(matches) != 1:
             raise ValueError("-- Several matches for chapter query '{}' -> {}".format(args.chap, matches))
         target_file = os.path.join("chapters", matches[0])
-        chap_name = target_file.rsplit(".", 1)[0]
+        chap_name = os.path.basename(target_file).rsplit(".", 1)[0]
         print("-- Compile chapter {}".format(chap_name))
         jobname = "thesis_{}".format(chap_name)
 
