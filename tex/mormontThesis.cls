@@ -1,5 +1,5 @@
 
-\NeedsTeXFormat{LaTeX2e}[2017-04-15]
+\NeedsTeXFormat{LaTeX2e}[2021-09-20]
 \newcommand{\classname}{mormontThesis}
 \providecommand{\baseclass}{book}
 \RequirePackage{etoolbox}
@@ -695,7 +695,7 @@ bookmarksopen=true,
 bookmarksopenlevel=0,
 hypertexnames=false,
 colorlinks=true,% Set to false to disable coloring links
-citecolor=primary,% The color of citations
+citecolor=ternary,% The color of citations
 linkcolor=primary,% The color of references to document elements (sections, %figures, etc)
 urlcolor=primary,% The color of hyperlinks (URLs)
 pdfstartview={FitV},
