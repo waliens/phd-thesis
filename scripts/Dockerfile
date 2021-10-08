@@ -1,8 +1,36 @@
-FROM blang/latex:ctanfull
+FROM ubuntu:xenial
+# copied from Benedikt Lang <mail@blang.io> (https://github.com/blang/latex-docker/blob/master/Dockerfile.basic)
+ENV DEBIAN_FRONTEND noninteractive
 
-RUN apt-get update && apt-get install python3 -y
+RUN apt-get update -q \
+    && apt-get install -qy build-essential wget libfontconfig1 python3 \
+    && rm -rf /var/lib/apt/lists/*
 
+# Install TexLive with scheme-basic
+RUN wget http://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz; \
+	mkdir /install-tl-unx; \
+	tar -xvf install-tl-unx.tar.gz -C /install-tl-unx --strip-components=1; \
+    echo "selected_scheme scheme-basic" >> /install-tl-unx/texlive.profile; \
+	/install-tl-unx/install-tl -profile /install-tl-unx/texlive.profile; \
+    rm -r /install-tl-unx; \
+	rm install-tl-unx.tar.gz
 
+ENV PATH="/usr/local/texlive/2021/bin/x86_64-linux:${PATH}"
 
+ENV HOME /data
+WORKDIR /data
+
+# Install latex packages
+RUN tlmgr install latexmk
+
+# install texlive
+RUN tlmgr install scheme-full
+
+# 
+RUN tlmgr install biblatex-ext
+
+# add compile script
 ADD compile.py /scripts/compile.py
 
+
+VOLUME ["/data"]
