@@ -143,15 +143,13 @@
 
 \RequirePackage{longtable} % Required for tables that span multiple pages (used 
 %in the symbols, abbreviations and physical constants pages)
-
+\RequirePackage{colortbl} % for cellcolor
 \RequirePackage{siunitx} % Required for \SI commands
 
 \RequirePackage{graphicx} % Required to include images
 \graphicspath{{icons/}{figures/}{./}{images/}} % Specifies where to look for included images
 
 \RequirePackage{booktabs} % Required for better table rules
-
-\RequirePackage{subcaption}
 
 \RequirePackage{amsthm}
 \RequirePackage{amssymb}
@@ -237,6 +235,9 @@
 \definecolor{ternary}{RGB}{131,154,40}
 \colorlet{ternary-lgt}{ternary!50!white}
 
+\definecolor{Dandelion}{HTML}{FDBB43}
+\definecolor{LimeGreen}{HTML}{8BC63E}
+
 \definecolor{dodgerblue}{rgb}{0.12, 0.56, 1.0}
 \definecolor{forestgreen}{rgb}{0.13, 0.55, 0.13}
 \definecolor{light-gray}{gray}{0.95}
@@ -246,22 +247,6 @@
 \definecolor{deepgreen}{HTML}{0AF191}
 \definecolor{purplish}{HTML}{E21173}
 
-\colorlet{mdtRed}{red!50!black}
-\colorlet{mdtBlue}{blue!50!black}
-%\definecolor{mdtBlue}{rgb}{52, 134, 235}
-
-\colorlet{color1}{dodgerblue}
-\colorlet{color2}{orange}
-\colorlet{color3}{forestgreen}
-\colorlet{color4}{magenta}
-
-% https://mycolor.space/?hex=%23237B91&sub=1
-\definecolor{somber1color}{HTML}{237b91}
-\definecolor{somber3color}{HTML}{009477}
-\definecolor{somber4color}{HTML}{F89235}
-\colorlet{somber1}{somber1color}
-\colorlet{somber2}{mdtRed}
-\colorlet{somber3}{somber3color}
 
 
 %----------------------------------------------------------------------------------------
@@ -680,7 +665,8 @@ Constants}
 %----------------------------------------------------------------------------------------
 % SUBFIGURES
 %----------------------------------------------------------------------------------------
-\RequirePackage{caption} 
+\RequirePackage{caption}
+\RequirePackage{subfig}
 \captionsetup[subfigure]{width=0.9\linewidth}
 %\captionsetup[subfigure]{width=0.9\linewidth,justification=raggedright}
 % Fix caption spacing https://tex.stackexchange.com/questions/372575/add-space-between-captions-not-between-the-images
