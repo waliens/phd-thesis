@@ -30,7 +30,7 @@ def make_target(include):
 
 
 def latexmk_cline(name, target, gg=False):
-    cmd = ["latexmk", "-cd", "-f", "-interaction=batchmode", "-jobname={}".format(name), "-pdf", target]
+    cmd = ["latexmk", "-cd", "-f", "-interaction=batchmode", "-jobname={}".format(name), "-pdf", target, "-norc", "-r", "./.latexmkrc", "-outdir=."]
     if gg:
         cmd.insert(3, "-gg")
     return cmd

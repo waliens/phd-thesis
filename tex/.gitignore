@@ -12,3 +12,8 @@
 *.run.xml
 .bash_history
 *.out
+*.bcf
+*.alg
+*.acn
+*.acr
+*.ist
