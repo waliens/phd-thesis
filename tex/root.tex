@@ -60,9 +60,48 @@ headsepline, % Uncomment to get a line under the header
     \restorebibmacro{textcite}%
     \usebibmacro{textcite}}}
 
-
-
 \usepackage{lipsum}
+
+% ========== %
+%  Acronyms  %
+% ========== %
+\newacronym{acc}{ACC}{Accuracy}
+\newacronym{auc}{AUC}{Area Under the Curve}
+\newacronym{dl}{DL}{Deep Learning}
+\newacronym{dp}{DP}{Digital pathology}
+\newacronym{etfl}{ET-FL}{Extremely Randomized Trees as Feature Learner}
+\newacronym{et}{ET}{Extremely Randomized Trees}
+\newacronym{fcn}{FCN}{Fully Convolutional Network}
+\newacronym{fc}{FC}{Fully Connected}
+\newacronym{heeo}{H\&E}{Hematoxylin \& eosin}
+\newacronym{loto}{LOTO}{Leave-One-Task-Out}
+\newacronym{ml}{ML}{Machine Learning}
+\newacronym{mtl}{MTL}{Multi-Task Learning}
+\newacronym{rfe}{RFE}{Recursive Feature Elimination}
+\newacronym{roc}{ROC}{Receiver Operating Characteristic}
+\newacronym{svm}{SVM}{Support-Vector Machine}
+\newacronym{tl}{TL}{Transfer Learning}
+\newacronym{wsi}{WSI}{Whole-Slide Image}
+
+\newcommand{\mtl}{\acrshort{mtl}}
+\newcommand{\mlearn}{\acrshort{ml}}
+\newcommand{\loto}{\acrshort{loto}}
+\newcommand{\tl}{\acrshort{tl}}
+\newcommand{\svm}{\acrshort{svm}}
+\newcommand{\dl}{\acrshort{dl}}
+\newcommand{\et}{\acrshort{et}}
+\newcommand{\fc}{\acrshort{fc}}
+\newcommand{\fcn}{\acrshort{fcn}}
+\newcommand{\roc}{\acrshort{roc}}
+\newcommand{\auc}{\acrshort{auc}}
+\newcommand{\acc}{\acrshort{acc}}
+\newcommand{\extree}{\acrshort{et}}
+\newcommand{\rfe}{\acrshort{rfe}}
+\newcommand{\dipath}{\acrshort{dp}}
+\newcommand{\wsi}{\acrshort{wsi}}
+\newcommand{\heeo}{\acrshort{heeo}}
+
+\newcommand{\rocauc}{\acrshort{roc} \acrshort{auc}}
 
 % ================= %
 %  Custom commands  %
@@ -70,7 +109,6 @@ headsepline, % Uncomment to get a line under the header
 \newcommand{\ie}{\textit{i.e.~}}
 \newcommand{\eg}{\textit{e.g.~}}
 \newcommand{\etal}{\textit{et al.~}}
-
 \author{Romain Mormont}
 \title{My Thesis Title: is a continuous machine learning long title}
 

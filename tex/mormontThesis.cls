@@ -160,7 +160,7 @@
 
 \RequirePackage{caption} % Required for customising the captions
 \captionsetup{justification=centerlast,font=small,labelfont=sc,margin=50pt}
-\usepackage[acronym]{glossaries}
+\usepackage[acronym,nomain]{glossaries}
 \usepackage{tocloft}
 \renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % for parts
 \renewcommand{\cftpartfont}{\color{secondary}\normalsize\bf}
