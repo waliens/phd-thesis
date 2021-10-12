@@ -382,9 +382,13 @@
 
 \RequirePackage{geometry}
 \geometry{
+%  showframe,
   headheight=4ex,
-  includehead,
-  includefoot
+  bottom=1.5cm,
+  inner=3.2cm,
+  outer=2.5cm
+%  includehead,
+%  includefoot
 }
 
 \raggedbottom
