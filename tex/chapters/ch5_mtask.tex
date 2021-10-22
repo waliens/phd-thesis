@@ -1,5 +1,5 @@
 \chapter{Multi-task pre-training}
-
+\label{chap:mtask}
 
 % \begin{abstract}
 % In this work, we investigate multi-task learning as a way of pre-training models for classification tasks in digital pathology. It is motivated by the fact that many small and medium-size datasets have been released by the community over the years whereas there is no large scale dataset similar to ImageNet in the domain. We first assemble and transform many digital pathology datasets into a pool of 22 classification tasks and almost 900k images. Then, we propose a simple architecture and training scheme for creating a transferable model and a robust evaluation and selection protocol in order to evaluate our method. Depending on the target task, we show that our models used as feature extractors either improve significantly over ImageNet pre-trained models or provide comparable performance. Fine-tuning improves performance over feature extraction and is able to recover the lack of specificity of ImageNet features, as both pre-training sources yield comparable performance.
@@ -298,7 +298,7 @@ The second important observation is that fine-tuning does not benefit from using
 There are also several interesting research directions regarding the architecture. On the one hand, it would be interesting to study the effect of increasing the capacity of the task-specific parts. On the other hand, we have only worked with classification tasks so far but it is possible to incorporate directly segmentation or detection tasks to the pre-training by appending an ad-hoc network as a head. Hopefully, enriching training signal with a dense prediction task such as segmentation could improve the transferability of the resulting models. However, this approach also raises pratical questions and issues such as model memory usage or loss aggregation. 
 
 More practically, we plan to integrate newly released datasets into our pool to reinforce its versatility and hopefully the transferability of the pre-trained models. We also plan to integrate the pre-trained models %as classifiers
-to the Cytomine open-source tool \parencite{maree2016collaborative} and the BIAFLOWS benchmarking platform \parencite{rubens2019biaflows}.
+to the Cytomine open-source tool \parencite{maree2016collaborative} and the BIAFLOWS benchmarking platform \parencite{rubens2020biaflows}.
 
 
 \section{Conclusion}

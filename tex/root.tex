@@ -15,6 +15,7 @@ headsepline, % Uncomment to get a line under the header
 ]{mormontThesis} % The class file specifying the document structure
 
 \usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage{csquotes}
 \usepackage[T1]{fontenc} % Output font encoding for international characters
 
 \usepackage{mathpazo} % Use the Palatino font by default
@@ -90,6 +91,8 @@ headsepline, % Uncomment to get a line under the header
 \newacronym{tl}{TL}{transfer learning}
 \newacronym{wsi}{WSI}{whole-slide image}
 \renewcommand{\glsnamefont}[1]{\textsc{\bfseries #1}}
+\newcommand{\acrfirst}[1]{\acrlong{#1} (\acrshort{#1})}
+\newcommand{\acrfirstbf}[1]{\textbf{\acrlong{#1}} (\acrshort{#1})}
 
 % ================= %
 %  Custom commands  %
@@ -98,6 +101,7 @@ headsepline, % Uncomment to get a line under the header
 \newcommand{\eg}{\textit{e.g.~}}
 \newcommand{\etal}{\textit{et al.~}}
 \newcommand{\etc}{\textit{etc}}
+\newcommand{\quoteit}[1]{``\textit{#1}"}
 
 \newcommand{\TODO}[1]{{\color{red}TODO}\footnote{\color{red}#1}}
 

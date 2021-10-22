@@ -133,7 +133,6 @@
 
 \RequirePackage{babel} % Required for automatically changing names of document 
 %elements to languages besides english
-\RequirePackage{csquotes}
 
 \RequirePackage{scrbase} % Required for handling language-dependent names of 
 %sections/document elements
