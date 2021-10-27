@@ -230,10 +230,13 @@
 % color palette
 \definecolor{primary}{RGB}{0,91,144}
 \colorlet{primary-lgt}{primary!50!white}
+\colorlet{primary-drk}{primary!50!black}
 \definecolor{secondary}{RGB}{176,43,59} 
 \colorlet{secondary-lgt}{secondary!50!white}
+\colorlet{secondary-drk}{secondary!50!black}
 \definecolor{ternary}{RGB}{131,154,40}
 \colorlet{ternary-lgt}{ternary!50!white}
+\colorlet{ternary-drk}{ternary!50!black}
 
 \definecolor{Dandelion}{HTML}{FDBB43}
 \definecolor{LimeGreen}{HTML}{8BC63E}
@@ -301,7 +304,7 @@
 \begin{minipage}{.15\textwidth}
     {\color{secondary}\scalebox{6}{\thechapter}}
 \end{minipage}% This must go next to `\end{minipage}`
-\begin{minipage}{.9\textwidth}
+\begin{minipage}{.85\textwidth}
     \centering
     \chapterprefixfont  \@chapapp \space \par\nobreak %\vspace{-2em}
     \rule[2em]{\linewidth}{.5pt}
@@ -339,18 +342,18 @@
 % #2: Box title
 \newtcolorbox{overview}[2][]
 {
-  colframe = black,
-  colback  = gray!5,
-  coltitle = black,
-  colbacktitle = white,%gray!75!black,
+  colframe = primary,
+  colback  = primary-lgt!50!white,
+  coltitle = white,
+  colbacktitle = primary,
   title    = {#2},
   fonttitle = \sffamily,
   enhanced,
-  attach boxed title to top right,
-  frame style={top color=dodgerblue, bottom color=orange, middle color=white},
-  leftrule = 2mm,
-  rightrule = 0mm,
-  bottomrule = 0mm,
+ % attach boxed title to top right,
+ %frame style={top color=dodgerblue, bottom color=orange, middle color=white},
+  leftrule = 0.5mm,
+  rightrule = 0.5mm,
+  bottomrule = 0.5mm,
   toprule=0mm,
   arc = 1mm,
   after skip=20pt plus 2pt,
