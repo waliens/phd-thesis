@@ -1,22 +1,32 @@
 \chapter{Machine learning}
 \label{chap:backml}
 
-This thesis focuses on the application of machine learning to digital pathology (see Chapter \ref{chap:backdp}) problems. Therefore this chapter aims at giving to a reader with basic knowledge of \acrshort{ml} the keys to understand our contributions. It is not aimed at being a thorough presentation of the different methods but rather an overview. For the readers who would still like to deepen their knowledge about these methods, we will provide pointers to relevant litterature.  
+\begin{overview}{Overview}
+This chapter aims at giving to a reader with basic knowledge of \acrshort{ml} the keys to understand our contributions. It is not aimed at being a thorough presentation of the different methods but rather an overview. For the readers who would still like to deepen their knowledge about these methods, we will provide pointers to relevant litterature.
+\end{overview}
 
 \section{What is machine learning ?} 
 \label{sec:backml:whatisml}
 
-\acrlong{ml} is a subfield of \acrlong{ai} which focuses on methods enabling computers to learn from data. More formally, a machine learning algorithm is defined by a set of candidate models (\ie an hypothesis space $\mathfrak{H}$), a quality measure for a model and an optimization strategy. The algorithm output is a model $h \in \mathfrak{H}$ that maximises the quality criterion 
+Machine learning is a subfield of \acrlong{ai} which focuses on methods enabling computers to learn from data. Most frequently, \acrlong{ml} methods build a model which can be seen as a function $h$ taking one or more input $x$ and producing one or more outputs $h(x)$.  A model can be seen as a function $h$ which, for some input data $x$, provides one or more outputs $h(x)$. 
+
+ More formally, a machine learning algorithm is defined by a set of candidate models (\ie an hypothesis space $\mathbb{H}$), a quality measure for a model and an optimization strategy. The algorithm output is a model $h \in \mathbb{H}$ that maximises the quality criterion. Over the years, many different algorithms have been developped and they differ by the \textbf{inductive bias}.  
 
 \subsection{Families of learning methods}
 
-There are many ways to structure the ecosystem of machine learning methods.  
+There are many ways to structure the ecosystem of machine learning methods. 
 
 
 % ===================
 % Eval and selection
 % ===================
 \section{Model evaluation and selection}
+
+\subsection{Metrics}
+% ROC AUC
+% Accuracy
+% Cross entropy
+% Dice score / soft dice loss
 
 \subsection{Bias-variance trade-off}
 
