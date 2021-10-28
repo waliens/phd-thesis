@@ -8,13 +8,51 @@ This chapter aims at giving to a reader with basic knowledge of \acrshort{ml} th
 \section{What is machine learning ?} 
 \label{sec:backml:whatisml}
 
-Machine learning is a subfield of \acrlong{ai} which focuses on methods enabling computers to learn from data. Most frequently, \acrlong{ml} methods build a model which can be seen as a function $h$ taking one or more input $x$ and producing one or more outputs $h(x)$.  A model can be seen as a function $h$ which, for some input data $x$, provides one or more outputs $h(x)$. 
+A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs (commonly referred to as models) and, more precisely, of \textbf{learning algorithms}. Formally, a learning algorithm is defined by a set of candidate models (\ie an hypothesis space $\mathcal{H}$), a quality measure for a model and an optimization strategy. The algorithm output is a model $h \in \mathcal{H}$ that maximises the quality criterion. In order to build and optimize the model and to evaluate its performance, the algorithm is provided with \textbf{training data} (the experience $E$, \aka observations, examples). 
 
- More formally, a machine learning algorithm is defined by a set of candidate models (\ie an hypothesis space $\mathbb{H}$), a quality measure for a model and an optimization strategy. The algorithm output is a model $h \in \mathbb{H}$ that maximises the quality criterion. Over the years, many different algorithms have been developped and they differ by the \textbf{inductive bias}.  
+Data is really the cornerstone of \acrlong{ml}. Its availability is really what been boosting  and current algorithms are able to process many kind of data types: characters, texts, time series, images, data records, graphs... Usually the format will dictate what kind of methods are most efficient. 
+
+
+As an example, a common task is \textit{image classification}, where the model must assign a label to an image: does it contain a human, an animal or an inanimate object ? In this case, the model would take the image as input and, based on its content, output one of the predefined labels. The performance measure $P$ would assess the correctness of the ouput label. The experience $E$ would be a set of images for which the label is known and would be used by the algorithm to optimize the model.
+
+In general, the experience $E$ is provided to the algorithm in the form of data.
+
+Designing a learning algorithm is not an easy task and the current state of \acrlong{ml} is a result of decades of research. 
+
+
+There are numerous tasks beyond image classification to which \acrlong{ml} can be applied nowadays of which few example are provided in Figure \TODO{illustrate tasks}.    
+
+
+
+
+
+
+
+
+
+%Most frequently, a \textbf{\acrlong{ml} algorithm} builds a model $h$ which takes some kind of input(s) $x$ and return some kind of output(s) $\hat{y}$ or $h(x)$. Inputs (\aka observations, examples) and outputs are numerical but can represent anything that can be encoded with numbers:  For instance, a model can be built to recognize colors.
+% A good model is expected to return the most relevant output given an input $x$ and it is the role of the learning algorithm to build it in such a way.
+% In the specific case of \textit{supervised \acrlong{ml}}, the algorithm is provided with a training dataset, a set of observations $\left(\mathbf{x}_i, y_i\right) \in \mathcal{X}\times\mathcal{Y}$, to optimize the model which should eventually fit this data but, most importantly, generalize well too unseen examples.  
+% Since the dawn of \acrlong{ml}, many algorithms have been created 
+
+
+%Examples of machine learning models are provided in Figure \ref{fig:backml:ml_examples}.
+
+% \begin{figure}
+%   \centering
+%   %\includegraphics[scale=1]{}
+%   \caption{Examples of machine learning models}
+%   \label{fig:backml:ml_examples}
+% \end{figure}
+
+
+
+
+
 
 \subsection{Families of learning methods}
 
-There are many ways to structure the ecosystem of machine learning methods. 
+There are many ways to structure the ecosystem of \acrlong{ml} methods. 
 
 
 % ===================
@@ -39,8 +77,11 @@ There are many ways to structure the ecosystem of machine learning methods.
 % ===================
 \section{Linear methods}
 
-\subsection{Logistic regression}
-% 
+The decision boundary is . 
+
+\begin{equation}
+h^(n)(x) = b + \sum_{i=1}^n w_i x_i 
+\end{equation} 
 
 \subsection{Support vector machine}
 % method
