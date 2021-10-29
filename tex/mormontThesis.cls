@@ -162,6 +162,7 @@
 \captionsetup{justification=centerlast,font=small,labelfont=sc,margin=50pt}
 \usepackage[acronym,nomain]{glossaries}
 \usepackage{tocloft}
+\setcounter{secnumdepth}{3}
 \renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % for parts
 \renewcommand{\cftpartfont}{\color{secondary}\normalsize\bf}
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}} % for chapters

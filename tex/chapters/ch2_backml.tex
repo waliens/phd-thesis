@@ -8,51 +8,40 @@ This chapter aims at giving to a reader with basic knowledge of \acrshort{ml} th
 \section{What is machine learning ?} 
 \label{sec:backml:whatisml}
 
-A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs (commonly referred to as models) and, more precisely, of \textbf{learning algorithms}. Formally, a learning algorithm is defined by a set of candidate models (\ie an hypothesis space $\mathcal{H}$), a quality measure for a model and an optimization strategy. The algorithm output is a model $h \in \mathcal{H}$ that maximises the quality criterion. In order to build and optimize the model and to evaluate its performance, the algorithm is provided with \textbf{training data} (the experience $E$, \aka observations, examples). 
+A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs (commonly referred to as \textit{models}) and, more precisely, of \textbf{learning algorithms}. Formally, a model $h$ can be seen a function taking an input $x \in \mathcal{X}$ (\aka observation, example) and producing an ouput $h(x)$ or $\hat{y} \in \mathcal{Y}$. In general, there is no restriction on what $x$ and $h(x)$ can be. For instance, $x$ and $h(x)$ can be a vector, matrix or a n-dimensional tensor. When $x$ is a vector, its components are commonly called \textit{features} or \textit{variables}. Moreover, a model can have several inputs (\resp outputs) in which case $x$ (\resp $h(x)$) is a n-tuple. A learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning sample, learning set, training set) that it can use to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
 
-Data is really the cornerstone of \acrlong{ml}. Its availability is really what been boosting  and current algorithms are able to process many kind of data types: characters, texts, time series, images, data records, graphs... Usually the format will dictate what kind of methods are most efficient. 
+As an example, a common task is \textit{natural image classification}, where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$. The performance measure $P$ would assess the correctness of the ouput label and could, for instance, be the accuracy: $P(y, \hat{y}) = \mathbb{1}_{y=\hat{y}}$.
 
-
-As an example, a common task is \textit{image classification}, where the model must assign a label to an image: does it contain a human, an animal or an inanimate object ? In this case, the model would take the image as input and, based on its content, output one of the predefined labels. The performance measure $P$ would assess the correctness of the ouput label. The experience $E$ would be a set of images for which the label is known and would be used by the algorithm to optimize the model.
-
-In general, the experience $E$ is provided to the algorithm in the form of data.
-
-Designing a learning algorithm is not an easy task and the current state of \acrlong{ml} is a result of decades of research. 
+There are numerous tasks beyond natural image classification to which \acrlong{ml} can be applied nowadays. In the next sections, we will discuss some of them and dive a little deeper into algorithms and topics related to learning which are relevant to this thesis.
 
 
-There are numerous tasks beyond image classification to which \acrlong{ml} can be applied nowadays of which few example are provided in Figure \TODO{illustrate tasks}.    
-
-
-
-
-
-
-
-
-
-%Most frequently, a \textbf{\acrlong{ml} algorithm} builds a model $h$ which takes some kind of input(s) $x$ and return some kind of output(s) $\hat{y}$ or $h(x)$. Inputs (\aka observations, examples) and outputs are numerical but can represent anything that can be encoded with numbers:  For instance, a model can be built to recognize colors.
-% A good model is expected to return the most relevant output given an input $x$ and it is the role of the learning algorithm to build it in such a way.
-% In the specific case of \textit{supervised \acrlong{ml}}, the algorithm is provided with a training dataset, a set of observations $\left(\mathbf{x}_i, y_i\right) \in \mathcal{X}\times\mathcal{Y}$, to optimize the model which should eventually fit this data but, most importantly, generalize well too unseen examples.  
-% Since the dawn of \acrlong{ml}, many algorithms have been created 
-
-
-%Examples of machine learning models are provided in Figure \ref{fig:backml:ml_examples}.
-
-% \begin{figure}
-%   \centering
-%   %\includegraphics[scale=1]{}
-%   \caption{Examples of machine learning models}
-%   \label{fig:backml:ml_examples}
-% \end{figure}
-
-
-
-
-
-
-\subsection{Families of learning methods}
+\section{Families of learning methods}
+\label{sec:backml:families}
 
 There are many ways to structure the ecosystem of \acrlong{ml} methods. 
+
+\subsection{Supervised and unsupervised learning}
+\label{ssec:backmk:supvsunsup}
+
+Supervised learning (\acrshort{sl}) regroups methods where the learning process is guided by an output signal. Formally, the learning algorithm is provided with a training set $(x_i, y_i) \sim P_{\mathcal{X},\mathcal{Y}}$ with $y_i$ is the output signal for the observation $x_i$, $i \in \left\{1,...,N\right\}$ and $P_{\mathcal{X},\mathcal{Y}}$ is a joint distribution over the input and output spaces. This output signal is usually generated by humans as some form of annotations or labelling. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost, litterally, as it requires human to spend time on labelling. What makes it expensive is the large amount of data to annotate or the expertise required (\eg in medicine) or the combination of both factors. This is especially aggravated when the target task is complex as, the more complex, the more data is required to sample sufficiently the input space.  
+
+In opposition, unsupervised learning regroups methods where there is no output signal guiding the learning process. Formally, the learning algorithm is provided with a training set $(x_i) \sim P_{\mathcal{X}}$ with $i \in \left\{1,...,N\right\}$. Some unsupervised methods focus on extracting information from data. For instance, this is the case for \textit{clustering} where the algorithm searches for natural groups of observations or features. Another example is \textit{dimensionality reduction} where the algorithm projects high-dimensional data into a lower-dimensional space while attempting to preserve as much information as possible. An interested reader will find more information about these methods in \parencite{friedman2017elements}. There exists another family of unsupervised learning methods that was first explored in the 1980s, with autoencoders, but has gained much traction recently which is called \textit{self-supervised learning} \parencite{lecun2021self}. The idea behind this family of methods is to exploit supervised learning algorithms but rather than guiding the learning process with human annotations, the training signal is found in the data itself. An example of such methods is \textit{image reconstruction}. Random parts of the input images are truncated and the model must be able to re-generate the missing parts and the original image. In this case, output signal is the original image and the model input is the truncated image which can be generated programatically without human intervention.
+
+% classical unsupervised learning
+% self-supervised
+
+Supervised and unsupervised learning do not cover all the existing \acrlong{ml} methods but are rather the ends of a spectrum.  
+
+% semi supervised 
+% weakly supervised 
+
+\subsection{Learning tasks}
+
+% classification
+% regression
+% segmentation
+% detection
+% generation
 
 
 % ===================
