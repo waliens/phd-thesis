@@ -10,11 +10,15 @@ Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} an
 \section{What is machine learning ?} 
 \label{sec:backml:whatisml}
 
-A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $x \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(x)$ or $\hat{y} \in \mathcal{Y}$. $x$ and $h(x)$ can be vectors, matrices or a n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $x$ is a two-dimensional vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $x$ (\resp $y$) is a $n$-tuple.
+A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $x \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(x)$ or $\hat{y} \in \mathcal{Y}$. $x$ and $h(x)$ can be vectors, matrices or n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $x$ is a two-dimensional vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $x$ (\resp $y$) is a $n$-tuple.
 
-In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning or training set) that it uses to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
+In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure $\ell$ for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning or training set) that it uses to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
 
-As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$. The performance measure $P$ would assess the correctness of the ouput label. For instance, it could be the accuracy: $P(y, \hat{y}) = \mathbb{1}_{y=\hat{y}}$.
+As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$. As a performance measure $P$, one could assess the correctness of the ouput label by assigning 1 to correct predictions and 0 to errors. This performance measure is called the \textit{accuracy} and is written as: 
+
+\begin{equation}
+P(y, \hat{y}) = \mathbb{1}_{y=\hat{y}}
+\end{equation}
 
 There are numerous tasks beyond natural image classification to which \acrlong{ml} can be applied nowadays. In the next sections, we will discuss some of them and dive a little deeper into algorithms and topics related to learning which are relevant to this thesis.
 
@@ -24,55 +28,64 @@ There are numerous tasks beyond natural image classification to which \acrlong{m
 
 There are many ways to structure the ecosystem of \acrlong{ml} methods. This section explores some of them.
 
-\subsection{Supervised and unsupervised learning}
+\subsection{Supervised learning}
 \label{ssec:backml:supvsunsup}
 
 \textit{Supervised learning} (\acrshort{sl}) regroups methods where the learning process is guided by an output signal. We formalize a supervised task as the tuple $\left(\mathcal{X}; \mathcal{Y}; p(x, y)\right)$ where $\mathcal{X}$ and $\mathcal{Y}$ are respectively the input and output spaces and $p(x, y)$ is a probability distribution over those joint spaces. The learning algorithm is provided with a training set 
 \begin{equation}
 \label{eqn:backml:supervised}
-\left\{(x_i, y_i) \mid i = 1,...,n ; (x_i, y_i) \sim p(x, y)\right\}
+\left\{(x_i, y_i) \mid i = 1,...,n ; (x_i, y_i) \sim p(x, y) \right\}
 \end{equation}
-where $y_i \in \mathcal{Y}$ is the output signal for the observation $x_i \in \mathcal{X}$.  This signal is often generated by humans as annotations or labels. Such guidance allows to use well-studied methods and usually helps learning strong models but also literally comes at a cost as it requires human to spend time on annotating. Sometimes it is the large amount of data to annotate which makes it expensive, sometimes it requires the intervention of experts (\eg for medical data), and sometimes both factors come into play. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. However, supervised learning remains one of the most effective ways of learning and has fuelled some of the most recent \acrlong{ml} successes.
+where $y_i \in \mathcal{Y}$ is the output signal for the observation $x_i \in \mathcal{X}$. The learning algorithm objective is to find a model $h \in \mathcal{H}$ that approximates at best the output. 
 
-In opposition, \acrfirstit{usl} regroups methods where no output signal is provided to guide the learning process. The learning algorithm is provided with 
+When the output space is a finite set of discrete scalar values $\mathcal{Y} = \left\{1, 2, ..., C\right\}$, the problem is called \textit{classification}. $C$ denotes the cardinality of the set $\mathcal{Y}$ or the number of classes. When $C = 2$, the problem is said to be \textit{binary}. In classification, the model should predict the most probable output given an example:
+\begin{equation}
+\hat{y}_i = \argmax{y_k \in \mathcal{Y}} p(y=y_k|x=x_i)
+\end{equation}
+Examples of classification tasks are for instance assigning a label to an image or detecting whether an email is a spam or not. 
+
+When the output space is continuous and the output is a real-valued scalar value, the problem is called \textit{regression}. In this case, the model should predict the expected value $y$ given any input $x_i$:
+\begin{equation}
+h(x_i) = \mathbb{E}\left[y|x=x_i\right]
+\end{equation}
+Examples of regression problems are trying to predict the price of a house given its area, the amount of product generated by a factory in a given time period or the review score of a product on an e-commerce platform. 
+
+Beyond scalar outputs, some models have sometimes to predict structured outputs. This is the case for \textit{image segmentation} which focuses on classifying each pixel of an image (\ie what kind of object does this pixel belong to in the image?). The output of the model is a segmentation mask where pixel at row $i$ and column $j$ is classified as $\hat{y}_{ij} \in \mathcal{Y}$. For some tasks, a mask is not always necessary, one is rather interested in the coarse location of the objects. This kind of task is called \textit{detection} where the output of the model, the location, can be encoded as image coordinates $(i, j)$ representing the object's center of gravity or any of its point. Another common representation is the bounding box, a box containing exactly the object of interest, encoded by the position of a corner of the box in the image and its height and width.
+
+In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also literally comes at a cost because of the human intervention. Sometimes, the amount of data to annotate is the reason why it is so expensive, sometimes because it requires the intervention of experts (\eg for medical data), and sometimes both factors come into play. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, data is particularily cumbersome to obtain in which case this situation is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following sections. 
+
+\subsection{Unsupervised learning}
+\label{ssec:backml:usl}
+
+In opposition to \acrlong{sl}, \acrfirstit{usl} regroups methods where no output signal is provided to guide the learning process. The learning algorithm is provided with 
 \begin{equation}
 \left\{x_i \mid i = 1,..., n ; x_i \sim p(x)\right\}
 \end{equation} 
 and attempts to extract information from this dataset. A common unsupervised task is \textit{density estimation} where the goal is to model the generating distribution $p(x)$ but there also exists other types of methods. For instance \textit{clustering} where the algorithm searches for natural groups of observations or features. Another example is \textit{dimensionality reduction} where the algorithm projects high-dimensional data into a lower-dimensional space while attempting to preserve as much information as possible. An interested reader will find more information about these methods in \parencite{friedman2017elements}. There exists another family of \acrlong{usl} methods that was first explored in the 1980s with autoencoders but has gained much traction recently. It is called \textit{self-supervised learning} \parencite{lecun2021self}. The idea behind this family of methods is to exploit supervised learning algorithms but rather than guiding the learning process with human annotations, the training signal is found in the data itself. An example of such methods is \textit{image reconstruction}. Random parts of the input images are truncated (\eg replaced by black squares) and the model must be able to re-generate the truncated parts. In this case, input and output signal are respectively the original and the truncated image. The model input can be generated from the original data without human intervention. 
 
-These two categories do not cover all the existing \acrlong{ml} methods but are rather at the ends of a spectrum. There also exists intermediate families of methods. Halfway between supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that use a dataset where only a part of the observations have an associated output signal. The dataset is composed of two subsets:
+\subsection{Between supervised and unsupervised learning}
+\label{ssec:backml:inbetween}
+
+The families discussed in Sections \ref{ssec:backml:supvsunsup} and \ref{ssec:backml:usl} do not cover all the existing \acrlong{ml} methods but are rather at the ends of a spectrum. There also exists intermediate families of methods. Halfway between supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that use a dataset where only a part of the observations have an associated output signal. The dataset is composed of two subsets:
 \begin{eqnarray}
 S_a = \left\{(x_i, y_i) \mid i = 1,...,n_a; (x_i, y_i) \sim p_{X,Y}; x_i \sim p_a(x)\right\} \\
 S_u = \left\{x_i \mid i = 1,...,n_u; x_i \sim p_u(x)\right\}
 \end{eqnarray}
-Semi-supervised methods make some assumptions about the ``closeness'' of the input distributions $p_a(x)$ and $p_u(x)$ \parencite{chapelle2006semi} which allow to exploit both sets to solve some particular tasks. One of the earliest forms of \acrshort{ssl} is \textit{self-training} where the model is initially trained in a supervised manner on $S_a$, then used to predict the output signal for examples of $S_u$. The newly self-annotated set is added to the learning set for the next round of training and this process is repeated until a certain quality criterion is met.  
+These  methods make some assumptions about the ``closeness'' of the input distributions $p_a(x)$ and $p_u(x)$ \parencite{chapelle2006semi} which allow to exploit both sets to solve some particular tasks. One of the earliest forms of \acrlong{ssl} is \textit{self-training} where the model is initially trained in a supervised manner on the set $S_a$, then iteratively refined by using both $S_a$ and $S_u$ as training data until a certain quality criterion is met. In order to use the second set, an output signal is predicted for all samples of $S_i$ with the model being trained. 
 
 Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the annotations are noisy (\eg $y$ can be incorrect or imprecise), coarse or incomplete (similar to \acrlong{usl}\TODO{check any diff with usl}). The challenge of working with coarse annotations consists in having a model output $h(x)$ that contains more information than the training signal $y$. Coming back to our example of Section \ref{sec:backml:whatisml}, a weakly-supervised problem would consist in locating the human, animal or object in the image using only the label as training signal.
 
-\subsection{Learning tasks}
-\label{ssec:backml:learningtasks}
 
-Whereas we categorized \acrshort{ml} methods based in Section \ref{ssec:backml:supvsunsup} on what data are available, this section focuses on grouping them by learning task or, in other words, by the type of output(s) produced by the models. 
+\subsection{Shallow versus deep learning}
 
-A common type of learning task is \textit{classification} where the possible outputs of the model are discrete unordered scalar values. Examples of such tasks are for instance assigning a label to an image or detecting whether an email is a spam or not. When there are only two possible labels ($\left|\mathcal{Y}\right| = 2$), the classification problem is said to be \textit{binary}.
+Many things in our world can be viewed as hierarchies of concepts. For instance, a human body is composed of body parts like a face and a face is itself composed of several elements: cheeks, eyes, nose... This decomposition could be refined even more and could also be applied to other concepts. Moreover, understanding hierarchies is sometimes key to learn some concepts efficiently. In computer vision, for example, an image can be seen as a hierarchy going from the pixels to the actual semantic of the image. Direct interpretation of individual pixels is rarely enough for learning anything meaningful. However, pixels combined together make edges, which themselves make textures, which are eventually combined in several rounds to reach meaningful semantic elements (see Figure \TODO{add figure to illustrate hierarchy of concept}). Therefore, being able to understand this hierarchy is a first step towards image understanding.   
 
-In opposition, \textit{regression} focuses on ordered real-valued scalar outputs. An example of a regression problem is trying to predict the price of a house given its area, the amount of product generated by a factory in a given time period or the review score of a product on an e-commerce platform. 
+Most of the \acrlong{ml} methods developed until recently can arguably be considered ``\textit{shallow}'' which means that they are not complex enough (\eg a linear model) or their learning process is not adapted (\eg a decision tree) to learn or exploit such hierarchies. In order to successfully apply these methods to complex data with hierarchical structure, one usually needs to help the learning algorithm by pre-processing the data and extract meaningful information using field knowledge. This process is called \textit{manual feature extraction} or \textit{engineering} and has been an important part of the design of machine learning algorithms. In computer vision, a great body of work is focused on creating complicated pipelines of feature extraction that produce hundreds of different features that can be used to understand images and alleviate the problem (\eg SURF \parencite{bay2006surf}, ORB \parencite{rublee2011orb}). However, more recently methods based on neural networks have show that manual feature extraction was usually not the best performing approach for a wide variety of tasks.
 
-Previous examples of classification and regression problems were single-valued outputs but can also be extended to structured outputs. This is the case for \textit{image segmentation} which focuses on classifying each pixel of an image (\ie what kind of object does this pixel belong to in the image?). The output of the model is a segmentation mask where pixel at row $i$ and column $j$ is classified as $\hat{y}_{ij} \in \mathcal{Y}$. For some tasks, a mask is not always necessary, one is rather interested in the coarse location of the objects. This kind of task is called \textit{detection} where the output of the model, the location, can be encoded as image coordinates $(i, j)$ representing the object's center of gravity or any point included in it. Another common representation is the bounding box, a box containing exactly the object of interest encoded by the position of a corner of the box in the image and its height and width.
+In 2012, the third iteration of a \acrlong{ml} challenge called ImageNet \parencite{russakovsky2015imagenet} was organized. One of the tasks was image classification and all but the best methods used combinations of shallow learning algorithms and features extraction. The winning method \parencite{krizhevsky2012imagenet} however did not and instead used a deep convolutional neural network trained on the raw images. They beat the second best method by a margin of 11\% error rate. This extraordinary improvement revived the interest of the \acrlong{ml} community to neural networks and launched ``\acrlong{dl}''. Nowadays, it is a bit clearer why the winning method (\ie the AlexNet architecture) worked so well. Indeed, in its design, the deep neural network incorporates some particularily beneficial \textit{inductive bias}, a set of assumptions that narrow the search of a good model in the hypothesis space. This inductive bias includes a trainable multi-layered structure that can automatically learn hierarchical concepts from the data directly. In this case, the ``deep'' qualifier refers to the large number of layers in the architecture and therefore its supposed ability to learn high-level concepts. Section \ref{sec:backml:deeplearning} dives a little further into deep learning concepts relevant to this thesis.
 
-% generation
-
-%\textit{Landmark detection} is another example where the task consists in finding some points of interests in an image. This is useful for instance to analyse the anatomical structures in humans or animals \TODO{cite}. The output of the model is a set of coordinates representing the landmarks in the input image. 
-\TODO{add more details}
-
-\subsection{Classical machine learning and deep learning}
-
-Until recently, applying \acrlong{ml} often implied going through a data preparation and feature extraction step. This step was especially important for images or similarly complex and structured data types. In the specific case of images, people have developed complicated pipelines of feature extraction based on statistics and computer vision that produce hundreds of different features. These features were designed to capture high-level concepts that ``classical'' methods (\eg linear models, kernelized \acrshort{svm}, random forests, \etc) were not able to learn easily by themselves using only the raw data (\eg pixels intensities). Such concepts are however of uttermost importance when trying to understand data like images as there is a natural hierarchical structure of concepts of increasing complexity inherent to our world and its data. For instance, to understand that an image contains a human, a model would have to understand that this human is made up of body parts structured in a certain way (\eg face and legs respectively above and below the trunk), that a face has eyes, lips and nose. Then, going even lower, that these parts are made of textures, edges which are themselves made up of colors and pixels.   
-
-
-
-\subsection{Transfer and multi-task learning}
-\label{ssec:backml:tlandmtl}
+\subsection{Transfer learning}
+\label{ssec:backml:transfer}
 
 As humans, we have extraordinary learning capabilites. Throughout our lives, we learn to move, communicate, interact with our environments and more. One specific learning ability that we possess is to use knowledge we have acquired in a given context to learn faster in a different context. For example, someone who already plays the violin will probably feel it easier to learn to play the piano than someone who has no music education at all. In a way, we ``transfer'' knowledge and skills from a task to another. 
 
@@ -80,21 +93,21 @@ This idea has been applied in \acrlong{ml} and from this application emerged \ac
 
 Transfer learning methods are organized based on the properties of the source and target tasks. The different types of supervision (or lack thereof) discussed in Section \ref{ssec:backml:supvsunsup} also apply for \acrlong{tl} in which case the supervision qualifier relates to the target task only. For instance, in supervised \acrlong{tl}, the target task is a supervised dataset as described in Equation \ref{eqn:backml:supervised}. For the rest of the section, we will assume that the source tasks are also supervised. 
 
-Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:homotransfer}) when the source and target tasks only differ by the distributions of their data. As an example, let us suppose we would want classify pictures taken with a camera equipped with a certain captor (dataset $B$) and that we also have at our disposal another dataset of picture taken taken with a camera equipped with another type of captor (dataset $A$). Each captor has a certain noise pattern which results in dataset $A$ and $B$ to have a slighlty different distributions in the pixel intensities (\ie $p_A(x) \neq p_B(x)$). This specific setup where only the inputs distributions differ is also called \textit{domain adaptation}.  
+Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:homotransfer}) when the source and target tasks only differ by the distributions of their data. As an example, let us suppose we would want classify pictures taken with a camera equipped with a certain sensor (dataset $B$) and that we also have at hands another dataset of pictures taken with a camera equipped with another type of sensor (dataset $A$). Each captor has a certain noise pattern which results in dataset $A$ and $B$ to have a slighlty different distributions in the pixel intensities (\ie $p_A(x) \neq p_B(x)$). This specific setup where only the inputs distributions differ is also called \textit{domain adaptation}.  
 
 \begin{definition}
 \label{def:backml:homotransfer}
 Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(x, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(x, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t \neq \emptyset$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(x) \neq p_t(x)$ or $p_s(y|x) \neq p_t(y|x)$. 
 \end{definition}
 
-Transfer learning can be \textit{heterogeneous} (see Definition \ref{def:backml:heterotransfer}). An example that will be addressed later in this thesis is the transfer of a model trained for natural image classification to medical image classification. In this case, both of the tasks are different: identify the presence a type of object in the image \vs assess the malignancy of a tumor from an image of a tissue. The input distributions also differ as medical images avec completely different content and appearance.  
+Transfer learning can be \textit{heterogeneous} (see Definition \ref{def:backml:heterotransfer}). An example that will be addressed later in this thesis is the transfer of a model trained for natural image classification to medical image classification. In this case, both of the tasks are different as the first consists in identifying the presence of a type of object in the image whereas the other consists in assessing the malignancy of a tumor from an image of a tissue. The input distributions also differ as medical images have completely different content and appearance.  
 
 \begin{definition}
 \label{def:backml:heterotransfer}
 Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(x, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(x, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t = \emptyset$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
 \end{definition}
 
-Applying a \acrlong{tl} algorithm does not always result in a performance improvement, sometimes performance are even worse compared to other approaches not using \acrlong{tl}, this is called \textit{negative transfer}. How to anticipate, predict and correct this phenomenon is still an open question being investigated. When the question to apply or not \acrlong{tl} has been answered positively, remains the choice of the transfer approach. Based on how they operate, \parencite{yang2020transfer} have identifed four different categories of \acrlong{tl} algorithms: 
+Sometimes, performance are worsen by the use of transfer learning. This phenomenon is called \textit{negative transfer}. Moreover, the training process on the target task can cause some of the previously-learned knowledge to be lost, sometimes called ``\textit{catastrophic interference}'' \cite{french1999catastrophic}. How to anticipate, predict and correct these phenomena are open research questions. When the decision to apply \acrlong{tl} has been taken, remains the choice of the transfer approach. Based on how they operate, \parencite{yang2020transfer} have identifed four different categories of \acrlong{tl} algorithms: 
 
 \begin{enumerate}
   \item \textit{instance-based}: knowledge transferred corresponds to the weights attached to the source examples,
@@ -103,9 +116,22 @@ Applying a \acrlong{tl} algorithm does not always result in a performance improv
   \item \textit{relation-based}: knowledge to be transferred corresponds to rules specifying the relations between the examples in the source domain. 
 \end{enumerate}
 
+This thesis explores heterogeneous model-based \acrlong{tl} for classification from natural images to a specific type of medical images from the field of digital pathology (more about this in Chapter \ref{chap:backdp}). Our approach consists in transferring a pre-trained deep learning model to the target tasks. 
 
 
-\TODO{multitask learning}
+\subsection{Multi-task learning}
+\label{ssec:backml:mtl}
+
+In \acrlong{tl}, the transfer process happens in two steps. First, knowledge is extracted from the source tasks one way or another, then later used for learning the target task. A similar approach is \acrfirstit{mtl} where, rather than performing the transfer in two steps, everything happens at once: a model is trained on all tasks simultaneously. Compared to learning each task individually, this approach has several advantages: it increases the total amount of data available for training a model, a more robust and universal representations can be learned by sharing knowledge between tasks and, to a certain extent, it prevents the model to overfit a specific task\footnote{See more on overfitting in Section \ref{ssec:backml:overfitting}.}. In the best scenarii, the use of \acrlong{mtl} improves the performance of each individual task compared to a setup where the tasks are treated independently. In opposition, it happens that antagonistic tasks cause the resulting individual task performance to be worse. This issue is related to negative transfer and catastrophic interference introduced in Section \ref{ssec:backml:transfer}. 
+
+Similarily to \acrlong{tl}, \acrlong{mtl} methods can be either \textit{heterogeneous} when the tasks are of different types (\eg supervised, unsupervised, classification, regression), or \textit{homogeneous} when tasks have only one type. In supervised \acrlong{mtl}, \parencite{zhang2017survey} have identified three families of methods:
+
+\begin{enumerate}
+  \item \textit{feature-based}: share knowledge through learning features common among the tasks
+  \item \textit{instance-based}: identify useful data instances and share knowledge through these intances
+  \item \textit{model} or \textit{parameters-based}: share knowledge through model parameters \TODO{say more?}
+\end{enumerate}
+
 
 
 % ===================
@@ -122,6 +148,7 @@ Applying a \acrlong{tl} algorithm does not always result in a performance improv
 \subsection{Bias-variance trade-off}
 
 \subsection{Overfitting}
+\label{ssec:backml:overfitting}
 
 \subsection{Model selection}
 
@@ -147,6 +174,7 @@ h^(n)(x) = b + \sum_{i=1}^n w_i x_i
 \subsection{Extremely randomized trees}
 
 \section{Deep learning}
+\label{sec:backml:deeplearning}
 
 \subsection{From a single perceptron to a convolutional neural network}
 
