@@ -12,21 +12,21 @@ Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} an
 
 A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $x \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(x)$ or $\hat{y} \in \mathcal{Y}$. $x$ and $h(x)$ can be vectors, matrices or n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $x$ is a two-dimensional vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $x$ (\resp $y$) is a $n$-tuple.
 
-In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure $\ell$ for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning or training set) that it uses to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
+In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure $P$ for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning or training set) that it uses to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
 
-As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$. As a performance measure $P$, one could assess the correctness of the ouput label by assigning 1 to correct predictions and 0 to errors. This performance measure is called the \textit{accuracy} and is written as: 
+As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$. As a performance measure $P$, one could assess the correctness of the ouput label by assigning 0 to correct predictions and 1 to errors. This performance measure is called the \textit{zero-one loss} and is written as:
 
 \begin{equation}
-P(y, \hat{y}) = \mathbb{1}_{y=\hat{y}}
+\ell_{0-1}(y, \hat{y}) = \mathbb{1}_{y\neq\hat{y}}
 \end{equation}
 
-There are numerous tasks beyond natural image classification to which \acrlong{ml} can be applied nowadays. In the next sections, we will discuss some of them and dive a little deeper into algorithms and topics related to learning which are relevant to this thesis.
+There are numerous tasks beyond natural image classification to which \acrlong{ml} can be applied nowadays. In the next Sections, we will discuss some of them and dive a little deeper into algorithms and topics related to learning which are relevant to this thesis.
 
 
 \section{Families of learning methods}
 \label{sec:backml:families}
 
-There are many ways to structure the ecosystem of \acrlong{ml} methods. This section explores some of them.
+There are many ways to structure the ecosystem of \acrlong{ml} methods. This Section explores some of them.
 
 \subsection{Supervised learning}
 \label{ssec:backml:sl}
@@ -52,7 +52,7 @@ Examples of regression problems are trying to predict the price of a house given
 
 Beyond scalar outputs, some models sometimes predict structured outputs. This is the case for \textit{image segmentation} which focuses on classifying each pixel of an image (\ie what kind of object does this pixel belong to in the image?). The output of the model is a segmentation mask where pixel at row $i$ and column $j$ is classified as $\hat{y}_{ij} \in \mathcal{Y}$. For some tasks, a mask is not always necessary, one is rather interested in the coarse location of the objects. This kind of task is called \textit{detection} where the output of the model, the location, can be encoded as image coordinates $(i, j)$ representing the object's center of gravity or any of its point. Another common representation is the bounding box, a box containing exactly the object of interest, encoded by the position of a corner of the box in the image and its height and width.
 
-In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires experts' intevention (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following sections. 
+In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires experts' intevention (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following Sections. 
 
 \subsection{Unsupervised learning}
 \label{ssec:backml:usl}
@@ -66,7 +66,7 @@ and attempts to extract information from this dataset. A common unsupervised tas
 \subsection{Between supervised and unsupervised learning}
 \label{ssec:backml:inbetween}
 
-The families discussed in Sections \ref{ssec:backml:supvsunsup} and \ref{ssec:backml:usl} do not cover all the existing \acrlong{ml} methods but are rather at the ends of a spectrum. There also exists intermediate families of methods. Halfway between supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that use a dataset where only a part of the observations have an associated output signal. The dataset is composed of two subsets:
+The families discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl} do not cover all the existing \acrlong{ml} methods but are rather at the ends of a spectrum. There also exists intermediate families of methods. Halfway between supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that use a dataset where only a part of the observations have an associated output signal. The dataset is composed of two subsets:
 \begin{eqnarray}
 S_a = \left\{(x_i, y_i) \mid i = 1,...,n_a; (x_i, y_i) \sim p_{X,Y}; x_i \sim p_a(x)\right\} \\
 S_u = \left\{x_i \mid i = 1,...,n_u; x_i \sim p_u(x)\right\}
@@ -91,7 +91,7 @@ As humans, we have extraordinary learning capabilites. Throughout our lives, we 
 
 This idea has been applied in \acrlong{ml} and from this application emerged \acrfirstit{tl} \parencite{yang2020transfer}. This field studies the ways knowledge learned from one or more tasks, called the \textit{source tasks}, can be exploited to learn more effectively on another task, the \textit{target task}. This subject has been researched for few decades now, as the first contributions about \acrlong{tl} date back to the end of the 1970s \parencite{bozinovski2020reminder}. A surge of interest happened in the 1990s notably with a NIPS-95 workshop called ``\textit{Learning to Learn: Knowledge Consolidation and Transfer in Inductive Systems}'' which discussed the importance of retaining previously-learned information for efficient learning. Since then, the interest has only been growing and the emergence of \acrlong{dl} has created new possibilities for \acrlong{tl}. 
 
-Transfer learning methods are organized based on the properties of the source and target tasks. The different types of supervision (or lack thereof) discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl} also apply for \acrlong{tl} in which case the supervision qualifier relates to the target task only. For instance, in supervised \acrlong{tl}, the target task is a supervised dataset as described in Equation \ref{eqn:backml:supervised}. For the rest of the section, we will assume that the source tasks are also supervised. 
+Transfer learning methods are organized based on the properties of the source and target tasks. The different types of supervision (or lack thereof) discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl} also apply for \acrlong{tl} in which case the supervision qualifier relates to the target task only. For instance, in supervised \acrlong{tl}, the target task is a supervised dataset as described in Equation \ref{eqn:backml:supervised}. For the rest of the Section, we will assume that the source tasks are also supervised. 
 
 Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:homotransfer}) when the source and target tasks only differ by the distributions of their data. As an example, let us suppose we would want classify pictures taken with a camera equipped with a certain sensor (dataset $B$) and that we also have at hands another dataset of pictures taken with a camera equipped with another type of sensor (dataset $A$). Each captor has a certain noise pattern which results in dataset $A$ and $B$ to have a slighlty different distributions in the pixel intensities (\ie $p_A(x) \neq p_B(x)$). This specific setup where only the inputs distributions differ is also called \textit{domain adaptation}.  
 
@@ -107,7 +107,7 @@ Transfer learning can be \textit{heterogeneous} (see Definition \ref{def:backml:
 Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(x, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(x, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t = \emptyset$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
 \end{definition}
 
-Sometimes, performance are worsen by the use of transfer learning. This happens for instance when the source and target tasks are ``not related enough''. Moreover, the training process on the target task can cause some of the previously-learned knowledge to be lost as most \acrlong{ml} methods do not have an explicit memory mechanism. These two phenomena are respectively called \textit{negative transfer} \parencite{zhang2020overcoming} and \textit{catastrophic interference} \parencite{french1999catastrophic}. How to anticipate and correct them are open research questions. When the decision to apply \acrlong{tl} has been taken, remains the choice of the transfer approach. Based on how they operate, \parencite{yang2020transfer} have identifed four different categories of \acrlong{tl} algorithms: 
+When the decision to apply \acrlong{tl} has been taken, remains the choice of the transfer approach. Based on how they operate, \parencite{yang2020transfer} have identifed four different categories of \acrlong{tl} algorithms: 
 
 \begin{enumerate}
   \item \textit{instance-based}: knowledge transferred corresponds to the weights attached to the source examples,
@@ -116,22 +116,20 @@ Sometimes, performance are worsen by the use of transfer learning. This happens 
   \item \textit{relation-based}: knowledge to be transferred corresponds to rules specifying the relations between the examples in the source domain. 
 \end{enumerate}
 
-This thesis explores heterogeneous model-based \acrlong{tl} for classification from natural images to a specific type of medical images from the field of digital pathology (more about this in Chapter \ref{chap:backdp}). Our approach consists in transferring a pre-trained deep learning model to the target tasks. 
-
+Transfer learning performance is influenced by serveral factors including how well the method is able to capture and use transferrable knowledge. The task-relatedness is also an important factor: usually the more similar the tasks, the better the performance. Sometimes, performance are worsen by the use of transfer learning. This happens for instance when the source and target tasks are not related enough. Moreover, the training process on the target task can cause some of the previously-learned knowledge to be lost as most \acrlong{ml} methods do not have a memory mechanism to retain such information. These two phenomena are respectively called \textit{negative transfer} \parencite{zhang2020overcoming} and \textit{catastrophic interference} \parencite{french1999catastrophic}. Although some methods have been proposed to tackle these challenges, how to anticipate and correct them are still open research questions.
 
 \subsection{Multi-task learning}
 \label{ssec:backml:mtl}
 
-In \acrlong{tl}, the transfer process happens in two steps. First, knowledge is extracted from the source tasks one way or another, then later used for learning the target task. A similar approach is \acrfirstit{mtl} where, rather than performing the transfer in two steps, everything happens at once: a model is trained on all tasks simultaneously. Compared to learning each task individually, this approach has several advantages: it increases the total amount of data available for training a model, a more robust and universal representations can be learned by sharing knowledge between tasks and, to a certain extent, it prevents the model to overfit a specific task\footnote{See more on overfitting in Section \ref{ssec:backml:overfitting}.}. In the best scenarii, the use of \acrlong{mtl} improves the performance of each individual task compared to a setup where the tasks are treated independently. In opposition, it happens that antagonistic tasks cause the resulting individual task performance to be worse. This issue is related to negative transfer and catastrophic interference introduced in Section \ref{ssec:backml:transfer}. 
+In \acrlong{tl}, the transfer process happens in two steps. First, knowledge is extracted from the source tasks one way or another, then later used for learning the target task. A similar approach is \acrfirstit{mtl} where, rather than performing the transfer in two steps, everything happens at once: a model is trained on all tasks simultaneously. Compared to learning each task individually, this approach has several advantages: it increases the total amount of data available for training a model, a more robust and universal representations can be learned by sharing knowledge between tasks and, to a certain extent, it prevents the model to overfit a specific task\footnote{See more on overfitting in Section \ref{ssec:backml:bvtradeoff}.}. In the best scenarii, the use of \acrlong{mtl} improves the performance of each individual task compared to a setup where the tasks are treated independently. In opposition, it happens that antagonistic tasks cause the resulting individual task performance to be worse. This issue is related to negative transfer and catastrophic interference introduced in Section \ref{ssec:backml:transfer}. 
 
 Similarily to \acrlong{tl}, \acrlong{mtl} methods can be either \textit{heterogeneous} when the tasks are of different types (\eg supervised, unsupervised, classification, regression), or \textit{homogeneous} when tasks have only one type. In supervised \acrlong{mtl}, \parencite{zhang2017survey} have identified three families of methods:
 
 \begin{enumerate}
   \item \textit{feature-based}: share knowledge through learning features common among the tasks
   \item \textit{instance-based}: identify useful data instances and share knowledge through these intances
-  \item \textit{model} or \textit{parameters-based}: share knowledge through model parameters \TODO{say more?}
+  \item \textit{model} or \textit{parameters-based}: use learned models as proxies to extract information about tasks relatedness
 \end{enumerate}
-
 
 
 % ===================
@@ -139,18 +137,71 @@ Similarily to \acrlong{tl}, \acrlong{mtl} methods can be either \textit{heteroge
 % ===================
 \section{Model evaluation and selection}
 
+As stated in Section \ref{sec:backml:whatisml}, evaluation is a core principle of \acrlong{ml} as a learning algorithms should select a model that maximizes a performance criterion. In this Section, we introduce different concepts related to the evaluation and selection of machine learning models. In Section \ref{ssec:backml:metrics}, we first introduce different metrics used in this thesis. In Sections \ref{ssec:backml:bvtradeoff} and \ref{ssec:backml:bvtradeoff}, we discuss the importance of generalization for \acrlong{ml} models and the related topics of bias-variance trade-off and overfitting. In Section \ref{ssec:backml:modelselection}, we discuss further model selection.
+
 \subsection{Metrics}
-% ROC AUC
-% Accuracy
-% Cross entropy
-% Dice score / soft dice loss
+\label{ssec:backml:metrics}
 
-\subsection{Bias-variance trade-off}
+% F1 ?
+The metrics presented in this Section are mostly supervised classification performance measures. Given a supervised dataset as described in Equation \ref{eqn:backml:supervised}, the metrics evaluate how the predicted class $\hat{y}_i$ compares to the ground truth class $y_i$. In the remainder of the thesis, when the higher the better regarding the metric, we will call this metric a \textit{score}. In opposition, when the lower the better, we will call it a \textit{loss}. In terms of notations, a loss and a score computed over a set of data will respectively be noted $\mathcal{L}$ and $\mathcal{M}$.
 
-\subsection{Overfitting}
-\label{ssec:backml:overfitting}
+\subsubsection{Accuracy}
+\label{sssec:backml:metric:acc}
+The accuracy was introduced in our first example of a machine learning problem in Section \ref{sec:backml:whatisml} with its dual, the zero-one loss. The accuracy assigns 1 to correct predictions and 0 to misclassified samples. The accuracy score can be computed over a dataset:
+
+\begin{equation}
+\label{eqn:backml:accuracy}
+\mathcal{M}_{\text{acc}} = \dfrac{1}{n} \sum\limits_{i = 1}^n (1 - \ell_{\text{0-1}}(y_i, \hat{y}_i))
+\end{equation} 
+
+It has the advantage of being simple to interpret, to compute and it applies to both binary and multi-class problems. However, it is affected by \textit{class imbalance}, the situtation when there is a disparity in the numbers of examples belonging to each the problem classes in the dataset. For instance, given binary dataset where $n-1$ examples belong to class $A$ and the last example to class $B$, a classifier predicting only class $A$ would obtain an accuracy close to $1$ which seems very good but in reality the classifier did not learn anything from the data.      
+
+\subsubsection{Area under the \acrlong{roc} curve}
+\label{sssec:backml:metric:rocauc}
+
+In binary classification, a specific name is given to each type of successful or unsuccessful predictions and these different types of elements form what is called the \textit{confusion matrix} (see Table \ref{tab:backml:confusion}). Each element of this table can be either a number or a proportion of samples falling in the category. The accuracy presented in Section \ref{sssec:backml:metric:acc} can be re-expressed based on this confusion matrix: $\frac{TN + TP}{N + P}$. In some context, however, it is more informative to look at other types of errors. For instance, when the target task consists in diagnosing cancer, one is more interested in assessing the number of false positives and negatives of the method using, for instance, the \textit{specificity} or \textit{sensitivity} (\aka recall) scores.
+
+\begin{equation}
+\label{eqn:backml:specifity}
+\textit{Specifity} = \frac{TN}{TN + FP} = 1 - \frac{FP}{N}
+\end{equation}
+
+\begin{equation}
+\label{eqn:backml:sensitivity}
+\textit{Sensitivity} = \frac{TP}{P}
+\end{equation}
+
+\begin{table}
+  \centering
+  \begin{tabular}{c|cc|c}
+  & \multicolumn{2}{c}{Predicted ($\hat{y}$)} & \\
+  Actual ($y$) & 0 & 1 & Total \\
+  \hline
+  0 & \textbf{T}rue \textbf{N}egative & \textbf{F}alse \textbf{N}egative & \textbf{N}egative \\
+  1 & \textbf{F}alse \textbf{P}ositive & \textbf{T}rue \textbf{P}ositive & \textbf{P}ositive \\
+  \end{tabular}
+  \caption{A confusion matrix for a binary classification problem.}
+  \label{tab:backml:confusion}
+\end{table}
+
+An usual way of analysing these metrics is to plot on a two-dimensional graph a model represented as a point $(1 - \textit{specificity}, \textit{sensitivity})$. When the output of a model is the probability of a class, it is possible to generate several pairs of the metrics by varying the threshold applied to the probabilities. Such a plot is called the \acrfirstit{roc} curve (see Figure \TODO{find a figure}). From this plot can be derived an new metric, the \textit{area under the \acrshort{roc} curve} (\rocauc). This metric requires the output of a model to be a ``thresholdable'' number, is more computationally expensive to obtain as one have to evaluate all possible thresholds and only applied to binary classification but provides a measure which is not impacted by class imbalance which is a very interesting property. 
+
+\subsubsection{Cross-entropy loss}
+\label{sssec:backml:metric:crossentropy}
+
+\subsubsection{Dice score}
+\label{sssec:backml:metric:dice}
+
+\subsubsection{Rankings of metrics}
+\label{ssec:backml:metric:rankings}
+
+
+\subsection{Bias-variance trade-off and overfitting}
+\label{ssec:backml:bvtradeoff}
+
 
 \subsection{Model selection}
+\label{ssec:backml:modelselection}
 
 % ===================
 % Methods
@@ -189,5 +240,12 @@ h^(n)(x) = b + \sum_{i=1}^n w_i x_i
 
 \subsection{Deep transfer learning}
 
-\subsection{Multi-task learning}
 
+
+\section{Wrapping up}
+
+In the previous Sections, we gave an overview of different families of \acrlong{ml} methods. We can now position our work in this context. In Chapters \ref{chap:comp} and \ref{chap:mtask}, both contributions explore heterogeneous model-based \acrlong{tl} by transferring \acrlong{dl} classification models. We use several target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp} (more on this in Chapter \ref{chap:backdp}). The first contribution studies transfer from ImageNet. Motivated by the fact that transfer works better when the source and target tasks are related, the second contribution use homogeneous features-based \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data directly.
+
+In Chapter \ref{chap:sdist}, we move to a different type of task: image segmentation. Working with an sparsely-annotated \acrlong{dp} dataset, we use self-training to complete the missing annotations and train a U-Net segmentation model.  
+
+\TODO{biaflows software}
