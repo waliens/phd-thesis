@@ -71,6 +71,7 @@ headsepline, % Uncomment to get a line under the header
 \newacronym{acc}{ACC}{accuracy}
 \newacronym{ai}{AI}{artificial intelligence}
 \newacronym{auc}{AUC}{area under the curve}
+\newacronym{bce}{BCE}{binary cross-entropy}
 \newacronym{cnn}{CNN}{convolutional neural networks}
 \newacronym{ct}{CT}{computed tomography}
 \newacronym{cv}{CV}{cross-validation}
@@ -112,9 +113,10 @@ headsepline, % Uncomment to get a line under the header
 \newcommand{\vs}{\textit{vs.}}
 \newcommand{\quoteit}[1]{``\textit{#1}"}
 \newcommand{\TODO}[1]{{\color{red}TODO}\footnote{\color{red}#1}}
-\newcommand{\argmax}[1]{\text{arg} \underset{#1}{\text{max}}}
-\newcommand{\argmin}[1]{\text{arg} \underset{#1}{\text{min}}}
+\newcommand{\argmax}[1]{\text{arg}\,\underset{#1}{\text{max}}\,}
+\newcommand{\argmin}[1]{\text{arg}\,\underset{#1}{\text{min}}\,}
 \newcommand{\rocauc}{\acrshort{roc} \acrshort{auc}}
+\newcommand{\rocaucs}{\rocauc~}
 
 \author{Romain Mormont}
 \title{Addressing data scarcity with deep transfer learning and self-training in digital pathology}

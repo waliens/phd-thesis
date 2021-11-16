@@ -10,11 +10,11 @@ Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} an
 \section{What is machine learning ?} 
 \label{sec:backml:whatisml}
 
-A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $x \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(x)$ or $\hat{y} \in \mathcal{Y}$. $x$ and $h(x)$ can be vectors, matrices or n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $x$ is a two-dimensional vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $x$ (\resp $y$) is a $n$-tuple.
+A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $x \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(x)$ or $\hat{y} \in \mathcal{Y}$. Entities $x$ and $h(x)$ can be vectors, matrices or n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $x$ is a two-dimensional vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $x$ (\resp $y$) is a $n$-tuple.
 
 In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure $P$ for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning or training set) that it uses to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
 
-As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$. As a performance measure $P$, one could assess the correctness of the ouput label by assigning 0 to correct predictions and 1 to errors. This performance measure is called the \textit{zero-one loss} and is written as:
+As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$ (\aka ground truth). As a performance measure $P$, one could assess the correctness of the ouput label by assigning 0 to correct predictions and 1 to errors. This performance measure is called the \textit{zero-one loss} and is written as:
 
 \begin{equation}
 \ell_{0-1}(y, \hat{y}) = \mathbb{1}_{y\neq\hat{y}}
@@ -38,13 +38,13 @@ There are many ways to structure the ecosystem of \acrlong{ml} methods. This Sec
 \end{equation}
 where $y_i \in \mathcal{Y}$ is the output signal for the observation $x_i \in \mathcal{X}$. The learning algorithm objective is to find a model $h \in \mathcal{H}$ that approximates at best the output. 
 
-When the output space is a finite set of discrete scalar values $\mathcal{Y} = \left\{1, 2, ..., C\right\}$, the problem is called \textit{classification}. $C$ denotes the cardinality of the set $\mathcal{Y}$ or the number of classes. When $C = 2$, the problem is said to be \textit{binary}. In classification, the model should predict the most probable output given an example:
+When the output space is a finite set of discrete scalar values $\mathcal{Y} = \left\{1, 2, ..., C\right\}$, the problem is called \textit{classification}. $C$ denotes the cardinality of the set $\mathcal{Y}$ or the number of classes. When $C = 2$, the problem is said to be \textit{binary}. In classification, the model should predict the most probable output class given an example:
 \begin{equation}
 \hat{y}_i = \argmax{y_k \in \mathcal{Y}} p(y=y_k|x=x_i)
 \end{equation}
 Examples of classification tasks are for instance assigning a label to an image or detecting whether an email is a spam or not. 
 
-When the output space is continuous and the output is a real-valued scalar value, the problem is called \textit{regression}. In this case, the model should predict the expected value $y$ given any input $x_i$:
+When the output space is continuous and the output is a real scalar value, the problem is called \textit{regression}. In this case, the model should predict the expected value $y$ given any input $x_i$:
 \begin{equation}
 h(x_i) = \mathbb{E}\left[y|x=x_i\right]
 \end{equation}
@@ -52,7 +52,7 @@ Examples of regression problems are trying to predict the price of a house given
 
 Beyond scalar outputs, some models sometimes predict structured outputs. This is the case for \textit{image segmentation} which focuses on classifying each pixel of an image (\ie what kind of object does this pixel belong to in the image?). The output of the model is a segmentation mask where pixel at row $i$ and column $j$ is classified as $\hat{y}_{ij} \in \mathcal{Y}$. For some tasks, a mask is not always necessary, one is rather interested in the coarse location of the objects. This kind of task is called \textit{detection} where the output of the model, the location, can be encoded as image coordinates $(i, j)$ representing the object's center of gravity or any of its point. Another common representation is the bounding box, a box containing exactly the object of interest, encoded by the position of a corner of the box in the image and its height and width.
 
-In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires experts' intevention (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following Sections. 
+In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires the intevention of experts (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following Sections. 
 
 \subsection{Unsupervised learning}
 \label{ssec:backml:usl}
@@ -78,9 +78,9 @@ Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the an
 
 \subsection{Shallow versus deep learning}
 
-Many things in our world can be viewed as hierarchies of concepts. For instance, a human body is composed of body parts like a face and a face is itself composed of several elements: cheeks, eyes, nose... This decomposition could be refined even more and could also be applied to other concepts. Moreover, understanding hierarchies is sometimes key to learn some concepts efficiently. In computer vision, for example, an image can be seen as a hierarchy going from the pixels to its actual semantic. Direct interpretation of individual pixels is rarely enough for learning anything meaningful. However, pixels combined together make edges, which themselves make textures, which are eventually combined in several rounds to reach meaningful semantic elements (see Figure \TODO{add figure to illustrate hierarchy of concept}). Therefore, being able to understand this hierarchy is a first step towards image understanding.   
+Many things in our world can be viewed as hierarchies of concepts. For instance, a human body is composed of body parts like a head. The head includes the face which is itself composed of several elements: cheeks, eyes, nose, \etc. This decomposition could be refined even more and could also be applied to other concepts. Understanding hierarchies is sometimes key to learn some concepts efficiently. In computer vision, for example, an image can be seen as a hierarchy going from the actual objects it contains down to the pixels. Direct interpretation of individual pixels is rarely enough for learning anything meaningful. However, pixels combined together make edges, which themselves make textures, which are eventually combined in several rounds to reach meaningful semantic elements (see Figure \TODO{add figure to illustrate hierarchy of concept}). Therefore, being able to understand this hierarchy is a first step towards image understanding.   
 
-Most of the \acrlong{ml} methods developed until recently can arguably be considered ``\textit{shallow}'' which means that they are not complex enough (\eg a linear model) or their learning process is not adapted (\eg a decision tree) to learn or exploit such hierarchies. In order to successfully apply these methods to complex data with hierarchical structure, one usually needs to help the learning algorithm by pre-processing the data and extract meaningful information using field knowledge. This process is called \textit{manual feature extraction} or \textit{engineering} and has been an important part of the design of machine learning algorithms. In computer vision, a great body of work is focused on creating complicated pipelines of feature extraction that produce hundreds of different features that can be used to understand images and alleviate the problem (\eg SURF \parencite{bay2006surf}, ORB \parencite{rublee2011orb}). However, more recently methods based on neural networks have shown that manual feature extraction was usually not the best performing approach for a wide variety of tasks.
+Most of the \acrlong{ml} methods developed until recently can arguably be considered ``\textit{shallow}'' which means that they are not complex enough (\eg a linear model) or their learning process is not adapted (\eg a decision tree) to learn or exploit such hierarchies. In order to successfully apply these methods to complex data with hierarchical structure, one usually needs to help the learning algorithm by pre-processing the data and extract meaningful information using field knowledge. This process is called \textit{manual feature extraction} or \textit{engineering} and has been an important part of the application of machine learning algorithms. In computer vision, a great body of work is focused on creating complicated pipelines of feature extraction that produce hundreds of different features that can be used to understand images and alleviate the problem (\eg SURF \parencite{bay2006surf}, ORB \parencite{rublee2011orb}). However, more recently methods based on neural networks have shown that manual feature extraction was usually not the best performing approach for a wide variety of tasks.
 
 In 2012, the third iteration of a \acrlong{ml} challenge called ImageNet \parencite{russakovsky2015imagenet} was organized. One of the tasks was image classification and all but the best methods used combinations of shallow learning algorithms and features extraction. The winning method \parencite{krizhevsky2012imagenet} however did not and instead used a deep convolutional neural network trained on the raw images. They beat the second best method by a margin of 11\% error rate. This extraordinary improvement revived the interest of the \acrlong{ml} community to neural networks and launched ``\acrlong{dl}''. Nowadays, it is a bit clearer why the winning method (\ie the AlexNet architecture) worked so well. Indeed, in its design, the deep neural network incorporates some particularily beneficial \textit{inductive bias}, a set of assumptions that narrow the search of a good model in the hypothesis space. This inductive bias includes a trainable multi-layered structure that can automatically learn hierarchical concepts from the data directly. In other words, instead of manual feature engineering, features are learned automatically. Section \ref{sec:backml:deeplearning} dives a little further into deep learning concepts relevant to this thesis.
 
@@ -100,7 +100,7 @@ Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:ho
 Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(x, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(x, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t \neq \emptyset$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(x) \neq p_t(x)$ or $p_s(y|x) \neq p_t(y|x)$. 
 \end{definition}
 
-Transfer learning can be \textit{heterogeneous} (see Definition \ref{def:backml:heterotransfer}). An example that will be addressed later in this thesis is the transfer of a model trained for natural image classification to medical image classification. In this case, both of the tasks are different as the first consists in identifying the presence of a type of object in the image whereas the other consists in assessing the malignancy of a tumor from an image of a tissue. The input distributions also differ as medical images have completely different content and appearance.  
+Transfer learning can be \textit{heterogeneous} (see Definition \ref{def:backml:heterotransfer}). An example that will be addressed later in this thesis is the transfer of a model trained for natural image classification to medical image classification. In this case, the tasks are different as the first consists in identifying the presence of a type of object in the image whereas the other consists in assessing the malignancy of a tumor from an image of a tissue. The input distributions also differ as medical images have completely different content and appearance.  
 
 \begin{definition}
 \label{def:backml:heterotransfer}
@@ -184,13 +184,54 @@ In binary classification, a specific name is given to each type of successful or
   \label{tab:backml:confusion}
 \end{table}
 
-An usual way of analysing these metrics is to plot on a two-dimensional graph a model represented as a point $(1 - \textit{specificity}, \textit{sensitivity})$. When the output of a model is the probability of a class, it is possible to generate several pairs of the metrics by varying the threshold applied to the probabilities. Such a plot is called the \acrfirstit{roc} curve (see Figure \TODO{find a figure}). From this plot can be derived an new metric, the \textit{area under the \acrshort{roc} curve} (\rocauc). This metric requires the output of a model to be a ``thresholdable'' number, is more computationally expensive to obtain as one have to evaluate all possible thresholds and only applied to binary classification but provides a measure which is not impacted by class imbalance which is a very interesting property. 
+These kind of metrics should always be studied together as it is often possible to maximise one at the expense of the other. Therefore a common analysis consists in plotting a model as a point $(1 - \textit{specificity}, \textit{sensitivity})$ in two-dimensional graph (in Figure \TODO{use the same as after for roc ??}). When the model outputs class probabilities, it is possible to generate several pairs of the metrics by varying the threshold applied to the probabilities (or a number that can be meaningfully applied a threshold). Such a plot is called the \acrfirstit{roc} curve (see Figure \TODO{find a figure}). From this plot can be derived a new metric, the \textit{area under the \acrshort{roc} curve} (\rocauc). This score can only be computed for model which produce a ``thresholdable'' number, it is relatively computationally expensive to obtain as one have to evaluate all possible thresholds and only applies to binary classification. However, it provides a measure which is not impacted by class imbalance which is a very interesting property in domains where this issue is common. Another advantage of the the \rocaucs is its finer grasp of how a model performs as it evaluates the probablities unlike the accuracy where the model is either wrong or right but there is no in-between.
 
 \subsubsection{Cross-entropy loss}
 \label{sssec:backml:metric:crossentropy}
 
+Cross-entropy is rooted in information theory and measures the similarity of two probability distributions $p$ and $q$ that, when defined over a finite and discrete set of events $\mathcal{X}$, is given by:
+\begin{equation}
+\label{eqn:backml:crossentropy}
+H(p, q) = - \sum\limits_{x_i \in \mathcal{X}} p\left(x_i\right) \log q\left(x_i\right)
+\end{equation}
+
+When the model outputs class probabilities, this similarity measure can be used to evaluate the discrepency between the prediction and the ground-truth. The cross-entropy becomes a loss function called the \textit{categorical cross-entropy}:
+\begin{equation}
+\label{eqn:backml:crossentropyloss}
+\mathcal{L}_{ce} = - \frac{1}{n} \sum\limits_{i=1}^n \sum\limits_{c=1}^{\left|\mathcal{Y}\right|} y^{(c)}_{i} \log \hat{y}^{(c)}_i
+\end{equation}
+where $\hat{y}^{(c)}_i$ is the probability predicted by the model for example $i$ and class $c$ and $y^{(c)}_i$ is the one-hot encoding of the ground truth:
+\begin{equation}
+\label{eqn:backml:onehotencoding}
+y^{(c)}_i = 
+\begin{cases}
+1,\,\text{if}\, y_i = c \\
+0,\,\text{otherwise}
+\end{cases}
+\end{equation} 
+
+In the case of binary classification, the metric falls back to the \acrfirstit{bce}:
+\begin{equation}
+\label{eqn:backml:bce}
+\mathcal{L}_{bce} = - \frac{1}{n} \sum\limits_{i=1}^n \left(y_i \log \hat{y}_1 + (1 - y_i) \log (1 - \hat{y}_i)\right) 
+\end{equation} 
+
+Similarly to \rocauc, the cross-entropy evaluates probabilities and therefore has a fine grasp on how the model performs. Another important advantage is its differentiability as it can be used as a loss for directly training differentiable models (\eg \acrlong{dl} models).
+
 \subsubsection{Dice score}
 \label{sssec:backml:metric:dice}
+
+As opposed to the previous metrics, the dice score is a set similarity measure that is used to evaluate binary image segmentation. Considering two sets $\mathcal{A}$ and $\mathcal{B}$, the dice score is defined as:
+\begin{equation}
+\label{eqn:backml:diceAB}
+\mathcal{D} = \frac{2 \left|\mathcal{A}\cap \mathcal{B}\right|}{\left|\mathcal{A}\right| + \left|\mathcal{B}\right|}
+\end{equation}
+When working with image segmentation, $\mathcal{A}$ and $\mathcal{B}$ becomes the sets of true and predicted binary labels for the pixels in the image and the intersection falls back to a dot product. The resulting formula is:
+\begin{equation}
+\label{eqn:backml:dice}
+\mathcal{M}_{dice} = \dfrac{2 \sum_i\sum_j y_{ij} \hat{y}_{ij} + \epsilon}{\sum_i\sum_j y_{ij} + \sum_i\sum_j \hat{y}_{ij} + \epsilon}
+\end{equation}
+where $\epsilon$ is a small value added for numerical stability, $y_{ij}$ is the actual class of pixel $(i, j)$ and $\hat{y}_{ij}$ the predicted class for this pixel. The predicted $\hat{y}_{ij}$ can either be binary or a probability. In the latter case, the metric is called the \textit{soft dice score} which is differentiable. When the model outputs class probabilities, instead of using the soft dice score, $\hat{y}_{ij}$ can be binarized using threshold value. 
 
 \subsubsection{Rankings of metrics}
 \label{ssec:backml:metric:rankings}
@@ -199,6 +240,9 @@ An usual way of analysing these metrics is to plot on a two-dimensional graph a 
 \subsection{Bias-variance trade-off and overfitting}
 \label{ssec:backml:bvtradeoff}
 
+% bias-variance decomposition
+% bias and variance over complexity
+% over parametrization
 
 \subsection{Model selection}
 \label{ssec:backml:modelselection}
