@@ -143,7 +143,7 @@ As stated in Section \ref{sec:backml:whatisml}, evaluation is a core principle o
 \label{ssec:backml:metrics}
 
 % F1 ?
-The metrics presented in this Section are mostly supervised classification performance measures. Given a supervised dataset as described in Equation \ref{eqn:backml:supervised}, the metrics evaluate how the predicted class $\hat{y}_i$ compares to the ground truth class $y_i$. In the remainder of the thesis, when the higher the better regarding the metric, we will call this metric a \textit{score}. In opposition, when the lower the better, we will call it a \textit{loss}. In terms of notations, a loss and a score computed over a set of data will respectively be noted $\mathcal{L}$ and $\mathcal{M}$.
+The metrics presented in this section are mostly supervised classification performance measures. Given a supervised dataset as described in Equation \ref{eqn:backml:supervised}, the metrics evaluate how the predicted class $\hat{y}_i$ compares to the ground truth class $y_i$. In the remainder of the thesis, when the higher the better for a metric, we will call it a \textit{score}. In opposition, when the lower the better, we will call it a \textit{loss}. In terms of notations, a loss and a score computed over a set of data will respectively be noted $\mathcal{L}$ and $\mathcal{M}$.
 
 \subsubsection{Accuracy}
 \label{sssec:backml:metric:acc}
@@ -154,7 +154,7 @@ The accuracy was introduced in our first example of a machine learning problem i
 \mathcal{M}_{\text{acc}} = \dfrac{1}{n} \sum\limits_{i = 1}^n (1 - \ell_{\text{0-1}}(y_i, \hat{y}_i))
 \end{equation} 
 
-It has the advantage of being simple to interpret, to compute and it applies to both binary and multi-class problems. However, it is affected by \textit{class imbalance}, the situtation when there is a disparity in the numbers of examples belonging to each the problem classes in the dataset. For instance, given binary dataset where $n-1$ examples belong to class $A$ and the last example to class $B$, a classifier predicting only class $A$ would obtain an accuracy close to $1$ which seems very good but in reality the classifier did not learn anything from the data.      
+It has the advantage of being simple to interpret, to compute and it applies to both binary and multi-class problems. However, it is affected by \textit{class imbalance}, the situtation when there is a disparity in the numbers of examples belonging to each of the problem classes in the dataset. For instance, given binary dataset where $n-1$ examples belong to class $A$ and the last example to class $B$, a classifier predicting only class $A$ would obtain an accuracy close to $1$ which seems very good but in reality the classifier did not learn anything from the data.      
 
 \subsubsection{Area under the \acrlong{roc} curve}
 \label{sssec:backml:metric:rocauc}
@@ -184,7 +184,7 @@ In binary classification, a specific name is given to each type of successful or
   \label{tab:backml:confusion}
 \end{table}
 
-These kind of metrics should always be studied together as it is often possible to maximise one at the expense of the other. Therefore a common analysis consists in plotting a model as a point $(1 - \textit{specificity}, \textit{sensitivity})$ in two-dimensional graph (in Figure \TODO{use the same as after for roc ??}). When the model outputs class probabilities, it is possible to generate several pairs of the metrics by varying the threshold applied to the probabilities (or a number that can be meaningfully applied a threshold). Such a plot is called the \acrfirstit{roc} curve (see Figure \TODO{find a figure}). From this plot can be derived a new metric, the \textit{area under the \acrshort{roc} curve} (\rocauc). This score can only be computed for model which produce a ``thresholdable'' number, it is relatively computationally expensive to obtain as one have to evaluate all possible thresholds and only applies to binary classification. However, it provides a measure which is not impacted by class imbalance which is a very interesting property in domains where this issue is common. Another advantage of the the \rocaucs is its finer grasp of how a model performs as it evaluates the probablities unlike the accuracy where the model is either wrong or right but there is no in-between.
+These kind of metrics should always be studied together as it is often possible to maximise one at the expense of the other. Therefore a common analysis consists in plotting a model as a point $(1 - \textit{specificity}, \textit{sensitivity})$ in two-dimensional graph (in Figure \TODO{use the same as after for roc ??}). When the model outputs class probabilities, it is possible to generate several pairs of the metrics by varying the threshold applied to the probabilities (or any number that can be meaningfully applied a threshold). Such a plot is called the \acrfirstit{roc} curve (see Figure \TODO{find a figure}). From this plot can be derived a new metric, the \textit{area under the \acrshort{roc} curve} (\rocauc). This score can only be computed for model which produce a ``thresholdable'' number, it is relatively computationally expensive to obtain as one have to evaluate all possible thresholds and only applies to binary classification. However, it provides a measure which is not impacted by class imbalance which is a very interesting property in domains where this issue is common. Another advantage of the the \rocaucs is its finer grasp of how a model performs as it evaluates the probablities unlike the accuracy where the model is either wrong or right but there is no in-between.
 
 \subsubsection{Cross-entropy loss}
 \label{sssec:backml:metric:crossentropy}
@@ -226,26 +226,61 @@ As opposed to the previous metrics, the dice score is a set similarity measure t
 \label{eqn:backml:diceAB}
 \mathcal{D} = \frac{2 \left|\mathcal{A}\cap \mathcal{B}\right|}{\left|\mathcal{A}\right| + \left|\mathcal{B}\right|}
 \end{equation}
-When working with image segmentation, $\mathcal{A}$ and $\mathcal{B}$ becomes the sets of true and predicted binary labels for the pixels in the image and the intersection falls back to a dot product. The resulting formula is:
+When working with image segmentation, $\mathcal{A}$ and $\mathcal{B}$ become the sets of true and predicted binary labels for the pixels in the image and the intersection falls back to a dot product. The resulting formula is:
 \begin{equation}
 \label{eqn:backml:dice}
 \mathcal{M}_{dice} = \dfrac{2 \sum_i\sum_j y_{ij} \hat{y}_{ij} + \epsilon}{\sum_i\sum_j y_{ij} + \sum_i\sum_j \hat{y}_{ij} + \epsilon}
 \end{equation}
-where $\epsilon$ is a small value added for numerical stability, $y_{ij}$ is the actual class of pixel $(i, j)$ and $\hat{y}_{ij}$ the predicted class for this pixel. The predicted $\hat{y}_{ij}$ can either be binary or a probability. In the latter case, the metric is called the \textit{soft dice score} which is differentiable. When the model outputs class probabilities, instead of using the soft dice score, $\hat{y}_{ij}$ can be binarized using threshold value. 
+where $\epsilon$ is a small value added for numerical stability, $y_{ij}$ is the actual class of pixel $(i, j)$ and $\hat{y}_{ij}$ the predicted class for this pixel. The predicted $\hat{y}_{ij}$ can either be binary or a probability. In the latter case, the metric is called the \textit{soft dice score} which is differentiable. When the model outputs class probabilities, instead of using the soft dice score, $\hat{y}_{ij}$ can be binarized using a threshold. 
 
 \subsubsection{Rankings of metrics}
 \label{ssec:backml:metric:rankings}
 
+In Part \ref{part:transfer} of this thesis, in order to increase the strength of our results, we use a relatively large set of image classification datasets to study transfer learning. In order to compare the different methods, we evaluate how it performs on those datasets. Unfortunatly, for reasons that will be explained later, it is not possible to use the same metric for all datasets. Moreover, a metric computed on a dataset is not always comparable to the same metric computed on a different dataset. For this reason, we resort to using \textit{rankings of methods}. First, we evaluate each method on each dataset with the best metric for this dataset, then rank all methods on the dataset: the best method gets rank 1 and the worst gets rank $m$ (where $m$ is the number of methods). Finally, in order to draw general conclusions, we average the rankings over all the dataset. The averaged ranks therefore provides a single metric for comparing the methods across datasets. This metric is not ideal \TODO{find references}.
+\subsection{Empirical risk minimization}
+\label{ssec:backml:modelselection}
+As stated in the introduction, the objective of a learning algorithm is to find a model $h \in \mathcal{H}$ that maximizes a performance measure or, alternatively, minimize a risk which can be formalized as the expected risk (for a supervised problem) \parencite{vapnik1992principles}:
+
+\begin{equation}
+\label{eqn:backml:expriskmin}
+R(h) = \mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(h\left(x\right), y\right)\right\}
+\end{equation}
+
+where $\ell: \mathcal{Y}\times\mathcal{Y} \rightarrow \mathbb{R}$ is a loss function which measures the closeness between $h(x)$ and $y$. The model that minimizes $R(h)$ is therefore the best possible model for the task and is called the Bayes model $h_B$. In practice, it is rarely possible to directly minimize the expected risk as one does not have access to the true distributions. It is therefore more convenient to work with an unbiased estimator of the estimated risk, the empirical risk, which is evaluated using the available supervised training set $\mathcal{S}$:
+
+\begin{equation}
+\label{eqn:backml:empiricalrisk}
+R_e(h) = \frac{1}{n} \sum_{i=1}^{|S|} \ell(h_\mathcal{S}(x_i), y_i), (x_i, y_i) \in \mathcal{S}
+\end{equation}
+
+The \acrfirstit{erm} principle suggests that a learning algorithm should pick a model that minimizes the emprical risk in order to approximate $h_B$ as well as possible. Most machine learning algorithms apply this principle.
 
 \subsection{Bias-variance trade-off and overfitting}
 \label{ssec:backml:bvtradeoff}
 
-% bias-variance decomposition
-% bias and variance over complexity
+Whereas it can be shown that the empirical risk, under some assumptions, converges to the expected risk when the training set grows ($n \rightarrow \infty$), in practice, one does not have access to an infinitely-large dataset. Therefore, the learned model will often differ from $h_B$ and its expected risk will often be larger. The effect of the ``\textit{choice}'' of a finite training set on the error can be studied using the \textit{bias-variance decomposition} of the error \parencite{geman1992neural, friedman2017elements}:
+
+\begin{equation}
+\label{eqn:backml:biasvariancedec}
+\mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{ \ell(h_{LS}(x), y)\right\}\right\} = \text{noise}(x) + \text{bias}^2(x) + \text{variance}(x)
+\end{equation}
+
+where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that can be extracted from $p(x,y)$ and $h_{\mathcal{S}} \in \mathcal{H}$ is the model learned from learning set $\mathcal{S} \in LS$. The \textit{noise} term is the error of $h_B$ and is therefore irreductible. The \text{bias} is the difference between $h_B$ and the average model (over models generated from $LS$). The \textit{variance} measures the variability of the predictions around the average model caused by the training set randomness. Several elements have a direct impact on these error terms such as: model capacity, training set size, noise in the data, \etc. 
+
+The \textit{capacity} or \textit{complexity} of a model is related to its ability to capture complex relationships in the data. Linear models are examples of low-capacity models as they are only able to capture linear relationships. Non-linear models such as random forests (see Section \ref{sec:backml:treebased}) or deep neural networks have a higher complexity or capacity compared to linear models. 
+
+Low-capacity models usually have low variance as their limited expressiveness does not allow them to change much based on the training data but they also have high bias as failing to capture complex relationships prevents the model from approximating $h_B$ correctly, this is \textit{underfitting}. In opposition, high-capacity models have low bias as their expressiveness allow them to approximate $h_B$ more accurately but this expressiveness also leads to high-variance as the model can learn a function which is too expressive compared to $h_B$ and, even worse, can fit the noise in the training data. This phenomenon is called \textit{overfitting} and hampers the models ability to generalize. The \textit{bias-variance trade-off} results from these observations and states that finding a good model (or minimizing the expected risk) consists in finding the trade-off between low- and high-capacity or underfitting and overfitting. In Figure \ref{fig:backml:biasvariancetradeoff} is plotted the classical representation of this trade-off.  
+
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.5]{backml/biasvariancetradeoff.png}
+  \caption{The bias-variance trade-off illustrated.}
+  \label{fig:backml:biasvariancetradeoff}
+\end{figure}
+
 % over parametrization
 
-\subsection{Model selection}
-\label{ssec:backml:modelselection}
 
 % ===================
 % Methods
@@ -263,6 +298,7 @@ h^(n)(x) = b + \sum_{i=1}^n w_i x_i
 % multi class svm
 
 \section{Tree-based methods}
+\label{sec:backml:treebased}
 
 \subsection{Decision tree and random forest}
 
