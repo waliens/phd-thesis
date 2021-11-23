@@ -20,13 +20,13 @@ As an example, a common task is \textit{natural image classification} where the 
 \ell_{0-1}(y, \hat{y}) = \mathbb{1}_{y\neq\hat{y}}
 \end{equation}
 
-There are numerous tasks beyond natural image classification to which \acrlong{ml} can be applied nowadays. In the next Sections, we will discuss some of them and dive a little deeper into algorithms and topics related to learning which are relevant to this thesis.
+There are numerous tasks beyond natural image classification to which \acrlong{ml} can be applied nowadays. In the next sections, we will discuss some of them and dive a little deeper into algorithms and topics related to learning which are relevant to this thesis.
 
 
 \section{Families of learning methods}
 \label{sec:backml:families}
 
-There are many ways to structure the ecosystem of \acrlong{ml} methods. This Section explores some of them.
+There are many ways to structure the ecosystem of \acrlong{ml} methods. This section explores some of them.
 
 \subsection{Supervised learning}
 \label{ssec:backml:sl}
@@ -52,7 +52,7 @@ Examples of regression problems are trying to predict the price of a house given
 
 Beyond scalar outputs, some models sometimes predict structured outputs. This is the case for \textit{image segmentation} which focuses on classifying each pixel of an image (\ie what kind of object does this pixel belong to in the image?). The output of the model is a segmentation mask where pixel at row $i$ and column $j$ is classified as $\hat{y}_{ij} \in \mathcal{Y}$. For some tasks, a mask is not always necessary, one is rather interested in the coarse location of the objects. This kind of task is called \textit{detection} where the output of the model, the location, can be encoded as image coordinates $(i, j)$ representing the object's center of gravity or any of its point. Another common representation is the bounding box, a box containing exactly the object of interest, encoded by the position of a corner of the box in the image and its height and width.
 
-In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires the intevention of experts (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following Sections. 
+In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires the intevention of experts (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following sections. 
 
 \subsection{Unsupervised learning}
 \label{ssec:backml:usl}
@@ -91,7 +91,7 @@ As humans, we have extraordinary learning capabilites. Throughout our lives, we 
 
 This idea has been applied in \acrlong{ml} and from this application emerged \acrfirstit{tl} \parencite{yang2020transfer}. This field studies the ways knowledge learned from one or more tasks, called the \textit{source tasks}, can be exploited to learn more effectively on another task, the \textit{target task}. This subject has been researched for few decades now, as the first contributions about \acrlong{tl} date back to the end of the 1970s \parencite{bozinovski2020reminder}. A surge of interest happened in the 1990s notably with a NIPS-95 workshop called ``\textit{Learning to Learn: Knowledge Consolidation and Transfer in Inductive Systems}'' which discussed the importance of retaining previously-learned information for efficient learning. Since then, the interest has only been growing and the emergence of \acrlong{dl} has created new possibilities for \acrlong{tl}. 
 
-Transfer learning methods are organized based on the properties of the source and target tasks. The different types of supervision (or lack thereof) discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl} also apply for \acrlong{tl} in which case the supervision qualifier relates to the target task only. For instance, in supervised \acrlong{tl}, the target task is a supervised dataset as described in Equation \ref{eqn:backml:supervised}. For the rest of the Section, we will assume that the source tasks are also supervised. 
+Transfer learning methods are organized based on the properties of the source and target tasks. The different types of supervision (or lack thereof) discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl} also apply for \acrlong{tl} in which case the supervision qualifier relates to the target task only. For instance, in supervised \acrlong{tl}, the target task is a supervised dataset as described in Equation \ref{eqn:backml:supervised}. For the remainder of the section, we will assume that the source tasks are also supervised. 
 
 Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:homotransfer}) when the source and target tasks only differ by the distributions of their data. As an example, let us suppose we would want classify pictures taken with a camera equipped with a certain sensor (dataset $B$) and that we also have at hands another dataset of pictures taken with a camera equipped with another type of sensor (dataset $A$). Each captor has a certain noise pattern which results in dataset $A$ and $B$ to have a slighlty different distributions in the pixel intensities (\ie $p_A(x) \neq p_B(x)$). This specific setup where only the inputs distributions differ is also called \textit{domain adaptation}.  
 
@@ -137,7 +137,65 @@ Similarily to \acrlong{tl}, \acrlong{mtl} methods can be either \textit{heteroge
 % ===================
 \section{Model evaluation and selection}
 
-As stated in Section \ref{sec:backml:whatisml}, evaluation is a core principle of \acrlong{ml} as a learning algorithms should select a model that maximizes a performance criterion. In this Section, we introduce different concepts related to the evaluation and selection of machine learning models. In Section \ref{ssec:backml:metrics}, we first introduce different metrics used in this thesis. In Sections \ref{ssec:backml:bvtradeoff} and \ref{ssec:backml:bvtradeoff}, we discuss the importance of generalization for \acrlong{ml} models and the related topics of bias-variance trade-off and overfitting. In Section \ref{ssec:backml:modelselection}, we discuss further model selection.
+As stated in Section \ref{sec:backml:whatisml}, evaluation is a core principle of \acrlong{ml} as a learning algorithms should select a model that maximizes a performance criterion. In this section, we introduce different concepts related to the evaluation and selection of machine learning models. In Sections \ref{ssec:backml:bvtradeoff} and \ref{ssec:backml:bvtradeoff}, we discuss the importance of generalization for \acrlong{ml} models and the related topics of bias-variance trade-off and overfitting. In Section \ref{ssec:backml:modelselection}, we discuss further practical consideration related to model selection. In Section \ref{ssec:backml:metrics}, we finally introduce different metrics used in this thesis. 
+
+
+\subsection{Empirical risk minimization}
+\label{ssec:backml:modelselection}
+As stated in the introduction, the objective of a learning algorithm is to find a model $h \in \mathcal{H}$ that maximizes a performance measure or, alternatively, minimize a risk which can be formalized as the expected risk (for a supervised problem) \parencite{vapnik1992principles}:
+
+\begin{equation}
+\label{eqn:backml:expriskmin}
+R(h) = \mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(h\left(x\right), y\right)\right\}
+\end{equation}
+
+where $\ell: \mathcal{Y}\times\mathcal{Y} \rightarrow \mathbb{R}$ is a loss function which measures the closeness between $h(x)$ and $y$. The expected risk is also called the \textit{generalization error}. The model that minimizes $R(h)$ is therefore the best possible model for the task and is called the Bayes model $h_B$. In practice, it is rarely possible to directly minimize the expected risk as one does not have access to the true distributions. It is therefore more convenient to work with an unbiased estimator of the estimated risk, the empirical risk, which is evaluated using the available supervised training set $\mathcal{S}$:
+
+\begin{equation}
+\label{eqn:backml:empiricalrisk}
+R_e(h) = \frac{1}{n} \sum_{i=1}^{|S|} \ell(h_\mathcal{S}(x_i), y_i), (x_i, y_i) \in \mathcal{S}
+\end{equation}
+
+The \acrfirstit{erm} principle suggests that a learning algorithm should pick a model that minimizes the emprical risk in order to approximate $h_B$ as well as possible. Most machine learning algorithms apply this principle.
+
+\subsection{Bias-variance trade-off and overfitting}
+\label{ssec:backml:bvtradeoff}
+
+Whereas it can be shown that the empirical risk, under some assumptions, converges to the expected risk when the training set grows ($n \rightarrow \infty$), in practice, one does not have access to an infinitely-large dataset. Therefore, the learned model will often differ from $h_B$ and its expected risk will often be larger. The effect of the ``\textit{choice}'' of a finite training set on the error can be studied using the \textit{bias-variance decomposition} of the error \parencite{geman1992neural, friedman2017elements}:
+
+\begin{equation}
+\label{eqn:backml:biasvariancedec}
+\mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{ \ell(h_{LS}(x), y)\right\}\right\} = \text{noise}(x) + \text{bias}^2(x) + \text{variance}(x)
+\end{equation}
+
+where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that can be extracted from $p(x,y)$ and $h_{\mathcal{S}} \in \mathcal{H}$ is the model learned from learning set $\mathcal{S} \in LS$. The \textit{noise} term is the error of $h_B$ and is therefore irreductible. The \text{bias} is the difference between $h_B$ and the average model (over models generated from $LS$). The \textit{variance} measures the variability of the predictions around the average model caused by the training set randomness. Several elements have a direct impact on these error terms such as: model capacity, training set size, noise in the data, \etc. 
+
+The \textit{capacity} or \textit{complexity} of a model is related to its ability to capture complex relationships in the data. Linear models are examples of low-capacity models as they are only able to capture linear relationships. Non-linear models such as random forests (see Section \ref{sec:backml:treebased}) or deep neural networks have a higher complexity or capacity compared to linear models. 
+
+Low-capacity models usually have low variance as their limited expressiveness does not allow them to change much based on the training data but they also have high bias as failing to capture complex relationships prevents the model from approximating $h_B$ correctly, this is \textit{underfitting}. In opposition, high-capacity models have low bias as their expressiveness allow them to approximate $h_B$ more accurately but this expressiveness also leads to high-variance as the model can learn a function which is too expressive compared to $h_B$ and, even worse, can fit the noise in the training data. This phenomenon is called \textit{overfitting} and hampers the models ability to generalize. The \textit{bias-variance trade-off} results from these observations and states that finding a good model (or minimizing the expected risk) consists in finding the trade-off between low- and high-capacity or underfitting and overfitting. In Figure \ref{fig:backml:biasvariancetradeoff} is plotted the classical representation of this trade-off.\TODO{what about the empirical risk in this setting ? in plot ?}
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.5]{backml/biasvariancetradeoff.png}
+  \caption{The bias-variance trade-off illustrated.}
+  \label{fig:backml:biasvariancetradeoff}
+\end{figure}
+
+\subsubsection{Over-parametrized models}
+
+With the advent of \acrlong{dl}, model complexity has exploded as typical \acrlong{dl} models have millions or even billons of parameters (see Section \ref{ssec:backml:dlarchi}). The bias-variance trade-off tells us that these models should be extremely prone to overfitting but the reality is different. Typically, it is not uncommon to find tasks for which deep learning models reach an empirical risk close to zero but actually generalize well to unseen data \parencite{zhang2021understanding}. Although the models are able to basically memorize the training data, the learned function is actually very robust. This phenomenon is currently being investigated and several explanations have been proposed such as the deep double-descent \parencite{belkin2019reconciling}. \TODO{check if more to say + add plot}
+
+\subsection{Model selection and evaluation in practice}
+
+These considerations have direct consequences on practical applications of machine learning. In particular, the presence of overfitting causes the empirical risk to reflect poorly the generalization error of a model. There are two common tasks where using the empirical risk only is not reliable which are \textit{model selection} and \textit{model evaluation}. The former consists in finding the model that would generalize best among a set of candidates and the latter consists in evaluating the expected performance of a model when it will be used on new data. Both tasks involve evaluating the generalization of a model. There exists several approaches to solve these tasks. 
+
+The simplest one is the use of an independant test set: the source dataset is split into two subsets, the train and test sets, which are used to respectively train and evaluate the model. The size of the subsets should be made such that the train set is large enough for the model to be able to learn but the test set should be large enough for the estimate of the error to be reliable. Those two objectives are obviously antagonistic. Moreover, this approach is not viable if the source dataset is too small as reducing even more the size of the sets will make both the training and evaluation unreliable. The test-set approach actually evaluates the generalization error of the model for the given dataset but not the expected generalization error used in Section \ref{ssec:backml:bvtradeoff}.
+
+Another approach that actually estimates the expected generalization error is \acrfirstit{cv} which simply repeats the train-test approach with different splits of the source dataset. For each train-test split, a model is trained the train set and evaluated on the test set. The \acrlong{cv} score is computed by averaging the test scores of all splits. These methods differ by how they generate their splits. A common \acrlong{cv} approach is \textit{$k$-fold \acrlong{cv}} where the data is randomly split into $k$ subsets and each subset is selected in turn to be the test set (and the remaining folds make the train set). 
+
+An important consideration is to never use a model selection score as the evaluation score of a model. Indeed, optimizing the choice of a model usually results in the selection score to be an overly optimistic estimator of the generalization performance of the model. In practice, this results in a three-way split of the training dataset: one extracts some train, validation and test sets. The models are trained on the first, selected on the second and the final model is evaluated on last. When the dataset is too small for such a three-way split, a common approach consists in extracting a test set from the initial dataset and then performing \acrlong{cv} on the train set. As a general rule, every decision influenced one way or another by the output $y$ should be done inside validation loop to avoid overfitting (using either \acrlong{cv} or an independant test-set).
+
+These two approaches are based on a strong assumption that the extracted sets are independant. If they are not, this would most probably lead to overfitting and the resulting selection or evaluation scores being overly optimistic. Therefore, it is sometimes not enough to split the sets randomly and domain knowledge must be used during the splitting procedure to enforce sets independance. This issue is sometimes called \textit{data leakage} \parencite{kaufman2012leakage} as information ``leaks'' between the sets. This topic will be discussed in Section \ref{sec:backdp:dataset} as \acrlong{dp} datasets must treated carefully to avoid this issue. 
 
 \subsection{Metrics}
 \label{ssec:backml:metrics}
@@ -237,49 +295,6 @@ where $\epsilon$ is a small value added for numerical stability, $y_{ij}$ is the
 \label{ssec:backml:metric:rankings}
 
 In Part \ref{part:transfer} of this thesis, in order to increase the strength of our results, we use a relatively large set of image classification datasets to study transfer learning. In order to compare the different methods, we evaluate how it performs on those datasets. Unfortunatly, for reasons that will be explained later, it is not possible to use the same metric for all datasets. Moreover, a metric computed on a dataset is not always comparable to the same metric computed on a different dataset. For this reason, we resort to using \textit{rankings of methods}. First, we evaluate each method on each dataset with the best metric for this dataset, then rank all methods on the dataset: the best method gets rank 1 and the worst gets rank $m$ (where $m$ is the number of methods). Finally, in order to draw general conclusions, we average the rankings over all the dataset. The averaged ranks therefore provides a single metric for comparing the methods across datasets. This metric is not ideal \TODO{find references}.
-\subsection{Empirical risk minimization}
-\label{ssec:backml:modelselection}
-As stated in the introduction, the objective of a learning algorithm is to find a model $h \in \mathcal{H}$ that maximizes a performance measure or, alternatively, minimize a risk which can be formalized as the expected risk (for a supervised problem) \parencite{vapnik1992principles}:
-
-\begin{equation}
-\label{eqn:backml:expriskmin}
-R(h) = \mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(h\left(x\right), y\right)\right\}
-\end{equation}
-
-where $\ell: \mathcal{Y}\times\mathcal{Y} \rightarrow \mathbb{R}$ is a loss function which measures the closeness between $h(x)$ and $y$. The model that minimizes $R(h)$ is therefore the best possible model for the task and is called the Bayes model $h_B$. In practice, it is rarely possible to directly minimize the expected risk as one does not have access to the true distributions. It is therefore more convenient to work with an unbiased estimator of the estimated risk, the empirical risk, which is evaluated using the available supervised training set $\mathcal{S}$:
-
-\begin{equation}
-\label{eqn:backml:empiricalrisk}
-R_e(h) = \frac{1}{n} \sum_{i=1}^{|S|} \ell(h_\mathcal{S}(x_i), y_i), (x_i, y_i) \in \mathcal{S}
-\end{equation}
-
-The \acrfirstit{erm} principle suggests that a learning algorithm should pick a model that minimizes the emprical risk in order to approximate $h_B$ as well as possible. Most machine learning algorithms apply this principle.
-
-\subsection{Bias-variance trade-off and overfitting}
-\label{ssec:backml:bvtradeoff}
-
-Whereas it can be shown that the empirical risk, under some assumptions, converges to the expected risk when the training set grows ($n \rightarrow \infty$), in practice, one does not have access to an infinitely-large dataset. Therefore, the learned model will often differ from $h_B$ and its expected risk will often be larger. The effect of the ``\textit{choice}'' of a finite training set on the error can be studied using the \textit{bias-variance decomposition} of the error \parencite{geman1992neural, friedman2017elements}:
-
-\begin{equation}
-\label{eqn:backml:biasvariancedec}
-\mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{ \ell(h_{LS}(x), y)\right\}\right\} = \text{noise}(x) + \text{bias}^2(x) + \text{variance}(x)
-\end{equation}
-
-where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that can be extracted from $p(x,y)$ and $h_{\mathcal{S}} \in \mathcal{H}$ is the model learned from learning set $\mathcal{S} \in LS$. The \textit{noise} term is the error of $h_B$ and is therefore irreductible. The \text{bias} is the difference between $h_B$ and the average model (over models generated from $LS$). The \textit{variance} measures the variability of the predictions around the average model caused by the training set randomness. Several elements have a direct impact on these error terms such as: model capacity, training set size, noise in the data, \etc. 
-
-The \textit{capacity} or \textit{complexity} of a model is related to its ability to capture complex relationships in the data. Linear models are examples of low-capacity models as they are only able to capture linear relationships. Non-linear models such as random forests (see Section \ref{sec:backml:treebased}) or deep neural networks have a higher complexity or capacity compared to linear models. 
-
-Low-capacity models usually have low variance as their limited expressiveness does not allow them to change much based on the training data but they also have high bias as failing to capture complex relationships prevents the model from approximating $h_B$ correctly, this is \textit{underfitting}. In opposition, high-capacity models have low bias as their expressiveness allow them to approximate $h_B$ more accurately but this expressiveness also leads to high-variance as the model can learn a function which is too expressive compared to $h_B$ and, even worse, can fit the noise in the training data. This phenomenon is called \textit{overfitting} and hampers the models ability to generalize. The \textit{bias-variance trade-off} results from these observations and states that finding a good model (or minimizing the expected risk) consists in finding the trade-off between low- and high-capacity or underfitting and overfitting. In Figure \ref{fig:backml:biasvariancetradeoff} is plotted the classical representation of this trade-off.  
-
-
-\begin{figure}
-  \centering
-  \includegraphics[scale=0.5]{backml/biasvariancetradeoff.png}
-  \caption{The bias-variance trade-off illustrated.}
-  \label{fig:backml:biasvariancetradeoff}
-\end{figure}
-
-% over parametrization
 
 
 % ===================
@@ -313,6 +328,7 @@ h^(n)(x) = b + \sum_{i=1}^n w_i x_i
 % backprop, optimizer, scheduling, learning rate
 
 \subsection{Modern network architectures}
+\label{ssec:backml:dlarchi}
 % resnet 
 % densenet
 % transformers
@@ -324,7 +340,7 @@ h^(n)(x) = b + \sum_{i=1}^n w_i x_i
 
 \section{Wrapping up}
 
-In the previous Sections, we gave an overview of different families of \acrlong{ml} methods. We can now position our work in this context. In Chapters \ref{chap:comp} and \ref{chap:mtask}, both contributions explore heterogeneous model-based \acrlong{tl} by transferring \acrlong{dl} classification models. We use several target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp} (more on this in Chapter \ref{chap:backdp}). The first contribution studies transfer from ImageNet. Motivated by the fact that transfer works better when the source and target tasks are related, the second contribution use homogeneous features-based \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data directly.
+In the previous sections, we gave an overview of different families of \acrlong{ml} methods. We can now position our work in this context. In Chapters \ref{chap:comp} and \ref{chap:mtask}, both contributions explore heterogeneous model-based \acrlong{tl} by transferring \acrlong{dl} classification models. We use several target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp} (more on this in Chapter \ref{chap:backdp}). The first contribution studies transfer from ImageNet. Motivated by the fact that transfer works better when the source and target tasks are related, the second contribution use homogeneous features-based \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data directly.
 
 In Chapter \ref{chap:sdist}, we move to a different type of task: image segmentation. Working with an sparsely-annotated \acrlong{dp} dataset, we use self-training to complete the missing annotations and train a U-Net segmentation model.  
 
