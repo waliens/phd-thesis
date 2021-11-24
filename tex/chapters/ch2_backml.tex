@@ -10,11 +10,11 @@ Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} an
 \section{What is machine learning ?} 
 \label{sec:backml:whatisml}
 
-A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $x \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(x)$ or $\hat{y} \in \mathcal{Y}$. Entities $x$ and $h(x)$ can be vectors, matrices or n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $x$ is a two-dimensional vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $x$ (\resp $y$) is a $n$-tuple.
+A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $\vect{x} \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(\vect{x})$ or $\hat{y} \in \mathcal{Y}$. Entities $\vect{x}$ and $h(\vect{x})$ can be  n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $\vect{x}$ is a vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $\vect{x}$ (\resp $y$) is a $n$-tuple.
 
 In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure $P$ for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning or training set) that it uses to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
 
-As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $x \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$ (\aka ground truth). As a performance measure $P$, one could assess the correctness of the ouput label by assigning 0 to correct predictions and 1 to errors. This performance measure is called the \textit{zero-one loss} and is written as:
+As an example, a common task is \textit{natural image classification} where the model must assign a label to a picture. For instance, one would want to detect whether a picture contains a human, an animal or an inanimate object. In this case, considering that the images are encoded with integers, the input space is the set of all possible color images: $\mathcal{X} \subset \mathbb{N}^{h\times w\times c}$ where $w$, $h$ and $c$ are respectively the image width, height and number of channels (which equals to 3 in RGB color images). The output space contains the 3 labels of interest: $\mathcal{Y} = \left\{\textit{human}, \textit{animal}, \textit{object}\right\}$. The model would take an image $\vect{x} \in \mathcal{X}$ as input and, based on its content, output $\hat{y}$, one of the predefined labels. This label $\hat{y}$ might be false if the model makes a mistake. Therefore, for the sake of distinction, the correct label is denoted $y$ (\aka ground truth). As a performance measure $P$, one could assess the correctness of the ouput label by assigning 0 to correct predictions and 1 to errors. This performance measure is called the \textit{zero-one loss} and is written as:
 
 \begin{equation}
 \ell_{0-1}(y, \hat{y}) = \mathbb{1}_{y\neq\hat{y}}
@@ -31,22 +31,22 @@ There are many ways to structure the ecosystem of \acrlong{ml} methods. This sec
 \subsection{Supervised learning}
 \label{ssec:backml:sl}
 
-\textit{Supervised learning} (\acrshort{sl}) regroups methods where the learning process is guided by an output signal. We formalize a supervised task as the tuple $\left(\mathcal{X}; \mathcal{Y}; p(x, y)\right)$ where $\mathcal{X}$ and $\mathcal{Y}$ are respectively the input and output spaces and $p(x, y)$ is a probability distribution over those joint spaces. The learning algorithm is provided with a training set 
+\textit{Supervised learning} (\acrshort{sl}) regroups methods where the learning process is guided by an output signal. We formalize a supervised task as the tuple $\left(\mathcal{X}; \mathcal{Y}; p(\vect{x}, y)\right)$ where $\mathcal{X}$ and $\mathcal{Y}$ are respectively the input and output spaces and $p(\vect{x}, y)$ is a probability distribution over those joint spaces. The learning algorithm is provided with a training set 
 \begin{equation}
 \label{eqn:backml:supervised}
-\left\{(x_i, y_i) \mid i = 1,...,n ; (x_i, y_i) \sim p(x, y) \right\}
+\left\{(\vect{x}_i, y_i) \mid i = 1,...,n ; (\vect{x}_i, y_i) \sim p(\vect{x}, y) \right\}
 \end{equation}
-where $y_i \in \mathcal{Y}$ is the output signal for the observation $x_i \in \mathcal{X}$. The learning algorithm objective is to find a model $h \in \mathcal{H}$ that approximates at best the output. 
+where $y_i \in \mathcal{Y}$ is the output signal for the observation $\vect{x}_i \in \mathcal{X}$. The learning algorithm objective is to find a model $h \in \mathcal{H}$ that approximates at best the output. 
 
 When the output space is a finite set of discrete scalar values $\mathcal{Y} = \left\{1, 2, ..., C\right\}$, the problem is called \textit{classification}. $C$ denotes the cardinality of the set $\mathcal{Y}$ or the number of classes. When $C = 2$, the problem is said to be \textit{binary}. In classification, the model should predict the most probable output class given an example:
 \begin{equation}
-\hat{y}_i = \argmax{y_k \in \mathcal{Y}} p(y=y_k|x=x_i)
+\hat{y}_i = \argmax{y_k \in \mathcal{Y}} p(y=y_k|\vect{x}=\vect{x}_i)
 \end{equation}
 Examples of classification tasks are for instance assigning a label to an image or detecting whether an email is a spam or not. 
 
-When the output space is continuous and the output is a real scalar value, the problem is called \textit{regression}. In this case, the model should predict the expected value $y$ given any input $x_i$:
+When the output space is continuous and the output is a real scalar value, the problem is called \textit{regression}. In this case, the model should predict the expected value $y$ given any input $\vect{x}_i$:
 \begin{equation}
-h(x_i) = \mathbb{E}\left[y|x=x_i\right]
+h(\vect{x}_i) = \mathbb{E}\left[y|\vect{x}=\vect{x}_i\right]
 \end{equation}
 Examples of regression problems are trying to predict the price of a house given its area, the amount of product generated by a factory in a given time period or the review score of a product on an e-commerce platform. 
 
@@ -59,21 +59,21 @@ In \acrlong{sl}, the training signal is often created by humans by manually anno
 
 In opposition to \acrlong{sl}, \acrfirstit{usl} regroups methods where no output signal is provided to guide the learning process. The learning algorithm is provided with 
 \begin{equation}
-\left\{x_i \mid i = 1,..., n ; x_i \sim p(x)\right\}
+\left\{\vect{x}_i \mid i = 1,..., n ; \vect{x}_i \sim p(\vect{x})\right\}
 \end{equation} 
-and attempts to extract information from this dataset. A common unsupervised task is \textit{density estimation} where the goal is to model the generating distribution $p(x)$ but there also exists other types of methods. For instance, \textit{clustering} where the algorithm searches for natural groups of observations or features. Another example is \textit{dimensionality reduction} where the algorithm projects high-dimensional data into a lower-dimensional space while attempting to preserve as much information as possible. An interested reader will find more information about these methods in \parencite{friedman2017elements}. There exists another family of \acrlong{usl} methods that was first explored in the 1980s with autoencoders but has gained much traction recently. It is called \textit{self-supervised learning} \parencite{lecun2021self}. The idea behind this family of methods is to exploit supervised learning algorithms but rather than guiding the learning process with human annotations, the training signal is found in the data itself. An example of such methods is \textit{image reconstruction}. Random parts of the input images are truncated (\eg replaced by black squares) and the model must be able to re-generate the truncated parts. In this case, input and output signal are respectively the original and the truncated image. The model input can be generated from the original data without human intervention. 
+and attempts to extract information from this dataset. A common unsupervised task is \textit{density estimation} where the goal is to model the generating distribution $p(\vect{x})$ but there also exists other types of methods. For instance, \textit{clustering} where the algorithm searches for natural groups of observations or features. Another example is \textit{dimensionality reduction} where the algorithm projects high-dimensional data into a lower-dimensional space while attempting to preserve as much information as possible. An interested reader will find more information about these methods in \parencite{friedman2017elements}. There exists another family of \acrlong{usl} methods that was first explored in the 1980s with autoencoders but has gained much traction recently. It is called \textit{self-supervised learning} \parencite{lecun2021self}. The idea behind this family of methods is to exploit supervised learning algorithms but rather than guiding the learning process with human annotations, the training signal is found in the data itself. An example of such methods is \textit{image reconstruction}. Random parts of the input images are truncated (\eg replaced by black squares) and the model must be able to re-generate the truncated parts. In this case, input and output signal are respectively the original and the truncated image. The model input can be generated from the original data without human intervention. 
 
 \subsection{Between supervised and unsupervised learning}
 \label{ssec:backml:inbetween}
 
 The families discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl} do not cover all the existing \acrlong{ml} methods but are rather at the ends of a spectrum. There also exists intermediate families of methods. Halfway between supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that use a dataset where only a part of the observations have an associated output signal. The dataset is composed of two subsets:
 \begin{eqnarray}
-S_a = \left\{(x_i, y_i) \mid i = 1,...,n_a; (x_i, y_i) \sim p_{X,Y}; x_i \sim p_a(x)\right\} \\
-S_u = \left\{x_i \mid i = 1,...,n_u; x_i \sim p_u(x)\right\}
+S_a = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n_a; (\vect{x}_i, y_i) \sim p_{\mathcal{X},\mathcal{Y}}; \vect{x}_i \sim p_a(\vect{x})\right\} \\
+S_u = \left\{\vect{x}_i \mid i = 1,...,n_u; \vect{x}_i \sim p_u(\vect{x})\right\}
 \end{eqnarray}
-These  methods make some assumptions about the ``closeness'' of the input distributions $p_a(x)$ and $p_u(x)$ \parencite{chapelle2006semi} which allow to exploit both sets to solve some particular tasks. One of the earliest forms of \acrlong{ssl} is \textit{self-training} where the model is initially trained in a supervised manner on the set $S_a$, then iteratively refined by using both $S_a$ and $S_u$ as training data until a certain quality criterion is met. In order to use the second set, an output signal is predicted for all samples of $S_i$ with the model being trained. 
+These  methods make some assumptions about the ``closeness'' of the input distributions $p_a(\vect{x})$ and $p_u(\vect{x})$ \parencite{chapelle2006semi} which allow to exploit both sets to solve some particular tasks. One of the earliest forms of \acrlong{ssl} is \textit{self-training} where the model is initially trained in a supervised manner on the set $S_a$, then iteratively refined by using both $S_a$ and $S_u$ as training data until a certain quality criterion is met. In order to use the second set, an output signal is predicted for all samples of $S_i$ with the model being trained. 
 
-Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the annotations are noisy (\eg $y$ can be incorrect or imprecise), coarse or incomplete (similar to \acrlong{usl}\TODO{check any diff with usl}). The challenge of working with coarse annotations consists in having a model output $h(x)$ that contains more information than the training signal $y$. Coming back to our example of Section \ref{sec:backml:whatisml}, a weakly-supervised problem would consist in locating the human, animal or object in the image using only the label as training signal.
+Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the annotations are noisy (\eg $y$ can be incorrect or imprecise), coarse or incomplete (similar to \acrlong{usl}\TODO{check any diff with usl}). The challenge of working with coarse annotations consists in having a model output $h(\vect{x})$ that contains more information than the training signal $y$. Coming back to our example of Section \ref{sec:backml:whatisml}, a weakly-supervised problem would consist in locating the human, animal or object in the image using only the label as training signal.
 
 
 \subsection{Shallow versus deep learning}
@@ -97,14 +97,14 @@ Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:ho
 
 \begin{definition}
 \label{def:backml:homotransfer}
-Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(x, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(x, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t \neq \emptyset$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(x) \neq p_t(x)$ or $p_s(y|x) \neq p_t(y|x)$. 
+Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t \neq \emptyset$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(\vect{x}) \neq p_t(\vect{x})$ or $p_s(y|\vect{x}) \neq p_t(y|\vect{x})$. 
 \end{definition}
 
 Transfer learning can be \textit{heterogeneous} (see Definition \ref{def:backml:heterotransfer}). An example that will be addressed later in this thesis is the transfer of a model trained for natural image classification to medical image classification. In this case, the tasks are different as the first consists in identifying the presence of a type of object in the image whereas the other consists in assessing the malignancy of a tumor from an image of a tissue. The input distributions also differ as medical images have completely different content and appearance.  
 
 \begin{definition}
 \label{def:backml:heterotransfer}
-Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(x, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(x, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t = \emptyset$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
+Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t = \emptyset$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
 \end{definition}
 
 When the decision to apply \acrlong{tl} has been taken, remains the choice of the transfer approach. Based on how they operate, \parencite{yang2020transfer} have identifed four different categories of \acrlong{tl} algorithms: 
@@ -146,14 +146,14 @@ As stated in the introduction, the objective of a learning algorithm is to find 
 
 \begin{equation}
 \label{eqn:backml:expriskmin}
-R(h) = \mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(h\left(x\right), y\right)\right\}
+R(h) = \mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(h(\vect{x}), y\right)\right\}
 \end{equation}
 
-where $\ell: \mathcal{Y}\times\mathcal{Y} \rightarrow \mathbb{R}$ is a loss function which measures the closeness between $h(x)$ and $y$. The expected risk is also called the \textit{generalization error}. The model that minimizes $R(h)$ is therefore the best possible model for the task and is called the Bayes model $h_B$. In practice, it is rarely possible to directly minimize the expected risk as one does not have access to the true distributions. It is therefore more convenient to work with an unbiased estimator of the estimated risk, the empirical risk, which is evaluated using the available supervised training set $\mathcal{S}$:
+where $\ell: \mathcal{Y}\times\mathcal{Y} \rightarrow \mathbb{R}$ is a loss function which measures the closeness between $h(\vect{x})$ and $y$. The expected risk is also called the \textit{generalization error}. The model that minimizes $R(h)$ is therefore the best possible model for the task and is called the Bayes model $h_B$. In practice, it is rarely possible to directly minimize the expected risk as one does not have access to the true distributions. It is therefore more convenient to work with an unbiased estimator of the estimated risk, the empirical risk, which is evaluated using the available supervised training set $\mathcal{S}$:
 
 \begin{equation}
 \label{eqn:backml:empiricalrisk}
-R_e(h) = \frac{1}{n} \sum_{i=1}^{|S|} \ell(h_\mathcal{S}(x_i), y_i), (x_i, y_i) \in \mathcal{S}
+R_e(h) = \frac{1}{n} \sum_{i=1}^{|S|} \ell(h_\mathcal{S}(\vect{x}_i), y_i), (\vect{x}_i, y_i) \in \mathcal{S}
 \end{equation}
 
 The \acrfirstit{erm} principle suggests that a learning algorithm should pick a model that minimizes the emprical risk in order to approximate $h_B$ as well as possible. Most machine learning algorithms apply this principle.
@@ -161,14 +161,14 @@ The \acrfirstit{erm} principle suggests that a learning algorithm should pick a 
 \subsection{Bias-variance trade-off and overfitting}
 \label{ssec:backml:bvtradeoff}
 
-Whereas it can be shown that the empirical risk, under some assumptions, converges to the expected risk when the training set grows ($n \rightarrow \infty$), in practice, one does not have access to an infinitely-large dataset. Therefore, the learned model will often differ from $h_B$ and its expected risk will often be larger. The effect of the ``\textit{choice}'' of a finite training set on the error can be studied using the \textit{bias-variance decomposition} of the error \parencite{geman1992neural, friedman2017elements}:
+Whereas it can be shown that the empirical risk, under some assumptions, converges to the expected risk when the training set grows ($n \rightarrow \infty$), in practice, one does not have access to an infinitely-large dataset. Therefore, the learned model will often differ from $h_B$ and its expected risk will often be larger. The effect of the ``\textit{choice}'' of a finite training set on the error can be studied using the \textit{bias-variance decomposition} of the error \parencite{geman1992neural, geurts2009bias, friedman2017elements}:
 
 \begin{equation}
 \label{eqn:backml:biasvariancedec}
-\mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{ \ell(h_{LS}(x), y)\right\}\right\} = \text{noise}(x) + \text{bias}^2(x) + \text{variance}(x)
+\mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{ \ell(h_{LS}(\vect{x}), y)\right\}\right\} = \text{noise}(\vect{x}) + \text{bias}^2(\vect{x}) + \text{variance}(\vect{x})
 \end{equation}
 
-where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that can be extracted from $p(x,y)$ and $h_{\mathcal{S}} \in \mathcal{H}$ is the model learned from learning set $\mathcal{S} \in LS$. The \textit{noise} term is the error of $h_B$ and is therefore irreductible. The \text{bias} is the difference between $h_B$ and the average model (over models generated from $LS$). The \textit{variance} measures the variability of the predictions around the average model caused by the training set randomness. Several elements have a direct impact on these error terms such as: model capacity, training set size, noise in the data, \etc. 
+where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that can be extracted from $p(\vect{x},y)$ and $h_{\mathcal{S}} \in \mathcal{H}$ is the model learned from learning set $\mathcal{S} \in LS$. The \textit{noise} term is the error of $h_B$ and is therefore irreductible. The \text{bias} is the difference between $h_B$ and the average model (over models generated from $LS$). The \textit{variance} measures the variability of the predictions around the average model caused by the training set randomness. Several elements have a direct impact on these error terms such as: model capacity, training set size, noise in the data, \etc. 
 
 The \textit{capacity} or \textit{complexity} of a model is related to its ability to capture complex relationships in the data. Linear models are examples of low-capacity models as they are only able to capture linear relationships. Non-linear models such as random forests (see Section \ref{sec:backml:treebased}) or deep neural networks have a higher complexity or capacity compared to linear models. 
 
@@ -191,9 +191,9 @@ These considerations have direct consequences on practical applications of machi
 
 The simplest one is the use of an independant test set: the source dataset is split into two subsets, the train and test sets, which are used to respectively train and evaluate the model. The size of the subsets should be made such that the train set is large enough for the model to be able to learn but the test set should be large enough for the estimate of the error to be reliable. Those two objectives are obviously antagonistic. Moreover, this approach is not viable if the source dataset is too small as reducing even more the size of the sets will make both the training and evaluation unreliable. The test-set approach actually evaluates the generalization error of the model for the given dataset but not the expected generalization error used in Section \ref{ssec:backml:bvtradeoff}.
 
-Another approach that actually estimates the expected generalization error is \acrfirstit{cv} which simply repeats the train-test approach with different splits of the source dataset. For each train-test split, a model is trained the train set and evaluated on the test set. The \acrlong{cv} score is computed by averaging the test scores of all splits. These methods differ by how they generate their splits. A common \acrlong{cv} approach is \textit{$k$-fold \acrlong{cv}} where the data is randomly split into $k$ subsets and each subset is selected in turn to be the test set (and the remaining folds make the train set). 
+Another approach that actually estimates the expected generalization error is \acrfirstit{cv} which simply repeats the train-test approach with different splits of the source dataset. For each train-test split, a model is trained on the train set and evaluated on the test set. The \acrlong{cv} score is computed by averaging the test scores of all splits. There exists several approaches for \acrlong{cv} whhich differ by how they generate their splits. A common approach is \textit{$k$-fold \acrlong{cv}} where the data is randomly split into $k$ subsets and each subset is selected in turn to be the test set (and the remaining folds make the train set). 
 
-An important consideration is to never use a model selection score as the evaluation score of a model. Indeed, optimizing the choice of a model usually results in the selection score to be an overly optimistic estimator of the generalization performance of the model. In practice, this results in a three-way split of the training dataset: one extracts some train, validation and test sets. The models are trained on the first, selected on the second and the final model is evaluated on last. When the dataset is too small for such a three-way split, a common approach consists in extracting a test set from the initial dataset and then performing \acrlong{cv} on the train set. As a general rule, every decision influenced one way or another by the output $y$ should be done inside validation loop to avoid overfitting (using either \acrlong{cv} or an independant test-set).
+An important consideration is to never use a model selection score as the evaluation score of a model. Indeed, optimizing the choice of a model usually results in the selection score to be an overly optimistic estimator of the generalization performance of the model. In practice, this results in a three-way split of the training dataset: one extracts some train, validation and test sets. The models are trained on the first, selected on the second and the final model is evaluated on last. When the dataset is too small for such a three-way split, a common approach consists in extracting a test set from the initial dataset and then performing \acrlong{cv} on the train set. As a general rule, every decision influenced one way or another by the output $y$ should be done within a validation loop to avoid overfitting (using either \acrlong{cv} or an independant test-set).
 
 These two approaches are based on a strong assumption that the extracted sets are independant. If they are not, this would most probably lead to overfitting and the resulting selection or evaluation scores being overly optimistic. Therefore, it is sometimes not enough to split the sets randomly and domain knowledge must be used during the splitting procedure to enforce sets independance. This issue is sometimes called \textit{data leakage} \parencite{kaufman2012leakage} as information ``leaks'' between the sets. This topic will be discussed in Section \ref{sec:backdp:dataset} as \acrlong{dp} datasets must treated carefully to avoid this issue. 
 
@@ -300,7 +300,9 @@ In Part \ref{part:transfer} of this thesis, in order to increase the strength of
 % ===================
 % Methods
 % ===================
-\section{Linear methods}
+\section{Support vector machines}
+
+In the previous sections, the notion of linear model
 
 The decision boundary is . 
 
