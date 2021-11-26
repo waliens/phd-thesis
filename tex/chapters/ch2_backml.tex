@@ -302,17 +302,50 @@ In Part \ref{part:transfer} of this thesis, in order to increase the strength of
 % ===================
 \section{Support vector machines}
 
-In the previous sections, the notion of linear model
+The \acrfirstit{svm} algorithm was invented in the early 1990s \parencite{boser1992training}. It is originally a linear method that can be used for regression and classification. By using the \textit{kernel trick}, \acrshort{svm} can also learn non-linear models but it is out of the scope of this thesis. An interested reader will learn more about kernel methods and the kernel trick in \parencite{friedman2017elements}.
 
-The decision boundary is . 
+In general, assuming a supervised dataset where inputs are such that $\vect{x} \in \mathbb{R}^m$ where $m$ is the number of features, a linear model is an hyperplane:
 
 \begin{equation}
-h^(n)(x) = b + \sum_{i=1}^n w_i x_i 
-\end{equation} 
+\label{eqn:backml:linearmodel}
+f(\vect{x}) = w_0 + \sum_{j=1}^m w_j x_j  
+\end{equation}
 
-\subsection{Support vector machine}
-% method
-% multi class svm
+where $w_0$ and the $w_j$ are the learnable parameters, respectively called the \textit{bias} and the \textit{weights}. This model can be used for regression in which case the model $h(\vect{x}) = f(\vect{x})$. A linear model can also be used for binary classification where the linear function is called the \textit{decision boundary} and is considered to separate positive from negative samples in the input space: $h(\vect{x}) = \text{sign}(f(\vect{x}))$ (\ie $\mathcal{Y} = \left\{-1, 1\right\}$). Linear methods differ from each other by the way they learn and generate these weights.
+
+Support vector machines optimize the parameters $w_0$ and $w_j$ to generate $f$ in such a way that the minimal distance from the hyperplane to the nearest points from the learning set is maximized. These nearest points are called the \textit{support vectors} and the margin between the support vectors is called the \textit{gutter}. An example of a \acrshort{svm} hyperplane is given in Figure \ref{fig:backml:svm}. It can be shown that the \acrshort{svm} optimization problem falls back to the Lagrange dual:
+ 
+\begin{align}
+\label{eqn:backml:svmoptimizationproblem}
+\underset{\boldsymbol{\alpha}}{\text{max}}& \sum_{k=1}^n \alpha_k - \frac{1}{2} \sum_{i,j=1}^n \alpha_i\alpha_j y_i y_j \vect{x}_i^T \vect{x}_j \\
+\text{subject to}~& 0 \leq \alpha_k \leq C, \forall k = 1, ..., n \\
+& \sum_{i=1}^n \alpha_i y_i = 0
+\end{align}
+
+which can be solved efficiently with classical linear solvers such as LIBLINEAR \parencite{fan2008liblinear}\TODO{libsvm}. When the optimal solution has been found, the weights can be derived by solving the system: 
+
+\begin{equation}
+\label{eqn:backml:svmweights}
+\alpha_k\left(y_k \left(w^T \vect{x}_k + b\right) - 1\right) = 0, \forall k = 1, ..., n
+\end{equation}
+
+In Equation \ref{eqn:backml:svmweights}, $\alpha_k > 0$ for the support vectors $x_k$ and $\alpha_k = 0$ for the other samples. This is an interesting property as it implies that only the support vectors and their weights $\alpha_k$ should be stored for future inference. This makes the model very memory efficient for problems where $m \gg n$. This property has also a negative side effect as it means that the model is highly dependent on the support vectors $x_k$. It can therefore change significantly if the $x_k$ are removed or changed which indicates high variance. The $C$ term in the Lagrange dual formulation is an hyperparameter that relaxes the need for linear separability of the training data and allows for points to lie within the gutter or to be misclassified. Low values of $C$ make the optimal solution tolerate more of such points. Reducing the dependency of the model on very few points also decreases the variance but increases the bias. In opposition, high values of $C$ puts a large penalty on points that lie withing the gutter or are misclassified which increases variance but decreases bias. 
+
+\begin{figure}
+  \centering
+  \subfloat[$C=10000$]{\includegraphics[scale=0.6]{backml/svm_c10000.png}}
+  \subfloat[$C=5$. Notice the new point \\ of class $0$ in the class $1$ cluster.]{\includegraphics[scale=0.6]{backml/svm_c5.png}}
+  \caption{Example of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with a yellow border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
+  \label{fig:backml:svm}
+\end{figure}
+
+
+\subsection{Multi-class problems}
+
+There exists few approaches to use a binary classification algorithm like \acrshort{svm} in a multi-class context. One of them is called \acrfirstit{ovo} and consists in training $K=\frac{C(C-1)}{2}$ binary classifiers (where $C$ is the number of classes), one for each pair of classes of the dataset. The prediction for a new sample will be the majority class among the predictions of these $K$ models. This approach has the drawback of requiring to learn $\mathcal{O}(C^2)$models which can be inefficient especially if the dataset is large.
+
+Another approach is called \acrfirstit{ovr} and consists in training $C$ models each of which deals with the classification problem of a class versus all the others. The final prediction is given by the model of which the decision function returned largest value. This approach is more computationally efficient than \acrshort{ovo} as only $C$ classifier have to be trained.
+
 
 \section{Tree-based methods}
 \label{sec:backml:treebased}
