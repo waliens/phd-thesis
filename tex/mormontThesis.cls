@@ -656,12 +656,11 @@ Constants}
 %----------------------------------------------------------------------------------------
 % ALGORITHMS
 %----------------------------------------------------------------------------------------
-\newcommand{\algoCommentFormat}[1]{\footnotesize\ttfamily\textcolor{somber1}{#1}}
+\newcommand{\algoCommentFormat}[1]{\footnotesize\ttfamily\textcolor{primary}{#1}}
 \SetCommentSty{algoCommentFormat}
-\newcommand{\algoLineNumFormat}[1]{\textcolor{somber2}{#1}}
+\newcommand{\algoLineNumFormat}[1]{\textcolor{secondary}{#1}}
 \SetNlSty{algoLineNumFormat}{}{}
 \DontPrintSemicolon
-
 \SetKwProg{Fn}{Function}{:}{}
 
 %\definecolor{shadecolor}{gray}{0.95}

@@ -10,7 +10,7 @@ Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} an
 \section{What is machine learning ?} 
 \label{sec:backml:whatisml}
 
-A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $\vect{x} \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(\vect{x})$ or $\hat{y} \in \mathcal{Y}$. Entities $\vect{x}$ and $h(\vect{x})$ can be  n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $\vect{x}$ is a vector, its components are commonly called \textit{features} or \textit{variables}. A model can have several inputs (\resp outputs) in which case $\vect{x}$ (\resp $y$) is a $n$-tuple.
+A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \textit{models}, and how to build them by learning. A \textit{model} $h$ can be seen a function taking an input $\vect{x} \in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(\vect{x})$ or $\hat{y} \in \mathcal{Y}$. Entities $\vect{x}$ and $h(\vect{x})$ can be  n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $\vect{x}$ is a vector, its components are commonly called \textit{features}, \textit{variables} or \textit{attributes}. A model can have several inputs (\resp outputs) in which case $\vect{x}$ (\resp $y$) is a $n$-tuple.
 
 In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a learning algorithm is defined by a set $\mathcal{H}$ of candidate models called the \textit{hypothesis space}, a performance measure $P$ for a model and an optimization strategy. As input, the algorithm is provided with \textit{training data} (the experience $E$, \aka learning or training set) that it uses to build, optimize and evaluate the model. The algorithm output is a model $h \in \mathcal{H}$ that maximises the performance criterion. 
 
@@ -334,8 +334,8 @@ In Equation \ref{eqn:backml:svmweights}, $\alpha_k > 0$ for the support vectors 
 \begin{figure}
   \centering
   \subfloat[$C=10000$]{\includegraphics[scale=0.6]{backml/svm_c10000.png}}
-  \subfloat[$C=5$. Notice the new point \\ of class $0$ in the class $1$ cluster.]{\includegraphics[scale=0.6]{backml/svm_c5.png}}
-  \caption{Example of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with a yellow border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
+  \subfloat[$C=25$. Notice the new points \\ of class $1$ in the class $0$ cluster.]{\includegraphics[scale=0.6]{backml/svm_c25.png}}
+  \caption{Example of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with bold coloured border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
   \label{fig:backml:svm}
 \end{figure}
 
@@ -346,13 +346,121 @@ There exists few approaches to use a binary classification algorithm like \acrsh
 
 Another approach is called \acrfirstit{ovr} and consists in training $C$ models each of which deals with the classification problem of a class versus all the others. The final prediction is given by the model of which the decision function returned largest value. This approach is more computationally efficient than \acrshort{ovo} as only $C$ classifier have to be trained.
 
-
 \section{Tree-based methods}
 \label{sec:backml:treebased}
 
-\subsection{Decision tree and random forest}
+This section explores tree-based methods. This family of methods was invented at least twice in the 1980s by the \acrshort{ai} \parencite{quinlan1986induction} and the statistics \parencite{breiman2017classification} communities. Section \ref{ssec:backml:dt} presents the basics of decision tree induction, Section \ref{ssec:backml:rf} introduces the random forest algorithms. Section \ref{ssec:backml:et} presents a variant of the random forest called \acrfirstit{et} and Section \ref{ssec:backml:et_image} finally explores how this method can be used for image classification.
+
+\subsection{Decision trees}
+\label{ssec:backml:dt}
+
+Let us consider a supervised dataset where each $\vect{x}_i$ is a vector of attributes:
+\begin{equation}
+\label{eqn:backml:dt:vectattributes}
+\vect{x}_i = \left(a^{(i)}_1, a^{(i)}_2, ..., a^{(i)}_m\right),~a^{(i)}_j \in \mathcal{X}_j
+\end{equation}
+and each attribute can be either numerical or categorical (binary or multi-valued). A decision tree is a model structured as a tree of which the nodes $\mathcal{Q}$ are divided in two sets: the internal and leaf nodes $\mathcal{I} \subset \mathcal{Q}$ and $\mathcal{F} \subset \mathcal{Q}$. Each internal node $q \in \mathcal{I}$ tests an input attribute $k_q \in \left\{1,...,m\right\}$ and its $E_q$ outward edges are associated with non-overlapping subsets:
+\begin{equation}
+\label{eqn:backml:dt:splitsgeneric}
+\mathcal{A}^{(q)}_l \subset \mathcal{X}_{k_q},~l = 0,...,E_q-1
+\end{equation}
+which are called \textit{splits}. The leaf nodes of the tree are labelled with the predictions of the model. In classification, the prediction can either be a class $\hat{y} \in \mathcal{Y}$ or a probability distribution over $\mathcal{Y}$. In regression, the output is a real value $\hat{y} \in \mathcal{Y}$. Given $x_i$, predicting an output value consists in a top-down traversal of the tree. When reaching an internal node $q$ during the traversal, $\vect{x}_i$ will follow the edge $l$ such that $a^{(i)}_{k_q} \in \mathcal{A}^{(q)}_l$ which leads to one of the children nodes of $q$. This process is repeated until a leaf is reached. The prediction and output of the algorithm for $\vect{x}_i$ is the labelling of this leaf. 
+
+In the remainder of the thesis, we will only consider numerical attributes and binary splits at each internal node ($E_q = 2$). These splits are defined by a threshold $v_q$ (or $q.v$) such that:
+\begin{align}
+\label{eqn:backml:dt:splitsbinary}
+\mathcal{A}^{(q)}_0 &= \left]-\infty, v_q\right]\\
+\mathcal{A}^{(q)}_1 &= \left]v_q, +\infty\right[
+\end{align}
+This representation allows for an efficient check at each node as the attribute value has just to be compared to the treshold value. The inference algorithm is formalized in Algorithm \ref{algo:backml:dtinference} for classification with numerical attributes. 
+
+\begin{algorithm}[t]
+  \SetAlgoLined
+  \KwData{A sample $\vect{x}_i = \left(a^{(i)}_1, a^{(i)}_2, ..., a^{(i)}_m\right)$ and a decision tree $D$.}
+  \KwResult{A probability distribution over $\mathcal{Y}$, the prediction for $\vect{x}_i$.}
+  \SetKwFunction{dtinfer}{DTInference}
+  \Fn{\dtinfer{D, $\vect{x}_i$}}{
+    $q = D.root$\;
+    \While{$q \not\in \mathcal{F}$}{
+      \eIf{$a_{k_q} \leq q.v$}{
+        $q = q.\text{left}$\;
+      }{
+        $q = q.\text{right}$\;
+      }
+    }
+    \KwRet{$q.\text{pred}$}\;
+  }
+  \caption{Inference with a classification tree $D$ and numerical attributes. The root of the tree is given by $D.root$, $q.left$ and $q.right$ denote the left and right children of a node and the prediction associated with the leaf node $f \in \mathcal{F}$ is accessed by $f.pred$. The regression algorithm only differs by its type of output.}
+  \label{algo:backml:dtinference}
+\end{algorithm}
+
+\subsubsection{Decision tree induction}
+\label{sssec:backml:dtinduction}
+
+Top-down tree induction is the name of the process of building a decision tree based on a supervised dataset. It is a greedy algorithm that, for a node and a set of examples $S$, will select an attribute and a split which reduce the most the so-called \textit{impurity} of the node. Then, $S$ will be divided in two subsets $S_0$ and $S_1$ based on the selected split and these will be used to build recursively the left and right sub-trees respectively. This procedure is repeated until a certain stopping criterion is met. An impurity measure $I(S)$ evaluates the disparity of the output labels $y_i$ in a set $S$ of training examples. For classification, a common impurity measure is the Shannon entropy computed on the class frequencies $p_i$:
+\begin{equation}
+\label{eqn:backml:shannon_entropy}
+I(S) = - \sum_{i=1}^C p_i \log p_i
+\end{equation}
+The simplest stopping criterion would be to stop developing the tree when the subset at the node cannot be further divided because either it is pure (\eg only one class represented in $S$) or because all attributes have a constant value. This algorithm is formalized in Algorithm \ref{algo:backml:dtinduction}. 
+
+
+\begin{algorithm}[t]
+  \SetAlgoLined
+  \SetKwFunction{dtinductrecur}{DTInductionRecursive}
+  \SetKwFunction{dtinduct}{DTInduction}
+  \SetKwFunction{computepred}{ComputePred}
+  \Fn{\dtinduct{$S$}}{
+    $D =~$ an empty decision tree\;
+    $D.root =~$ \dtinductrecur{$S$}\;
+    \KwRet{$D$}\;
+  }
+  \;
+  
+  \Fn{\dtinductrecur{$S$}}{
+    \If{$I(S) = 0~\vee~$ all attributes in $S$ are constant}{
+      $q =~$ a new node\;
+      $q.\text{left} =~$ NIL\;
+      $q.\text{right} =~$ NIL\;
+      $q.\text{pred} =~$ \computepred{$S$}\; 
+      \KwRet{$q$}\;
+    }
+    $k_{best} = -1$\;
+    $\Delta I_{best} = 0$\;
+    $v_{best} = 0$\;
+    \For{$j = 1, ...,|\vect{x}|$}{
+      $A =~$ array of examples sorted over values of $j^{th}$ attribute in $S$\;
+      \For{$i = 1, ..., |A|-1$}{
+        $\Delta I = I(A) - \frac{i}{|A|} I(A[\rightarrow i]) - \frac{|A| - i - 1}{|A|} I(A[(i+1) \rightarrow])$\;
+        \If{$\Delta I > \Delta I_{best}$}{
+          $k_{best} = j$\;
+          $v_{best} = \frac{A[i] + A[i+1]}{2}$\;
+          $\Delta I_{best} = \Delta I$\;
+        }
+      }
+    }
+    $S_0 = \left\{x_i \mid a^{(i)}_{k_{best}} \leq v_{best} \right\}$\;
+    $S_1 = S \setminus S_0$\;
+    $q =~$ a new node\;
+    $q.v = v_{best}$\;
+    $q.\text{left} =~$ \dtinductrecur{$S_0$}\;
+    $q.\text{right} =~$ \dtinductrecur{$S_1$}\;
+    \KwRet{$q$}\;
+  }
+\caption{Decision tree induction. The \texttt{ComputePred($S$)} function computes the most appropriate prediction for a leaf node from $S$ (\eg by taking the majority class in classification or the classes probability distribution).}
+\label{algo:backml:dtinduction}
+\end{algorithm}
+
+A tree built using this simple stopping criterion is said to be \textit{fully-developed}. Such a tree is able to capture the training set perfectly which, in practice, hurts generalization as the model clearly overfits. In order to alleviate the problem and reduce the variance, there exists several methods such as pruning which consists in preventing the final tree to grow too deep. This can be done during the induction (pre-pruning) or a posteriori (post-pruning). Simple (pre-)pruning techniques are, for example, stopping the induction when a branch reaches a certain depth, or ensuring that all leaf nodes contain at least a given number of samples. An advantage of decision trees are their interpretability as the rules learned by the model can be easily understood by looking at the tree. In practice, decision trees are rarely used by themselves because of their high variance but rather as part of a forest (see Section \ref{ssec:backml:rf}).
+
+\subsection{Random forests}
+\label{ssec:backml:rf}
 
 \subsection{Extremely randomized trees}
+\label{ssec:backml:et}
+
+\subsection{Image classification with extra-trees}
+\label{ssec:backml:et_image}
 
 \section{Deep learning}
 \label{sec:backml:deeplearning}
