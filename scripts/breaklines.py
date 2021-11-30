@@ -24,7 +24,7 @@ def command_length(s):
 
 	cnt, curr = 1, 0
 
-	while cnt > 0:
+	while cnt > 0 and curr + length < len(s):
 		if s[curr + length] == "{":
 			cnt += 1
 		elif s[curr + length] == "}":
@@ -228,8 +228,4 @@ def warp_text_file(filepath, width=80, out_filepath="test.txt"):
 
 
 if __name__ == "__main__":
-	warp_text_file("C:/Git/phd-thesis/tex/chapters/ch5_mtask.tex")
-	#warp_text_file("test.txt")
-	# s = "A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$ \\parencite{mitchell1997machine}. Machine learning concerns the study of such programs, commonly referred to as \\textit{models}, and how to build them by learning. A \\textit{model} $h$ can be seen a function taking an input $x \\in \mathcal{X}$ (\aka observation, example, instance) and producing an ouput $h(x)$ or $\\hat{y} \\in \\mathcal{Y}$. $x$ and $h(x)$ can be vectors, matrices or n-dimensional tensors and encode many kind of data types: data record, image, graph, time series, text... When $x$ is a two-dimensional vector, its components are commonly called \\textit{features} or \\textit{variables}. A model can have several inputs (\\resp outputs) in which case $x$ (\\resp $y$) is a $n$-tuple."
-	# scanned = scan_commands_and_inline_math(s)
-	# print(scanned)
+	pass
