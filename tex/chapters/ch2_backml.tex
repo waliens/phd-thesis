@@ -52,7 +52,7 @@ Examples of regression problems are trying to predict the price of a house given
 
 Beyond scalar outputs, some models sometimes predict structured outputs. This is the case for \textit{image segmentation} which focuses on classifying each pixel of an image (\ie what kind of object does this pixel belong to in the image?). The output of the model is a segmentation mask where pixel at row $i$ and column $j$ is classified as $\hat{y}_{ij} \in \mathcal{Y}$. For some tasks, a mask is not always necessary, one is rather interested in the coarse location of the objects. This kind of task is called \textit{detection} where the output of the model, the location, can be encoded as image coordinates $(i, j)$ representing the object's center of gravity or any of its point. Another common representation is the bounding box, a box containing exactly the object of interest, encoded by the position of a corner of the box in the image and its height and width.
 
-In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows to use well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires the intevention of experts (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following sections. 
+In \acrlong{sl}, the training signal is often created by humans by manually annotating examples. Such guidance allows using well-studied methods and usually helps learning strong models but also comes at a cost because of the human intervention. This is especially aggravated when the target task is difficult as, the more complex, the more data is required to sample sufficiently the input space. In some domains, annotations are particularily cumbersome to obtain because one lacks raw data, or because the annotation process requires the intevention of experts (\eg medical data). In this case, this issue is referred to as \textit{data scarcity}. In general, the lack of data hampers the successful application of \acrlong{sl} but several approaches exist to work it around which are presented briefly in the following sections. 
 
 \subsection{Unsupervised learning}
 \label{ssec:backml:usl}
@@ -71,7 +71,7 @@ The families discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl
 S_a = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n_a; (\vect{x}_i, y_i) \sim p_{\mathcal{X},\mathcal{Y}}; \vect{x}_i \sim p_a(\vect{x})\right\} \\
 S_u = \left\{\vect{x}_i \mid i = 1,...,n_u; \vect{x}_i \sim p_u(\vect{x})\right\}
 \end{eqnarray}
-These  methods make some assumptions about the ``closeness'' of the input distributions $p_a(\vect{x})$ and $p_u(\vect{x})$ \parencite{chapelle2006semi} which allow to exploit both sets to solve some particular tasks. One of the earliest forms of \acrlong{ssl} is \textit{self-training} where the model is initially trained in a supervised manner on the set $S_a$, then iteratively refined by using both $S_a$ and $S_u$ as training data until a certain quality criterion is met. In order to use the second set, an output signal is predicted for all samples of $S_i$ with the model being trained. 
+These  methods make some assumptions about the ``closeness'' of the input distributions $p_a(\vect{x})$ and $p_u(\vect{x})$ \parencite{chapelle2006semi} which allow exploiting both sets to solve some particular tasks. One of the earliest forms of \acrlong{ssl} is \textit{self-training} where the model is initially trained in a supervised manner on the set $S_a$, then iteratively refined by using both $S_a$ and $S_u$ as training data until a certain quality criterion is met. In order to use the second set, an output signal is predicted for all samples of $S_i$ with the model being trained. 
 
 Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the annotations are noisy (\eg $y$ can be incorrect or imprecise), coarse or incomplete (similar to \acrlong{usl}\TODO{check any diff with usl}). The challenge of working with coarse annotations consists in having a model output $h(\vect{x})$ that contains more information than the training signal $y$. Coming back to our example of Section \ref{sec:backml:whatisml}, a weakly-supervised problem would consist in locating the human, animal or object in the image using only the label as training signal.
 
@@ -349,7 +349,7 @@ Another approach is called \acrfirstit{ovr} and consists in training $C$ models 
 \section{Tree-based methods}
 \label{sec:backml:treebased}
 
-This section explores tree-based methods. This family of methods was invented at least twice in the 1980s by the \acrshort{ai} \parencite{quinlan1986induction} and the statistics \parencite{breiman2017classification} communities. Section \ref{ssec:backml:dt} presents the basics of decision tree induction, Section \ref{ssec:backml:rf} introduces the random forest algorithms. Section \ref{ssec:backml:et} presents a variant of the random forest called \acrfirstit{et} and Section \ref{ssec:backml:et_image} finally explores how this method can be used for image classification.
+Tree-based methods are a popular family of methods invented at least twice in the 1980s by the \acrshort{ai} \parencite{quinlan1986induction} and the statistics \parencite{breiman2017classification} communities. Section \ref{ssec:backml:dt} presents the basics of decision tree inference and induction, Section \ref{ssec:backml:rf} introduces the random forest algorithms. Section \ref{ssec:backml:et} presents a variant of the random forest called \acrfirstit{et} and Section \ref{ssec:backml:et_image} finally explores how this method can be used for image classification.
 
 \subsection{Decision trees}
 \label{ssec:backml:dt}
@@ -359,14 +359,14 @@ Let us consider a supervised dataset where each $\vect{x}_i$ is a vector of attr
 \label{eqn:backml:dt:vectattributes}
 \vect{x}_i = \left(a^{(i)}_1, a^{(i)}_2, ..., a^{(i)}_m\right),~a^{(i)}_j \in \mathcal{X}_j
 \end{equation}
-and each attribute can be either numerical or categorical (binary or multi-valued). A decision tree is a model structured as a tree of which the nodes $\mathcal{Q}$ are divided in two sets: the internal and leaf nodes $\mathcal{I} \subset \mathcal{Q}$ and $\mathcal{F} \subset \mathcal{Q}$. Each internal node $q \in \mathcal{I}$ tests an input attribute $k_q \in \left\{1,...,m\right\}$ and its $E_q$ outward edges are associated with non-overlapping subsets:
+and each attribute can be either numerical or categorical (binary or multi-valued). A decision tree is a model structured as a tree of which the nodes $\mathcal{Q}$ are divided in two subsets: the internal and leaf nodes $\mathcal{I} \subset \mathcal{Q}$ and $\mathcal{F} \subset \mathcal{Q}$. Each internal node $q \in \mathcal{I}$ tests an input attribute $k_q \in \left\{1,...,m\right\}$ and its $E_q$ outward edges are associated with non-overlapping subsets:
 \begin{equation}
 \label{eqn:backml:dt:splitsgeneric}
 \mathcal{A}^{(q)}_l \subset \mathcal{X}_{k_q},~l = 0,...,E_q-1
 \end{equation}
-which are called \textit{splits}. The leaf nodes of the tree are labelled with the predictions of the model. In classification, the prediction can either be a class $\hat{y} \in \mathcal{Y}$ or a probability distribution over $\mathcal{Y}$. In regression, the output is a real value $\hat{y} \in \mathcal{Y}$. Given $x_i$, predicting an output value consists in a top-down traversal of the tree. When reaching an internal node $q$ during the traversal, $\vect{x}_i$ will follow the edge $l$ such that $a^{(i)}_{k_q} \in \mathcal{A}^{(q)}_l$ which leads to one of the children nodes of $q$. This process is repeated until a leaf is reached. The prediction and output of the algorithm for $\vect{x}_i$ is the labelling of this leaf. 
+which are called \textit{splits}. The leaf nodes of the tree are labelled with the predictions of the model. In classification, the prediction can either be a class $\hat{y} \in \mathcal{Y}$ or a probability distribution over $\mathcal{Y}$. In regression, the output is a real value $\hat{y} \in \mathcal{Y}$. Given $x_i$, predicting an output value consists in a top-down traversal of the tree. When reaching an internal node $q$ during the traversal, $\vect{x}_i$ will follow the edge $l$ such that $a^{(i)}_{k_q} \in \mathcal{A}^{(q)}_l$ which leads to one of the children nodes of $q$. This process is repeated until the algorithm reaches a leaf of which the associated labelling is the output of the algorithm for $\vect{x}_i$. 
 
-In the remainder of the thesis, we will only consider numerical attributes and binary splits at each internal node ($E_q = 2$). These splits are defined by a threshold $v_q$ (or $q.v$) such that:
+In the remainder of the thesis, we will only consider numerical attributes and binary splits at each internal node ($E_q = 2$). These splits are defined by a threshold $v_q$ such that:
 \begin{align}
 \label{eqn:backml:dt:splitsbinary}
 \mathcal{A}^{(q)}_0 &= \left]-\infty, v_q\right]\\
@@ -376,13 +376,13 @@ This representation allows for an efficient check at each node as the attribute 
 
 \begin{algorithm}[t]
   \SetAlgoLined
-  \KwData{A sample $\vect{x}_i = \left(a^{(i)}_1, a^{(i)}_2, ..., a^{(i)}_m\right)$ and a decision tree $D$.}
+  \KwData{A sample $\vect{x}_i = \left(a^{(i)}_1, a^{(i)}_2, ..., a^{(i)}_m\right)$ and the root $r$ of a decision tree.}
   \KwResult{A probability distribution over $\mathcal{Y}$, the prediction for $\vect{x}_i$.}
-  \SetKwFunction{dtinfer}{DTInference}
-  \Fn{\dtinfer{D, $\vect{x}_i$}}{
-    $q = D.root$\;
+  \SetKwFunction{dtinfer}{TreeInference}
+  \Fn{\dtinfer{$r$, $\vect{x}_i$}}{
+    $q = r$\;
     \While{$q \not\in \mathcal{F}$}{
-      \eIf{$a_{k_q} \leq q.v$}{
+      \eIf{$a^{(i)}_{k_q} \leq v_q$}{
         $q = q.\text{left}$\;
       }{
         $q = q.\text{right}$\;
@@ -390,7 +390,7 @@ This representation allows for an efficient check at each node as the attribute 
     }
     \KwRet{$q.\text{pred}$}\;
   }
-  \caption{Inference with a classification tree $D$ and numerical attributes. The root of the tree is given by $D.root$, $q.left$ and $q.right$ denote the left and right children of a node and the prediction associated with the leaf node $f \in \mathcal{F}$ is accessed by $f.pred$. The regression algorithm only differs by its type of output.}
+  \caption{Inference with a classification tree and numerical attributes. $q.\text{left}$ and $q.\text{right}$ denote the left and right children of a node and the prediction associated with the leaf node $f \in \mathcal{F}$ is accessed by $f.\text{pred}$. The regression algorithm only differs by its type of output.}
   \label{algo:backml:dtinference}
 \end{algorithm}
 
@@ -407,60 +407,59 @@ The simplest stopping criterion would be to stop developing the tree when the su
 
 \begin{algorithm}[t]
   \SetAlgoLined
-  \SetKwFunction{dtinductrecur}{DTInductionRecursive}
-  \SetKwFunction{dtinduct}{DTInduction}
+  \SetKwFunction{dtinduct}{TreeInduction}
+  \SetKwFunction{stopsplit}{StopSplit}
   \SetKwFunction{computepred}{ComputePred}
+  \KwData{A  supervised dataset $S$ where each sample $\vect{x}_i = \left(a^{(i)}_1, a^{(i)}_2, ..., a^{(i)}_m\right)$.}
+  \KwResult{The root node of a decision tree built for $S$.}
+  
   \Fn{\dtinduct{$S$}}{
-    $D =~$ an empty decision tree\;
-    $D.root =~$ \dtinductrecur{$S$}\;
-    \KwRet{$D$}\;
+    \If{\stopsplit($S$)}{
+      \KwRet{\text{a node associated with most appropriate labelling given} $S$}\;
+    }
+    Find the best split $v_q$ for attribute $k_q$ for new node $q$:\;
+    $\argmin{v,k} \left[\frac{|S_0|}{|S|} I\left(S_0\right) + \frac{|S_1|}{|S|} I\left(S_1\right)\right] : S_0 = \left\{(\vect{x}_i, y_i) \mid a^{(i)}_k < v\right\}, S_1 = S \setminus S_0 $\; \label{algo:backml:dtinduction:argmax}
+    $q.\text{left} =~$\dtinduct{$S_0$}\;
+    $q.\text{right} =~$\dtinduct{$S_1$}\;
+    \KwRet{$q$}\;
   }
   \;
-  
-  \Fn{\dtinductrecur{$S$}}{
-    \If{$I(S) = 0~\vee~$ all attributes in $S$ are constant}{
-      $q =~$ a new node\;
-      $q.\text{left} =~$ NIL\;
-      $q.\text{right} =~$ NIL\;
-      $q.\text{pred} =~$ \computepred{$S$}\; 
-      \KwRet{$q$}\;
-    }
-    $k_{best} = -1$\;
-    $\Delta I_{best} = 0$\;
-    $v_{best} = 0$\;
-    \For{$j = 1, ...,|\vect{x}|$}{
-      $A =~$ array of examples sorted over values of $j^{th}$ attribute in $S$\;
-      \For{$i = 1, ..., |A|-1$}{
-        $\Delta I = I(A) - \frac{i}{|A|} I(A[\rightarrow i]) - \frac{|A| - i - 1}{|A|} I(A[(i+1) \rightarrow])$\;
-        \If{$\Delta I > \Delta I_{best}$}{
-          $k_{best} = j$\;
-          $v_{best} = \frac{A[i] + A[i+1]}{2}$\;
-          $\Delta I_{best} = \Delta I$\;
-        }
-      }
-    }
-    $S_0 = \left\{x_i \mid a^{(i)}_{k_{best}} \leq v_{best} \right\}$\;
-    $S_1 = S \setminus S_0$\;
-    $q =~$ a new node\;
-    $q.v = v_{best}$\;
-    $q.\text{left} =~$ \dtinductrecur{$S_0$}\;
-    $q.\text{right} =~$ \dtinductrecur{$S_1$}\;
-    \KwRet{$q$}\;
+  \Fn{\stopsplit{$S$}}{
+    \KwRet{$true~$\text{if either the $y_i$ or all the attributes are constant in} $S$, $false~$\text{otherwise}}\;
   }
 \caption{Decision tree induction. The \texttt{ComputePred($S$)} function computes the most appropriate prediction for a leaf node from $S$ (\eg by taking the majority class in classification or the classes probability distribution).}
 \label{algo:backml:dtinduction}
 \end{algorithm}
 
-A tree built using this simple stopping criterion is said to be \textit{fully-developed}. Such a tree is able to capture the training set perfectly which, in practice, hurts generalization as the model clearly overfits. In order to alleviate the problem and reduce the variance, there exists several methods such as pruning which consists in preventing the final tree to grow too deep. This can be done during the induction (pre-pruning) or a posteriori (post-pruning). Simple (pre-)pruning techniques are, for example, stopping the induction when a branch reaches a certain depth, or ensuring that all leaf nodes contain at least a given number of samples. An advantage of decision trees are their interpretability as the rules learned by the model can be easily understood by looking at the tree. In practice, decision trees are rarely used by themselves because of their high variance but rather as part of a forest (see Section \ref{ssec:backml:rf}).
+\begin{figure}
+  \centering
+  \subfloat[Fully-developped]{\includegraphics[scale=0.6]{backml/dt_full.png}}
+  \subfloat[Maximum depth of 3]{\includegraphics[scale=0.6]{backml/dt_max_depth3.png}}
+  \caption{Decision tree decision boundary (white line). Pre-pruning using the maximum depth parameter reduces the complexity of the model.}
+  \label{fig:backml:dt_boundary}
+\end{figure}
+
+A tree built using this simple stopping criterion is said to be \textit{fully-developed}. Such a tree is able to capture the training set perfectly which, in practice, hurts generalization as it usually leads to overfitting. In order to alleviate the problem and reduce the variance, there exists several methods such as pruning which consists in preventing the final tree to grow too deep. This can be done during the induction (pre-pruning) or a posteriori (post-pruning). Simple (pre-)pruning techniques are, for example, stopping the induction when a branch reaches a certain depth, or ensuring that all leaf nodes contain at least a given number of samples (see Figure \ref{fig:backml:dt_boundary}). An advantage of decision trees are their interpretability as the rules learned by the model can be easily understood by looking at the tree. In practice, decision trees are rarely used alone because of their high variance.
 
 \subsection{Random forests}
 \label{ssec:backml:rf}
 
+Random forests \parencite{breiman2001random} is an ensemble method based on decision trees. Ensemble methods combine the predictions of several models to produce a final prediction. Random forest is part of the family of averaging techniques where models are built independently and their predictions are averaged (\eg a majority vote for classification). It can be shown that this approach reduces variance compared to that of the base model (\eg decision trees) and the more decorrelated the individual models, the more the variance reduction.
+
+In random forests, decorrelation is achieved through \textit{bagging} (\aka bootstrap aggregating) and \textit{random attribute subset selection}. The former consists in training each individual model on a bootstrap sample of the training set: the training set for the $t^{\text{th}}$ decision tree in the ensemble is a set $S_t$ built by sampling with replacement in the original training set $S$. Regarding the attribute subset selection, each tree only considers a subset of $K \in \left\{1,..., m\right\}$ randomly selected features when looking for the best split. In other words, only $K$ random variables are considered when searching for $k_q$ at line \ref{algo:backml:dtinduction:argmax} in Algorithm \ref{algo:backml:dtinduction}. These two sources of randomness usually increase the bias as the individual models do not have access to all the original training examples and attributes. However, the variance reduction resulting from the ensembling is usually of much greater magnitude resulting in a significant performance improvement compared to using a decision tree alone.
+
 \subsection{Extremely randomized trees}
 \label{ssec:backml:et}
 
+The \textit{\acrlong{et}} (\acrshort{et}, \aka extra-trees) \parencite{geurts2006extremely} are a variant of the random forests algorithm and introduces yet another source of decorrelation by selecting the split $v_q$ at random during the induction (instead of optimizing it, see line \ref{algo:backml:dtinduction:argmax} in Algorithm \ref{algo:backml:dtinduction}). Moreover, to attenuate the bias increase, each individual tree is built on the whole training set instead of a boostrap sample. These choices makes the algorithm particularily computationally efficient as it is not necessary to iterate over the training samples to optimize the split anymore.
+
 \subsection{Image classification with extra-trees}
 \label{ssec:backml:et_image}
+
+Extra-trees can be used for image classification as presented in \parencite{maree2016towards}. The core idea behind this algorithm is to represent an image as a set of $n_w$ random subwindows. Subwindows are rectangle patches extracted from the image, resized to have all the target height $t_h$ and width $t_w$ and flattened into a vector of $t_h \times t_w \times c$ ($c$, the number of color channels). The original dimensions of the rectangular patches are drawn uniformly at random in a range of proportions $s_{min}$ and $s_{max}$ of the image size. The position of the patches are also drawn uniformly at random. Each subwindow is attributed the class of its parent image. The resulting training dataset containing $n \times n_w$ examples, each a vector of dimension $t_h \times t_w \times c$, can be used to train a extra-trees classifier. At inference, the same extraction process is applied and the final prediction for the image is determined by a majority vote on the predicted classes for its subwindows. Regarding parameters, the more windows and the more trees in the forest, the better. In addition to the tree complexity hyperparameters, the image colorspace, $s_{min}$ and $s_{max}$ should be tuned as well to optimize generalization.
+
+This variant of the algorithm is called \acrfirstit{etdic} but another variant exists where the forest is used as a feature learner (\acrshort{etfl}). The idea of \acrshort{etfl} is to train a limited number of trees with the subwindows similarly to the \acrshort{etdic} approach. But rather than using the forest as a direct classifier, it is used to create a new representation for the image. This representation is a vector of the same dimension as the number of leaves in the forest and value $\nu_i$ for leaf $i$ corresponds to the frequency of subwindows of the image reaching the leaf when propagated into the forest. 
+
 
 \section{Deep learning}
 \label{sec:backml:deeplearning}
