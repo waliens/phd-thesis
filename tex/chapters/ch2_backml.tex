@@ -529,10 +529,30 @@ Pooling, similarly to convolution, brings equivariance to translation and increa
 
 \subsection{Neural network optimization}
 \label{ssec:backml:dl:opti}
-% backprop, optimizer, scheduling, learning rate, batch norm
+Remains the question of how to find the best parameters for the neural network $h(\cdot; \theta)$ using a training set. Obviously, these weights should be tuned so that the final model minimizes the expected risk (\ie the generalization error) which is not directly possible as explained in Section \ref{ssec:backml:modelselection}. Following the \acrshort{erm} principle, $h(\cdot; \theta)$ can be optimized by minimizing its error on the training set measured by a loss $\mathcal{L}$. In most cases, it is not possible to find the solution analytically and, therefore, one resorts to numerical optimization and variants of \textit{gradient descent} algorithms.
+
+Starting from initial model parameters $\theta_0$, gradient descent is an algorithm that iteratively builds a sequence of parameters $\theta_i$ such that the loss should decrease when $i$ increases. The parameters update consists in applying them a correction of amplitude $\gamma$, the learning rate, in opposite direction of the gradients of $\mathcal{L}$ in the parameters space:
+
+\begin{equation}
+\label{eqn:backml:gradientdescent}
+\theta_{i+1} = \theta_{i} - \gamma \nabla \mathcal{L}(h(\cdot, \theta_{i})) 
+\end{equation}
+
+Gradient descent does not guarantee convergence in general as the optimization can either reach in a local minimum or diverge. The choices of $\theta_0$ and $\gamma$ are important to avoid divergence. Regarding the local minima issue, the very high-dimensional nature of neural networks makes it unlikely to have no dimension along which the model can improve at a given iteration of the algorithm. Moreover, finding parameters that achieve the global minimum of the training error is probably not a good idea as it might lead to overfitting.
+
+The gradient descent algorithm computes the gradients over the whole training set every iteration which is particularily inefficient when $n \gg$. A way of improving this inefficiency consists in using \acrfirstit{sgd} where the gradients are approximated using subset $\mathcal{B}$ of training samples instead of the whole set. This approach has been shown to be particularily efficient for both the generalization of the model and the computational cost of training \parencite{bottou201113}. When $|\mathcal{B}| > 1$ (commonly called \textit{batch}) but small, \acrshort{sgd} becomes \textit{mini-batch gradient descent} which is the most used optimization strategy for training neural networks nowadays.
+
+\subsubsection{Back-propagation}
+\label{sssec:backml:backprop}
+
+Gradient descent heavily relies on gradient of parameters for updating the model. The success of deep learning can be partly attribute to an efficient algorithm for computing these gradients called \textit{backpropagation} \parencite{rumelhart1986learning}. The algorithm make use of the chain rule 
+
+
+% backprop, optimizer, scheduling
 
 \subsection{Modern network architectures}
 \label{ssec:backml:dl:modernarchi}
+% batch norm
 % resnet 
 % densenet
 % unet
