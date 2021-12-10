@@ -470,20 +470,28 @@ As introduced in Section \ref{ssec:backml:shallowdeep}, \acrlong{dl} is a broad 
 \subsection{Components of modern neural networks}
 \label{ssec:backml:dp:components}
 
-A feedforward neural network can be seen as a parametrized function approximator $h$ which combines several intermediate functions $h_l(\cdot, \theta^{(l)})$ ($l=1, ..., L$), also called \textit{layers}, through composition: $h(\vect{x}, \theta) = (h^{(1)} \circ h^{(2)} \circ ... \circ h^{(L)})(\vect{x})$. $\theta$ is the set containing all the learnable parameters of the neural network $h$ and $\theta^{(l)}$ are the parameters of the function $h_l$ (or layer $l$). The feedforward nature of the network specifies that information only flows one-way, from the input $\vect{x}$ to the output $y$. In other words, there is no feedback loop. For a reason that will become clearer in Section \ref{ssec:backml:dl:opti}, one additional constraint on the functions $h_l$ is that they must be differentiable. 
+A feedforward neural network can be seen as a parametrized function approximator $h$ which combines several intermediate functions $h_l(\cdot, \theta^{(l)})$ ($l=1, ..., L$), also called \textit{layers}, through composition: $h(\vect{x}, \theta) = (h^{(1)} \circ h^{(2)} \circ ... \circ h^{(L)})(\vect{x})$. $\theta$ is the set containing all the learnable parameters of the neural network $h$ and $\theta^{(l)}$ are the parameters of the function $h_l$ (or layer $l$). The feedforward nature of the network specifies that information only flows one-way, from the input $\vect{x}$ to the output $y$. In other words, there is no feedback loop.
 
-Unlike decision trees (for instance) which learn the tree structure automatically, the design of a neural network is performed manually most of the time and consists in choosing and combining the appropriate functions $h^{(l)}$. Although it introduces complexity when it comes to engineering the best architecture for a problem, this modularity actually offers a great flexibility to practioners as, nowadays, there exists a large number of functions to choose from. Moreover, decades of research have highlighted best practices and guidelines for choosing such functions based on the type of data to be processed for instance. 
+Unlike decision trees (for instance) which learn the tree structure automatically, the architecture of a neural network is built manually most of the time and consists in choosing and combining the appropriate functions $h^{(l)}$ for the task at hand. Although it introduces some complexity when it comes to engineering the best architecture for a problem, this modularity actually offers a unprecedented way of implementing inductive bias. Moreover, as long as the chosen functions are differentiable, the final network can be trained using the \textit{backpropagation} algorithm (see Section \ref{ssec:backml:dl:opti}) independently of the architectural choices.
 
 The idea behind one of the first machine learning algorithm ever published, the perceptron \parencite{rosenblatt1958perceptron}, is still at the core of most \acrlong{dl} architectures today. Loosely modeling the working of brain neurons, the perceptron can be represented as: 
 \begin{equation}
 \label{eqn:backml:perceptron}
 f(\vect{x}) = \sigma\left(\theta_0 + \sum_{i=0}^m \theta_i x_i\right)
 \end{equation}
-where $\sigma(\cdot): \mathcal{X} \rightarrow \mathbb{R}$ is a non-linear differentiable function called the \textit{activation function}, $\theta_0$ and $\theta_i$ are respectively the learnable bias and weights.
+where $\sigma(\cdot): \mathcal{X} \rightarrow \mathbb{R}$ is a non-linear differentiable function called the \textit{activation function}, $\theta_0$ and $\theta_i$ are respectively the learnable bias and weights. An eligible function for $\sigma(x)$ should have at least two modes transitioning around $x=0$. In the past decades, typical $\sigma$ functions were the hyperbolic tangent, the sigmoid or the step function. Nowadays, the most common is the \acrfirstit{relu} function (see Equation \ref{eqn:backml:relu}) which is particularily efficient to compute and has some properties that interacts favorably with the training algorithm making neural networks easier to train.
 
-A perceptron alone is simply a linear model and is therefore not complex enough for many type of tasks. However, perceptrons can be combined together into a perceptron layer: a parallel combination of $u$ perceptrons ($u$ is the width of the layer) each with their own set of weights and biases and all taking the same vector as input. A perceptron layer therefore outputs a vector $\vect{z} \in \mathbb{R}^u$. 
+\begin{equation}
+\label{eqn:backml:relu}
+\sigma(x) = \text{ReLU}(x) = \begin{cases}
+0\text{, if}~ x < 0\\
+x\text{, else}
+\end{cases}
+\end{equation}
 
-In the spirit of learning a hierarchy, perceptron layers can be connected one after another to form a \acrfirstit{mlp} (see Figure \TODO{illustrate mlp}) where each individual perceptron is also called a \textit{neuron}. It can be shown that sufficiently complex \acrshort{mlp}s are universal function approximators (\ie they can learn any function) \parencite{hornik1989multilayer} which is an intersting property. However, realistically dimensioned \acrshort{mlp}s have the drawback of being very complex models easily reaching millions or even billions of learnable parameters. This makes them difficult to optimize and prone to overfitting. Regularization techniques exist to reduce model complexity such as weight decay (\ie smaller absolute weights values are preferred over large ones) or dropout \parencite{srivastava2014dropout} (\eg during training, some neurons are disabled at random) but unfortunately are often not enough. Therefore, whereas \acrshort{mlp}s still have their use in some applications and or as part of larger and more diverse architectures, they are rarely used by themselves nowadays.
+The perceptron, or \textit{neuron}, is simply a linear model and is therefore not complex enough for many type of tasks. However, perceptrons can be combined together into a perceptron layer: a parallel combination of $u$ perceptrons ($u$ is the width of the layer) each with their own set of weights and biases and all taking the same vector as input. A perceptron layer therefore outputs a vector $\vect{z} \in \mathbb{R}^u$. 
+
+In the spirit of learning a hierarchy, perceptron layers can be connected one after another to form a \acrfirstit{mlp} (see Figure \TODO{illustrate mlp}). It can be shown that sufficiently complex \acrshort{mlp}s are universal function approximators (\ie they can learn any function) \parencite{hornik1989multilayer} which is an interesting property. However, realistically dimensioned \acrshort{mlp}s have the drawback of being very complex models easily reaching millions or even billions of learnable parameters. This makes them difficult to optimize and prone to overfitting. Regularization techniques exist to reduce model complexity such as weight decay (\ie smaller absolute weights values are preferred over large ones) or dropout \parencite{srivastava2014dropout} (\eg during training, some neurons are disabled at random) but unfortunately are often not enough. Therefore, whereas \acrshort{mlp}s still have their use in some applications and or as part of larger and more diverse architectures, they are rarely used by themselves nowadays.
 
 \subsubsection{Convolutional neural networks}
 \label{sssec:backml:dl:cnn}
@@ -505,16 +513,15 @@ where $(i, j)$ are the coordinates of a vector of $\vect{z}^{(l-1)}$, $\theta^{(
 
 \begin{equation}
 \label{eqn:backml:convnetwithactiv}
-\vect{z}^{(l)} = h^{(l)}(\vect{x}) = \sigma\left(\vect{a}^{(l)}\right)
+\vect{z}^{(l)} = h^{(l)}(\vect{z}^{(l-1)}) = \sigma\left(\vect{a}^{(l)}\right)
 \end{equation}
 
-Modern architectures often use the \acrfirstit{relu} activation function (see Figure \TODO{example}) because it is very efficient to compute and exhibits convenient propreties when it comes to optimizing the network (see Section \ref{ssec:backml:dl:opti}).
 
-Convolutional layer have many hyperparameters starting with the number of feature maps $f_{out}$ and filter dimensions $h_f, w_f$ (typically $h_f \times w_f = 3 \times 3$ or $5 \times 5$) which both directly control the number of learnable parameters of the layer (and therefore its complexity). In addition to those, \textit{stride} $s$ allows reducing the amount of computations of the layer by evaluating the kernel every $s$ pixels (instead of every pixels) along a dimension (see Figure \TODO{stride example}). The \textit{padding} defines how convolution behaves near the edges of the image where all the evaluated pixels might not exist (see Figure \TODO{padding example}). Typical padding options are considering missing pixels to have value 0, mirroring the image at the edge, \etc. Unlike stride, \textit{dilation} is a skipping mechanism which concerns the filter rather than the input pixels (see Figure \TODO{dilation example}). 
+Convolutional layer have many hyperparameters including the number of feature maps $f_{out}$ and filter dimensions $h_f, w_f$ (typically $h_f \times w_f = 3 \times 3$ or $5 \times 5$) which both directly control the number of learnable parameters of the layer (and therefore its complexity). In addition to those, \textit{stride} $s$ allows reducing the amount of computations of the layer by evaluating the kernel every $s$ pixels (instead of every pixels) along a dimension (see Figure \TODO{stride example}). The \textit{padding} defines how convolution behaves near the edges of the image where all the evaluated pixels might not exist (see Figure \TODO{padding example}). Typical padding options are considering missing pixels to have value 0, mirroring the image at the edge, \etc. Unlike stride, \textit{dilation} is a skipping mechanism which concerns the filter rather than the input pixels (see Figure \TODO{dilation example}). 
 
 In addition to exploiting locality and stationarity, \acrshort{cnn}s have other interesting properties which contribute to their efficiency for processing structured data. They have \textit{equivariance to translation} which means that translating the convolutional layer input along some of the dimensions only translates the output along the same dimensions. For tasks like image classification, object location is often irrelevant for inferring the class. Therefore, the network does not have to learn this invariance which makes training easier. It has also been shown that, for image classification, the learned kernels are similar to classical computer vision filters capturing edges or color patterns in early layer and, as one ascends the network, kernels show compositionability, invariance and class discrimination \parencite{zeiler2014visualizing} confirming the ability of such a network to learn and use the inherent hierarchical structure of the data. Stacking convolutional layers also brings the benefit of increasing the receptive field of late layers. The receptive field of an activation $a^{(l)}_{ijk}$ in a feature map $k$ at layer $l$ is the set of pixels of the input that influence this activation. The larger the receptive field, the more information from the input is considered by the layer. 
 
-Pooling layers are another common components of \acrshort{cnn}s. Their role is to reduce the dimensionality of feature maps by aggregating close activations. In a way, pooling layer can be seen as a special convolutional layer with stride where that the kernel is not learned (but rather computes a possibly non-linear statistics) and the depth of the feature maps before and after pooling do not change (\ie $f_{in} = f_{out}$). Like convolution, pooling has some kernel size, stride and padding hyperparameters. Remains the choice of aggregation function, the most common being \textit{max pooling} and \textit{average pooling}. The former will output the largest activation among the one covered by the kernel:
+Pooling layers are another common components of \acrshort{cnn}s. Their role is to reduce the dimensionality of feature maps by aggregating close activations. In a way, pooling layer can be seen as a special convolutional layer with stride of which the kernel is not learned (but rather computes a possibly non-linear statistics) and the depth of the feature maps before and after pooling does not change (\ie $f_{in} = f_{out}$). Like convolution, pooling has some kernel size, stride and padding hyperparameters. Remains the choice of aggregation function, the most common being \textit{max pooling} and \textit{average pooling}. The former will output the largest activation among the one covered by the kernel:
 \begin{equation}
 \label{eqn:backml:maxpooling}
 a_{ijk} = \text{max} \left\{ x_{i+r,j+s,k} \mid r = 1, ..., h_f; s = 1, ..., w_f \right\}
@@ -525,34 +532,63 @@ The latter will average the activations covered by the kernel:
 a_{ijk} = \frac{1}{h_f \times w_f} \sum_{r=1}^{h_f} \sum_{s=1}^{w_f}  x_{i+r,j+s,k} 
 \end{equation} 
 
-Pooling, similarly to convolution, brings equivariance to translation and increase the receptive field of deeper layers. The reduction of dimensionality also reduces the computational cost of the network as deeper layers have smaller feature maps to process. There exists other type of pooling layers which are described in \parencite{gholamalinezhad2020pooling}. 
+Pooling, similarly to convolution, brings equivariance to translation and increase the receptive field of deeper layers. The reduction of dimensionality also reduces the computational cost of the network as deeper layers have smaller feature maps to process. There exists other type of pooling layers which are described in \parencite{gholamalinezhad2020pooling}.   
 
 \subsection{Neural network optimization}
 \label{ssec:backml:dl:opti}
 Remains the question of how to find the best parameters for the neural network $h(\cdot; \theta)$ using a training set. Obviously, these weights should be tuned so that the final model minimizes the expected risk (\ie the generalization error) which is not directly possible as explained in Section \ref{ssec:backml:modelselection}. Following the \acrshort{erm} principle, $h(\cdot; \theta)$ can be optimized by minimizing its error on the training set measured by a loss $\mathcal{L}$. In most cases, it is not possible to find the solution analytically and, therefore, one resorts to numerical optimization and variants of \textit{gradient descent} algorithms.
 
-Starting from initial model parameters $\theta_0$, gradient descent is an algorithm that iteratively builds a sequence of parameters $\theta_i$ such that the loss should decrease when $i$ increases. The parameters update consists in applying them a correction of amplitude $\gamma$, the learning rate, in opposite direction of the gradients of $\mathcal{L}$ in the parameters space:
+Starting from initial model parameters $\theta_0$, gradient descent is an algorithm that iteratively builds a sequence of parameters $\theta_i$ such that the loss should ideally decrease when $i$ increases. The parameters update consists in applying them a correction of amplitude $\gamma$, the learning rate, in opposite direction of the gradients of $\mathcal{L}$ in the parameters space:
 
 \begin{equation}
 \label{eqn:backml:gradientdescent}
-\theta_{i+1} = \theta_{i} - \gamma \nabla \mathcal{L}(h(\cdot, \theta_{i})) 
+\theta_{i} = \theta_{i-1} - \gamma \nabla \mathcal{L}(h(\cdot, \theta_{i})) 
 \end{equation}
 
-Gradient descent does not guarantee convergence in general as the optimization can either reach in a local minimum or diverge. The choices of $\theta_0$ and $\gamma$ are important to avoid divergence. Regarding the local minima issue, the very high-dimensional nature of neural networks makes it unlikely to have no dimension along which the model can improve at a given iteration of the algorithm. Moreover, finding parameters that achieve the global minimum of the training error is probably not a good idea as it might lead to overfitting.
+Gradient descent does not guarantee convergence to a global minimum in general as the optimization can either reach in a local minimum or diverge. The choices of $\theta_0$ and $\gamma$ are important to avoid divergence. Regarding the local minima issue, the very high-dimensional nature of neural networks makes it unlikely to have no dimension along which the model can improve at a given iteration of the algorithm. Moreover, finding parameters that achieve the global minimum of the training error is probably not a good idea as it might lead to overfitting.
 
-The gradient descent algorithm computes the gradients over the whole training set every iteration which is particularily inefficient when $n \gg$. A way of improving this inefficiency consists in using \acrfirstit{sgd} where the gradients are approximated using subset $\mathcal{B}$ of training samples instead of the whole set. This approach has been shown to be particularily efficient for both the generalization of the model and the computational cost of training \parencite{bottou201113}. When $|\mathcal{B}| > 1$ (commonly called \textit{batch}) but small, \acrshort{sgd} becomes \textit{mini-batch gradient descent} which is the most used optimization strategy for training neural networks nowadays.
+The gradient descent algorithm computes the gradients over the whole training set every iteration which is particularily inefficient when $n \gg$. A way of improving this inefficiency consists in using \acrfirstit{sgd} where the gradients are approximated using subset $\mathcal{B}$ of training samples instead of the whole set. This approach has been shown to be particularily efficient for both the generalization of the model and computational cost of training \parencite{bottou201113}. When $|\mathcal{B}| > 1$ (commonly called \textit{batch}) but small, \acrshort{sgd} becomes \textit{mini-batch gradient descent} which is the most used optimization strategy for training neural networks nowadays.
 
-\subsubsection{Back-propagation}
+Several adjustements to the gradient descent formulation of Equation \ref{eqn:backml:gradientdescent} have shown to be effective for convergence and stability of the optimization. In the thesis, whenever we optimize a neural network by gradient descent, we use the Adam optimizer \parencite{kingma2014adam} approach which normalizes the gradients using moving estimates of their mean and uncentered variance. This method is efficient and does not require much tuning of the hyperparameters. 
+
+\subsubsection{Backward propagation}
 \label{sssec:backml:backprop}
 
-Gradient descent heavily relies on gradient of parameters for updating the model. The success of deep learning can be partly attribute to an efficient algorithm for computing these gradients called \textit{backpropagation} \parencite{rumelhart1986learning}. The algorithm make use of the chain rule 
+Gradient descent, as its name suggests, heavily relies on gradient of parameters for updating the model. The success of deep learning can be partly attributed to an efficient algorithm for computing these gradients called \textit{backward propagation} \parencite{rumelhart1986learning} (\aka backpropagation). The algorithm is based on the chain rule which states that the derivative of a composition of functions $y(x) = (h^{(1)} \circ h^{(2)} \circ ... \circ h^{(L)})(x)$ with respect to its input can be broken down into a product of derivatives. Given $y_i = (h^{(1)} \circ h^{(2)} \circ ... \circ h^{(i)})(x)$, the composition of the $i^{\text{th}}$ first functions ($i = 1, ..., L$), the chain rule states that:
+
+\begin{equation}
+\label{eqn:backml:chainrule}
+\nabla h = \dfrac{\partial h(x)}{\partial x} = \dfrac{\partial y_L}{\partial x} = \dfrac{\partial y_L}{\partial y_{L-1}} \times ... \times \dfrac{\partial y_2}{\partial y_1} \times \dfrac{\partial y_1}{\partial x}  
+\end{equation}
+
+This applies directly to feedforward neural networks which are compositions of functions and implies that computing the parameters gradients can be broken down into computing local gradients at every layer. The backward propagation algorithm starts from the loss and iteratively evaluates local gradients going backward in the network until all parameters have been reached. These local gradients can then be combined using the chain rule and the resulting gradients can be used to update the parameters as dictated by gradient descent. This obviously requires that all functions $h^{(l)}$ are differentiable as introduced in Section \ref{ssec:backml:dp:components}. 
+
+Nowadays, all deep learning frameworks implement backward propagation and also feature automatic differentiation. Automatic differentiation means that every basic mathematical function present in the library is associated with its analytical derivative. Therefore, during backpropagation, the algorithm can compute the gradients automatically and exactly based on this information. The combination of these two features makes training a neural network particularily easy as everything is automated. 
 
 
-% backprop, optimizer, scheduling
+\subsubsection{Batch normalization}
+\label{sssec:backml:bacthnorm}
+
+The \acrfirstit{bn} \parencite{ioffe2015batch} layer is part of the family of normalization layers. This layer acts as a regularizer and is usually placed before activations in neural networks. Given a signal $\vect{x} = \left(\vect{x}_1, \vect{x}_2, ..., \vect{x}_m\right)$ (\eg the output of a convolutional layer) and training iteration $t$, the \acrshort{bn} layer maintains an estimate of the mean $\mu_i$ and variance $\sigma_i$ ($i = 1, ..., m$) of the preceeding layer output computed over the batch. These estimates are used to normalize the inputs. Obviously, whether this normalization is actually beneficial for the network is probably task-, layer- and feature-specific and there are probably scenarii where normalizing would hurt performance. Therefore, the signal $\hat{\vect{x}}$ is then followed by a learnable linear layer allowing the network to learn to revert this normalization if necessary:
+
+\begin{equation}
+\label{eqn:backml:bn}
+\acrshort{bn}(\vect{x}) = \begin{bmatrix}
+\alpha_0 \left(\dfrac{\vect{x}_0 - \mu_0}{\sqrt{\sigma^2_0 + \epsilon}}\right) + \beta_0 & ... & \alpha_m \left(\dfrac{\vect{x}_m - \mu_m}{\sqrt{\sigma^2_m + \epsilon}}\right) + \beta_m \\
+\end{bmatrix}\end{equation} 
+
+where the $\alpha_i$ and $\beta_i$ are the learnable parameters. During training, the input statistics $\mu_i$ and $\sigma_i$ are computed on-the-fly using a moving average. At inference, the statistics are frozen as well as the learnable parameters $\alpha_i$ and $\beta_i$.      
+  
+Batch normalization greatly helps network optimizition by maintaining intermediate activations within acceptable ranges of values and therefore reducing the risk of vanishing or exploding gradients, narrowing the parameter search and allowing higher learning rates. 
+
+Unfortunately, the use of batch statistics can also be an issue. When there is a sudden change in the model input distribution, the batch statistics are likely to change quickly but the linear layer, restricted by the learning rate, will probably not be able to adapt as quickly. This can cause instabilities while the networks adapts its \acrlong{bn} layers for the new distribution. This situation can occur for instance with transfer learning where source and target tasks can have drastically different input distributions. 
+
+\TODO{explain our solution here? or section on deep transfer learning}
+
+% vanishing or exploding 
 
 \subsection{Modern network architectures}
 \label{ssec:backml:dl:modernarchi}
-% batch norm
 % resnet 
 % densenet
 % unet
@@ -566,6 +602,17 @@ Image segmentation tasks generally use \textit{fully-convolutional neural networ
 \subsection{Deep transfer learning}
 \label{ssec:backml:dl:deeptransfer}
 
+As presented in Section \ref{ssec:backml:transfer}, \acrlong{tl} regroup several families of methods which have been and continue to be explored through the prism of \acrlong{dl} \parencite{tan2018survey}. In this thesis, we focus on supervised model-based (or network-based) transfer learning applied to images. With this approach, knowledge is encoded through the parameters of a model. This model is first trained on a target task, usually a large image dataset, then transferred to the target task.
+
+There are two approaches for transferring a deep neural network to a target task. Let us consider three networks $h^{(\text{shared})}(\cdot;\theta_{\text{shared}})$, $h^{(\text{source})}(\cdot;\theta_{\text{source}})$ and $h^{(\text{target})}(\cdot;\theta_{\text{target}})$. The first network $h^{(\text{shared})}$ will be shared between the source and target tasks. $h^{(\text{source})}$ and $h^{(\text{target})}$ are the task-specific networks. Both approaches first require the network $h = h^{(shared)} \circ h^{(source)}$ to be trained on the source task. At the end of training, $\theta_{\text{shared}}$ encodes the knowledge to be transferred. 
+
+The first transfer approach is \textit{feature extraction} and simply consists in generating a new representation for images of the target task by forwarding them through $h(\cdot;\theta^{(c)}_{source})$. The generated features can be used to train a third-party classifier such as \acrshort{svm}.
+
+The second transfer approach is \textit{fine-tuning} where the task-specific part of the network is replaced to match the target task (\ie $\theta^{(c)}_{source}$ becomes $\theta^{(c)}_{target}$) and the resulting network is trained further   
+
+This approach only emerged recently with works on the Overfeat \parencite{sermanet2013overfeat, razavian2014cnn} and Decaf \parencite{donahue2014decaf} architectures. The authors trained their AlexNet-based networks on the large ImageNet source dataset composed of 1.2 millions natural images and 1000 distinct classes. They both showed that these networks were able to produce discriminative features for tasks they were not trained on.
+
+Building upon these results, \parencite{yosinski2014transferable} analyzed the transferability of deep neural networks in more details. Their most prominent result was that transfer performance seemed to deacrease with  
 
 \section{Wrapping up}
 
