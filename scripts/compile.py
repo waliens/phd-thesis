@@ -23,7 +23,7 @@ def make_target(include):
     with open("root.tex", "r", encoding="utf8") as root_file:
         tex = root_file.read()
         tex = tex.replace("\\begin{document}\\end{document}", "\\begin{document}\\input{" + include + "}\\end{document}")
-        tmp_target_filename = "{}_target.tex".format(random_string(7))
+        tmp_target_filename = "{}_target.tex".format(os.path.basename(include).rsplit(".", 1)[0])
         with open(tmp_target_filename, "w+", encoding="utf8") as tmp_target:
             tmp_target.write(tex)
         return tmp_target_filename
