@@ -22,6 +22,7 @@ As an example, a common task is \textit{natural image classification} where the 
 
 There are numerous tasks beyond natural image classification to which \acrlong{ml} can be applied nowadays. In the next sections, we will discuss some of them and dive a little deeper into algorithms and topics related to learning which are relevant to this thesis.
 
+\TODO{inference ?}
 
 \section{Families of learning methods}
 \label{sec:backml:families}
@@ -83,7 +84,7 @@ Many things in our world can be viewed as hierarchies of concepts. For instance,
 
 Most of the \acrlong{ml} methods developed until recently can arguably be considered ``\textit{shallow}'' which means that they are not complex enough (\eg a linear model) or their learning process is not adapted (\eg a decision tree) to learn or exploit such hierarchies. In order to successfully apply these methods to complex data with hierarchical structure, one usually needs to help the learning algorithm by pre-processing the data and extract meaningful information using field knowledge. This process is called \textit{manual feature extraction} or \textit{engineering} and has been an important part of the application of machine learning algorithms. In computer vision, a great body of work is focused on creating complicated pipelines of feature extraction that produce hundreds of different features that can be used for image understanding (\eg SURF \parencite{bay2006surf}, ORB \parencite{rublee2011orb}). However, more recently ``\acrlong{dl}'' methods based on neural networks have shown that manual feature extraction was usually not the best performing approach for a wide variety of tasks.
 
-Although neural network research is as old as machine learning itself, the real breakthrough of \acrlong{dl} happened in 2012 when the third iteration of a \acrlong{ml} challenge called ImageNet \parencite{russakovsky2015imagenet} was organized. One of the tasks was image classification and all but the best methods used combinations of shallow learning algorithms and features extraction. However, the winning team did not and, building upon neural network research form the previous decades, used a deep convolutional neural network \parencite{krizhevsky2012imagenet} trained on the raw images instead. They beat the second best method by a margin of 11\% error rate. This extraordinary improvement revived the interest of the \acrlong{ml} community to neural networks and launched the ``\acrlong{dl} revolution''. Nowadays, it is a bit clearer why the winning method (\ie the AlexNet architecture) worked so well. Indeed, in its design, the deep neural network incorporates some particularily beneficial \textit{inductive bias}, a set of assumptions that narrow the search of a good model in the hypothesis space. This inductive bias includes a trainable multi-layered (hence ``deep'') structure that can automatically learn hierarchical concepts from the data directly. In other words, instead of manual feature engineering, features are learned automatically. Nowadays, \acrlong{dl} is a thriving research field that has grown far beyond image classification. Section \ref{sec:backml:deeplearning} dives a little further into \acrlong{dl} concepts relevant to this thesis.
+Although neural network research is as old as machine learning itself, the real breakthrough of \acrlong{dl} happened in 2012 when the third iteration of a \acrlong{ml} challenge called \acrfirstit{ilsvrc} \parencite{russakovsky2015imagenet} was organized. One of the tasks was image classification and all but the best methods used combinations of shallow learning algorithms and features extraction. However, the winning team did not and, building upon neural network research form the previous decades, used a deep convolutional neural network \parencite{krizhevsky2012imagenet} trained on the raw images instead. They beat the second best method by a margin of 11\% error rate. This extraordinary improvement revived the interest of the \acrlong{ml} community to neural networks and launched the ``\acrlong{dl} revolution''. Nowadays, it is a bit clearer why the winning method (\ie the AlexNet architecture) worked so well. Indeed, in its design, the deep neural network incorporates some particularily beneficial \textit{inductive bias}, a set of assumptions that narrow the search of a good model in the hypothesis space. This inductive bias includes a trainable multi-layered (hence ``deep'') structure that can automatically learn hierarchical concepts from the data directly. In other words, instead of manual feature engineering, features are learned automatically. Nowadays, \acrlong{dl} is a thriving research field that has grown far beyond image classification. Section \ref{sec:backml:deeplearning} dives a little further into \acrlong{dl} concepts relevant to this thesis.
 
 \subsection{Transfer learning}
 \label{ssec:backml:transfer}
@@ -553,6 +554,8 @@ The gradient descent algorithm computes the gradients over the whole training se
 
 Several adjustements to the gradient descent formulation of Equation \ref{eqn:backml:gradientdescent} have shown to be effective for convergence and stability of the optimization. In the thesis, whenever we optimize a neural network by gradient descent, we use the Adam optimizer \parencite{kingma2014adam} approach which normalizes the gradients using moving estimates of their mean and uncentered variance. This method is efficient and does not require much tuning of the hyperparameters. 
 
+\TODO{talk about vanishing gradients?}
+
 \subsubsection{Backward propagation}
 \label{sssec:backml:backprop}
 
@@ -576,7 +579,7 @@ The \acrfirstit{bn} \parencite{ioffe2015batch} layer is part of the family of no
 \begin{equation}
 \label{eqn:backml:bn}
 \acrshort{bn}(\vect{x}) = \begin{bmatrix}
-\alpha_0 \left(\dfrac{\vect{x}_0 - \mu_0}{\sqrt{\sigma^2_0 + \epsilon}}\right) + \beta_0 & ... & \alpha_m \left(\dfrac{\vect{x}_m - \mu_m}{\sqrt{\sigma^2_m + \epsilon}}\right) + \beta_m \\
+\alpha_1 \left(\dfrac{\vect{x}_1 - \mu_1}{\sqrt{\sigma^2_1 + \epsilon}}\right) + \beta_1 & ... & \alpha_m \left(\dfrac{\vect{x}_m - \mu_m}{\sqrt{\sigma^2_m + \epsilon}}\right) + \beta_m \\
 \end{bmatrix}\end{equation} 
 
 where the $\alpha_i$ and $\beta_i$ are the learnable parameters. During training, the input statistics $\mu_i$ and $\sigma_i$ are computed on-the-fly using a moving average. At inference, the statistics are frozen as well as the learnable parameters $\alpha_i$ and $\beta_i$.      
@@ -585,21 +588,69 @@ Batch normalization greatly helps network optimizition by maintaining intermedia
 
 Unfortunately, the use of batch statistics can also be an issue. When there is a sudden change in the model input distribution, the batch statistics are likely to change quickly but the linear layer, restricted by the learning rate, will probably not be able to adapt as quickly. This can cause instabilities while the networks adapts its \acrlong{bn} layers for the new distribution. This situation can occur for instance with \acrlong{tl} where source and target tasks can have drastically different input distributions. 
 
-\TODO{explain our solution here? or section on deep \acrlong{tl}}
-
-% vanishing or exploding 
+\TODO{explain our solution here for batchnorm in transfer issue? or section on deep \acrlong{tl}}
 
 \subsection{Modern network architectures}
 \label{ssec:backml:dl:modernarchi}
-% resnet 
-% densenet
-% unet
 
-\subsubsection{Unet}
+\TODO{et mobile nets}
 
-Image segmentation tasks generally use \textit{fully-convolutional neural network} where almost all layers are convolutional. Some successful architectures based on \acrshort{cnn}s are presented in Section \ref{ssec:backml:dl:modernarchi}. 
+\subsubsection{Simple layer-stacking architecture}
+\label{sssec:backml:arch:layerstacking}
+After the success of AlexNet, researchers investigated the effect of model depth on classification performance. An architecture in particular caught the attention by enfing up a runner up for a later edition of \acrshort{ilsvrc} in 2014. This architecture is named VGG \parencite{simonyan2014very} after the team who participated the challenge. It has two implementations we use in this thesis: VGG16 and VGG19. The number is the count of layers with trainable weights in the architecture. These architectures are pretty straightfoward (see Figure \ref{fig:backml:vgg}) as they only stack blocks of few convolutional layers with \acrshort{relu} activation followed by pooling. The last convolutional layer is followed by a 3-layers \acrshort{mlp}. 
 
-% transformers
+\begin{figure}
+  \centering
+  \includegraphics[rotate=-90, scale=0.33]{backml/vgg1619.png}
+  \caption{VGG16 and VGG19 architectures, from \parencite{img:vgg1619}}
+  \label{fig:backml:vgg}
+\end{figure}
+
+\subsubsection{Residual architecture}
+\label{sssec:backml:arch:residual}
+
+Although improving over AlexNet, very deep networks like VGGs are subject to training difficulties: beyond a certain model depth, accuracies sometimes start to decrease. This can be attributed to the fact that, for a given task, adding layers beyond a certain depth is not necessary. Moreover, it can be difficult for gradients to flow back given the depth of the architecture (\ie vanishing gradients). In order to address those two issues, ResNet \parencite{he2016deep} introduces the \textit{residual mapping}, or \textit{skip-connection}. Given a layer $h^{(l)}(\vect{x})$, the residual mapping $r^{(l)}(\vect{x})$ would be:
+
+\begin{equation}
+\label{eqn:backml:residual}
+r^{(l)}(\vect{x}) = \vect{x} + h^{(l)}(\vect{x})
+\end{equation}
+
+This residual mapping makes it easier for the optimizer to simply ignore the layer as it just has to tune all the weights in $h^{(l)}(\vect{x})$ to 0 in which case $r^{(l)}(\vect{x}) = \vect{x}$. Moreover, gradients are still able to flow freely through the skip-connection. This increased trainability has been empirically confirmed as very deep residual network (up to 150 layers) have won \acrshort{ilsvrc} in 2015 and 2016 and have shown impressive performance in many other contexts. Another advantage of residual networks is that, even though they are deeper than their VGG counterparts, they need much less parameters to reach better performance\footnote{VGG16 and 19 have more than 140M parameters whereas ResNet50 has 25M and the largest ResNet152 has 66M parameters.} making ResNets more lightweight. Nowadays, residual connections are a common building block in deep architectures. In this thesis, we use one of the first iteration of ResNets, namely ResNet50. 
+
+\TODO{schema of resnet}
+
+
+\subsubsection{Inception architecture}
+\label{sssec:backml:arch:inception}
+% InceptionV3
+% InceptionResNetV2
+In \acrshort{ilsvrc}2014, the winning methods was based on an architecture called GoogLeNet \parencite{szegedy2015going} (\aka InceptionV1). This architecture is based on \textit{inception modules}. An inception module is a composition of convolutional layers built to maintain a certain level representativeness while reducing the number of training parameters compared to a block of plain convolutional layers. An example of a trick used 
+to reduce the number of parameters is to use two consecutive $3 \times 3$ instead of one $5 \times 5$ convolutional layers. In this thesis, we use InceptionV3 \parencite{szegedy2016rethinking}, the third iteration of the architecture, which essentially scales it up by using factorized convolutions and regularization. We also use InceptionResNetV2, a version of the Inception architecture using residual connection \parencite{szegedy2017inception}. 
+
+
+\subsubsection{Dense architecture}
+\label{sssec:backml:arch:dense}
+The densely connected convolutional networks \parencite{huang2017densely} push further the idea of residual connection. Let us suppose a group of $L$ consecutive convolutional layers $h^{(l)}$ ($l = 1, ..., L$) taking $\vect{x}$ as input. In this group, each layer $h^{(l)}$ receives as input the outputs of all preceeding layers $h^{(i)}$ ($i = 1, ..., l-1$) and the input signal $\vect{x}$. This group of layer is called a \textit{dense block} and is the basis for the densely connected networks. Such networks typically stack several dense blocks connected together with one final convolution and one pooling layers (see Figure \ref{fig:backml:densenet}).
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.35]{backml/densenet.png}
+  \caption{A densely connected network (image from \parencite{huang2017densely}).}
+  \label{fig:backml:densenet}
+\end{figure}
+
+\subsubsection{A segmentation architecture, UNet}
+\label{sssec:backml:arch:segment}
+
+For tackling image segmentation tasks, one generally uses \textit{\acrlong{fcn}s} (\acrshort{fcn}) which is a kind of network where (almost) all layers are convolutional. One of the most popular architecture for segmentation is a U-shaped \acrshort{fcn} called U-Net \parencite{ronneberger2015unet}. This architecture is composed of some contracting and expanding paths (hence the ``U'', see Figure \ref{fig:backml:unet}). Similarly as for image classification, the former is composed of convolutional and pooling layers that progressively compress the input image into high-level concepts. The latter progressively expands these concepts using deconvolution, the inverse operation of convolution. The particularity of U-Net is that it uses skip-connections between features maps of similar expressiveness of the contracting and expanding paths.   
+
+\begin{figure}
+  \centering
+  \includegraphics[scale=0.35]{backml/unet.png}
+  \caption{U-Net architecture (image from \parencite{ronneberger2015unet}).}
+  \label{fig:backml:unet}
+\end{figure}
 
 \subsection{Deep transfer learning}
 \label{ssec:backml:dl:deeptransfer}
@@ -638,4 +689,4 @@ Because of its ability to tackle data scarcity, \acrlong{tl} has been a method o
 
 In the previous sections, we gave an overview of different families of \acrlong{ml} methods. We can now position our work in this context. In Chapters \ref{chap:comp} and \ref{chap:mtask}, both contributions explore heterogeneous model-based \acrlong{tl} by transfering \acrlong{dl} classification models. We use several target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp} (more on this in Chapter \ref{chap:backdp}). The first contribution studies transfer from ImageNet. Motivated by the fact that transfer works better when the source and target tasks are related, the second contribution use homogeneous features-based \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data directly.
 
-In Chapter \ref{chap:sdist}, we move to a different type of task: image segmentation. Working with an sparsely-annotated \acrlong{dp} dataset, we use self-training to complete the missing annotations and train a U-Net segmentation model.
+In Chapter \ref{chap:sdist}, we move to a different type of task: image segmentation. Working with an sparsely-annotated \acrlong{dp} dataset, we use self-training to complete the areas where annotations are missing. We train a U-Net segmentation model on the self-annotated segmentation.
