@@ -1,6 +1,7 @@
 import re
 import os
 from bisect import bisect
+from argparse import ArgumentParser
 
 BEGIN_PATTERN = re.compile(r"(?:\\begin[ ]?(?:\[[^\[\]]*])?[ ]?{([^{}]+)}(?:{[^\[\]]*})*|\$\$|\\\[)", re.IGNORECASE)
 END_PATTERN = re.compile(r"(?:\\end[ ]?{([^{}]+)}|\\])", re.IGNORECASE)
@@ -123,6 +124,7 @@ def merge_lines(lines):
 	env_stack = list()
 	while i < len(lines):
 		line = lines[i].rstrip()
+
 		sequences = scan_envs(line, env_stack)
 		scanned = scan_commands_and_inline_math(line.strip())
 
@@ -131,7 +133,7 @@ def merge_lines(lines):
 				out_lines.append(re.sub(r"\s+", " ", " ".join([s.strip() for s in lines[start_group:i]])))
 			out_lines.append("")
 			start_group = i + 1
-		elif re.match(r"^\s+%", line) is not None or len(sequences) == 0 or (len(scanned) == 1 and (scanned[0][1] - scanned[0][0]) == len(line.rstrip())):
+		elif re.match(r"^\s*%", line) is not None or len(sequences) == 0 or (len(scanned) == 1 and (scanned[0][1] - scanned[0][0]) == len(line.rstrip())):
 			if start_group != i:
 				out_lines.append(re.sub(r"\s+", " ", " ".join([s.strip() for s in lines[start_group:i]])))
 				start_group = i
@@ -142,7 +144,7 @@ def merge_lines(lines):
 		i += 1
 
 	if start_group != len(lines):
-		out_lines.append(re.sub(r"\s+", " ", " ".join([s.strip() for s in lines[start_group]])))
+		out_lines.append(re.sub(r"\s+", " ", " ".join([s.strip() for s in lines[start_group:]])))
 
 	return out_lines
 
@@ -191,6 +193,7 @@ def split_line(line, width=80):
 			remaining = remaining[split_point:]
 		else:
 			out_lines.append(remaining)
+			remaining = ""
 
 	if len(remaining) > 0:
 		out_lines.append(remaining)
@@ -202,7 +205,8 @@ def split_lines(lines, width=80):
 	out_lines = list()
 	env_stack = list()
 	for i, line in enumerate(lines):
-		print("\rsplit: {:3.2f}%".format(100 * (i + 1) / len(lines)), end="", flush=True)
+		print("\rsplit: {:3.2f}% (l: {})".format(100 * (i + 1) / len(lines), i + 1), end="", flush=True)
+
 		sequences = scan_envs(line, env_stack)
 		if not line.strip().startswith("%") and len(sequences) == 1 and (sequences[0][1] - sequences[0][0]) == len(line):
 			out_lines.extend(split_line(line, width=width))
@@ -213,7 +217,7 @@ def split_lines(lines, width=80):
 
 
 def warp_text_file(filepath, width=80, out_filepath="test.txt"):
-	if not os.path.exists(filepath):
+	if not os.path.exists(filepath) or not os.path.isfile(filepath):
 		raise FileNotFoundError("file '{}' does not exist".format(filepath))
 
 	env_stack = list()
@@ -228,4 +232,11 @@ def warp_text_file(filepath, width=80, out_filepath="test.txt"):
 
 
 if __name__ == "__main__":
-	pass
+	import sys
+	parser = ArgumentParser()
+	parser.add_argument("-i", "--input", dest="input", required=True)
+	parser.add_argument("-o", "--output", dest="output", required=True)
+	args, _ = parser.parse_known_args(sys.argv[1:])
+	print("in  file: {}".format(args.input))
+	print("out file: {}".format(args.output))
+	warp_text_file(args.input, out_filepath=args.output)
