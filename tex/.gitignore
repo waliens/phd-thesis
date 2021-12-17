@@ -8,7 +8,7 @@
 *.lof
 *.lot
 *.toc
-*.pdf
+./*.pdf
 *.run.xml
 .bash_history
 *.out

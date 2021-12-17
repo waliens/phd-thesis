@@ -95,7 +95,7 @@ For the collected datasets to be used in a multi-task classification setting, so
 
 \begin{figure}
     \centering
-    \includegraphics[scale=0.46]{mtask/multitask-training.png}
+    \includegraphics[scale=0.46]{mtask/multitask-training.pdf}
     \caption{Multi-task architecture. $\mathcal{L}$ is the multi-task loss (see Section \ref{ssec:mtask:multitask-training}) and $S$ is a softmax layer. $x_j^{(i)}$ and $z_j^{(i)}$ designate respectively the $j^{\text{th}}$ sample of the batch $\mathbf{x}$ and its corresponding features produced by $\theta_s$. This sample belongs to task $t_i$. Features produced for samples of a given task $t_i$ are routed to this task head $\theta_i$. In this example, there is no sample for task 3 in the batch $\mathbf{x}$. Therefore, the corresponding head $\theta_3$ is inactive (\ie produces no output, no parameters update, no gradient computed) for this iteration.}
     \label{fig:mtask:multitask-training}
 \end{figure}
