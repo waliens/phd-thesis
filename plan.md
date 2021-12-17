@@ -31,6 +31,9 @@
 5. **Multi-task pre-training of deep neural networks for digital pathology**
 6. **U-Net self-distillation as a way to cope with loosely annotated segmentation dataset???**
 7. **Biaflows ???**
+8. **SLDC**
+9. **Contributions to Cytomine**
+10. **Conclusion**
 
 ### Appendix
 
