@@ -2,9 +2,9 @@
 \label{chap:backml}
 
 \begin{overview}{Overview}
-The goal of this chapter is mainly to give some keys to understand our contributions to a reader with basic knowledge of \acrlong{ml}. It is not aimed at being a thorough presentation of the field or of the different methods but rather an overview. For the readers who would still like to deepen their knowledge about these methods, we provide pointers to relevant litterature. In this chapter, we also introduce the notations that we use throughout this thesis.
+The goal of this chapter is to provide machine learning background and keys to understand our contributions. It is not aimed at being an exhaustive tour of the field of machine learning but rather an overview of topics relevant to this thesis. For the readers who would still like to deepen their knowledge about these methods, we provide pointers to relevant litterature. In this chapter, we also introduce the notations that we use throughout this thesis.
 
-Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} and a first example of an \acrshort{ml} problem. Section \ref{sec:backml:families} explores the different ways the field of \acrlong{ml} can be structured (\eg supervised vs. unsupervised learning, classification vs. regression, classical machine vs. \acrlong{dl}...) in order to position our work in its context.
+Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} and a first example of an \acrshort{ml} problem. Section \ref{sec:backml:families} explores the different ways the field of \acrlong{ml} can be structured (\eg supervised vs. unsupervised learning, classification vs. regression, classical machine vs. \acrlong{dl}...) in order to position our work in its context. Section \ref{sec:backml:modeleval} discusses what guides \acrlong{ml} model training from a theoritical point of view. Then, it presents practical concerns regarding model selection and evaluation. It finally provides a description of different evaluation metrics used in this thesis. This chapter then shifts its focus on specific machine learning methods and algorithms: \acrlong{svm} in Section \ref{sec:backml:svm}, tree-based methods in \ref{sec:backml:treebased} and deep learning in Section \ref{sec:backml:deeplearning} in which we also discuss more thouroughly deep transfer learning (see Section \ref{ssec:backml:dl:deeptransfer}). In the final Section \ref{sec:backml:wrapup}, we wrap up by positioning our work in the context of \acrlong{ml}.
 \end{overview}
 
 \section{What is machine learning ?}
@@ -364,7 +364,9 @@ information about tasks relatedness.
 % ===================
 % Eval and selection
 % ===================
+
 \section{Model evaluation and selection}
+\label{sec:backml:modeleval}
 
 As stated in Section \ref{sec:backml:whatisml}, evaluation is a core principle of
 \acrlong{ml} as a learning algorithms should select a model that maximizes a
@@ -718,6 +720,7 @@ the methods across datasets. This metric is not ideal
 % ===================
 % Methods
 % ===================
+
 \section{Support vector machines}
 \label{sec:backml:svm}
 
@@ -1025,7 +1028,6 @@ representation can then be used to train another classifier like \acrshort{svm}.
 At inference, the representation for the new samples is extracted from the forest
 which are then classified with the second classifier. In general, \acrshort{etfl}
 is superior to \acrshort{etdic} in terms of performance.
-
 
 \section{Deep learning}
 \label{sec:backml:deeplearning}
@@ -1621,9 +1623,9 @@ we explore further applications of \acrlong{tl} to \acrlong{dp} and medical imag
 in general.
 
 \section{Wrapping up}
+\label{sec:backml:wrapup}
 
-In the previous sections, we gave an overview of different families of \acrlong{ml}
-methods. We can now position our work in this context. In Chapters \ref{chap:comp}
+In the previous sections, we gave an overview of different topics. We can now position our work in this context. In Chapters \ref{chap:comp}
 and \ref{chap:mtask}, both contributions explore heterogeneous model-based
 \acrlong{tl} by transfering \acrlong{dl} classification models. We use several
 target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp}
@@ -1637,3 +1639,5 @@ In Chapter \ref{chap:sdist}, we move to a different type of task: image segmenta
 Working with an sparsely-annotated \acrlong{dp} dataset, we use self-training to
 complete the areas where annotations are missing. We train a U-Net segmentation
 model on the self-annotated segmentation.
+
+\TODO{chapter on software contributions}

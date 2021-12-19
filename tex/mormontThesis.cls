@@ -217,7 +217,7 @@
 \newcommand{\decoRule}{\rule{.8\textwidth}{.4pt}} % New command for a rule to 
 %be used under figures
 
-\setcounter{tocdepth}{3} % The depth to which the document sections are printed 
+\setcounter{tocdepth}{2} % The depth to which the document sections are printed 
 %to the table of contents
 \ProvideDocumentCommand{\addchaptertocentry}{ m }{%
   \addcontentsline{toc}{chapter}{#1}%
