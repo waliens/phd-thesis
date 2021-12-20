@@ -1358,7 +1358,7 @@ is automated.
 The \acrfirstit{bn} \parencite{ioffe2015batch} layer is part of the family of
 normalization layers. This layer acts as a regularizer and is usually placed before
 activations in neural networks. Given a signal
-$\vect{x} = \left(\vect{x}_1, \vect{x}_2, ..., \vect{x}_f\right) in \mathbb{R}^f$
+$\vect{x} = \left(\vect{x}_1, \vect{x}_2, ..., \vect{x}_f\right) \in \mathbb{R}^f$
 (\eg the output of a convolutional layer), the \acrshort{bn} layer maintains an
 estimate of the mean $\mu_i$ and variance $\sigma_i$ ($i = 1, ..., f$) of the
 preceeding layer output computed over the batch. These estimates are used to
@@ -1372,7 +1372,7 @@ necessary:
 \begin{equation}
 \label{eqn:backml:bn}
 \acrshort{bn}(\vect{x}) = \begin{bmatrix}
-\alpha_1 \left(\dfrac{\vect{x}_1 - \mu_1}{\sqrt{\sigma^2_1 + \epsilon}}\right) + \beta_1 & ... & \alpha_f \left(\dfrac{\vect{x}_f - \mu_f}{\sqrt{\sigma^2_f + \epsilon}}\right) + \beta_m \\
+\alpha_1 \left(\dfrac{\vect{x}_1 - \mu_1}{\sqrt{\sigma^2_1 + \epsilon}}\right) + \beta_1 & ... & \alpha_f \left(\dfrac{\vect{x}_f - \mu_f}{\sqrt{\sigma^2_f + \epsilon}}\right) + \beta_f \\
 \end{bmatrix}\end{equation}
 
 where the $\alpha_i$ and $\beta_i$ are the learnable parameters. During training,
