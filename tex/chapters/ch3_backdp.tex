@@ -22,7 +22,7 @@ Nowadays, medicine and healthcare rely heavily on analysis of human body samples
   \label{fig:backdp:glassslides}
 \end{figure}
 
-The trend of digitalization affecting our societies also impacts pathology as, using dedicated scanners, these glass slides can now be digitized into large image files called \acrfirstit{wsi}. In this context, \acrfirstit{dp} can be defined as ``\textit{the acquisition, management, sharing and interpretation of pathology information — including slides and data — in a digital environment}'' \parencite{doolan2019whatisdp}. Working with \acrshort{wsi} instead of physical slides has several advantages and drawbacks (see Table 1 in \parencite{jahn2020digital} for a thorough list). Aside from easier sharing and storing of slides, digitization also opens the way for automated analysis sofware to automatically extract relevant information. Such software have the potential to relieve pathologists from time-consuming tasks allowing them to focus on challenging cases and research therefore reducing healthcare cost and improving diagnosis quality. According to the 2020 report on cancer from \acrfirstit{who} \parencite{world2020report}, the ratio of pathologist per inhabitant was approximately 1 per 15000 in high income countries but dramatically dropping to 1 per 1 million or less many low income countries. AI-assisted pathology therefore holds even greater promises for coverage and quality of healthcare in these countries where pathologists are rare.
+The trend of digitalization affecting our societies also impacts pathology as, using dedicated scanners, these glass slides can now be digitized into large image files called \acrfirstit{wsi}. In this context, \acrfirstit{dp} can be defined as ``\textit{the acquisition, management, sharing and interpretation of pathology information — including slides and data — in a digital environment}'' \parencite{doolan2019whatisdp}. Working with \acrshort{wsi} instead of physical slides has several advantages and drawbacks (see Table 1 in \parencite{jahn2020digital} for a thorough list). Aside from easier sharing and storing of slides, digitization also opens the way for automated analysis sofware to automatically extract relevant information. Such software have the potential to relieve pathologists from time-consuming tasks allowing them to focus on challenging cases and research therefore reducing healthcare cost and improving diagnosis quality. According to the 2020 report on cancer from \acrfirstit{who} \parencite{world2020report}, the ratio of pathologist per inhabitant was approximately 1 per 15000 in high income countries but dramatically dropping to 1 er 1 million or less many low income countries. AI-assisted pathology therefore holds even greater promises for coverage and quality of healthcare in these countries where pathologists are rare.
 
 Interestingly, although digitization technologies are quite mature, adoption of \acrlong{dp} in healthcare facilities is not simple. Many still heavily rely on glass slides for day-to-day operations. Indeed, the transformation requires significant investments (both in time and money) and careful planning to carry it out successfully which is not always comptabile with the workload of pathology services. Experienced pathologists are sometimes reluctant to change and lack confidence in modern tools for slide visualization and analysis. Moreover, some tasks cannot be performed easily on \acrlong{wsi}s but can on a glass slide (\eg exploring the depth of a sample in cytology by changing the focal plane). 
 
@@ -35,13 +35,15 @@ Overall, digital pathology holds great promises but presents significant and int
 
 Turning a bodily specimen into \acrlong{wsi}s is a long and complex multi-step process typically involving the work of several highly-specialized technicians. Some steps can nowadays be automated but the chain remains mostly manual. In this section, we describe the different steps of this procedure (see \parencite{mccann2014automated} for an alternate and more detailed presentation with illustrations). With each step of the procedure comes the risk of introducing artifacts of which we will provide few examples. For a more complete list of pre-scan artifacts with illustrations, see \parencite{taqi2018review}. 
 
+\TODO{talk about how this process can change for different type of samples => cytology???}
+
 \subsection{Samples collection, fixation, cutting and dehydratation}
 
 Whereas we focus mostly on histo- and cyto-pathology in this thesis, a pathology service typically deals with more than these two modalities. The specimens they receive for analysis range from small (commonly referred to as \textit{biopsies}) to very large (whole organ or body). Whole bodies are usually destined for autopsies which might themselves generate biopsies. Smaller speciemens (organs, biopsies) must be fixated before going through the next steps. 
 
 The goal of fixation is to put a stop to the natural decay of the specimen and increase its structural stability \parencite{rolls2012process}. This can be achieved, for instance, by immersing the specimen in a formaldehyde bath (\ie the fixative solution) for period of time depending on its size (\ie few hours to a whole day). 
 
-When the specimen has been fixated\TODO{cytology: also cut ?)}, it is then placed into a standardized container called a \textit{cassette} (see Figure \ref{fig:backdp:cassette}). If the sample is too large for the cassette, a volume of interest is cut from the specimen. Depending on the later examination, the orientation of the cut can be crucial to exhibit relevant tissue structures of the specimen. In the remaininder, we will call a \textit{sample} the content of this cassette.
+When the specimen has been fixated, it is then placed into a standardized container called a \textit{cassette} (see Figure \ref{fig:backdp:cassette}). If the sample is too large for the cassette, a volume of interest is cut from the specimen. Depending on the later examination, the orientation of the cut can be crucial to exhibit relevant tissue structures of the specimen. In the remaininder, we will call a \textit{sample} the content of this cassette.
 
 For a proper analysis, the cellular morphology of the sample must be preserved. This is most commonly achieved by infiltrating the tissue with paraffin wax. Infiltration however does not work on a raw fixated tissue because paraffin is hydrophobic. Therefore, one must first perform \textit{dehydratation}, that is, to replace water naturally present in the sample with a product miscible with parrafin. This is done by first plunging the sample into a succession of alcoholic solutions baths. Although this process achieve dehydratation, alcohol does not mix with paraffin neither. Therefore, the sample is then plunged into one or more xylene-based solutions baths, xylene being miscible with both alcohol and paraffin. The sample, infiltrated with xylene, is finally plunged in a paraffin bath under vacuum \TODO{how does it work the vaccum stuff???}. The dehydratation process takes few hours and is often automated using dedicated machines.  
 
@@ -67,6 +69,7 @@ Artifacts can appear as early as at extraction of the specimen and even before. 
 \end{figure}
 
 \subsection{Embedding, microtomy and glass-slide application}
+\label{ssec:backdp:embedding}
 
 At this point, the sample in the cassette has been infiltrated with paraffin. The next step consists in embedding the infiltrated sample in a block of paraffin to allow easier cutting. The sample is placed in a small container attached to the back of the cassette. This container will serve as a mold for casting the block of parrafin (see Figure \ref{fig:backdp:cassette-parrafin}). The block casting and hardening process takes When the block has solidified, the sample can now be cut into thin slices to be applied on the glass slides. Cuting is performed with a dedicated tool called a \textit{microtome} (see Figure \TODO{illus microtome}). Operated by a technician, the microtome allows slices to be cut to an extremely small and precise thickness of around 3 or 4 $\mu m$. The cutted slices are then floated onto a water bath which helps mouting them on glass-slides. 
 
@@ -74,16 +77,25 @@ These steps should be performed carefully not to introduce artifacts. For instan
 
 \subsection{Staining}
 \label{ssec:backdp:staining}
-At this point, mounted tissue slices are almost completely transparent which would prevent any meaningful analysis. They must therefore be stained to highlight structures of interest. Similarly as for dehydratation, staining consists in bathing the slide into a succession of solutions. The nature of these solutions will depend on the content that should be highlighted for the future analysis or the nature of the sample (\eg cytology \vs histology). The most common and standard staining in histology is called \acrfirstit{heeo}. Hematoxylin stains nucleic acids in a deep blue-purple color (typically cell nuclei) and eosin nonspecifically stains proteins in a pink color (typically extracellular matrix and cytoplasm). An example of an H&E slide is given in Figure \TODO{illus h&e}.
+At this point, mounted tissue slices are almost completely transparent which would prevent any meaningful analysis. They must therefore be stained to highlight structures of interest. Similarly as for dehydratation, this process consists in bathing the slide into a succession of stainning solutions. The nature of these solutions will depend on the content that should be highlighted for the future analysis. The most common and standard staining in histology is called \acrfirstit{heeo}. Hematoxylin stains nucleic acids in a deep blue-purple color (typically cell nuclei) and eosin nonspecifically stains proteins in a pink color (typically extracellular matrix and cytoplasm). An example of an \acrshort{heeo} slide is given in Figure \TODO{illus \acrshort{heeo}}. The \acrshort{heeo} stain, although most common, is not the only available. There exists many other staining techniques such as \acrfirstit{ihc} which exploits the binding nature of some antibodies with specific proteins. Markers can then be used to highlight the antibodies, hence the proteins of interest they have bound with. Example of an \acrshort{ihc}-stained slide is given in Figure \TODO{illu \acrshort{ihc}}. When the sample has been stained and cleaned from remaining excess of staining solutions, one must apply a cover slip on the sample in order to ensure that sample lies in one single plane as the focal plane of microscopes is usually quite narrow \TODO{cover slip even for scanning ?}. The cover slip also protects the sample from external contamination and degradation. 
+
+The choice of a staining and its clean application are crucial for an efficient analysis. The staining baths can become contaminated with samples, by-products resulting from chemical reactions (\eg precipitation or crystallization of chemical components resulting in the presence of pigments in the sample) or external objects (\eg hair, dust). The baths usually degrade over time and use which can cause variation in the staining intensities between earlier and later samples. The bath duration is important for proper staining and bathing samples for less or more time than recommanded can respectively cause under- or over-staining. Moreover, insufficient cleaning after staining can leave spots of stain on the slide. Improper application of the cover slip can for instance cause the presence of air bubbles. Nowadays, the staining process can be automated with dedicated machine reducing the variability of the process. 
 
 \subsection{Scanning}
+\label{ssec:backdp:scanning}
 
 
-\section{Professions and typical tasks}
-\label{sec:backdp:professionandtasks}
+
+
+
+\section{Typical analysis tasks}
+\label{sec:backdp:typicaltasks}
 
 \section{Machine learning}
 \label{sec:backdp:ml}
+
+\TODO{talk about how such a complex specimen->slide process can cause variations from a lab to another}
+
 
 \subsection{Data leakage}
 \label{ssec:backdp:dataleakage}
