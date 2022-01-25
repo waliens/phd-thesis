@@ -388,7 +388,7 @@
 \geometry{
 %  showframe,
   headheight=4ex,
-  bottom=1.5cm,
+  bottom=2cm,
   inner=3.2cm,
   outer=2.5cm
 %  includehead,
