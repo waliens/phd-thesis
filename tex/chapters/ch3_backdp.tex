@@ -91,8 +91,14 @@ Scanners are equipped with high-precision lenses and sensors allowing them to ge
 
 Scanning can also introduce artifacts including stiching problems (\ie misalignment between scanned tiles or lines), blur due to incorrect focus, tissue detection failure causing parts of the slide to be missing from the \acrshort{wsi}. The scanner should obviously remain as clean as possible to avoir external components to pollute the image (\eg dust, glass shards, hair, \etc). 
 
-\section{Typical analysis tasks}
-\label{sec:backdp:typicaltasks}
+\section{Typical diagnosis tasks}
+\label{sec:backdp:typicaldiagnosistasks}
+
+When a slide has finally been prepared, pathologists take over and can start the analysis, whether on a computer screen or through the lenses of an optical microscope. One of the most frequent condition that has to be evaluated is malignancy of tumors but other diagnosis can also be performed on the basis of pathology slides. The indicators of malignancy can vary greatly from a disease to another and even from one type of cancer to another. The approach of the slide by the pathologist and the analysis can therefore vary accordingly. Some analysis can be qualitative but some diagnosis require grading the severity of the disease which is usually based on a quantitive evaluation of some indicators. 
+
+Sometimes diagnosis require to evaluate tissues appearance, shape or localization at a macroscopic level\TODO{illustrate with images and examples}. For instance, localizing a malignant tumor in its support tissue can be important for guiding a future surgical operation \TODO{double check}. Measuring the size of a tumor (by measuring its surface on the slide) is useful for grading cancer. Evaluating whether a tumor still in-situ (\ie cancer cells have not spread from the location where they first formed) or proliferative is also paramount for determining a propre treatment as proliferation opens the possibility of metastases.  
+
+Some analysis require to look at tissues at a more microscopic level. A single cell with a specific morphology in a slide\footnote{The extent of a tissue on a slide can be several orders of magnitude larger than the dimensions of the cells it contains.} can determine the malignant nature of a sample. A common, relatively simple yet time-consuming task is counting the number of mitosis (\ie cell division \TODO{figure}) in a tissue which is required for grading some cancer.
 
 \section{Machine learning}
 \label{sec:backdp:ml}
