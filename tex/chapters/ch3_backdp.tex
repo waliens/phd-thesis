@@ -103,15 +103,34 @@ Some analysis require to look at tissues at a more microscopic level. A single c
 \section{Machine learning}
 \label{sec:backdp:ml}
 
-\TODO{talk about how such a complex specimen->slide process can cause variations from a lab to another}
-
+Digital pathology has opened the way for the application of \acrlong{ml} to automate analysis and diagnosis. Albeit promising, application of \acrlong{ml} remains challenging for various reasons. In this section, we discuss some of these challenges in Sections \ref{ssec:backdp:dataleakage} and \ref{ssec:backdp:datascarcity} then present some techniques that can be used, if not to overcome them, at least to alleviate them.
 
 \subsection{Data leakage}
 \label{ssec:backdp:dataleakage}
 
+In Section \ref{ssec:backml:modelselinpractice}, we introduced the notion of data leakage that occurs when samples in different splits of a dataset are not independent from each other. Data leakage usually results in poor generalization performance when a \acrlong{ml} model is used in production. Obviously, this should be avoided at all cost especially when the prediction of this model impacts the patient diagnosis and treatment. It is worth noting that data leakage is considered an important obstacle for the application of \acrlong{ml} in biology and medicine in general, not only in \acrlong{dp} \parencite{ching2018opportunities}. 
+
+In \acrlong{dp}, data leakage can occur in many, sometimes subtle, ways. Therefore, learning pipelines should be built carefully. One important potential source of data leakage is due to the fact that a whole-slide image does not only convey information about the tissue it contains but also about the slide preparation process (see Section \ref{sec:backdp:wsi}). For instance, staining solutions decay over time. Therefore, the staining intensity can reflect whether the sample has been dipped in a recently-changed or an heavily-used staining bath. When staining is performed manually, the intensity might also reflect the identity of the technician who performed the staining operation. Indeed, some technicians might dip slides for a little longer than others resulting in a stronger intensity. When a dataset is built by different laboratories, the origin of a slide can traceable due to differences in the slide preparation processes between the sites. 
+
+These slide idiosyncracies are harmless as long as they are not correlated with the learning problem target. Whereas it might seem unlikely to happen, some simple though unfortunate choices can lead to correlation. For instance, supposing a problem of malignancy assessment, if one laboratory provides all the healthy samples and another all the malignant samples, there is significant risk that the learning algorithm would exploit the differences resulting from the preparation processes. This would obviously lead to poor generalization when the model will be applied to slide coming from another laboratory for instance. This could occur similarly if malignant and healthy slides are provided by the same laboratory but the former are prepared in the morning and the latter in the afternoon.
+
+The slide preparation process is not the only culprit for data leakage. One other possible source occurs at the patient level. \parencite{bussola2021ai} \TODO{test score worse for patient wise splitting than for tile wise splitting in the article. That's unexpected.} have empirically studied patient-wise and random dataset splitting strategies. They have shown that overfitting and data leakage indeed occurs when splitting samples randomly. 
+
+In general, it is difficult to completely prevent data leakage as one does not always have control on the whole \acrshort{wsi} generation process. However, good practices surely help reducing the problem to an acceptable minimum. A detailed list of guidelines and good practices to reduce the risk of data leakage can be found in \parencite{maree2017need}. This includes collecting data as representative as possible of the different variations that could naturally occur during the generation process. For model evaluation and selection, splitting the dataset into subsets should be performed considering the characteristics of the samples that could correlate with the target (\ie patient, laboratory, technician, staining, equipement, time of the day/week, \etc).
+
 \subsection{Data scarcity}
 \label{ssec:backdp:datascarcity}
 % and imperfect annotations
+
+As introduced in Section \ref{ssec:backml:sl}, \acrlong{ml} requires data and the lack of it is reffered to as \textit{data scarcity}. 
+
+% many source but no annotations: cite few dataset sources
+% variability, noise and uncertainty (disagreement between pathologists)
+% class imbalance
+
+\TODO{talk about how such a complex specimen->slide process can cause variations from a lab to another}
+
+
 
 \subsection{Transfer learning}
 \label{ssec:backdp:tl}
