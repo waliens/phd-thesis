@@ -122,11 +122,15 @@ In general, it is difficult to completely prevent data leakage as one does not a
 \label{ssec:backdp:datascarcity}
 % and imperfect annotations
 
-As introduced in Section \ref{ssec:backml:sl}, \textit{data scarcity} refers to a context where data is lacking which usually hampers the performance of \acrlong{ml} methods. Data scarcity is often cited as one of the major challenges in \acrlong{dp} \parencite{tizhoosh2018artificial,litjens2017survey,robertson2018digital,komura2018machine}. 
+As introduced in Section \ref{ssec:backml:sl}, \textit{data scarcity} refers to a context where data is lacking which usually hampers the performance of \acrlong{ml} methods, especially \acrlong{dl}. Data scarcity is often cited as one of the major challenges in \acrlong{dp} \parencite{tizhoosh2018artificial,litjens2017survey,robertson2018digital,komura2018machine}. A misconception would be to consider that data simply does not exist in a sufficient quantity. Indeed, this statement is not true as hospitals and research institutes have accumulated a significant amount of data in different formats over the years (\eg imaging, text, \etc). What makes \acrlong{dp} but also the whole field of medical and biological image analysis a data scarce domain is a combination of factors preventing this data to be usable for \acrlong{ml} in a straightforward way.
 
+More or less recent successes in the application of machine and \acrshort{dl} to natural images problems have been propelled by the existence of numerous large and exhaustively annotated datasets. For instance, the ImageNet classification dataset features 1000 fine-grained classes for 1.2 million images. Another example is \acrfirstit{coco} by Microsoft \parencite{lin2014microsoft}, a large-scale dataset for segmentation, detection and captioning (\TODO{present captioning in chapter 1}). It contains more than 200k images annotated with fine segmentation masks over objects from 91 distinct categories (\ie humans, furnitures, animals, \etc). It counts more than 800k unique annotated instances of these object categories. Initially published by Google in 2016, the most recent iteration of Open Images Dataset \parencite{kuznetsova2020open} contains approximately 9.2M images each annotated with one or more labels from 19.8k concepts for a total of 30M image-level labels. \TODO{figure to provide examples of these dataset}.
+
+% interest of the ML community
 % many source but no annotations: cite few dataset sources
 % variability, noise and uncertainty (disagreement between pathologists)
 % class imbalance
+% privacy
 
 
 \subsection{Data dimensionality}
