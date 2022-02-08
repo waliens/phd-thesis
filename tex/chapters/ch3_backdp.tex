@@ -116,20 +116,25 @@ These slide idiosyncracies are harmless as long as they are not correlated with 
 
 The slide preparation process is not the only culprit for data leakage. One other possible source occurs at the patient level. \parencite{bussola2021ai} \TODO{test score worse for patient wise splitting than for tile wise splitting in the article. That's unexpected.} have empirically studied patient-wise and random dataset splitting strategies. They have shown that overfitting and data leakage indeed occurs when splitting samples randomly. 
 
-In general, it is difficult to completely prevent data leakage as one does not always have control on the whole \acrshort{wsi} generation process. However, good practices surely help reducing the problem to an acceptable minimum. A detailed list of guidelines and good practices to reduce the risk of data leakage can be found in \parencite{maree2017need}. This includes collecting data as representative as possible of the different variations that could naturally occur during the generation process. For model evaluation and selection, splitting the dataset into subsets should be performed considering the characteristics of the samples that could correlate with the target (\ie patient, laboratory, technician, staining, equipement, time of the day/week, \etc).
+In general, it is difficult to completely prevent data leakage as one does not always have control over the whole \acrshort{wsi} generation process. However, good practices surely help reducing the problem to an acceptable minimum. A detailed list of guidelines and good practices to reduce the risk of data leakage can be found in \parencite{maree2017need}. This includes collecting data as representative as possible of the different variations that could naturally occur during the generation process. For model evaluation and selection, splitting the dataset into subsets should be performed considering the characteristics of the samples that could correlate with the target (\ie patient, laboratory, technician, staining, equipement, time of the day/week, \etc).
 
 \subsection{Data scarcity}
 \label{ssec:backdp:datascarcity}
 % and imperfect annotations
 
-As introduced in Section \ref{ssec:backml:sl}, \acrlong{ml} requires data and the lack of it is reffered to as \textit{data scarcity}. 
+As introduced in Section \ref{ssec:backml:sl}, \textit{data scarcity} refers to a context where data is lacking which usually hampers the performance of \acrlong{ml} methods. Data scarcity is often cited as one of the major challenges in \acrlong{dp} \parencite{tizhoosh2018artificial,litjens2017survey,robertson2018digital,komura2018machine}. 
 
 % many source but no annotations: cite few dataset sources
 % variability, noise and uncertainty (disagreement between pathologists)
 % class imbalance
 
+
+\subsection{Data dimensionality}
+\label{ssec:backdp:datadimensionality} 
+
 \TODO{talk about how such a complex specimen->slide process can cause variations from a lab to another}
 
+\subsection{Data augmentation}
 
 
 \subsection{Transfer learning}
