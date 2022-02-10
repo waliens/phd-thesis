@@ -124,41 +124,63 @@ In general, it is difficult to completely prevent data leakage as one does not a
 
 As introduced in Section \ref{ssec:backml:sl}, \textit{data scarcity} refers to a context where data is lacking which usually hampers the performance of \acrlong{ml} methods, especially \acrlong{dl}. Data scarcity is often cited as one of the major challenges in \acrlong{dp} \parencite{tizhoosh2018artificial,litjens2017survey,robertson2018digital,komura2018machine}. A misconception would be to consider that data simply does not exist in a sufficient quantity. Indeed, hospitals and research institutes have accumulated a significant amount of data in different formats over the years (\eg imaging, text, \etc). What makes \acrlong{dp} but also the whole field of medical and biological image analysis a data scarce domain is a combination of factors preventing this data to be usable for \acrlong{ml} in a straightforward way.
 
-More or less recent successes in the application of machine and \acrshort{dl} to natural images problems have been propelled by the existence of numerous large and exhaustively annotated datasets. For instance, the ImageNet classification dataset features 1000 fine-grained classes for 1.2 million images and has been a key element in my \acrlong{dl} innovations since AlexNet. Another example is \acrfirstit{coco} by Microsoft \parencite{lin2014microsoft}, a large-scale dataset for segmentation, detection and captioning (\TODO{present captioning in chapter 1}). It contains more than 200k images annotated with fine segmentation masks over objects from 91 distinct categories (\ie humans, furnitures, animals, \etc). It counts more than 800k unique annotated instances of these categories. Initially published by Google in 2016, the most recent iteration of Open Images Dataset \parencite{kuznetsova2020open} contains approximately 9.2 million images each annotated with one or more labels from 19.8k concepts for a total of 30 million image-level labels. \TODO{figure to provide examples of these dataset}. 
+More or less recent successes in the application of machine and \acrshort{dl} to natural images problems have been propelled by the existence of numerous large and exhaustively annotated datasets. For instance, the ImageNet classification dataset features 1000 fine-grained classes for 1.2 million images and has been a key element in \acrlong{dl} innovations since AlexNet. Another example is \acrfirstit{coco} by Microsoft \parencite{lin2014microsoft}, a large-scale dataset for segmentation, detection and captioning (\TODO{present captioning in chapter 1}). It contains more than 200k images annotated with fine segmentation masks over objects from 91 distinct categories (\ie humans, furnitures, animals, \etc). It counts more than 800k unique annotated instances of these categories. Initially published by Google in 2016, the most recent iteration of Open Images Dataset \parencite{kuznetsova2020open} contains approximately 9.2 million images each annotated with one or more labels from 19.8k concepts for a total of 30 million image-level labels. \TODO{figure to provide examples of these dataset}. 
 
-Those were only few examples of the plethora of datasets available in the natural image domain. In \acrlong{dp}, although the data scarcity situation is slowly improving, as the interest for \acrshort{ml}-based solutions has encouraged researchers and practitioners to increasingly share data and annotations, dataset size and versatility are still subpar compared to the natural image domain. In order to illustrate this point, we performed a search on the GrandChallenge website \parencite{grandchallange}, a popular plateform which runs \acrlong{ml} challenges related to biomedical images. We searched for \textit{histology} challenges published in 2021 and found eight results. All datasets are briefly described in Table \ref{tab:backdp:datascarcity-grandchallenge}. 
-
-Depending on the target task, \acrshort{dp} datasets are either provided as a set of \acrlong{wsi}s or \acrfirstit{roi} extracted from \acrshort{wsi}s. 
+Those were only few examples of the plethora of datasets available in the natural image domain. In \acrlong{dp}, although the data scarcity situation is slowly improving, as the interest for \acrshort{ml}-based solutions has encouraged researchers and practitioners to increasingly share data and annotations, dataset size, versatility and variety are still subpar compared to the natural image domain. 
 
 \begin{table}
   \centering
-  \small
-  \begin{tabular}{|cc|cccccc|}
+  \footnotesize
+  \begin{tabular}{|ccc|ccccccc|}
     \hline
-    \multicolumn{2}{c}{Dataset} & \# \acrshort{wsi} & \# \acrshort{roi} & \acrshort{roi} size & AI-assisted & Number of target \\
+    \multicolumn{3}{|c|}{Challenge} & \# \acrshort{wsi} & \# \acrshort{roi} & \acrshort{roi} size & Crowd & AI-assist. & Task & \# targ. \\
     \hline
-    \multirow{3}{*}{TIGER [1]} & wsitils &  & & & & yes & \\
-    & wsirois & & & & & no & \\
-    & wsibulk & & & & & no & \\
-    CoNiC [2] & &  & & & & yes & \\
-    MIDOG 2021 [3] & &  & & & & yes & \\
-    BCNB [4] & &  & & & & no & \\
-    WSSS4LUAD [5] & &  & & & & no & \\
-    BCSS [6] & &  & & & & no & \\
-    NuCLS [7] & &  & & & & yes & \\
-    PAIP 2021 [8] & &  & & & & no & \\
+    \multirow{3}{*}{(1)} & \multirow{3}{*}{TIGER} & tils & 82 & / &  / & yes & yes & REG & $r \in \left[1, 100\right]$\\
+    & & rois & 195 & 2032 & $<$ 1.5k $\times$ 1.5k & no & no & SEG & 7\\
+    & & bulk & 93 & / & / & no & no & SEG & 2 \\
+    \hdashline
+    (2) & \multicolumn{2}{c|}{CoNiC} & / & 4981 & 256 $\times$ 256 & no & yes & \acrshort{seg}, \acrshort{clf} & 6 \\
+    (3) & \multicolumn{2}{c|}{MIDOG} 2021 & 50 & 200 & $<$ 5k $\times$ 5k & no & yes & \acrshort{det}, \acrshort{cnt} & 2 \\
+    (4) & \multicolumn{2}{c|}{BCNB} & 1058 & / & / & no & no & \acrshort{clf} & 16$^{(a)}$ \\
+    (5) & \multicolumn{2}{c|}{WSSS4LUAD} & 87 & 10k & $<$ 300 $\times$ 300 & no & no & \acrshort{clf} & 2\\
+    (6) & \multicolumn{2}{c|}{BCSS} & / & 151 & $<$ 7k $\times$ 10k & no & no & \acrshort{seg} & 7\\
+    (7) & \multicolumn{2}{c|}{NuCLS} & / & 3944 & $<$ 300 $\times$ 300 & yes & yes & \acrshort{seg}, \acrshort{det} & 12 \\
+    (8) & \multicolumn{2}{c|}{PAIP 2021} & 150 & / & / & no & no & \acrshort{seg}$^{(b)}$ & 4 \\
     \hline
   \end{tabular}
-  \caption{
-  [1] \parencite{}, [2] \parencite{graham2021conic}, [3] \parencite{aubreville2021mitosis}, [4] \parencite{xu2021predicting}, [5] \parencite{han2021multilayer}, [6] \parencite{amgad2019structured}, [7] \parencite{amgad2021nucls}, [8] \parencite{}}
+  \caption{List of challenges published in 2021 with the ``histology'' modality on the Grand Challenge website. The ``Crowd'' and 
+  ``AI-assist.'' columns relate to the annotation process and how it was performed. The former indicates whether or not non-pathologists 
+  were involved in the process (\ie \textit{yes} for crowdsourcing). The latter indicates whether or not the annotation process involved 
+  some kind of AI assistance. The ``\# targ.'' indicates the number of target categories/classes of the underlying \acrlong{ml} problem. 
+  References for the challenges: $(1)$ \TODO{\cite{}}, $(2)$ \cite{graham2021conic}, $(3)$ \cite{aubreville2021mitosis}, $(4)$ \cite{xu2021predicting}, 
+  $(5)$ \cite{han2021multilayer}, $(6)$ \cite{amgad2019structured}, $(7)$ \cite{amgad2021nucls}, $(8)$ \TODO{\cite{}}. $(a)$ The BCNB challenge 
+  proposes 6 differents classification tasks each with up to 4 classes (for a total of 16 classes). $(b)$ The expected output is not a 
+  classical segmentation mask but rather the boundary of the structure of interest.}
   \label{tab:backdp:datascarcity-grandchallenge}
 \end{table}
+
+In order to illustrate this point, we performed a search on the Grand Challenge website \parencite{grandchallange}, a popular plateform which runs \acrlong{ml} challenges related to biomedical images. We searched for \textit{histology} challenges published in 2021 and found eight results (see Table \ref{tab:backdp:datascarcity-grandchallenge} for a brief description of relevant aspects of these datasets). Each challenge comes with a dataset which is usually also made available for alternate research. 
+
+A first observation is that, whether the dataset is a set of \acrshort{wsi} or \acrfirstit{roi}, the number of provided images is several orders of magnitude below the number of images available in natural image datasets. It can be argued that the dimensions of \acrshort{wsi} and \acrshort{roi} images in \acrlong{dp} datasets is significantly larger that natural images (\eg average image size in ImageNet is 469 $\times$ 387 pixels, the largest of the 151 \acrshort{roi} of BCSS reaches approximately 7k $\times$ 10k pixels), however this must be in perspective in relation to the prediction task. For instance, 1000 \acrshort{wsi} represents a very large amount of raw data (\eg few terabytes) but, when the target task is whole-slide classification, this only amounts to a thousand of annotated samples which is quite few compared to ImageNet or others. 
+
+Beyond the size of datasets, it is interesting to note that most prediction tasks in \acrlong{dp} only feature few classes (at most 12 in our Grand Challenge sample). It is even common to encounter tasks presented as binary (\eg malignant \vs benign) even though it is often a simplification of the underlying biological or medical problem. Datasets with a large variety of classes have shown to be effective for learning efficient models on natural images. Therefore, on this matter, \acrlong{dp} is still lagging behind significantly. To the best of our knowledge, there is no single dataset that features more than 100 classes. \TODO{what is the largest?}
+
+It is also interesting to consider how these datasets were built. Among them, four datasets use internal data acquired and annotated specifically for the challenge (PAIP 2021, MIDOG 2021, BCNB, BCSS), two of them mix both internal and external data (TIGER, WSSS4LUAD) and the last two use exclusively data from external sources (CoNiC, NuCLS). Regarding the use of external data, it either means that external \acrshort{wsi} were imported and annotated for the challenge or that data from other datasets were combined together. For instance, the CoNiC challenge is based on the Lizard dataset \parencite{graham2021lizard} which combines data from the \acrfirstit{tcga} \parencite{weinstein2013cancer}, PanNuke \parencite{gamper2019pannuke}, CRAG \parencite{graham2019mild}, CoNSeP \parencite{graham2019hover}, GlaS \parencite{sirinukunwattana2017gland} and DigestPath \parencite{li2019signet}. The \acrshort{tcga} is an open platform gathering various data related to cancer genomic including a little more than 30k \acrlong{wsi}s, making it one of the largest open database of \acrshort{wsi} to date. It is no surprise that, over the years, many datasets have been built using the \acrshort{tcga} as one of their sources. This also includes WSSS4LUAD, TIGER and NuCLS from our Grand Challenge sample. Interestingly, one of the components of Lizard, PanNuke has also been built from \acrfirst{tcga} and three external datasets of which two were built on top of the same platform (MoNuSeg \parencite{kumar2019multi} and CMP17 \parencite{vu2019methods}). Although, it raises the question of the risk of data leakage, assembling existing datasets to form a larger one certainly helps fighting data scarcity.     
+
+This analysis is not aimed at being a thourough evaluation of \acrshort{dp} datasets characteristics but rather serves as a way to highlight different consequences of data scarcity in the field: small dataset size, variety, the preference for existing data combination rather creation.  
 
 % interest of the ML community
 % many source but no annotations: cite few dataset sources
 % variability, noise and uncertainty (disagreement between pathologists)
 % class imbalance
 % privacy
+
+BIG picture \parencite{moulin2021imi}
+open resources \parencite{maree2019open}
+TCGA 
+Depending on the target task, \acrshort{dp} datasets are either provided as a set of \acrlong{wsi}s or \acrfirstit{roi} extracted from \acrshort{wsi}s. 
+
+
 
 \subsection{Data dimensionality}
 \label{ssec:backdp:datadimensionality} 

@@ -153,13 +153,14 @@
 
 \RequirePackage{amsthm}
 \RequirePackage{amssymb}
+\usepackage{arydshln}
 
 %\RequirePackage{eufrak}
 
 \usepackage[ruled,vlined,linesnumbered]{algorithm2e}
 
 \RequirePackage{caption} % Required for customising the captions
-\captionsetup{justification=centerlast,font=small,labelfont=sc,margin=50pt}
+\captionsetup{justification=centerlast,font=small,labelfont=sc, margin=5pt}
 \usepackage[acronym,nomain]{glossaries}
 \usepackage{tocloft}
 \setcounter{secnumdepth}{3}
