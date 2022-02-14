@@ -22,10 +22,6 @@ Interestingly, works such as \parencite{donahue2014decaf,yosinski2014transferabl
 
 In this work, we study thoroughly and compare several strategies that involve off-the-shelf features and network fine-tuning. We carry out several experiments over eight object classification datasets in \acrshort{dp} and cytology. Different combinations of state-of-the-art networks and feature selection techniques using random forests are proposed in order to answer questions of very high pratical relevance: which network provides best-performing features? How should those features be extracted and then exploited to get the best performance? Is fine-tuning better than using off-the-shelf features? More generally, our empirical study will also contribute to confirm the interest of deep transfer learning for tackling the recurrent data scarcity problem in biomedical imaging.
 
-
-
-
-
 %-------------------------------------------------------------------------------------------------------------------
 %-------------------------------------------------------------------------------------------------------------------
 \section{Related work}
@@ -37,10 +33,6 @@ Some of the first applications of deep transfer learning in biomedical imaging w
 While it is clear that training from scratch very deep networks is not viable in most case due to data scarcity \parencite{bayramoglu2016transfer,tajbakhsh2016convolutional}, there is currently no consensus and best practice about how transfer learning should be applied to digital pathology and microscopy. Some recent publications in the biomedical field have shown that fine-tuning outperforms off-the-shelf features \parencite{antony2016quantifying,kieffer2017convolutional,ravishankar2016understanding,shin2016deep}. However, as noted in \parencite{litjens2017survey}, experiments in these papers are often carried out on a single dataset, which does not allow to draw general conclusions. Moreover, those experiments do not use current state-of-the-art networks. A short review of the networks used in biomedical imaging is given in Supplementary Table 1 and shows that the more recent and efficient residual and densely connected networks have been underused or not used at all, in particular in digital pathology and microscopy.
 
 %most studies have focused on AlexNet \parencite{krizhevsky2012imagenet}, VGG16 \parencite{simonyan2014very}, GoogLeNet \parencite{szegedy2015going} and InceptionV3 \parencite{szegedy2016rethinking} architectures while
-
-
-
-
 
 
 %-------------------------------------------------------------------------------------------------------------------
