@@ -2,17 +2,17 @@
 \label{chap:backdp}
 
 \begin{overview}{Overview}
-  The goal of this chapter is to provide digital pathology background  and keys to understand our contributions. We will focus our attention on topics relevant to this thesis. 
+  The goal of this chapter is to provide \acrlong{dp} background and keys to understand our contributions. We will focus our attention on topics relevant to this thesis. 
   
   Section \ref{sec:backdp:whatisdp} introduces and defines medical terms such as \textit{pathology}, defines \acrfirstit{dp} and introduces the notion of \acrfirstit{wsi}. Section \ref{sec:backdp:wsi} presents the journey of a sample from the body to the \acrshort{wsi}, introducing the different sources of variability introduced by the whole conversion process. 
 \end{overview}
 
 % analogintelligence.com image dp illustration
 
-\section{What is digital pathology?}
+\section{What is \acrlong{dp}?}
 \label{sec:backdp:whatisdp}
 
-Nowadays, medicine and healthcare rely heavily on analysis of human body samples to study and diagnose diseases. The branch of medicine focusing on this analysis is called \textit{pathology} which includes histology-based pathology (\aka histopathology) and cytology-based pathology (\aka cytopathology). Both of these sub-branches involve the study of microscope glass slides containing samples (see Figure \ref{fig:backdp:glassslides}). In the case of histology, these samples are tissue sections cut from a bodily specimen. Cytology, on the other hand, is concerned with samples of free cells or tissue fragments which can be extracted by different techniques. 
+Nowadays, medicine and healthcare rely heavily on analysis of human body samples to study and diagnose diseases. The branch of medicine focusing on this analysis is called \textit{pathology} which includes histology-based pathology (\aka histopathology) and cytology-based pathology (\aka cytopathology). Both of these sub-branches involve the study of microscope glass slides containing samples (see Figure \ref{fig:backdp:glassslides}). On the one hand, histology samples are tissue sections cut from a bodily specimen. Cytology, on the other hand, is concerned with samples of free cells or tissue fragments which can be extracted by different techniques. \TODO{experimental pathology ?}
 
 \begin{figure}
   \centering
@@ -22,20 +22,21 @@ Nowadays, medicine and healthcare rely heavily on analysis of human body samples
   \label{fig:backdp:glassslides}
 \end{figure}
 
-The trend of digitalization affecting our societies also impacts pathology as, using dedicated scanners, these glass slides can now be digitized into large image files called \acrfirstit{wsi}. In this context, \acrfirstit{dp} can be defined as ``\textit{the acquisition, management, sharing and interpretation of pathology information — including slides and data — in a digital environment}'' \parencite{doolan2019whatisdp}. Working with \acrshort{wsi} instead of physical slides has several advantages and drawbacks (see Table 1 in \parencite{jahn2020digital} for a thorough list). Aside from easier sharing and storing of slides, digitization also opens the way for automated analysis sofware to automatically extract relevant information. Such software have the potential to relieve pathologists from time-consuming tasks allowing them to focus on challenging cases and research therefore reducing healthcare cost and improving diagnosis quality. According to the 2020 report on cancer from \acrfirstit{who} \parencite{world2020report}, the ratio of pathologist per inhabitant was approximately 1 per 15000 in high income countries but dramatically dropping to 1 er 1 million or less many low income countries. AI-assisted pathology therefore holds even greater promises for coverage and quality of healthcare in these countries where pathologists are rare.
+The trend of digitalization affecting our societies also impacts pathology as, using dedicated scanners, these glass slides can now be digitized into large image files called \acrfirstit{wsi}. These files associated with patient metadata are stored in computer systems commonly called \acrfirstit{pacs}. In this context, \acrfirstit{dp} can be defined as ``\textit{the acquisition, management, sharing and interpretation of pathology information — including slides and data — in a digital environment}'' \parencite{doolan2019whatisdp}. Working with \acrshort{wsi} instead of physical slides has several advantages and drawbacks (see Table 1 in \parencite{jahn2020digital} for a thorough list). Aside from easier sharing and storing of slides, digitization also opens the way for automated analysis sofware to automatically extract relevant information, typically with the help of \acrlong{ai} and \acrlong{dl}. The branch of \acrlong{dp} interested in such analysis is called \acrfirstit{cpath} and holds great promises for the future. Indeed, \acrshort{cpath} techniques have the potential to relieve pathologists from easy but time-consuming tasks allowing them to focus on challenging cases and research therefore reducing healthcare cost and improving diagnosis quality. On a larger scale, they hold promises for increased coverage and quality of healthcare around the world and especially in low incomes countries where the number of pathologists per inhabitant is typically insufficient. According to the \acrshort{who} cancer report \parencite{world2020report}, the ratio of pathologist per inhabitant was approximately 1 per 15000 in high income countries in 2020 but dramatically dropped to 1 per million or less in many low income countries. 
 
-Interestingly, although digitization technologies are quite mature, adoption of \acrlong{dp} in healthcare facilities is not simple. Many still heavily rely on glass slides for day-to-day operations. Indeed, the transformation requires significant investments (both in time and money) and careful planning to carry it out successfully which is not always comptabile with the workload of pathology services. Experienced pathologists are sometimes reluctant to change and lack confidence in modern tools for slide visualization and analysis. Moreover, some tasks cannot be performed easily on \acrlong{wsi}s but can on a glass slide (\eg exploring the depth of a sample in cytology by changing the focal plane). 
+Interestingly, although digitization technologies are quite mature, adoption of \acrlong{dp} in healthcare facilities is not simple. Many still heavily rely on glass slides for day-to-day operations. Indeed, the transformation requires to modernize the whole hardware (scanners, workstation) and software (slide viewers, information system) infrastructure and to re-think entirely the processes of the facility \parencite{temprana2022digipatics}. This obviously requires significant investments both in time and money and careful planning to carry it out successfully which is not always comptabile with the workload of pathology services or research laboratories. Other difficulties might arise, slowing down the transformation, such as reluctance to change and lack of confidence in modern tools for slide visualization and analysis. 
+%Moreover, some tasks cannot be performed easily on \acrlong{wsi}s but can on a glass slide (\eg exploring the depth of a sample in cytology by changing the focal plane). 
 
-As far as automated analysis is concerned, it remains quite a challenge. Whole-slide images typically contain several gigapixels and cannot be loaded entirely in a typical computer memory at full resolution. Moreover, for most tasks, the image content is complex and classical computer vision methods would often fail to distinguish structures of interest. This complexity is due in particular to the presence of artifacts \parencite{taqi2018review} appearing during the conversion process of a bodily specimen to an image (see Section \ref{sec:backdp:wsi}). The ability of learning techniques to train models that capture complex relationships in data makes machine learning an ideal candidate to tackle \acrlong{dp} tasks. However, data scarcity is a prevalent issue in the field as quality data, especially annotated, can be difficult to obtain for various reasons: privacy concerns, time-consuming and expensive nature of the annotation process, \etc.     
+As far as automated analysis is concerned, it remains quite a challenge. Whole-slide images typically contain several gigapixels and cannot be loaded entirely in a typical computer memory at full resolution. Moreover, for most tasks, the image content is complex and classical computer vision methods (\eg thresholding) would often fail to distinguish structures of interest. This complexity is aggravated by the presence of artifacts \parencite{taqi2018review} appearing during the conversion process of a bodily specimen to an image (see Section \ref{sec:backdp:wsi}). The ability of learning techniques to train models that capture complex relationships in data makes \acrlong{ml} an ideal candidate to tackle \acrlong{dp} tasks. However, data scarcity is a prevalent issue in the field as quality data, especially annotated, can be difficult to obtain for various reasons: privacy concerns, time-consuming and expensive nature of the annotation process, \etc.     
 
-Overall, digital pathology holds great promises but presents significant and interesting challenges on several fronts. This thesis focuses on the \acrshort{ml}-based automated analysis aspects of digital pathology and studies how to tackle data scarcity.
+Overall, \acrlong{dp} holds great promises but presents significant and interesting challenges on several fronts. This thesis focuses on the \acrshort{ml}-based automated analysis aspects of \acrlong{dp} and studies how to tackle data scarcity.
 
 \section{A journey from the body to the computer}
 \label{sec:backdp:wsi}
 
 Turning a bodily specimen into \acrlong{wsi}s is a long and complex multi-step process typically involving the work of several highly-specialized technicians. Some steps can nowadays be automated but the chain remains mostly manual. In this section, we describe the different steps of this procedure (see \parencite{mccann2014automated} for an alternate presentation with illustrations). For the sake of brevity, this description focuses on histology with a tissue section prepared for brightfield microscopy and scanning, brightfield being one of the most common modality used in histo- and cytopathology. Sample preparation can differ more or less dependending on the nature of the sample (\eg histology, cytology, hematology) or target imaging technique (\eg brightfield, fluoresence, multispectral) but it is out of the scope this thesis to discuss these differences. 
 
-During the description, we will discuss some of the possible visual and/or physical alterations of the sample resulting from a specific preparation step. The presence of these alterations, or artifacts, is one of the reason why processing \acrshort{wsi} manually or automatically can be challenging. Indeed, these alterations can at worst prevent any meaningful analysis by hiding, destroying or changing the appearance of the structures of interest. Our presentation of alterations and artifacts will not be exhaustive. A more thourough list of pre-scan artifacts with illustrations can be found in \parencite{taqi2018review}. 
+During the description, we will discuss some of the possible visual and/or physical alterations of the sample resulting from a specific preparation step. The presence of these alterations, or artifacts, is one of the reason why processing \acrshort{wsi} manually or automatically can be challenging. Indeed, these alterations can at worst prevent any meaningful analysis by hiding, destroying or changing the appearance of the structures of interest. Our presentation of alterations and artifacts will not be exhaustive. A more thorough list of pre-scan artifacts with illustrations can be found in \parencite{taqi2018review}. 
 
 \subsection{Samples collection, fixation, cutting and dehydratation}
 
@@ -107,7 +108,11 @@ Sometimes diagnosis require to evaluate tissues appearance, shape or localizatio
 
 Some analysis require to look at tissues at a more microscopic level. A single cell with a specific morphology in a slide\footnote{The extent of a tissue on a slide can be several orders of magnitude larger than the dimensions of the cells it contains.} can determine the malignant nature of a sample. A common, relatively simple yet time-consuming task is counting the number of mitosis (\ie cell division \TODO{figure}) in a tissue which is required for grading some cancer.
 
-\section{Machine learning}
+
+\TODO{illustrate with some of my datasets}
+
+
+\section{Computational pathology and machine learning}
 \label{sec:backdp:ml}
 
 Digital pathology has opened the way for the application of \acrlong{ml} to automate analysis and diagnosis. Albeit promising, application of \acrlong{ml} remains challenging for various reasons. In this section, we discuss some of these challenges in Sections \ref{ssec:backdp:dataleakage} and \ref{ssec:backdp:datascarcity} then present some techniques that can be used, if not to overcome them, at least to alleviate them.
@@ -133,7 +138,10 @@ As introduced in Section \ref{ssec:backml:sl}, \textit{data scarcity} refers to 
 
 Many successes in the application of machine and \acrlong{dl} to natural images problems were made possible by the availability of numerous large and exhaustively annotated datasets. For instance, the ImageNet classification dataset features 1000 fine-grained classes for 1.2 million images and has been a key element in \acrlong{dl} innovations since AlexNet. Another example is \acrfirstit{coco} by Microsoft \parencite{lin2014microsoft}, a large-scale dataset for segmentation, detection and captioning (\TODO{present captioning in chapter 1}). It contains more than 200k images annotated with fine segmentation masks over objects from 91 distinct categories (\ie humans, furnitures, animals, \etc). It counts more than 800k unique annotated instances of these categories. Initially published by Google in 2016, the most recent iteration of Open Images Dataset \parencite{kuznetsova2020open} contains approximately 9.2 million images each annotated with one or more labels from 19.8k concepts for a total of 30 million image-level labels. \TODO{figure to provide examples of these dataset}. 
 
-Those were only few examples of the plethora of datasets available in the natural image domain. In \acrlong{dp}, the growing interest for \acrshort{ml}-based solutions has encouraged researchers and practitioners to increasingly share their data and annotations.. Although the data scarcity situation is slowly improving, dataset size, versatility and variety are still subpar compared to the natural image domain.
+Those were only few examples of the plethora of datasets available in the natural image domain. In \acrlong{dp}, the growing interest for \acrshort{ml}-based solutions has encouraged researchers and practitioners to increasingly share their data and annotations. Although the data scarcity situation is slowly improving, dataset size, versatility and variety are still subpar compared to the natural image domain.
+
+\subsubsection{A mini review of Grand Challenge pathology datasets from 2021}
+\label{sssec:backdp:grandchallenge}
 
 \begin{table}
   \centering
@@ -174,47 +182,45 @@ Beyond the size of datasets, it is interesting to note that most prediction task
 
 It is also interesting to consider how these datasets were built. Among them, four datasets use internal data acquired and annotated specifically for the challenge (PAIP 2021, MIDOG 2021, BCNB, BCSS), two of them mix both internal and external data (TIGER, WSSS4LUAD) and the last two use exclusively data from external sources (CoNiC, NuCLS). Regarding the use of external data, it either means that external \acrshort{wsi} were imported and annotated for the challenge or that data from other datasets were combined together. For instance, the CoNiC challenge is based on the Lizard dataset \parencite{graham2021lizard} which combines data from the \acrfirstit{tcga} \parencite{weinstein2013cancer}, PanNuke \parencite{gamper2019pannuke}, CRAG \parencite{graham2019mild}, CoNSeP \parencite{graham2019hover}, GlaS \parencite{sirinukunwattana2017gland} and DigestPath \parencite{li2019signet}. The \acrshort{tcga} is an open platform gathering various data related to cancer genomic including a little more than 30k \acrlong{wsi}s, making it one of the largest open database of \acrshort{wsi} to date. It is no surprise that, over the years, many datasets have been built using the \acrshort{tcga} as one of their sources. This also includes WSSS4LUAD, TIGER and NuCLS from our Grand Challenge sample. Interestingly, one of the components of Lizard, PanNuke has also been built from \acrfirst{tcga} and three external datasets of which two were built on top of the same platform (MoNuSeg \parencite{kumar2019multi} and CMP17 \parencite{vu2019methods}). Although, it raises the question of the risk of data leakage, assembling existing datasets to form a larger one certainly helps fighting data scarcity.     
 
-This analysis is not aimed at being a thourough evaluation of \acrshort{dp} datasets characteristics but rather serves as a way to highlight different consequences of data scarcity in the field: small dataset size, lack variety and versatility, prevalent combination of existing data rather than creation. The causes of data scarcity are numerous and we are going to discuss some of them in the next paragraphs. 
+\subsubsection{Causes}
+\label{sssec:backdp:ds-causes}
 
-One of the main cause of scarcity is the cost of the annotation process. Pathology is not a simple subject and slide evaluation requires years of training and experience. Whereas classifying pictures into object categories can be done by mostly anyone, creating a ground truth \acrlong{dp} dataset requires trained pathologists for whom time is a precious and expensive resource. Therefore, annotation cost in \acrlong{dp} is significantly higher compared to the natural image domain. This is aggravated by the fact that disagreement between pathologists is not uncommon and quality ground truth usually requires confronting and aggregating annotations by several experts. Some ideas have been explored to alleviate this cost such as crowdsourcing through citizen science \parencite{peplow2016citizen} or the intervention of medical students (\eg NuCLS dataset). This approach obviously requires either supervision by pathologists or more annotations per image to average out the inaccuracies (or even both). Whatever the approach, however, this usually induces lower cost per annotation. Another idea, sometimes called human-in-the-loop \parencite{chai2020human}, is the use of AI to assist experts and accelerate the annotation process (see NuCLS, CoNiC, MIDOG 2021 from our sample). An algorithm could for instance suggest cell boundaries with a weak algorithm. The annotator could then correct the boundaries if necessary which is less time-consuming then complete annotation.  
+The mini-review performed in the previous section was not aimed at being a thorough evaluation of \acrshort{dp} datasets characteristics. It rather serves as a way to highlight different consequences of data scarcity in the field: small dataset size, lack variety and versatility, \etc. The scarcity in \acrlong{dp} is caused by a combination of factors.  
 
-The different sources of variability in the slide content and preparation process is another cause of scarcity. Indeed, the more variation the more data is required for learning a robust model. This can be alleviated during the training process with an ad-hoc data augmentation (see Section \ref{ssec:backdp:dataaugmentation}) procedure that would automatically generate the kind of variations that can be expected (\eg staining intensity, deformation, \etc). Data normalization during pre-processing can also help to reduce variability. 
+One of the main causes of scarcity is the cost of the annotation process. Pathology is not a simple subject and slide evaluation requires years of training and experience. Whereas classifying pictures into object categories can be done by mostly anyone, creating a ground truth \acrlong{dp} dataset requires trained pathologists for whom time is a precious and expensive resource. Therefore, annotation cost in \acrlong{dp} is significantly higher compared to the natural image domain. This is aggravated by the fact that disagreement between pathologists is not uncommon and quality ground truth usually requires confronting and aggregating annotations by several experts. 
 
-Privacy and ethical concerns also play a role. Indeed, medical data is sensitive and cannot be shared without patient consent, rightfully so, preventing data to be made available for \acrlong{ml}. Privacy might incur additional costs as it might be necessary to keep track where data records have been used. Indeed, in case a patient revokes his data sharing agreement, under the right-to-be-forgotten, models might have to be re-trained \parencite{humerick2017taking}. Overall, it can discourage researchers and partictioners to make their data available. On another front, complexity and duration of the slide preparation process makes it more difficult to produce new \acrshort{wsi} than natural images like pictures which can be captured with any smartphone nowadays. Currently, slide preparation is definitely not a bottleneck as opposed to labeling but could become one if AI-assisted annotation and crowdsourcing improve significantly the throughput of quality annotations.
+Privacy and ethical concerns also play a role. Indeed, medical data is sensitive and cannot be shared without patient consent, rightfully so, preventing data to be made available for \acrlong{ml}. Privacy might incur additional costs as it might be necessary to keep track where data records have been used, for instance, in the context of the european \acrfirst{gdpr}. Indeed, in case a patient revokes his data sharing agreement, under the right-to-be-forgotten, models might have to be re-trained \parencite{humerick2017taking}. Overall, it can discourage researchers and partictioners to make their data available. 
 
-\TODO{class imbalance, label noise (disagreement)}
+The use of data-hungry \acrlong{dl} algorithms does not help and is aggravated by the need for a dataset to contain enough samples to account for the variability incurred by the slides content and preparation process. 
+
+% On another front, complexity and duration of the slide preparation process makes it more difficult to produce new \acrshort{wsi} than natural images like pictures which can be captured with any smartphone nowadays. Currently, slide preparation is definitely not a bottleneck as opposed to labeling but could become one if  throughput of quality annotations.
+
+\subsubsection{Potential solutions}
+\label{sssec:backdp:ds-solutions}
+
+The causes of data scarcity are numerous and it remains a challenge for \acrlong{dp} but the situation is slowly improving. 
+
+Nowadays, there exists annotation strategies which allow to cut the cost per annotation and therefore produce larger datasets given the same budget. These strategies include crowdsourcing through citizen science \parencite{peplow2016citizen} or the intervention of medical students (\eg NuCLS dataset). These approaches obviously require either supervision by pathologists or more annotations per image to average out the inaccuracies (or even both) but these are in general less expensive than direct annotation by trained pathologists. It is also possible indirectly reduce the annotation cost by reducing the time spent per annotation. One way of achieving that is to use of AI to assist experts and accelerate the annotation process (see NuCLS, CoNiC, MIDOG 2021 from our Grand Challenge sample) \parencite{chai2020human}. An algorithm could for instance suggest cell boundaries with a weak algorithm. The annotator could then correct the boundaries if necessary which is less time-consuming then drawing the boundary from scratch. The use of dedicated and intuitive user interface with efficient drawing tools can also help in that regard.  
+
+If annotating new data is not an option, it is also possible to combat data scarcity by the use of existing external data and proper computational methods. There exists several open resources for \acrlong{dp} \parencite{maree2019open} providing access to slides and annotations. We have already introduced \acrshort{tcga} which provides access to a spectacular amount of 30k \acrshort{wsi}. The Camelyon dataset \parencite{litjens2018camelyon} contains 1399 \acrshort{wsi} of which 209 were annotated at full resolution with detailed hand-drawn contours of all metastases. This is one of the largest most-precisely annotated dataset in the field to date. The Lizard dataset (subject of the CoNiC challenge) contains almost 500k segmented nuclei all labelled into one of 6 classes. Some promising projects are also ongoing such as Bigpicture \parencite{moulin2021imi} of which the goals are to ``\textit{create the first European, ethically compliant, and quality-controlled whole slide imaging platform, in which both large-scale data and AI algorithms will exist}'' and have the same impact on pathology as ImageNet had on the natural image domain. 
+
+Regarding the computational methods, there exists machine and \acrlong{dl} algorithms which can make use of external data. We explore some of them in the thesis and present related works in Section \ref{ssec:backdp:compmethods}. Sometimes the lack of data is such that the dataset is not representative enough of the different variations that could occur in a realistic context. The impact of this issue can be alleviated during the training process directly with an ad-hoc data augmentation procedure that would automatically generate the kind of variations that can be expected (\eg staining intensity, deformation, \etc). Data normalization during pre-processing can also help to reduce variability. \TODO{present data aug techniques???}
+
+% AI-assisted annotation and crowdsourcing improve significantly the
+
+\TODO{class imbalance, label noise}
 % Data scarcity can also appear within a problem where annotations and images are plentiful. Indeed,  
 
-As presented here, the causes of data scarcity are numerous and it remains a challenge for \acrlong{dp} but the situation is slowly improving. Nowadays, there exists several open resources for digital pathology \parencite{maree2019open} providing access to slides and annotations. We have already introduced \acrshort{tcga} which provides access to a spectacular amount of 30k \acrshort{wsi}. The Camelyon dataset \parencite{litjens2018camelyon} contains 1399 \acrshort{wsi} of which 209 were annotated at full resolution with detailed hand-drawn contours of all metastases. This is one of the largest most-precisely annotated dataset in the field to date. The Lizard dataset (subject of the CoNiC challenge) contains almost 500k segmented nuclei all labelled into one of 6 classes. Some promising projects are also ongoing such as Bigpicture \parencite{moulin2021imi} of which the goals are to ``\textit{create the first European, ethically compliant, and quality-controlled whole slide imaging platform, in which both large-scale data and AI algorithms will exist}'' and have the same impact on pathology as ImageNet had in the natural image domain \TODO{general-purpose computer vision, better term?}. 
-
-\subsection{Data dimensionality}
-\label{ssec:backdp:datadimensionality} 
-
-\subsection{Data augmentation}
-\label{ssec:backdp:dataaugmentation} 
-
-\subsection{Transfer learning}
-\label{ssec:backdp:tl}
-
+\subsection{Computational methods}
+\label{ssec:backdp:compmethods}
 \parencite{van2019strategies}
 
-\section{Visualization, analysis and benchmarking tools}
 
-\subsection{Cytomine}
+\subsubsection{Transfer learning}
+\label{sssec:backdp:tl}
 
-\subsection{Biaflows}
+\subsubsection{Multi-task learning}
+\label{sssec:backdp:mtl}
 
-\subsection{Others}
-
-\section{Digital pathology datasets}
-\label{sec:backdp:dataset}
-
-
-% origin, acknowledgements, subject, organ, staining, statistics
-
-
-\subsection{Thyroid nodule fine-needle aspiration biopsy}
-
-
-
-\subsection{Publicly available}
+\subsubsection{Self-training}
+\label{sssec:backdp:st}
