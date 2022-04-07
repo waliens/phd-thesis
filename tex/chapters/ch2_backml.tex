@@ -1593,7 +1593,9 @@ vision filters. This motivates freezing only the first layers of the network to
 avoid catastrophic interference as they are more generic and therefore should not
 require much tuning. They also studied how task similarity impacted transfer
 performance and found that similar tasks indeed benefited better from transfer
-than dissimilar ones.
+than dissimilar ones. More recently, \parencite{kornblith2019better} showed that 
+there is a correlation between model performance on the source task (in this case 
+ImageNet) and transfer performance on the target task.
 
 Whereas the versatility of ImageNet initially fueled research in deep \acrlong{tl}
 with supervised model pre-training, several recent contributions have shown that
