@@ -134,7 +134,7 @@ For histology, it is usually sufficient for scanners to scan one focal plane of 
 
 Scanning can also introduce artifacts including stiching problems (\ie misalignment between scanned tiles or lines), blur due to incorrect focus, tissue detection failure causing parts of the slide to be missing from the \acrshort{wsi}. The scanner should obviously remain as clean as possible to avoir external components to pollute the image (\eg dust, glass shards, hair, \etc). 
 
-\subsection{Storing \acrshort{wsi}s}
+\subsection{File formats and compression}
 \label{ssec:backdp:storingviewing}
 
 For each glass slide, a scanner generates one or more files to store the image data but also any metadata related to the case (information or identifiers of laboratory, patient, specimen, staining, \etc). How the data is organized in such a file is specified by a \textit{file format} of which there exists many. Some file formats are closed and proprietary (\eg scanner- or vendor-specific file formats) but others have open specifications (\eg DICOM, OME-TIFF\TODO{??}). The most involved formats usually combine a descriptive part to store case-related metadata using, for instance, the XML language (\eg in OME-TIFF) and a subfile format for the image itself (\eg TIFF). 
@@ -273,20 +273,20 @@ Nowadays, there exists annotation strategies which allow to cut the cost per ann
 
 If annotating new data is not an option, it is also possible to combat data scarcity by the use of existing external data and proper computational methods. There exists several open resources for \acrlong{dp} \parencite{maree2019open} providing access to slides and annotations. We have already introduced \acrshort{tcga} which provides access to a spectacular amount of 30k \acrshort{wsi}. The Camelyon dataset \parencite{litjens2018camelyon} contains 1399 \acrshort{wsi} of which 209 were annotated at full resolution with detailed hand-drawn contours of all metastases. This is one of the largest most-precisely annotated dataset in the field to date. The Lizard dataset (subject of the CoNiC challenge) contains almost 500k segmented nuclei all labelled into one of 6 classes. Some promising projects are also ongoing such as Bigpicture \parencite{moulin2021imi} of which the goals are to ``\textit{create the first European, ethically compliant, and quality-controlled whole slide imaging platform, in which both large-scale data and AI algorithms will exist}'' and have the same impact on pathology as ImageNet had on the natural image domain. 
 
-Regarding the computational methods, there exists machine and \acrlong{dl} algorithms which can make use of external data. We explore some of them in the thesis and present related works in Section \ref{ssec:backdp:compmethods}. Sometimes the lack of data is such that the dataset is not representative enough of the different variations that could occur in a realistic context. The impact of this issue can be alleviated during the training process directly with an ad-hoc data augmentation procedure that would automatically generate the kind of variations that can be expected (\eg staining intensity, deformation, \etc). Data normalization during pre-processing can also help to reduce variability. \TODO{present data aug techniques???}
+Regarding the computational methods, there exists machine and \acrlong{dl} algorithms which can make use of external data. We explore some of them in the thesis and present related works in Section \ref{sec:backdp:compmethods}. Sometimes the lack of data is such that the dataset is not representative enough of the different variations that could occur in a realistic context. The impact of this issue can be alleviated during the training process directly with an ad-hoc data augmentation procedure that would automatically generate the kind of variations that can be expected (\eg staining intensity, deformation, \etc). Data normalization during pre-processing can also help to reduce variability. \TODO{present data aug techniques???}
 
 % AI-assisted annotation and crowdsourcing improve significantly the
 
 \TODO{class imbalance, label noise}
 % Data scarcity can also appear within a problem where annotations and images are plentiful. Indeed,  
 
-\subsection{Computational methods}
-\label{ssec:backdp:compmethods}
+\section{Computational methods and related works}
+\label{sec:backdp:compmethods}
 \parencite{van2019strategies}
 
 
-\subsubsection{Transfer learning}
-\label{sssec:backdp:tl}
+\subsection{Transfer learning}
+\label{ssec:backdp:tl}
 
 General purpose transfer learning was discussed in Sections \ref{ssec:backml:transfer} and \ref{ssec:backml:dl:deeptransfer}. In this section, we explore how deep transfer learning was applied to biomedical images. Some of the first applications were reported in \parencite{bar2015chest,ciompi2015automatic,van2015off} for pulmonary nodule detection in chest x-rays and \acrshort{ct}-scans using Decaf and OverFeat (feature extractors based on ImageNet and AlexNet) as feature extractors. While those works have revealed the potential of deep transfer learning in that field, the performances were not significantly better than those of previous methods. \parencite{ravishankar2016understanding} compared the performance of a pre-trained AlexNet-based CaffeNet \parencite{jia2014caffe} to well-established computer vision like \acrfirstit{hog} \parencite{mcconnell1986method} and found transfer to outperform these features.
 
@@ -315,8 +315,8 @@ Later, as new ImageNet architectures emerged, their transfer potential from Imag
 
 \parencite{van2019strategies}
 
-\subsubsection{Multi-task learning}
-\label{sssec:backdp:mtl}
+\subsection{Multi-task learning}
+\label{ssec:backdp:mtl}
 
-\subsubsection{Self-training}
-\label{sssec:backdp:st}
+\subsection{Self-training}
+\label{ssec:backdp:st}
