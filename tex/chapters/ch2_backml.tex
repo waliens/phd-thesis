@@ -75,7 +75,7 @@ is a probability distribution over those joint spaces. The learning algorithm is
 provided with a training set
 \begin{equation}
 \label{eqn:backml:supervised}
-\mathcal{S} = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n ; (\vect{x}_i, y_i) \sim p(\vect{x}, y) \right\}
+\mathcal{D} = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n ; (\vect{x}_i, y_i) \sim p(\vect{x}, y) \right\}
 \end{equation}
 where $y_i \in \mathcal{Y}$ is the output signal for the observation
 $\vect{x}_i \in \mathcal{X}$. The learning algorithm objective is to find a model
@@ -135,7 +135,7 @@ In opposition to \acrlong{sl}, \acrfirstit{usl} regroups methods where no output
 signal is provided to guide the learning process. The learning algorithm is provided
 with
 \begin{equation}
-\mathcal{S} = \left\{\vect{x}_i \mid i = 1,..., n ; \vect{x}_i \sim p(\vect{x})\right\}
+\mathcal{D} = \left\{\vect{x}_i \mid i = 1,..., n ; \vect{x}_i \sim p(\vect{x})\right\}
 \end{equation}
 and attempts to extract information from this dataset. A common unsupervised task
 is \textit{density estimation} where the goal is to model the generating distribution
@@ -166,17 +166,13 @@ supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that
 use a dataset where only a part of the observations have an associated output
 signal. The dataset is composed of two subsets:
 \begin{eqnarray}
-\mathcal{S}_a = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n_a; (\vect{x}_i, y_i) \sim p_{\mathcal{X},\mathcal{Y}}; \vect{x}_i \sim p_a(\vect{x})\right\} \\
-\mathcal{S}_u = \left\{\vect{x}_i \mid i = 1,...,n_u; \vect{x}_i \sim p_u(\vect{x})\right\}
+\mathcal{D}_l = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n_a; (\vect{x}_i, y_i) \sim p_{\mathcal{X},\mathcal{Y}}; \vect{x}_i \sim p_a(\vect{x})\right\} \\
+\mathcal{D}_u = \left\{\vect{x}_i \mid i = 1,...,n_u; \vect{x}_i \sim p_u(\vect{x})\right\}
 \end{eqnarray}
 These methods make some assumptions about the ``closeness'' of the input distributions
 $p_a(\vect{x})$ and $p_u(\vect{x})$ \parencite{chapelle2006semi} which allow
 exploiting both sets to solve some particular tasks. One of the earliest forms of
-\acrlong{ssl} is \textit{self-training} \parencite{scudder1965probability} where
-the model is initially trained in a supervised manner on the set $S_a$, then
-iteratively refined by using both $S_a$ and $S_u$ as training data until a certain
-quality criterion is met. In order to use the second set, an output signal is
-predicted for all samples of $S_i$ with the model being trained.
+\acrlong{ssl} is \textit{self-training} \parencite{scudder1965probability, yarowsky1995unsupervised} which consists in an iterative process of which a typical iteration, or round, is composed of two steps. First, the \textit{teacher} model is used to generate pseudo-labels for unlabeled samples from $\mathcal{D}_u$. Then, these samples are used alongside samples from $\mathcal{D}_l$ to train a model, the \textit{student}. We will discuss self-training more throroughly in Section \ref{ssec:backml:dl:selftraining}.
 
 Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the
 annotations are noisy (\eg $y$ can be incorrect or imprecise), incomplete (similar
@@ -399,11 +395,11 @@ therefore the best possible model for the task and is called the Bayes model $h_
 In practice, it is rarely possible to directly minimize the expected risk as one
 does not have access to the true distributions. It is therefore more convenient
 to work with an unbiased estimator of the estimated risk, the empirical risk,
-which is evaluated using the available supervised training set $\mathcal{S}$:
+which is evaluated using the available supervised training set $\mathcal{D}$:
 
 \begin{equation}
 \label{eqn:backml:empiricalrisk}
-R_e(h) = \frac{1}{n} \sum_{i=1}^{|\mathcal{S}|} \ell(h_\mathcal{S}(\vect{x}_i), y_i), (\vect{x}_i, y_i) \in \mathcal{S}
+R_e(h) = \frac{1}{n} \sum_{i=1}^{|\mathcal{D}|} \ell(h_\mathcal{D}(\vect{x}_i), y_i), (\vect{x}_i, y_i) \in \mathcal{D}
 \end{equation}
 
 The \acrfirstit{erm} principle suggests that a learning algorithm should pick a
@@ -427,8 +423,8 @@ generalization error can be studied using the \textit{bias-variance decompositio
 \end{equation}
 
 where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that
-can be extracted from $p(\vect{x},y)$ and $h_{\mathcal{S}} \in \mathcal{H}$ is
-the model learned from a learning set $\mathcal{S} \in LS$. The \textit{noise}
+can be extracted from $p(\vect{x},y)$ and $h_{\mathcal{D}} \in \mathcal{H}$ is
+the model learned from a learning set $\mathcal{D} \in LS$. The \textit{noise}
 term is the error of $h_B$ and is therefore irreductible. The \text{bias} is the
 error of the average model (over models generated from $LS$) with respect to $h_B$.
 The \textit{variance} measures the variability of the predictions around the
@@ -685,7 +681,7 @@ that is used to evaluate binary image segmentation. Considering two sets $\mathc
 and $\mathcal{B}$, the dice score is defined as:
 \begin{equation}
 \label{eqn:backml:diceAB}
-\mathcal{D} = \frac{2 \left|\mathcal{A}\cap \mathcal{B}\right|}{\left|\mathcal{A}\right| + \left|\mathcal{B}\right|}
+Dice = \frac{2 \left|\mathcal{A}\cap \mathcal{B}\right|}{\left|\mathcal{A}\right| + \left|\mathcal{B}\right|}
 \end{equation}
 When working with image segmentation, $\mathcal{A}$ and $\mathcal{B}$ become the
 sets of true and predicted binary labels for the pixels in the image and the
@@ -1593,9 +1589,12 @@ vision filters. This motivates freezing only the first layers of the network to
 avoid catastrophic interference as they are more generic and therefore should not
 require much tuning. They also studied how task similarity impacted transfer
 performance and found that similar tasks indeed benefited better from transfer
-than dissimilar ones. More recently, \parencite{kornblith2019better} showed that 
-there is a correlation between model performance on the source task (in this case 
-ImageNet) and transfer performance on the target task.
+than dissimilar ones. This was confirmed in \parencite{mensink2021factors} who 
+showed that for a variety of tasks, there exists a source task that outperforms
+ImageNet, especially when this task incorporates in some ways the target domain.
+More recently, \parencite{kornblith2019better} showed that there is a correlation 
+between model performance on the source task (in this case  ImageNet) and transfer 
+performance on the target task. 
 
 Whereas the versatility of ImageNet initially fueled research in deep \acrlong{tl}
 with supervised model pre-training, several recent contributions have shown that
@@ -1624,6 +1623,15 @@ Because of its ability to tackle data scarcity, \acrlong{tl} has been a method o
 choice in many applications where this problem occurs. In Section \ref{ssec:backdp:tl},
 we explore further applications of \acrlong{tl} to \acrlong{dp} and medical imaging
 in general.
+
+\subsection{Self-training}
+\label{ssec:backml:dl:selftraining}
+
+As introduced in Section \ref{ssec:backml:inbetween}, self-training is a family of \acrlong{ssl} methods. A self-training process is iterative where a typical iteration consists in using a teacher model to produce pseudo-labels for unlabeled samples from $\mathcal{D}_u$ which are then combined with labeled samples from $\mathcal{D}_l$ to train a student model. 
+
+There are several elements that characterize a self-training algorithm. An important element is the way the student and teachers models interact during the process. A common approach consists in using the current student as a teacher for the next training round during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
+
+Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} select which samples should be included for the next training rounds by excluding high entropy samples for instance \parencite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \parencite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \parencite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
 
 \section{Wrapping up}
 \label{sec:backml:wrapup}
