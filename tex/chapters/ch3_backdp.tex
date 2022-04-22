@@ -34,7 +34,7 @@ Overall, \acrlong{dp} holds great promises but presents significant and interest
 \section{A journey from the body to the computer}
 \label{sec:backdp:wsi}
 
-Turning a bodily specimen into \acrlong{wsi}s is a long and complex multi-step process typically involving the work of several highly-specialized technicians. Some steps can nowadays be automated but the chain remains mostly manual. In this section, we describe the different steps of this procedure which is summarized in Figure \ref{fig:backdp:overallprocess}. An alternate presentation of the process can be found in \parencite{mccann2014automated} (including illustrations). Sample preparation can differ more or less dependending on the nature of the sample (\eg histology, cytology, hematology) or target imaging technique (\eg brightfield, fluoresence, multispectral). For the sake of brevity, our description focuses on histology with a tissue section prepared for brightfield microscopy and scanning, brightfield being one of the most common modality used in histo- and cytopathology. We will also present few technical details related to \acrshort{wsi} files structure and visualization. 
+Turning a bodily specimen into \acrlong{wsi}s is a long and complex multi-step process typically involving the work of several highly-specialized technicians and machines. Some steps can nowadays be automated but the chain remains mostly manual. In this section, we describe the different steps of this procedure which is summarized in Figure \ref{fig:backdp:overallprocess}. An alternate presentation of the process can be found in \parencite{mccann2014automated} (including illustrations). Sample preparation can differ more or less dependending on the nature of the sample (\eg histology, cytology, hematology) or target imaging technique (\eg brightfield, fluoresence, multispectral). For the sake of brevity, our description focuses on histology with a tissue section prepared for brightfield microscopy and scanning, brightfield being one of the most common modality used in histo- and cytopathology. We will also present few technical details related to \acrshort{wsi} files structure and visualization. 
 
 Throughout the section, we will discuss some of the possible artifacts resulting from the transformation procedure. Our presentation of artifacts will not be exhaustive. A more thorough list of pre-scan artifacts with illustrations can be found in \parencite{taqi2018review}. \TODO{discuss how often alterations can appear !!  talk about the effect of automation on the presence of artifacts !!}
 
@@ -45,17 +45,15 @@ Throughout the section, we will discuss some of the possible artifacts resulting
   \label{fig:backdp:overallprocess}
 \end{figure}
 
-\subsection{Samples collection, fixation, cutting and dehydratation}
+\subsection{Specimens collection, fixation, cutting and dehydratation}
 
-Whereas we focus mostly on histo- and cyto-pathology in this thesis, a pathology service typically deals with more than these two modalities. The specimens they receive for analysis range from small (commonly referred to as \textit{biopsies}) to very large (whole organ or body). Whole bodies are usually destined for autopsies which might themselves generate biopsies. Smaller specimens (organs, biopsies) must be fixated before going through the next steps. 
+Whether it is for research or diagnosis, the slide preparation process starts with a specimen, a piece of human or animal body for which a question must be answered. The specimen can be as large as a whole organ but can also be as small as a drop of bodily material commonly referred to as a \textit{biopsy}. Before going through with the preparation process, a specimen must be fixated. The goal of fixation is to put a stop to the natural decay of the specimen and increase its structural stability \parencite{rolls2012process}. This can be achieved, for instance, by immersing the specimen in a formaldehyde bath (\ie the fixative solution) for period of time depending on its size (\ie few hours to a whole day). 
 
-The goal of fixation is to put a stop to the natural decay of the specimen and increase its structural stability \parencite{rolls2012process}. This can be achieved, for instance, by immersing the specimen in a formaldehyde bath (\ie the fixative solution) for period of time depending on its size (\ie few hours to a whole day). 
+When the specimen has been fixated, it is then placed into a standardized container called a \textit{cassette} (see Figure \ref{fig:backdp:cassette}). If it is too large for the cassette (\eg an organ), one or more volumes of interest are cut from the specimen. Depending on the later examination, the orientation of the cut can be crucial to exhibit relevant tissue structures of the specimen. In the remaininder, we will call a \textit{sample} the content of this cassette.
 
-When the specimen has been fixated, it is then placed into a standardized container called a \textit{cassette} (see Figure \ref{fig:backdp:cassette}). If the sample is too large for the cassette, a volume of interest is cut from the specimen. Depending on the later examination, the orientation of the cut can be crucial to exhibit relevant tissue structures of the specimen. In the remaininder, we will call a \textit{sample} the content of this cassette.
+For a proper analysis, the cellular morphology of the sample must be preserved. This is most commonly achieved by infiltrating the tissue with paraffin wax. Infiltration however does not work on a raw fixated tissue because paraffin is hydrophobic. Therefore, one must first perform \textit{dehydratation}, that is, replacing water naturally present in the sample with a product miscible with parrafin. This is done by first immersing the sample into a succession of alcoholic solutions baths. Although this process achieves dehydratation, alcohol does not mix with paraffin neither. Therefore, the sample is then immersed into one or more xylene-based solutions baths, xylene being miscible with both alcohol and paraffin. The sample, infiltrated with xylene, is finally immersed in a paraffin bath under vacuum. The dehydratation process takes few hours and is often automated using dedicated machines.
 
-For a proper analysis, the cellular morphology of the sample must be preserved. This is most commonly achieved by infiltrating the tissue with paraffin wax. Infiltration however does not work on a raw fixated tissue because paraffin is hydrophobic. Therefore, one must first perform \textit{dehydratation}, that is, replacing water naturally present in the sample with a product miscible with parrafin. This is done by first immersing the sample into a succession of alcoholic solutions baths. Although this process achieves dehydratation, alcohol does not mix with paraffin neither. Therefore, the sample is then immersed into one or more xylene-based solutions baths, xylene being miscible with both alcohol and paraffin. The sample, infiltrated with xylene, is finally immersed in a paraffin bath under vacuum. The dehydratation process takes few hours and is often automated using dedicated machines.  
-
-Artifacts can already be introduced by these preparation steps. Tissue can be damaged at specimen extraction site by the use of medical tools or treatment. Bad fixation can lead to decaying tissue (\ie autolysis) and structural degradation (\eg tissue shrinkage). Improper cutting can also cause tissue damage like tearing, squeezing and burning. Improper dehydratation can leave some parts of the sample with remaining water, alcholol or xylene. Tissues can also be exposed to the different solutions for an excessive duration. These processing errors can for instance cause tearing, shrinkage, interference with the staining process (see Section \ref{ssec:backdp:staining}) and affect the structural properties of the tissue (\eg tissue becomes brittle).
+The earliest source of artifacts is the specimen extraction process itself. The specimen can indeed be damaged by the use of certain tools (\eg burned by an electrical scalpel) or treatment at the extraction site. Unlike these, the following artifacts are caused by the early stages of the slide preparation process. Bad fixation can lead to decaying tissue (\ie autolysis) and structural degradation (\eg tissue shrinkage). Improper cutting can also cause tissue damage like tearing and squeezing. Improper dehydratation can leave some parts of the sample with remaining water, alcholol or xylene. Tissues can also be exposed to the different solutions for an excessive duration. These processing errors can for instance cause tearing, shrinkage, interference with the staining process (see Section \ref{ssec:backdp:staining}) and affect the structural properties of the tissue (\eg tissue becomes brittle).
 
 \TODO{big figure illustrating ``all'' possible artifactsand variations}
 
@@ -81,6 +79,8 @@ Artifacts can already be introduced by these preparation steps. Tissue can be da
 
 At this point, the sample in the cassette has been infiltrated with paraffin. The next step consists in embedding the infiltrated sample in a block of paraffin to allow easier cutting. The sample is placed in a small container attached to the back of the cassette. This container will serve as a mold for casting the block of parrafin (see Figure \ref{fig:backdp:cassette-parrafin}). When the block has solidified, the sample can now be cut into thin slices to be applied on the glass slides. Cutting is performed with a dedicated tool called a \textit{microtome} (see Figure \ref{fig:backdp:microtome}). Operated by a technician, the microtome allows slices to be cut to an extremely small and precise thickness of around 3 or 4 $\mu m$. The slices are then floated onto a water bath which helps mouting them on glass slides. 
 
+There exists automated embedding machines, but microtomy remains mostly manual. Although modern microtomes are equipped with automation features making them more ergonomic and convenient to use, they are still operated by technicians. To the best of our knowledge there is no system that produce unstained slide from an paraffin-embedded sample without active human intervention. 
+
 \begin{figure}
   \centering
   \includegraphics[scale=0.25]{backdp/microtome.jpg}
@@ -88,11 +88,11 @@ At this point, the sample in the cassette has been infiltrated with paraffin. Th
   \label{fig:backdp:microtome}
 \end{figure}
 
-These steps should be performed carefully not to introduce artifacts. For instance, a warm parrafin block or a dull microtome blade can cause compression artifacts (\ie tissue displacement causing material accumulation). Another possible source of artifact is contamination of the water bath with previous samples, hair, dust which can in turn contaminate the floating slices.   
+These steps should be performed carefully not to introduce artifacts. For instance, a warm and soft parrafin block, a dull microtome blade or a calcification in the tissue can cause compression artifacts (\ie tissue displacement causing material accumulation). A calcificaiton is solid calcium deposit present in the tissue that the blade cannot cut through. This deposit is therefore pushed through the tissue compressing underlying tissues. Another possible source of artifact is contamination of the water bath with previous samples, hair, dust which can in turn contaminate the floating slices.   
 
 \subsection{Staining}
 \label{ssec:backdp:staining}
-Mounted tissue slices are almost completely transparent which would prevent any meaningful analysis. They must therefore be stained to highlight structures of interest (see Figure \ref{fig:backdp:stainedvsnonstained}). Similarly as for dehydratation, this process consists in immersing the slide into a succession of stainning solutions. The nature of these solutions will depend on the content that should be highlighted for the future analysis. The most common and standard staining in histology is called \acrfirstit{heeo}. Hematoxylin stains nucleic acids in a deep blue-purple color (typically cell nuclei) and eosin nonspecifically stains proteins in a pink color (typically extracellular matrix and cytoplasm). The \acrshort{heeo} stain, although most common, is not the only available. There exists many other staining techniques such as \acrfirstit{ihc} which exploits the binding nature of some antibodies with specific proteins. Markers can then be used to highlight the antibodies, hence the proteins of interest they have bound with. An example of a tissue stained with \acrshort{heeo} and \acrshort{ihc} is given in Figure \ref{fig:backdp:heeo-ihc}. When the sample has been stained and cleaned from remaining excess of staining solutions, one must apply a cover slip on the sample in order to ensure that sample lies in one single plane as the focal plane of microscopes and scanners is usually quite narrow. The cover slip also protects the sample from external contamination and degradation. 
+Mounted tissue slices are almost completely transparent which would prevent any meaningful analysis. They must therefore be stained to highlight structures of interest (see Figure \ref{fig:backdp:stainedvsnonstained}). Similarly as for dehydratation, this process consists in immersing the slide into a succession of stainning solutions. The nature of these solutions will depend on the content that should be highlighted for the future analysis. The most common and standard staining in histology is called \acrfirstit{heeo}. Hematoxylin stains nucleic acids in a deep blue-purple color (typically cell nuclei) and eosin nonspecifically stains proteins in a pink color (typically extracellular matrix and cytoplasm). The \acrshort{heeo} stain, although most common, is not the only available. There exists many other staining techniques such as \acrfirstit{ihc} which exploits the binding nature of some antibodies with specific proteins. Markers can then be used to highlight the antibodies, hence the proteins of interest they have bound with. Because the \acrshort{ihc} staining can be very selective, a counterstain (\eg hematoxylin) is often applied to highlight   the rest of the tissue. Counterstain is particularily important when different slices of a tissue stained with different techniques must be compared together because it helps matching the slices spatially. An example of a tissue stained with \acrshort{heeo} and \acrshort{ihc} is given in Figure \ref{fig:backdp:heeo-ihc}. When the sample has been stained and cleaned from remaining excess of staining solutions, one must apply a cover slip on the sample in order to ensure that sample lies in one single plane as the focal plane of microscopes and scanners is usually quite narrow. The cover slip also protects the sample from external contamination and degradation. 
 
 \begin{figure}
   \centering
@@ -101,7 +101,7 @@ Mounted tissue slices are almost completely transparent which would prevent any 
   \label{fig:backdp:stainedvsnonstained}
 \end{figure}
 
-The choice of a staining and its clean application are crucial for an efficient analysis. The staining baths can become contaminated with samples, by-products resulting from chemical reactions (\eg precipitation or crystallization of chemical components resulting in the presence of pigments in the sample) or external objects (\eg hair, dust). The baths usually degrade over time and use which can cause variation in the staining intensities between earlier and later samples. The bath duration is important for proper staining and bathing samples for less or more time than recommanded can respectively cause under- or over-staining. Moreover, insufficient cleaning after staining can leave spots of stain on the slide. Improper application of the cover slip can for instance cause the presence of air bubbles. Nowadays, the staining process can be automated with dedicated machine reducing the variability of the process. 
+The choice of a staining and its clean application are crucial for an efficient analysis. The staining baths can become contaminated with samples, by-products resulting from chemical reactions (\eg precipitation or crystallization of chemical components resulting in the presence of pigments in the sample) or external objects (\eg hair, dust). The baths tend to degrade over time as moving slides from one bath to another transfer some staining solutions as well. The degradation of the staining solutionscan cause variation in staining intensities between earlier and later samples. The bath duration is important for proper staining and bathing samples for less or more time than recommanded can respectively cause under- or over-staining. Moreover, insufficient cleaning after staining can leave spots of stain on the slide. Improper application of the cover slip can for instance cause the presence of air bubbles. Nowadays, the staining process can be automated with dedicated machine reducing the variability of the process. 
 
 \begin{figure}
   \centering
@@ -158,27 +158,75 @@ Whereas it is included by-design in web-based tools, remote slide viewing is als
 
 Beyond software, hardware considerations are important for efficient viewing, especially when implemented at the scale of a laboratory or pathology service \parencite{temprana2022digipatics}. Personnal workstations should be equipped with a quality screen able to render image without loss of quality (color and resolution). They also must be equipped with adequate computing resources (memory and \acrshort{cpu}/\acrshort{gpu}) in particular if analysis algorithms are supposed to be executed on them. The network should be robust enough to support the exchange of information (\ie download and upload of large files and data). Servers should have enough disk space to store the digitized slides and data and implement mechanisms in order to minimize the risk of data corruption or loss. 
 
-\TODO{variations of appearance due to using a tool vs another \parencite{cheng2020evaluating} ??}
+% \TODO{variations of appearance due to using a tool vs another \parencite{cheng2020evaluating} ??}
 
 \TODO{conclusion on this part}
 
 \section{Whole-slide analysis}
 \label{sec:backdp:typicalanalysistasks}
 
-When a slide has finally been prepared, pathologists take over and can start the analysis, whether on a computer screen or through the lenses of an optical microscope. One of the most frequent condition that has to be evaluated is malignancy of tumors but other diagnosis can also be performed on the basis of pathology slides. The indicators of malignancy can vary greatly from a disease to another and even from one type of cancer to another. The approach of the slide by the pathologist and the analysis can therefore vary accordingly. Some analysis can be qualitative but some diagnosis require grading the severity of the disease which is usually based on a quantitive evaluation of some indicators. 
+\TODO{experimental histology - response to experimental treatment ?}
 
-Sometimes diagnosis require to evaluate tissues appearance, shape or localization at a macroscopic level\TODO{illustrate with images and examples}. For instance, localizing a malignant tumor in its support tissue can be important for guiding a future surgical operation \TODO{double check}. Measuring the size of a tumor (by measuring its surface on the slide) is useful for grading cancer. Evaluating whether a tumor still in-situ (\ie cancer cells have not spread from the location where they first formed) or proliferative is also paramount for determining a propre treatment as proliferation opens the possibility of metastases.  
+When a slide has finally been prepared, pathologists take over and start the analysis, whether on a computer screen or through the lenses of an optical microscope. One of the most frequent condition that has to be evaluated is malignancy of tumors but other diagnosis can also be performed on the basis of pathology slides. The indicators of malignancy can vary greatly from a disease to another and even from one type of cancer to another. The approach of the slide by the pathologist and the analysis can therefore vary accordingly. 
 
-Some analysis require to look at tissues at a more microscopic level. A single cell with a specific morphology in a slide\footnote{The extent of a tissue on a slide can be several orders of magnitude larger than the dimensions of the cells it contains.} can determine the malignant nature of a sample. A common, relatively simple yet time-consuming task is counting the number of mitosis (\ie cell division \TODO{figure}) in a tissue which is required for grading some cancer.
+An important tool for diagnosis and prognosis are grading systems. A grading system is a set of mostly objective criteria for quantifying the severity of a disease. These criteria can be quantitative (\eg couting cells, measuring tumor area) or qualitative (\eg evaluating cell or tissue morphology, detect metastases) and consider macroscopic or microscopic elements. Beyond grading, slide analysis can also provide direct information for establishing a proper treatment. For instance, localizing a malignant tumor in its support tissue can be important for guiding a future surgical operation. 
 
+All the types of tasks involved in slide analysis are not equal. They have varying degrees of complexity and tediousness. Some tasks are rather simple but take a significant amount of time (\eg counting mitosis, see Section \ref{ssec:backdp:analysis_quantification}), others require strong focus for an extended period of time which increases the risk of error (\eg thyroid nodule malignancy, see Section \ref{ssec:backdp:ssec:backdp:analysis_localization}). Moreover, some diagnosis require to screen more than just one slide, in which case the volume of information to review can be significant. 
+
+When a task has to be performed frequently and is tedious, error-prone or involves reviewing a large amount of data, there is a great potential for \acrlong{cpath} methods to improve analysis quality and speed. These methods can either provide quantitative or qualitative information that directly contribute to the diagnosis or simply assist the practitioner during the reviewing (\eg image registration, see Section \ref{ssec:backdp:analysis_registration}).
+
+
+%Evaluating whether a tumor is still in-situ (\ie cancer cells have not spread from the location where they first formed) or proliferative is also paramount for determining a proper treatment as proliferation opens the possibility of metastases.  
+% Some analysis require to look at tissues at a more microscopic level. A single cell with a specific morphology in a slide\footnote{The extent of a tissue on a slide can be several orders of magnitude larger than the dimensions of the cells it contains.} can determine the malignant nature of a sample.
 
 localization / classification / quantification
 
-\subsection{Localization}
-\subsection{Classification}
+\parencite{abels2019computational}
+
+
+\subsection{Mitotic count}
+\label{ssec:backdp:analysis_mitotic_count}
+
+Mitosis is one of the phases of the cell cycle during which the chromosomes (replicated in a previous phase) are separated into two new nuclei. Tumor often exhibits a larger mitosis rate compared to healthy tissues. Many grading systems therefore use a measure of the mitosis rate as an indicator of cancer severity. For instance, the Bloom-Richardson system \parencite{roychowdhury2022bloomrichardson} for histologic grading of breast cancer includes mitotic count as one of its three indicators. In particular, the mitosis must be counted in 10 field of views of a specified size. The final grade is determined based on a point system. Each indicator provides 1 (least severe) to 3 (most severe) point(s) which are added together (3-5 pts = grade I, 6-7 pts = grade II and 8-9 pts = grade III). 
+
+Counting mitosis is not necessarily complicated but it is cumbersome. It is no surprise that \acrlong{cpath} methods have been investigated to automate the task. In 2014 was organized the MITOS-ATYPIA-14 challenge \parencite{roux2014mitos} where participants had to come up with the best \acrlong{ml} model to count the number of mitosis in different field of views (see Figure \ref{fig:backdp:mitos_atypia}). In addition to the mitotic count, they had to provide predict a global nuclear atypia score for each field of view, nuclear atypia being another indicator of the Bloom-Richardson system. 
+
+\begin{figure}
+  \centering
+  \subfloat{\includegraphics[height=190pt]{backdp/mitosis_zoomout.png}}
+  \hspace{0.5cm}
+  \subfloat{\includegraphics[height=190pt]{backdp/mitosis_zoomin.png}}
+  \caption{\TODO{todo}}
+  \label{fig:backdp:mitos_atypia}
+\end{figure}
+
+\subsection{Thyroid nodule malignancy}
+\label{ssec:backdp:analysis_thyroid}
+
+\subsection{Camelyon}
+\label{ssec:backdp:analysis_camelyon}
+
+% thyroid 
+% metastases (in-situ)
+
+% kidney (cell appearance): Formanhn / WHO-ISUP 
+% breast (cell appearance): Bloom Richardson 
+% prostate (glandular structure): Gleason Score
+% whole slide classification
+
 \subsection{Quantification}
+\label{ssec:backdp:analysis_quantification}
+
+% mitosis detection
+% quantifying the extent of some parts of a tumor
+
+\subsection{Registration}
+\label{ssec:backdp:analysis_registration}
+
 
 \TODO{illustrate with some of my datasets}
+
+\TODO{annotations ?? \parencite{wahab2022semantic}}
 
 
 \section{Computational pathology and machine learning}
