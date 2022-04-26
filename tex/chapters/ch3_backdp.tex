@@ -169,9 +169,9 @@ Beyond software, hardware considerations are important for efficient viewing, es
 
 When a slide has finally been prepared, pathologists take over and start the analysis, whether on a computer screen or through the lenses of an optical microscope. One of the most frequent condition that has to be evaluated is malignancy of tumors but other diagnosis can also be performed on the basis of pathology slides. The indicators of malignancy can vary greatly from a disease to another and even from one type of cancer to another. The approach of the slide by the pathologist and the analysis can therefore vary accordingly. 
 
-An important tool for diagnosis and prognosis are grading systems. A grading system is a set of mostly objective criteria for quantifying the severity of a disease. These criteria can be quantitative (\eg couting cells, measuring tumor area) or qualitative (\eg evaluating cell or tissue morphology, detect metastases) and consider macroscopic or microscopic elements. Beyond grading, slide analysis can also provide direct information for establishing a proper treatment. For instance, localizing a malignant tumor in its support tissue can be important for guiding a future surgical operation. 
+Two important tools for diagnosis and prognosis of cancer are grading and staging systems. A grading system is a set of mostly objective criteria for evaluating how abnormal cancer cells and tissues are compared to their healthy counterparts. Similarly, a staging system defines is set of criteria but for quantifying the dimensions of the primary tumor and determining how far the cancer has spread in the patient's body. These criteria can be quantitative (\eg cell counts, tumor area dimensions) or qualitative (\eg cell or tissue morphology, presence of metastases) and consider macroscopic or microscopic elements. Beyond grading and staging, slide analysis can also provide direct information for establishing a proper treatment. For instance, localizing a malignant tumor in its support tissue can be important for guiding a future surgical operation. 
 
-All the types of tasks involved in slide analysis are not equal. They have varying degrees of complexity and tediousness. Some tasks are rather simple but take a significant amount of time (\eg counting mitosis, see Section \ref{ssec:backdp:analysis_quantification}), others require strong focus for an extended period of time which increases the risk of error (\eg thyroid nodule malignancy, see Section \ref{ssec:backdp:ssec:backdp:analysis_localization}). Moreover, some diagnosis require to screen more than just one slide, in which case the volume of information to review can be significant. 
+All the types of tasks involved in slide analysis are not equal. They have varying degrees of complexity and tediousness. Some tasks are rather simple but take a significant amount of time (\eg counting mitosis, see Section \ref{ssec:backdp:analysis_mitotic_count}), others require strong focus for an extended period of time which increases the risk of error (\eg thyroid nodule malignancy, see Section \ref{ssec:backdp:analysis_thyroid}). Moreover, some diagnosis require to screen more than just one slide, in which case the volume of information to review can be significant. 
 
 When a task has to be performed frequently and is tedious, error-prone or involves reviewing a large amount of data, there is a great potential for \acrlong{cpath} methods to improve analysis quality and speed. These methods can either provide quantitative or qualitative information that directly contribute to the diagnosis or simply assist the practitioner during the reviewing (\eg image registration, see Section \ref{ssec:backdp:analysis_registration}).
 
@@ -189,36 +189,71 @@ localization / classification / quantification
 
 Mitosis is one of the phases of the cell cycle during which the chromosomes (replicated in a previous phase) are separated into two new nuclei. Tumor often exhibits a larger mitosis rate compared to healthy tissues. Many grading systems therefore use a measure of the mitosis rate as an indicator of cancer severity. For instance, the Bloom-Richardson system \parencite{roychowdhury2022bloomrichardson} for histologic grading of breast cancer includes mitotic count as one of its three indicators. In particular, the mitosis must be counted in 10 field of views of a specified size. The final grade is determined based on a point system. Each indicator provides 1 (least severe) to 3 (most severe) point(s) which are added together (3-5 pts = grade I, 6-7 pts = grade II and 8-9 pts = grade III). 
 
-Counting mitosis is not necessarily complicated but it is cumbersome. It is no surprise that \acrlong{cpath} methods have been investigated to automate the task. In 2014 was organized the MITOS-ATYPIA-14 challenge \parencite{roux2014mitos} where participants had to come up with the best \acrlong{ml} model to count the number of mitosis in different field of views (see Figure \ref{fig:backdp:mitos_atypia}). In addition to the mitotic count, they had to provide predict a global nuclear atypia score for each field of view, nuclear atypia being another indicator of the Bloom-Richardson system. 
+Counting mitosis is not necessarily complicated but it is cumbersome. It is no surprise that \acrlong{cpath} methods have been investigated to automate the task. In 2014 was organized the MITOS-ATYPIA-14 challenge \parencite{roux2014mitos} where participants had to come up with the best \acrlong{ml} model to count the number of mitosis in different field of views (see Figure \ref{fig:backdp:mitos_atypia}). In addition to the mitotic count, they had to predict a global nuclear atypia score for each field of view, nuclear atypia being another indicator of the Bloom-Richardson system. 
 
 \begin{figure}
   \centering
   \subfloat{\includegraphics[height=190pt]{backdp/mitosis_zoomout.png}}
   \hspace{0.5cm}
   \subfloat{\includegraphics[height=190pt]{backdp/mitosis_zoomin.png}}
-  \caption{\TODO{todo}}
+  \caption{\textit{Left:} a training image from provided for the MITOS-ATYPIA-14 challenge. Red dots are mitosis present in this image. \textit{Right:} A close up view of four mitosis (in the green square from the left image).}
   \label{fig:backdp:mitos_atypia}
+\end{figure}
+
+\subsection{Breast cancer staging and sentinel lymph nodes}
+\label{ssec:backdp:analysis_camelyon}
+
+Axillary lymph nodes are structures of the immune system located near the armpit. They drain a large proportion of the lymph coming out of the breast. They contain lymphocytes and constitute a barrier that eliminates bacteries, viruses and other foreign particules (including metastases) from the lymph. Because they are the first recipient of metastases originating from breast tumors, these lymph nodes are an important element to consider when staging breast cancer. In particular, in the context of $TNM$, a standard internationally accepted cancer staging system, the $pN$-stage \parencite{reisenbichler2022tmnstagingbreast} quantifies cancer spread through the presence of metastases in regional lymph nodes. Its histological evaluation requires to screen one section of up to 10 axillary lymph nodes and several sections of the ``sentinel'' lymph node which is the most likely to contain metastases \parencite{weaver2010pathology}. Sometimes, additional slides counter-stained with \acrshort{ihc} must be analysed to confirm the diagnosis. The staging system requires to evaluate the number of nodes contaminated with metastases and the dimensions of these metastases (\ie their size and number of cells they contain).
+
+Evaluation of the $pN$-stage has many characteristics that qualifies it to be a good candidate for automation: it is time-consuming, tedious and error-prone. The computational pathology community has therefore considered this problem notably through the Camelyon16 and Camelyon17 challenges \parencite{litjens2018camelyon}. For the first iteration of the challenge, the participants had to predict a slide-level $pN$-stage. For the second iteration, the organizers moved to a patient-level prediction. The participants were provided with 899 training and 500 testing\acrshort{wsi}s which were collected in 5 differents hospitals and medical centers from the Netherlands. All training slides were also coming with a slide level $pN$-stage label. Moreover, 209 of those \acrshort{wsi}s contained detailed hand-drawn contours for all metastases. 
+
+This challenge was a success as many teams participated despite the complexity of handling such a massive dataset (3 terabytes of slide data). The top-performing algorithms were quite successful at predicting the $pN$-stage. However, as stated by the organizers, the task was not adequatly solved and there was room for improvement \parencite{bandi2018detection} as a combination of the best algorithms still misclassified the $pN$-stage for 23 patients out of 100. 
+
+\begin{figure}
+  \centering
+  \subfloat{\includegraphics[width=420pt]{backdp/camelyon_lymphnode.png}} \\
+  \subfloat{\includegraphics[height=150pt]{backdp/camelyon_metastase_noannot.png}}
+  \hspace{0.5cm}
+  \subfloat{\includegraphics[height=150pt]{backdp/camelyon_metastase_withannot.png}}
+  \caption{A \acrshort{wsi} from the Camelyon16 challenge training set. \textit{Top:} the whole-slide image with metastases highlighted in red. \textit{Bottom:} A close-up view of a metastase with (\textit{right}) and without (\textit{left}) annotation mask.}
+  \label{fig:backdp:camelyon_sample}
 \end{figure}
 
 \subsection{Thyroid nodule malignancy}
 \label{ssec:backdp:analysis_thyroid}
 
-\subsection{Camelyon}
-\label{ssec:backdp:analysis_camelyon}
+A thyroid nodule is a small lump that can form within the thyroid gland. Most nodules are benign but up to $5\%$ of them are malignant \parencite{yeung2008management}. Malignancy diagnosis is based on a wide variety of information including patient history (past exposure to radiation, family history of thyroid cancer, \etc) and different technical examinations (\eg echography or radiography). A crucial step in the process is the \acrfirstit{fnab} during which cell material is extracted from the nodule. The resulting cytology sample is smeared on a glass slide (this slide process is different from the one described in Section \ref{sec:backdp:wsi}), stained and examined under a microscope. A lot of information can be extracted from such a slide by evaluating cell morphology or organization. In particular, the presence of cells with intranuclear inclusions (see Figure \ref{fig:backdp:thyroid_inclusion}) is highly suggestive of cancer \parencite{arena2014intranuclear}. Relatively to the size of a slide, these cells are tiny and this problem comes down to finding a needle in a haystack (see Figure \ref{fig:backdp:thyroid_needle_haystack}). Considering this is only a part of what must be investigated in a thyroid nodule smear, it would greatly benefit from the use of computational methods. An algorithm could either directly help pathologists in finding the cells or provide a more comprehensive diagnosis system that would make the search of such cells irrelevant.
+
+Although the earliest application of \acrlong{ai} to nodule malignancy assessment dates back to the 1990s \parencite{karakitsos1999learning}, the topic is still quite under-studied and currently available algorithms are mostly simple benign \vs malignant classifiers \parencite{kezlarian2021artificial}. These are too simple for clinical use which requires the integration of several multi-modal sources of information.    
+
+
+\begin{figure}
+  \centering
+  \subfloat{\includegraphics[height=80pt]{backdp/incl1.png}}
+  \hspace{0.2cm}
+  \subfloat{\includegraphics[height=80pt]{backdp/incl2.png}}
+  \hspace{0.2cm}
+  \subfloat{\includegraphics[height=80pt]{backdp/incl3.png}}
+  \hspace{0.2cm}
+  \subfloat{\includegraphics[height=80pt]{backdp/incl4.png}}
+  \caption{Example of cells with an intranuclear inclusion from thyroid nodule \acrshort{fnab} smears.}
+  \label{fig:backdp:thyroid_inclusion}
+\end{figure}
+
+\begin{figure}
+  \centering
+  \includegraphics[height=21cm]{backdp/thyroid_needle_haystack.png}
+  \caption{Views of a intracellular inclusion at different zoom levels. In the top left corners of each image are the absolute and relative magnification.}
+  \label{fig:backdp:thyroid_needle_haystack}
+\end{figure}
+
 
 % thyroid 
 % metastases (in-situ)
 
 % kidney (cell appearance): Formanhn / WHO-ISUP 
-% breast (cell appearance): Bloom Richardson 
 % prostate (glandular structure): Gleason Score
 % whole slide classification
-
-\subsection{Quantification}
-\label{ssec:backdp:analysis_quantification}
-
-% mitosis detection
-% quantifying the extent of some parts of a tumor
 
 \subsection{Registration}
 \label{ssec:backdp:analysis_registration}

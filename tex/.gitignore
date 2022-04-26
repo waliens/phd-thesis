@@ -17,3 +17,5 @@ thesis_*.pdf
 *.acn
 *.acr
 *.ist
+*_down.*
+*_original.*
