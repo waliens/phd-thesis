@@ -674,8 +674,8 @@ Constants}
 % SUBFIGURES
 %----------------------------------------------------------------------------------------
 \RequirePackage{caption}
-\RequirePackage{subfig}
-\captionsetup[subfigure]{width=0.9\linewidth}
+\RequirePackage{subcaption}
+% \captionsetup[subfigure]{width=0.9\linewidth}
 %\captionsetup[subfigure]{width=0.9\linewidth,justification=raggedright}
 % Fix caption spacing https://tex.stackexchange.com/questions/372575/add-space-between-captions-not-between-the-images
 
