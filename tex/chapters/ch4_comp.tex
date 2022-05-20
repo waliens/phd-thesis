@@ -8,12 +8,13 @@
 
 
 \begin{overview}{Overview}
-    In this chapter, we investigate deep heterogeneous model-based transfer learning as a way to overcome object recognition challenges encountered in the field of digital pathology. Through several experiments, we explore various uses of pre-trained neural network architectures and different combination schemes with random forests for feature selection. Our experiments on eight classification datasets show that densely connected and residual networks consistently yield best performances across strategies. It also appears that network fine-tuning and using inner layers features are the best performing strategies, with the former yielding slightly superior results. \\
+    In this chapter, we investigate deep heterogeneous model-based transfer learning as a way to overcome object recognition challenges encountered in the field of \acrlong{dp}. Through several experiments, we explore various uses of pre-trained neural network architectures and different combination schemes with random forests for feature selection. Our experiments on eight classification datasets show that densely connected and residual networks consistently yield best performances across strategies. It also appears that network fine-tuning and using inner layers features are the best performing strategies, with the former yielding slightly superior results. \\
 
     \textbf{References:} this chapter is a modified version of the following article 
 
-    \fullcite{mormont2018comparison}
+    \fullcite{mormont2018comparison} \\
 
+    Supplementary materials can be found in Chapter \ref{app:comp}.
 \end{overview}
 
 %-------------------------------------------------------------------------------------------------------------------
@@ -30,7 +31,7 @@ Data scarcity in \acrlong{cpath} is a recurrent problem which can be tackled in 
 
 Therefore, we study thoroughly and compare several strategies that involve feature extraction and fine-tuning. We carry out several experiments over eight object classification histology and cytology datasets. Different combinations of state-of-the-art networks and feature selection techniques using random forests are proposed in order to answer questions of high pratical relevance: which network provides best-performing features? How should those features be extracted and then exploited to get the best performance? Is fine-tuning better than using off-the-shelf features? More generally, our empirical study also contributes to confirm the interest of deep transfer learning for tackling the recurrent data scarcity problem in \acrlong{cpath}.
 
-This chapter is organized as follows. We first introduce the eight datasets we have used in Section \ref{sec:comp:datasets}. We present how we perform feature extraction and fine-tuning in Section \ref{sec:comp:methods}. Our experiments and results are presented and discussed in Section \ref{sec:comp:experiments}.
+This chapter is organized as follows. We first introduce the eight datasets we have used in Section \ref{sec:comp:datasets}. We present how we perform feature extraction and fine-tuning in Section \ref{sec:comp:methods}. Our experiments and results are presented and discussed in Section \ref{sec:comp:experiments}. We finally conclude in Section \ref{sec:comp:conclusion}. 
 
 \section{Datasets}
 \label{sec:comp:datasets}
@@ -334,13 +335,8 @@ The average ranks for the different fine-tuning methods are given in Figure \ref
     \label{fig:comp:res_avg_ranks_all_methods}
 \end{figure}
 
-
-%-------------------------------------------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------------------------------------------
 \subsection{Discussion}
 \label{ssec:comp:exp_comparing}
-
-
 
 To allow comparison of all strategies, the best scores per strategy and dataset are summarized in Table \ref{tab:comp:res_best_scores_per_strategy} and the average ranks of all methods evaluated in the previous experiments are given in Figure \ref{fig:comp:res_avg_ranks_all_methods}.
 
@@ -355,13 +351,11 @@ Merging features across networks and layers yield results similar to using last 
 Throughout the experiments, we have also gained more insights about the extracted features. By performing feature selection, we have discovered that very few features are actually useful for learning efficient classifiers on our datasets and the best features are task-dependent.
 
 
-
-
-%-------------------------------------------------------------------------------------------------------------------
-%-------------------------------------------------------------------------------------------------------------------
 \section{Conclusion}
+\label{sec:comp:conclusion}
 
-In this work, we have empirically investigated various deep transfer learning strategies for recognition in digital pathology and microscopy. 
-We have observed that residual and densely connected networks often yielded best performances across the various experiments and datasets. We have also observed that fine-tuning outperformed features from the last layer of off-the-shelf networks. It also appeared that using one network's inner layer features yielded performances slightly superior to using those of the last layer and inferior to fine-tuning but with the advantage of not having to re-train the network. We hope our thorough study and our results will help practitioners to devise best practices for efficient usage of existing deep networks. 
+We have empirically investigated various deep transfer learning strategies for recognition in \acrlong{cpath}. We have observed that residual and densely connected networks often yielded best performances across the various experiments and datasets. We have also observed that fine-tuning outperformed features from the last layer of off-the-shelf networks. It also appeared that using one network's inner layer features yielded performances slightly superior to using those of the last layer and inferior to fine-tuning but with the advantage of not having to re-train the network. 
 
-In the future, we want to study further deep transfer learning (e.g. combining inner layers and fine-tuning strategies). We also aim at collecting and merging larger annotated biomedical datasets to train networks using a large-scale source dataset closer to our target tasks.  We also plan to integrate these strategies into the Cytomine \parencite{maree2016collaborative} web application to ease their application on novel datasets.
+% We hope our thorough study and our results will help practitioners to devise best practices for efficient usage of existing deep networks. 
+
+% In the future, we want to study further deep transfer learning (e.g. combining inner layers and fine-tuning strategies). We also aim at collecting and merging larger annotated biomedical datasets to train networks using a large-scale source dataset closer to our target tasks.  We also plan to integrate these strategies into the Cytomine \parencite{maree2016collaborative} web application to ease their application on novel datasets.
