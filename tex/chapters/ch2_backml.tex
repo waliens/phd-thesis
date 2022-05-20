@@ -202,7 +202,7 @@ understanding by learning.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.45]{backml/image-hierarchy.png}
+  \includegraphics[width=\textwidth]{backml/image-hierarchy.png}
   \caption{A custom hierarchical model illustrating the compositionnality and hierarchical nature of vision tasks (source: \parencite{leonardis2010learning}).}
   \label{fig:backml:hierarchy}
 \end{figure}
@@ -456,7 +456,7 @@ this trade-off.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.75]{backml/biasvariancetradeoff.pdf}
+  \includegraphics[width=0.75\textwidth]{backml/biasvariancetradeoff.pdf}
   \caption{The bias-variance trade-off illustrated.}
   \label{fig:backml:biasvariancetradeoff}
 \end{figure}
@@ -625,7 +625,7 @@ there is no in-between.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.9]{backml/roc-curve.pdf}
+  \includegraphics[width=0.65\textwidth]{backml/roc-curve.pdf}
   \caption{A \acrshort{roc} curve. The red points correspond to different threshold values applied to the probabilities produced by the model. The area of the light blue zone under the curve is the \acrshort{roc} \acrshort{auc} score.}
   \label{fig:backml:roc-curve}
 \end{figure}
@@ -788,8 +788,16 @@ the gutter or are misclassified which increases variance but decreases bias.
 
 \begin{figure}
   \centering
-  \subfloat[$C=10000$]{\includegraphics[scale=0.65]{backml/svm_c10000.pdf}}
-  \subfloat[$C=25$. Notice the new points \\ of class $1$ in the class $0$ cluster.]{\includegraphics[scale=0.65]{backml/svm_c25.pdf}}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{backml/svm_c10000.pdf}
+    \caption{$C=10000$}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{backml/svm_c25.pdf}
+    \caption{$C=25$. Notice the new points \\ of class $1$ in the class $0$ cluster.}
+  \end{subfigure}
   \caption{Examples of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with bold coloured border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
   \label{fig:backml:svm}
 \end{figure}
@@ -935,8 +943,16 @@ This algorithm is formalized in Algorithm \ref{algo:backml:dtinduction}.
 
 \begin{figure}
   \centering
-  \subfloat[Fully-developped]{\includegraphics[scale=0.65]{backml/dt_full.pdf}}
-  \subfloat[Maximum depth = 3]{\includegraphics[scale=0.65]{backml/dt_max_depth3.pdf}}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{backml/dt_full.pdf}
+    \caption{Fully-developped}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{backml/dt_max_depth3.pdf}
+    \caption{Maximum depth = 3}
+  \end{subfigure}
   \caption{Decision tree decision boundary (white line). Pre-pruning using the maximum depth parameter reduces the complexity of the model.}
   \label{fig:backml:dt_boundary}
 \end{figure}
@@ -1113,7 +1129,7 @@ nowadays.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=1]{backml/mlp.pdf}
+  \includegraphics[width=\textwidth]{backml/mlp.pdf}
   \caption{A \acrlong{mlp} with 2 hidden layers $h^{(1)}$ and $h^{(^2)}$ for a two-dimensional input $\vect{x}$.}
   \label{fig:backml:mlp}
 \end{figure}
@@ -1133,10 +1149,10 @@ network (\ie a \acrshort{mlp}). The convolutional layer is introduced in this
 section and the pooling layer in Section \ref{sssec:backml:poolinglayer}.
 
 \begin{figure}
- \centering
- \includegraphics[scale=0.4]{backml/convnet.png}
- \caption{A \acrlong{cnn} (source \parencite{millar2019using}).}
- \label{fig:backml:cnn}
+  \centering
+  \includegraphics[width=0.75\textwidth]{backml/convnet.png}
+  \caption{A \acrlong{cnn} (source \parencite{millar2019using}).}
+  \label{fig:backml:cnn}
 \end{figure}
 
 Let us suppose a naive implementation of an image classifier with a \acrshort{mlp}
@@ -1193,7 +1209,7 @@ and stride are illustrated in Figure \ref{fig:backml:paddingstride}.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.8]{backml/convolutionwithstride.pdf}
+  \includegraphics[width=\textwidth]{backml/convolutionwithstride.pdf}
   \caption{Illustration of stride and padding.}
   \label{fig:backml:paddingstride}
 \end{figure}
@@ -1413,7 +1429,7 @@ followed by pooling. The last convolutional layer is followed by a 3-layers
 \begin{figure}
   \centering
   \includegraphics[rotate=-90, scale=0.28]{backml/vgg1619.png}
-  \caption{VGG16 and VGG19 architectures (image from \parencite{img:vgg1619})}
+  \caption{VGG16 and VGG19 architectures (source: \parencite{img:vgg1619})}
   \label{fig:backml:vgg}
 \end{figure}
 
@@ -1450,8 +1466,8 @@ ResNet34, a similar architecture).
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.4]{backml/resnet34.png}
-  \caption{ResNet34, same design as ResNet50 but less layers. Residual connections are placed every two convolutional layers (image from \parencite{he2016deep}).}
+  \includegraphics[width=\textwidth]{backml/resnet34.png}
+  \caption{ResNet34, same design as ResNet50 but less layers. Residual connections are placed every two convolutional layers (source: \parencite{he2016deep}).}
   \label{fig:backml:resnet}
 \end{figure}
 
@@ -1487,8 +1503,8 @@ together with one convolution and one pooling layers (see Figure
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.35]{backml/densenet.png}
-  \caption{A densely connected network (image from \parencite{huang2017densely}).}
+  \includegraphics[width=\textwidth]{backml/densenet.png}
+  \caption{A densely connected network (source: \parencite{huang2017densely}).}
   \label{fig:backml:densenet}
 \end{figure}
 
@@ -1512,8 +1528,8 @@ paths.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.35]{backml/unet.png}
-  \caption{U-Net architecture (image from \parencite{ronneberger2015unet}).}
+  \includegraphics[width=\textwidth]{backml/unet.png}
+  \caption{U-Net architecture (source: \parencite{ronneberger2015unet}).}
   \label{fig:backml:unet}
 \end{figure}
 
@@ -1540,7 +1556,7 @@ to be transfered.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.8]{backml/transfer-fe.pdf}
+  \includegraphics[width=\textwidth]{backml/transfer-fe.pdf}
   \caption{Supervised \acrlong{tl} by \textit{feature extraction}. The shared network is trained by supervised learning on the source task. Then, the shared part $\theta_s$ is extracted and used as an encoder for images of the target task. A third-party classifier $clf$ can be trained and used to classify the encoded target data.}
   \label{fig:backml:transfer-fe}
 \end{figure}
@@ -1557,7 +1573,7 @@ classifier is a linear \acrshort{svm}.
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.85]{backml/transfer-ft.pdf}
+  \includegraphics[width=\textwidth]{backml/transfer-ft.pdf}
   \caption{Supervised \acrlong{tl} by \textit{fine-tuning}. The shared network is trained by supervised learning on the source task. Then, the shared part $\theta_s$ is extracted and attached $\theta_n$. The network $h_s \circ h_n$ is trained by gradient descent on the target task.}
   \label{fig:backml:transfer-ft}
 \end{figure}

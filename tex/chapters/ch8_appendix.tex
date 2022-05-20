@@ -36,7 +36,7 @@ For the baseline ET-FL, we tune the size of the windows $\left(w_{min}, w_{max}\
 \section{Best features}
 \label{app:comp:sec:bestfeatures}
 
-In order to investigate the best features (according to feature importances) for a given network, we compute the minimum size of the best features subset so that at least one feature is in this subset for all datasets. The resulting sizes for all networks are given in Table \ref{app:comp:tab:best_subset_size}. We also compute the percentages of overlap between subsets of selected features by RFE for all pairs of datasets (see Table \ref{app:comp:tab:rfe_sub_overlap})
+In order to investigate the best features (according to feature importances) for a given network, we compute the minimum size of the best features subset so that at least one feature is in this subset for all datasets. The resulting sizes for all networks are given in Table \ref{app:comp:tab:best_subset_size}. We also compute the percentages of overlap between subsets of selected features by RFE for all pairs of datasets (see Tablez \ref{app:comp:tab:rfe_sub_overlap} and \ref{app:comp:tab:rfe_sub_overlap2})
 
 \begin{table}
 \centering
@@ -237,22 +237,22 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
 
 \begin{figure}
 	\centering
-  \begin{subfigure}{0.95\textwidth}
+  \begin{subfigure}[t]{0.95\textwidth}
     \centering
     \includegraphics[width=\textwidth]{comp/supp/rfe_mobile.png} \\
     \caption{Mobile}
   \end{subfigure}
-  \begin{subfigure}{0.95\textwidth}
+  \begin{subfigure}[t]{0.95\textwidth}
     \centering
     \includegraphics[width=\textwidth]{comp/supp/rfe_dense_net_201.png} \\
     \caption{DenseNet}
   \end{subfigure}
-  \begin{subfigure}{0.95\textwidth}
+  \begin{subfigure}[t]{0.95\textwidth}
     \centering
     \includegraphics[width=\textwidth]{comp/supp/rfe_inception_resnet_v2.png} \\
     \caption{IncResV2}
   \end{subfigure}
-    \begin{subfigure}{0.95\textwidth}
+    \begin{subfigure}[t]{0.95\textwidth}
     \centering
     \includegraphics[width=\textwidth]{comp/supp/rfe_resnet50.png}
     \caption{ResNet}
@@ -263,17 +263,17 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
 
 \begin{figure}
 	\centering
-  \begin{subfigure}{0.95\textwidth}
+  \begin{subfigure}[t]{0.99\textwidth}
     \centering
     \includegraphics[width=\textwidth]{comp/supp/rfe_inception_v3.png} \\
     \caption{IncV3}
   \end{subfigure}
-  \begin{subfigure}{0.95\textwidth}
+  \begin{subfigure}[t]{0.99\textwidth}
     \centering
     \includegraphics[width=\textwidth]{comp/supp/rfe_vgg19.png} \\
     \caption{VGG19}
   \end{subfigure}
-  \begin{subfigure}{0.95\textwidth}
+  \begin{subfigure}[t]{0.99\textwidth}
     \centering
     \includegraphics[width=\textwidth]{comp/supp/rfe_vgg16.png} \\
     \caption{VGG16}
@@ -285,7 +285,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
 \begin{table}
   \centering
   \small
-  \begin{subtable}{0.45\textwidth}
+  \begin{subtable}[h]{0.45\textwidth}
     \centering
     \begin{tabular}{|c|cccccccc|} 
     \hline
@@ -304,7 +304,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \caption{Mobile}
   \end{subtable}
 
-  \begin{subtable}{0.45\textwidth}
+  \begin{subtable}[h]{0.45\textwidth}
     \centering
     \begin{tabular}{|c|cccccccc|} 
     \hline
@@ -321,9 +321,9 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \hline
     \end{tabular}
     \caption{IncResV2}
-  \end{subtable}
+  \end{subtable} \\
 
-  \begin{subtable}{0.45\textwidth}
+  \begin{subtable}[h]{0.45\textwidth}
     \centering
     \begin{tabular}{|c|cccccccc|} 
     \hline
@@ -342,7 +342,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \caption{IncV3}
   \end{subtable}
 
-  \begin{subtable}{0.45\textwidth}
+  \begin{subtable}[h]{0.45\textwidth}
     \centering
     \begin{tabular}{|c|cccccccc|} 
     \hline
@@ -359,9 +359,15 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \hline
     \end{tabular}
     \caption{ResNet}
-  \end{subtable}
+  \end{subtable} \\
 
-  \begin{subtable}{0.45\textwidth}
+  \caption{Percentages of overlap between features selected by RFE on the studied datasets (part 1, see Figure \ref{app:comp:tab:rfe_sub_overlap2} for part 2). The tables can be read as follows: the number at row $i$ and column $j$ is the percentage of features among the ones selected for dataset $j$ that were also selected for the dataset $i$.}
+  \label{app:comp:tab:rfe_sub_overlap}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{subtable}[h]{0.45\textwidth}
     \centering
     \begin{tabular}{|c|cccccccc|} 
     \hline
@@ -380,7 +386,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \caption{VGG16}
   \end{subtable}
 
-  \begin{subtable}{0.45\textwidth}
+  \begin{subtable}[h]{0.45\textwidth}
     \centering
     \begin{tabular}{|c|cccccccc|} 
     \hline
@@ -397,9 +403,9 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \hline
     \end{tabular}
     \caption{VGG19}
-  \end{subtable}
+  \end{subtable} \\
 
-  \begin{subtable}{0.45\textwidth}
+  \begin{subtable}[h]{0.45\textwidth}
     \centering
     \begin{tabular}{|c|cccccccc|} 
     \hline
@@ -418,14 +424,14 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \caption{DenseNet}
   \end{subtable}
 
-  \caption{Percentages of overlap between features selected by RFE on the studied datasets. The tables can be read as follows: the number at row $i$ and column $j$ is the percentage of features among the ones selected for dataset $j$ that were also selected for the dataset $i$.}
-  \label{app:comp:tab:rfe_sub_overlap}
+  \caption{Percentages of overlap between features selected by RFE on the studied datasets (part 2, see Figure \ref{app:comp:tab:rfe_sub_overlap} for part 1).}
+  \label{app:comp:tab:rfe_sub_overlap2}
 \end{table}
 
 
 \begin{table}
   \centering
-  \footnotesize
+  \scriptsize
 	\begin{tabular}{|c|c|c|ccccc|ccc|}
     \hline
     \textbf{Experiment} & $\mathcal{C}$ & $\mathcal{N}$ & \textbf{C} & \textbf{P} & \textbf{G} & \textbf{N} & \textbf{B} & \textbf{M} & \textbf{L} & \textbf{H} \\
@@ -504,7 +510,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
 
 \begin{table}
   \centering
-  \small
+  \scriptsize
   \begin{tabular}{|c|c|ccccc|ccc|}
     \hline
     $\mathcal{N}$ & \textbf{Layer $l$}  & \textbf{C} & \textbf{P} & \textbf{G} & \textbf{N} & \textbf{B} & \textbf{M} & \textbf{L} & \textbf{H} \\

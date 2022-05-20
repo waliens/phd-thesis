@@ -14,8 +14,14 @@ Nowadays, medicine and healthcare rely heavily on analysis of human body samples
 
 \begin{figure}
   \centering
-  \subfloat{\includegraphics[height=150pt]{backdp/microscope-slide.png}}\hspace{1cm}
-  \subfloat{\includegraphics[height=150pt]{backdp/wsi.png}}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=150pt]{backdp/microscope-slide.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=150pt]{backdp/wsi.png}
+  \end{subfigure}
   \caption{\textit{Left:} microscope slides with tissue samples (source: \parencite{img:glassslides}). \textit{Right:} a whole-slide image of dimensions 30720 x 25600 pixels}
   \label{fig:backdp:glassslides}
 \end{figure}
@@ -55,37 +61,71 @@ The earliest source of artifacts is the specimen extraction process itself. The 
 
 \begin{figure}
   \centering
+  \begin{subfigure}[t]{0.32\textwidth}
+    \centering
+    \includegraphics[height=125pt]{backdp/JOMFP-22-279a-g007.jpg}
+    \caption{}
+    \label{fig:backdp:artifacts:autolysis1}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.32\textwidth}
+    \centering
+    \includegraphics[height=125pt]{backdp/JOMFP-22-279a-g008.jpg}
+    \caption{}
+    \label{fig:backdp:artifacts:autolysis2}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.32\textwidth}
+    \includegraphics[height=125pt]{backdp/artifact_dull_blade.png}
+    \caption{}
+    \label{fig:backdp:artifacts:microtomy1}
+  \end{subfigure}\\
 
-  \subfloat[\label{fig:backdp:artifacts:autolysis1}]{\includegraphics[height=125pt]{backdp/JOMFP-22-279a-g007.jpg}}%
-  \subfloat[\label{fig:backdp:artifacts:autolysis2}]{\includegraphics[height=125pt]{backdp/JOMFP-22-279a-g008.jpg}}%
-  \subfloat[\label{fig:backdp:artifacts:microtomy1}]{\includegraphics[height=125pt]{backdp/artifact_dull_blade.png}}\\
+  \begin{subfigure}[t]{0.32\textwidth}
+    \includegraphics[height=125pt]{backdp/calcification.png}
+    \caption{}
+    \label{fig:backdp:artifacts:microtomy2}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.32\textwidth}
+    \includegraphics[height=125pt]{backdp/folding_artifact.png}
+    \caption{}
+    \label{fig:backdp:artifacts:folding}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.32\textwidth}
+    \includegraphics[height=125pt]{backdp/staining_artifact.png}
+    \caption{}
+    \label{fig:backdp:artifacts:staining}
+  \end{subfigure}\\
 
-  \subfloat[\label{fig:backdp:artifacts:microtomy2}]{\includegraphics[height=125pt]{backdp/calcification.png}}%
-  \subfloat[\label{fig:backdp:artifacts:folding}]{\includegraphics[height=125pt]{backdp/folding_artifact.png}}%
-  \subfloat[\label{fig:backdp:artifacts:staining}]{\includegraphics[height=125pt]{backdp/staining_artifact.png}}\\
-
-  \subfloat[\label{fig:backdp:artifacts:scanning1}]{\includegraphics[height=125pt]{backdp/artifact_scanner_stitching.png}}%
-  \subfloat[\label{fig:backdp:artifacts:scanning2}]{\includegraphics[height=125pt]{backdp/scanning_artifact.png}}%
+  \begin{subfigure}[t]{0.48\textwidth}
+    \includegraphics[height=125pt]{backdp/artifact_scanner_stitching.png}
+    \caption{}
+    \label{fig:backdp:artifacts:scanning1}
+  \end{subfigure}%
+  \begin{subfigure}[t]{0.48\textwidth}
+    \includegraphics[height=125pt]{backdp/scanning_artifact.png}
+    \caption{}
+    \label{fig:backdp:artifacts:scanning2}
+  \end{subfigure}%
 
   \caption{\textit{Autolysis artifacts} \ref{fig:backdp:artifacts:autolysis1} (poor cellular differentiation), \ref{fig:backdp:artifacts:autolysis2} (tissue separation). \textit{Microtomy artifacts} \ref{fig:backdp:artifacts:microtomy1} (nick or blemish in the blade), \ref{fig:backdp:artifacts:microtomy2} (calcification pushed through the tissue by the blade). Folding artifact \ref{fig:backdp:artifacts:folding}. Staining artifact \ref{fig:backdp:artifacts:staining}. Scanning artifacts \ref{fig:backdp:artifacts:scanning1} (stiching issue), \ref{fig:backdp:artifacts:scanning2} (scanner failed to capture part of the tissue) \TODO{double check with Michel} \\ (sources: \ref{fig:backdp:artifacts:autolysis1}, \ref{fig:backdp:artifacts:autolysis2} \parencite{taqi2018review}; others from Cytomine).}
 \end{figure}
 
 \TODO{big figure illustrating ``all'' possible artifactsand variations}
 
-% \begin{figure}
-%   \centering
-%   \subfloat[This is an example of well-fixed tissue showing good nuclear and cytoplasmic morphology with minimal shrinkage showing clearly defined basement membranes and cell margins.]{\includegraphics[scale=1.0]{backdp/fixationgood.png}\label{fig:backdp:goodfixation}}\quad
-  
-%   \subfloat[This is an example of poorly-fixed tissue showing inferior nuclear and cytoplasmic morphology with excessive shrinkage and poorly defined cell margins.]{\includegraphics[scale=1.0]{backdp/fixationbad.jpg}\label{fig:backdp:badfixation}}
-    
-%   \caption{Examples of good and bad fixations (images and sub-captions from \parencite{rolls2012process}).}
-%   \label{fig:backdp:fixation}
-% \end{figure}
 
 \begin{figure}
   \centering
-  \subfloat[Cassette with fixated samples \\(source: \parencite{stidworthy2011getting})]{\includegraphics[height=150pt]{backdp/cassette.jpg}\label{fig:backdp:cassette}}\quad
-  \subfloat[Cassette with parrafin-embedded samples \\(source: \parencite{img:cassetteparrafin})]{\includegraphics[height=150pt]{backdp/cassette-parrafin.jpg}\label{fig:backdp:cassette-parrafin}}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=150pt]{backdp/cassette.jpg}
+    \caption{Cassette with fixated samples (source: \parencite{stidworthy2011getting})}
+    \label{fig:backdp:cassette}
+  \end{subfigure}\quad
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=150pt]{backdp/cassette-parrafin.jpg}
+    \caption{Cassette with parrafin-embedded samples (source: \parencite{img:cassetteparrafin})}
+    \label{fig:backdp:cassette-parrafin}
+  \end{subfigure}
   \caption{Tissue cassettes.}
 \end{figure}
 
@@ -98,7 +138,7 @@ There exists automated embedding machines, but microtomy remains mostly manual. 
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.1]{backdp/microtome.jpg}
+  \includegraphics[width=0.5\textwidth]{backdp/microtome.jpg}
   \caption{A microtome}
   \label{fig:backdp:microtome}
 \end{figure}
@@ -111,7 +151,7 @@ Mounted tissue slices are almost completely transparent which would prevent any 
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.5]{backdp/staindvsnonstained.png}
+  \includegraphics[width=0.35\textwidth]{backdp/staindvsnonstained.png}
   \caption{\textit{Left:} an unstained tissue section mounted on a glass slide. \textit{Middle:} \acrshort{heeo}-stained section coming from the same tissue. \textit{Right:} the source tissue embedded in a paraffin block \\ (source: \parencite{abbasi2019all})}
   \label{fig:backdp:stainedvsnonstained}
 \end{figure}
@@ -120,7 +160,7 @@ The choice of a staining and its clean application are crucial for an efficient 
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.5]{backdp/heeo-ihc.jpg}
+  \includegraphics[width=0.5\textwidth]{backdp/heeo-ihc.jpg}
   \caption{Two slices of the same tissue stained with \acrshort{heeo} (left) and \acrshort{ihc} (right). \\(source: \parencite{litjens2018camelyon})}
   \label{fig:backdp:heeo-ihc}
 \end{figure}
@@ -134,9 +174,16 @@ Scanners are equipped with high-precision lenses and sensors allowing them to ge
 
 \begin{figure}
   \centering
-  \subfloat[][$\times$1.25, 7.24 $\mu$m/pixel]{\includegraphics[height=200pt]{backdp/magres_x1.25_cell.png}}
-  \hspace{0.5cm}
-  \subfloat[][$\times$40, 0.226 $\mu$m/pixel]{\includegraphics[height=200pt]{backdp/magres_x40_cell.png}}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=190pt]{backdp/magres_x1.25_cell.png}
+    \caption{$\times$1.25, 7.24 $\mu$m/pixel}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.47\textwidth}
+    \centering
+    \includegraphics[height=190pt]{backdp/magres_x40_cell.png}
+    \caption{$\times$40, 0.226 $\mu$m/pixel}
+  \end{subfigure}
   \caption{Two images (approximately 200 $\times$ 200) extracted from the same WSI at different magnification and resolution (reported in subcaptions). They are both centered on the same cell.}
 \end{figure}
 
@@ -155,7 +202,7 @@ Regarding the internal structure of the latter, the image is usually splitted in
 
 \begin{figure}
   \centering
-  \includegraphics[scale=0.7]{backdp/pyramidalimage.jpg}
+  \includegraphics[width=0.75\textwidth]{backdp/pyramidalimage.jpg}
   \caption{Pyramidal view of a whole-slide image (source: \parencite{marini2022multi_scale_tools})}
   \label{fig:backdp:pyramidalimage}
 \end{figure}
@@ -207,9 +254,14 @@ Counting mitosis is not necessarily complicated but it is cumbersome. It is no s
 
 \begin{figure}
   \centering
-  \subfloat{\includegraphics[height=190pt]{backdp/mitosis_zoomout.png}}
-  \hspace{0.5cm}
-  \subfloat{\includegraphics[height=190pt]{backdp/mitosis_zoomin.png}}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=190pt]{backdp/mitosis_zoomout.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=190pt]{backdp/mitosis_zoomin.png}
+  \end{subfigure}
   \caption{\textit{Left:} a training image from provided for the MITOS-ATYPIA-14 challenge. Red dots are mitosis present in this image. \textit{Right:} A close up view of four mitosis (in the green square from the left image).}
   \label{fig:backdp:mitos_atypia}
 \end{figure}
@@ -225,10 +277,19 @@ This challenge was a success as many teams participated despite the complexity o
 
 \begin{figure}
   \centering
-  \subfloat{\includegraphics[width=420pt]{backdp/camelyon_lymphnode.png}} \\
-  \subfloat{\includegraphics[height=150pt]{backdp/camelyon_metastase_noannot.png}}
-  \hspace{0.5cm}
-  \subfloat{\includegraphics[height=150pt]{backdp/camelyon_metastase_withannot.png}}
+  \begin{subfigure}[t]{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{backdp/camelyon_lymphnode.png} 
+  \end{subfigure}\\
+  \vspace{1cm}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=150pt]{backdp/camelyon_metastase_noannot.png}
+  \end{subfigure}
+  \begin{subfigure}[t]{0.48\textwidth}
+    \centering
+    \includegraphics[height=150pt]{backdp/camelyon_metastase_withannot.png}
+  \end{subfigure}
   \caption{A \acrshort{wsi} from the Camelyon16 challenge training set. \textit{Top:} the whole-slide image with metastases highlighted in red. \textit{Bottom:} A close-up view of a metastase with (\textit{right}) and without (\textit{left}) annotation mask.}
   \label{fig:backdp:camelyon_sample}
 \end{figure}
@@ -242,13 +303,25 @@ Although the earliest application of \acrlong{ai} to nodule malignancy assessmen
 
 \begin{figure}
   \centering
-  \subfloat{\includegraphics[height=80pt]{backdp/incl1.png}}
-  \hspace{0.2cm}
-  \subfloat{\includegraphics[height=80pt]{backdp/incl2.png}}
-  \hspace{0.2cm}
-  \subfloat{\includegraphics[height=80pt]{backdp/incl3.png}}
-  \hspace{0.2cm}
-  \subfloat{\includegraphics[height=80pt]{backdp/incl4.png}}
+  \begin{subfigure}[t]{0.225\textwidth}
+    \centering
+    \includegraphics[height=80pt]{backdp/incl1.png}
+  \end{subfigure}
+  \hspace{0.1cm}
+  \begin{subfigure}[t]{0.225\textwidth}
+    \centering
+    \includegraphics[height=80pt]{backdp/incl2.png}
+  \end{subfigure}
+  \hspace{0.1cm}
+  \begin{subfigure}[t]{0.225\textwidth}
+    \centering
+    \includegraphics[height=80pt]{backdp/incl3.png}
+  \end{subfigure}
+  \hspace{0.1cm}
+  \begin{subfigure}[t]{0.225\textwidth}
+    \centering
+    \includegraphics[height=80pt]{backdp/incl4.png}
+  \end{subfigure}
   \caption{Example of cells with an intranuclear inclusion from thyroid nodule \acrshort{fnab} smears.}
   \label{fig:backdp:thyroid_inclusion}
 \end{figure}

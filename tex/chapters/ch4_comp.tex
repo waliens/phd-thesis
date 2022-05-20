@@ -59,57 +59,57 @@ This chapter is organized as follows. We first introduce the eight datasets we h
 \end{table}
 
 \begin{figure}
-	\centering
-    \begin{subfigure}{0.225\textwidth}
+    \centering
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_necrose.png}
         \caption{Necrosis}
         \label{sfig:comp:dataset:necrosis}
     \end{subfigure}
-    \begin{subfigure}{0.225\textwidth}
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_patterns.png}
         \caption{ProliferativePattern}
         \label{sfig:comp:dataset:proliferativepattern}
     \end{subfigure}
-    \begin{subfigure}{0.225\textwidth}
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_cells.png}
         \caption{CellInclusion}
         \label{sfig:comp:dataset:cellinclusion}
     \end{subfigure}
-    \begin{subfigure}{0.225\textwidth}
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_breast.png}
         \caption{Breast}
         \label{sfig:comp:dataset:breast}
     \end{subfigure} \\
-    \begin{subfigure}{0.225\textwidth}
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_glomeruli.png}
         \caption{Glomeruli}
         \label{sfig:comp:dataset:glomeruli}
     \end{subfigure}
-    \begin{subfigure}{0.225\textwidth}
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_lbtd_lba.png}
         \caption{MouseLba}
         \label{sfig:comp:dataset:mouselba}
     \end{subfigure}
-    \begin{subfigure}{0.225\textwidth}
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_anapath.png}
         \caption{HumanLba}
         \label{sfig:comp:dataset:humanlba}
     \end{subfigure}
-    \begin{subfigure}{0.225\textwidth}
+    \begin{subfigure}[t]{0.225\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/illus_tissus.png}
         \caption{Lung}
         \label{sfig:comp:dataset:lung}
     \end{subfigure}
-	\caption{Overview of our eight classification datasets (the display size does not reflect actual image size). For binary classification datasets, negative and positive samples were respectively placed at the top and bottom of the figures.}
-	\label{fig:comp:dataset_samples}
+    \caption{Overview of our eight classification datasets (the display size does not reflect actual image size). For binary classification datasets, negative and positive samples were respectively placed at the top and bottom of the figures.}
+    \label{fig:comp:dataset_samples}
 \end{figure}
  
 
@@ -171,7 +171,7 @@ As a baseline for comparison, we use the \acrshort{etfl} variant of the tree-bas
 \label{ssec:comp:exp_last_layer}
 
 \begin{figure}
-    \center
+    \centering
     \includegraphics[width=0.75\textwidth]{comp/last_baseline_bars.png}
     \caption{Average ranks of the methods for the ``\textit{Last layer features}" experiment. Colors encode the choice of classifier for $h_c$ (orange for \acrshort{svm}, green for \acrshort{et} and red for \acrshort{fc}).}
     \label{fig:comp:avg_ranks_last_layer}
@@ -185,7 +185,7 @@ We observe that \acrshort{svm} and single layer perceptron are more efficient at
 \label{ssec:comp:exp_feat_sel}
 
 \begin{figure}
-	\center 
+    \centering
     \includegraphics[width=0.75\textwidth]{comp/rfe_last_et_bars.png}
     \caption{Average ranks for last layers' features classified with \acrshort{et} before (orange) and after (green) selection with \acrlong{rfe}.}
     \label{fig:comp:exp_rfe_last_et_cmp}
@@ -202,10 +202,10 @@ On average across datasets and networks, this method selected 7.5 \% of the feat
 Our experiments show that, among the available features from the last layer, most of them are uninformative or redundant and therefore only few of them are actually needed for the prediction. This conclusion can also be drawn by observing the \acrlong{rfe} \acrlong{cv} curves (see Supplementary Figures \ref{app:comp:fig:rfe_1} and 
 \ref{app:comp:fig:rfe_2}). For all datasets and networks, the accuracy converges very abruptly to a plateau when the number of selected features increases, which indicates that removing features from the learning set does not impact negatively the predictive power of the models.
 
-It is also interesting to note that the selected features are not the same across datasets. For instance with DenseNet, for a feature to appear in the subset of best features (determined with the importances obtained during the ``\textit{Last layer features}" experiment) for all datasets, we need to consider a subset of size 1477 (\ie 77\% of the features). We observe similar results for the other networks (see Supplementary Table \ref{app:comp:tab:best_subset_size}). On the other hand, there can be a significant overlap between features selected by RFE for specific pairs of datasets (see Supplementary Table \ref{app:comp:tab:rfe_sub_overlap}). These results suggest that the best features are task-dependent and that there would be no interest in restricting a priori the subset of transferred features, even when focusing on the domain of \acrlong{cpath}.
+It is also interesting to note that the selected features are not the same across datasets. For instance with DenseNet, for a feature to appear in the subset of best features (determined with the importances obtained during the ``\textit{Last layer features}" experiment) for all datasets, we need to consider a subset of size 1477 (\ie 77\% of the features). We observe similar results for the other networks (see Supplementary Table \ref{app:comp:tab:best_subset_size}). On the other hand, there can be a significant overlap between features selected by RFE for specific pairs of datasets (see Supplementary Tables \ref{app:comp:tab:rfe_sub_overlap} and \ref{app:comp:tab:rfe_sub_overlap2}). These results suggest that the best features are task-dependent and that there would be no interest in restricting a priori the subset of transferred features, even when focusing on the domain of \acrlong{cpath}.
  
 \begin{table}
-	\center
+    \center
     \small
     \begin{tabular}{|l||c|c|c|c|c||c|c|c|}   
       \hline 
@@ -228,7 +228,7 @@ It is also interesting to note that the selected features are not the same acros
       \hline
       \textbf{Metric} & \multicolumn{5}{c||}{Roc AUC} & \multicolumn{3}{c|}{Accuracy (multi-class)} \\
       \hline
-	\end{tabular}
+    \end{tabular}
       \caption{Best score for each strategy and each dataset. The best and second best scores are respectively highlighted in green and orange.}
     \label{tab:comp:res_best_scores_per_strategy}
 \end{table}
@@ -240,12 +240,12 @@ It is also interesting to note that the selected features are not the same acros
 \label{ssec:comp:exp_merge_net}
 
 
- \begin{figure}
-     \center 
-     \includegraphics[width=0.75\textwidth]{comp/merged_all_merged_perc.png}
-     \caption{Average relative importances (across datasets) brought by each studied network when all their last layer features are aggregated. The black bars quantify the proportion of features of each network. The colors indicate the information brought by features of decreasing importances: blue and red features are respectively the most informative and least informative ones. Blue, orange, green and red bars regroup importances of features that respectively and cumulatively bring 10\%, 25\%, 50\% and 100\% of the information for predicting the outcome.}
-     \label{fig:comp:models_merged_avg_imp}
- \end{figure} 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{comp/merged_all_merged_perc.png}
+    \caption{Average relative importances (across datasets) brought by each studied network when all their last layer features are aggregated. The black bars quantify the proportion of features of each network. The colors indicate the information brought by features of decreasing importances: blue and red features are respectively the most informative and least informative ones. Blue, orange, green and red bars regroup importances of features that respectively and cumulatively bring 10\%, 25\%, 50\% and 100\% of the information for predicting the outcome.}
+    \label{fig:comp:models_merged_avg_imp}
+\end{figure} 
 
 
 The third strategy consists in merging features from the last layer of all the studied networks. Aggregating all features results in a feature vector of size $9600$. We observe in Table \ref{tab:comp:res_best_scores_per_strategy} and Figure \ref{fig:comp:res_avg_ranks_all_methods} that despite the fact that features from all networks are combined, this strategy gives performance results similar to but not better than using the best single network, both with \acrshort{et} and \acrshort{svm}.
@@ -258,20 +258,19 @@ Surprisingly, the importances brought by the VGG networks relatively to the numb
 \label{ssec:comp:exp_merged_layers}
 
 \begin{figure}
-     \center 
-     \includegraphics[width=0.75\textwidth]{comp/merged_layers_all_bars.png}
-     \caption{Average ranks for models learned on merged layers of networks compared to the baseline.}
-     \label{fig:comp:res_avg_ranks_merged_layers}
- \end{figure}
- 
+    \centering
+    \includegraphics[width=0.75\textwidth]{comp/merged_layers_all_bars.png}
+    \caption{Average ranks for models learned on merged layers of networks compared to the baseline.}
+    \label{fig:comp:res_avg_ranks_merged_layers}
+\end{figure}
 
  
-  \begin{figure}
-     \center 
-     \includegraphics[width=0.75\textwidth]{comp/ft_baseline_bars.png}
-     \caption{Average ranks for fine-tuned networks compared to the baseline. Evaluation was done either by using \acrshort{svm} (orange) or \acrlong{et} (green) on the fine-tuned features or by predicting the outcome using the fine-tuned \acrlong{fc} layer directly (red).}
-     \label{fig:comp:res_avg_ranks_ft}
- \end{figure}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{comp/ft_baseline_bars.png}
+    \caption{Average ranks for fine-tuned networks compared to the baseline. Evaluation was done either by using \acrshort{svm} (orange) or \acrlong{et} (green) on the fine-tuned features or by predicting the outcome using the fine-tuned \acrlong{fc} layer directly (red).}
+    \label{fig:comp:res_avg_ranks_ft}
+\end{figure}
 
 This strategy aims at merging features across layers (at several depths) for a given network. Given the results in Section \ref{ssec:comp:exp_last_layer}, we limit our analysis to the IncResV2, ResNet and DenseNet networks. Those three networks have complex structures and many layers which yield plenty of possible cut points for feature extraction. To reduce the number of possibilities, we limit the extraction to bottlenecks of the networks. Details about the layer selection are given in Supplementary Section \ref{app:comp:sec:features_and_cut_points}. 
 
@@ -280,17 +279,17 @@ The average ranks for each layer of all studied networks are given in Figure \re
  
 \begin{figure}
     \centering
-    \begin{subfigure}{0.8\textwidth}
+    \begin{subfigure}[t]{0.8\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/dense_net_201_all_merged_perc.png}
         \caption{DenseNet}
     \end{subfigure}\\
-    \begin{subfigure}{0.8\textwidth}
+    \begin{subfigure}[t]{0.8\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/inception_resnet_v2_all_merged_perc.png}
         \caption{IncResV2}
     \end{subfigure}\\
-    \begin{subfigure}{0.8\textwidth}
+    \begin{subfigure}[t]{0.8\textwidth}
         \centering
         \includegraphics[width=\textwidth]{comp/resnet50_all_merged_perc.png}
         \caption{ResNet}
@@ -309,11 +308,11 @@ Merging features from several layers results in large feature vectors for descri
 \label{ssec:comp:exp_inner_layers}
 
 \begin{figure}
-     \center 
-     \includegraphics[scale=0.8]{comp/all_per_layer_bars.png}
-     \caption{Average ranks for the baseline and the models trained using features from layers inside the networks. For each network, the layers are sorted by decreasing depth (from top to bottom).}
-     \label{fig:comp:res_avg_ranks_per_layer}
- \end{figure}
+    \center 
+    \includegraphics[scale=0.8]{comp/all_per_layer_bars.png}
+    \caption{Average ranks for the baseline and the models trained using features from layers inside the networks. For each network, the layers are sorted by decreasing depth (from top to bottom).}
+    \label{fig:comp:res_avg_ranks_per_layer}
+\end{figure}
  
 For this strategy, we assess features extracted from each layer separately. The motivation is to determine if there is a layer that, taken alone, yields better performance than the others, and in particular, the last one. Using the same cut points as in the previous section to define the layers, we learn as many \acrshort{svm} classifiers as there are layers, each using the features of a single layer.
 
@@ -329,11 +328,11 @@ The average ranks for the different fine-tuning methods are given in Figure \ref
 
 
 \begin{figure}
-    \center 
+    \centering 
     \includegraphics[scale=0.75]{comp/all_exp_bars.png}
     \caption{Average ranks for all the evaluated methods.}
     \label{fig:comp:res_avg_ranks_all_methods}
-  \end{figure}
+\end{figure}
 
 
 %-------------------------------------------------------------------------------------------------------------------
