@@ -14,7 +14,7 @@
 
     \fullcite{mormont2018comparison} \\
 
-    Supplementary materials can be found in Chapter \ref{app:comp}.
+    Supplementary materials can be found in Appendix Chapter \ref{app:comp}.
 \end{overview}
 
 %-------------------------------------------------------------------------------------------------------------------
@@ -29,7 +29,7 @@
 
 Data scarcity in \acrlong{cpath} is a recurrent problem which can be tackled in several ways, one of them being transfer learning (see Section \ref{ssec:backdp:datascarcity}). In this chapter, we explore how \acrlong{cnn}s pre-trained on ImageNet \cite{deng2009imagenet} (source task) can be transfered to \acrlong{cpath} target tasks as these architectures have shown interesting transfer properties \parencite{donahue2014decaf,yosinski2014transferable,sermanet2013overfeat}. We study and compare both feature extraction and fine-tuning. At the time of writing the article this chapter is based on (early 2018), both strategies had not been compared thoroughly yet in \acrlong{cpath} and there was no consensus about whether one was better than the other (see Sections \ref{ssec:backml:dl:deeptransfer} and \ref{ssec:backdp:tl} for related works). Moreover, most works involving transfer learning in medical imaging used old architectures such as AlexNet \parencite{shin2016deep,bayramoglu2016transfer,antony2016quantifying,ravishankar2016understanding,tajbakhsh2016convolutional,kumar2017comparative,kim2016deep}, GoogLeNet \parencite{shin2016deep,bayramoglu2016transfer} or VGG \parencite{kieffer2017convolutional,bayramoglu2016transfer,antony2016quantifying,yu2017deep,hou2016automatic,kumar2017comparative}. To the best of our knowledge, only one article used residual networks for transfer learning at the time \parencite{yu2017deep} and none were using dense networks.
 
-Therefore, we study thoroughly and compare several strategies that involve feature extraction and fine-tuning. We carry out several experiments over eight object classification histology and cytology datasets. Different combinations of state-of-the-art networks and feature selection techniques using random forests are proposed in order to answer questions of high pratical relevance: which network provides best-performing features? How should those features be extracted and then exploited to get the best performance? Is fine-tuning better than using off-the-shelf features? More generally, our empirical study also contributes to confirm the interest of deep transfer learning for tackling the recurrent data scarcity problem in \acrlong{cpath}.
+Therefore, we study thoroughly and compare several strategies that involve feature extraction and fine-tuning. We carry out several experiments over eight object classification histology and cytology datasets. Different combinations of state-of-the-art networks and feature selection techniques using random forests are proposed in order to answer questions of high pratical relevance: which network provides best-performing features? How should those features be extracted and then exploited to get the best performance? Is fine-tuning better than using features from off-the-shelf networks? More generally, our empirical study also contributes to confirm the interest of deep transfer learning for tackling the recurrent data scarcity problem in \acrlong{cpath}.
 
 This chapter is organized as follows. We first introduce the eight datasets we have used in Section \ref{sec:comp:datasets}. We present how we perform feature extraction and fine-tuning in Section \ref{sec:comp:methods}. Our experiments and results are presented and discussed in Section \ref{sec:comp:experiments}. We finally conclude in Section \ref{sec:comp:conclusion}. 
 
@@ -323,7 +323,7 @@ Average ranks for each inner layer and each network are given in Figure \ref{fig
 \subsection{Fine-tuned features}
 \label{ssec:comp:exp_fine_tuning}
 
-All previous experiments explored strategies using off-the-shelf features. In this last strategy, we investigate fine-tuning as described in Section \ref{ssec:comp:meth_fine_tuning}. We focus on the same three networks as in the previous sections (ResNet, IncResV2 and DenseNet).
+All previous experiments explored strategies using features extracted from off-the-shelf networks. In this last strategy, we investigate fine-tuning as described in Section \ref{ssec:comp:meth_fine_tuning}. We focus on the same three networks as in the previous sections (ResNet, IncResV2 and DenseNet).
 
 The average ranks for the different fine-tuning methods are given in Figure \ref{fig:comp:res_avg_ranks_ft}. With the three networks, best performances are obtained by making predictions directly from the fine-tuned fully connected layer. \acrshort{svm} and \acrshort{et} trained on the features extracted from the fine-tuned networks are clearly inferior, in particular with IncResV2. Note that, for the other two, last layer features extracted from the fine-tuned network are nevertheless better than last layer features from the original network, when used as inputs to \acrshort{svm} (see Figure \ref{fig:comp:res_avg_ranks_all_methods}). Fine-tuning is thus globally improving the quality of the features for these two networks. Overall, the best performance is obtained with fine-tuned DenseNet.
 
