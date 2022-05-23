@@ -8,7 +8,7 @@ from argparse import ArgumentParser
 from tempfile import NamedTemporaryFile
 
 
-CHAPTERS = ["intro", "backml", "backdp", "comp", "mtask", "sdist", "biaflows", "appendix"]
+CHAPTERS = ["intro", "backml", "backdp", "comp", "mtask", "strain", "biaflows", "appendix_comp", "appendix_mtask", "appendix_strain"]
 
 
 def is_int(v):
