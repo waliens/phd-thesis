@@ -2,9 +2,9 @@
 \label{chap:backml}
 
 \begin{overview}{Overview}
-The goal of this chapter is to provide machine learning background and keys to understand our contributions. It is not aimed at being an exhaustive tour of the field of machine learning but rather an overview of topics relevant to this thesis. For the readers who would still like to deepen their knowledge about these methods, we provide pointers to relevant litterature. In this chapter, we also introduce the notations that we use throughout this thesis.
+The goal of this chapter is to provide machine learning background and keys to understand our contributions. It is not aimed at being an exhaustive tour of the field of machine learning but rather an overview of topics relevant to this thesis. For the readers who would still like to deepen their knowledge about these methods, we provide pointers to relevant literature. In this chapter, we also introduce the notations that we use throughout this thesis.
 
-Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} and a first example of an \acrshort{ml} problem. Section \ref{sec:backml:families} explores the different ways the field of \acrlong{ml} can be structured (\eg supervised vs. unsupervised learning, classification vs. regression, classical machine vs. \acrlong{dl}...) in order to position our work in its context. Section \ref{sec:backml:modeleval} discusses what guides \acrlong{ml} model training from a theoritical point of view. Then, it presents practical concerns regarding model selection and evaluation. It finally provides a description of different evaluation metrics used in this thesis. This chapter then shifts its focus on specific machine learning methods and algorithms: \acrlong{svm} in Section \ref{sec:backml:svm}, tree-based methods in \ref{sec:backml:treebased} and deep learning in Section \ref{sec:backml:deeplearning} in which we also discuss more thoroughly deep transfer learning (see Section \ref{ssec:backml:dl:deeptransfer}). In the final Section \ref{sec:backml:wrapup}, we wrap up by positioning our work in the context of \acrlong{ml}.
+Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} and a first example of an \acrshort{ml} problem. Section \ref{sec:backml:families} explores the different ways the field of \acrlong{ml} can be structured (\eg supervised vs. unsupervised learning, classification vs. regression, classical machine vs. \acrlong{dl}...) in order to position our work in its context. Section \ref{sec:backml:modeleval} discusses what guides \acrlong{ml} model training from a theoretical point of view. Then, it presents practical concerns regarding model selection and evaluation. It finally provides a description of different evaluation metrics used in this thesis. This chapter then shifts its focus on specific machine learning methods and algorithms: \acrlong{svm} in Section \ref{sec:backml:svm}, tree-based methods in \ref{sec:backml:treebased} and deep learning in Section \ref{sec:backml:deeplearning} in which we also discuss more thoroughly deep transfer learning (see Section \ref{ssec:backml:dl:deeptransfer}). In the final Section \ref{sec:backml:wrapup}, we wrap up by positioning our work in the context of \acrlong{ml}.
 \end{overview}
 
 \section{What is machine learning ?}
@@ -144,9 +144,9 @@ for instance, the algorithm searches for natural groups of observations or featu
 Another example is \textit{dimensionality reduction} where the algorithm projects
 high-dimensional data into a lower-dimensional space while attempting to preserve
 as much information as possible. An interested reader will find more information
-about these methods in \parencite{friedman2017elements}. There exists another
+about these methods in \parencite{hastie2017elements}. There exists another
 family of \acrlong{usl} methods that was first explored in the 1980s with autoencoders
-but has gained much traction recently. It is called \textit{self-supervised learning}
+\parencite{ballard1987modular, le1987modeles, bourlard1988auto} but has gained much traction recently. It is called \textit{self-supervised learning}
 \parencite{lecun2021self}. The idea behind this family of methods is to exploit
 supervised learning algorithms but rather than guiding the learning process with
 human annotations, the training signal is found in the data itself. An example of
@@ -166,13 +166,13 @@ supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that
 use a dataset where only a part of the observations have an associated output
 signal. The dataset is composed of two subsets:
 \begin{eqnarray}
-\mathcal{D}_l = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n_a; (\vect{x}_i, y_i) \sim p_{\mathcal{X},\mathcal{Y}}; \vect{x}_i \sim p_a(\vect{x})\right\} \\
+\mathcal{D}_l = \left\{(\vect{x}_i, y_i) \mid i = 1,...,n_a; y_i \sim p\left(y | x_i\right),\mathcal{Y}; \vect{x}_i \sim p_a(\vect{x})\right\} \\
 \mathcal{D}_u = \left\{\vect{x}_i \mid i = 1,...,n_u; \vect{x}_i \sim p_u(\vect{x})\right\}
 \end{eqnarray}
 These methods make some assumptions about the ``closeness'' of the input distributions
 $p_a(\vect{x})$ and $p_u(\vect{x})$ \parencite{chapelle2006semi} which allow
 exploiting both sets to solve some particular tasks. One of the earliest forms of
-\acrlong{ssl} is \textit{self-training} \parencite{scudder1965probability, yarowsky1995unsupervised} which consists in an iterative process of which a typical iteration, or round, is composed of two steps. First, the \textit{teacher} model is used to generate pseudo-labels for unlabeled samples from $\mathcal{D}_u$. Then, these samples are used alongside samples from $\mathcal{D}_l$ to train a model, the \textit{student}. We will discuss self-training more throroughly in Section \ref{ssec:backml:dl:selftraining}.
+\acrlong{ssl} is \textit{self-training} \parencite{scudder1965probability, yarowsky1995unsupervised} which consists in an iterative process of which a typical iteration, or round, is composed of two steps. First, the \textit{teacher} model is used to generate pseudo-labels for unlabeled samples from $\mathcal{D}_u$. Then, these samples are used alongside samples from $\mathcal{D}_l$ to train a model, the \textit{student}. We will discuss self-training more thoroughly in Section \ref{ssec:backml:dl:selftraining}.
 
 Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the
 annotations are noisy (\eg $y$ can be incorrect or imprecise), incomplete (similar
@@ -231,7 +231,7 @@ winning team followed a different approach. Building upon neural network researc
 form the previous decades, they used a deep convolutional neural network, AlexNet,
 trained on the raw images directly \parencite{krizhevsky2012imagenet}. They beat
 the second best method by a margin of 11\% error rate. This extraordinary improvement
-revived the interest of the \acrlong{ml} community to neural networks and launched
+revived the interest of the \acrlong{ml} community for neural networks and launched
 the ``\acrlong{dl} revolution''. The success of this method can be partly attributed
 to some particularily beneficial \textit{inductive bias}, a set of assumptions
 that narrow the search of a good model in the hypothesis space. This inductive
@@ -273,6 +273,11 @@ words, in supervised \acrlong{tl}, the target task is a supervised dataset as
 described in Equation \ref{eqn:backml:supervised}. For the remainder of the section,
 we will assume that the source tasks are also supervised.
 
+\begin{definition}
+  \label{def:backml:homotransfer}
+  Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t \neq \emptyset$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(\vect{x}) \neq p_t(\vect{x})$ or $p_s(y|\vect{x}) \neq p_t(y|\vect{x})$.
+\end{definition}
+
 Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:homotransfer})
 when the source and target tasks only differ by the distributions of their data.
 As an example, let us suppose we would want to classify pictures taken with a
@@ -284,8 +289,8 @@ pixel intensities (\ie $p_A(x) \neq p_B(x)$). This specific setup where only the
 inputs distributions differ is called \textit{domain adaptation}.
 
 \begin{definition}
-\label{def:backml:homotransfer}
-Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t \neq \emptyset$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(\vect{x}) \neq p_t(\vect{x})$ or $p_s(y|\vect{x}) \neq p_t(y|\vect{x})$.
+  \label{def:backml:heterotransfer}
+  Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t = \emptyset$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
 \end{definition}
 
 Transfer learning can be \textit{heterogeneous} (see Definition
@@ -297,13 +302,8 @@ other consists in assessing the malignancy of a tumor from an image of a tissue.
 The input distributions also differ as medical images have completely different
 content and appearance.
 
-\begin{definition}
-\label{def:backml:heterotransfer}
-Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t = \emptyset$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
-\end{definition}
-
-There exists many different transfer approaches. Based on how they operate,
-\parencite{yang2020transfer} have identifed four different categories of \acrlong{tl}
+There exist many different transfer approaches. Based on how they operate,
+\parencite{yang2020transfer} have identified four different categories of \acrlong{tl}
 algorithms. The case when knowledge transfered corresponds to the weights attached
 to the source examples is called \textit{instance-based} \acrlong{tl}. Is referred
 to as \textit{feature-based} \acrlong{tl} the case when knowledge is represented
@@ -313,7 +313,7 @@ this is \textit{model-based} \acrlong{tl}. Finally, when the knowledge is transf
 as rules specifying the relations between examples in the source domains, transfer
 is referred to as \textit{relation-based}.
 
-Transfer learning performance is influenced by serveral factors including how well
+Transfer learning performance is influenced by several factors including how well
 the method is able to capture and use transferable knowledge. The task-relatedness
 is also an important factor: usually the more similar the tasks, the better the
 performance. Sometimes, performance are worsen by the use of \acrlong{tl}. This
@@ -368,9 +368,9 @@ As stated in Section \ref{sec:backml:whatisml}, evaluation is a core principle o
 \acrlong{ml} as a learning algorithms should select a model that maximizes a
 performance criterion. In this section, we introduce different concepts related
 to the evaluation and selection of machine learning models. In Sections
-\ref{ssec:backml:bvtradeoff} and \ref{ssec:backml:bvtradeoff}, we discuss the
+\ref{ssec:backml:modelselection} and \ref{ssec:backml:bvtradeoff}, we discuss the
 importance of generalization for \acrlong{ml} models and the related topics of
-bias-variance trade-off and overfitting. In Section \ref{ssec:backml:modelselection},
+bias-variance trade-off and overfitting. In Section \ref{ssec:backml:modelselinpractice},
 we discuss further practical consideration related to model selection. In Section
 \ref{ssec:backml:metrics}, we finally introduce different metrics used in this
 thesis.
@@ -382,12 +382,10 @@ As stated in the introduction, the objective of a learning algorithm is to find
 a model $h \in \mathcal{H}$ that maximizes a performance measure or, alternatively,
 minimizes the expected risk $R(h)$ (for a supervised problem)
 \parencite{vapnik1992principles}:
-
 \begin{equation}
 \label{eqn:backml:expriskmin}
 R(h) = \mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(h(\vect{x}), y\right)\right\}
 \end{equation}
-
 where $\ell: \mathcal{Y}\times\mathcal{Y} \rightarrow \mathbb{R}$ is a loss function
 which measures the closeness between $h(\vect{x})$ and $y$. The expected risk is
 also called the \textit{generalization error}. The model that minimizes $R(h)$ is
@@ -415,7 +413,7 @@ practice, one does not have access to an infinitely-large dataset. Therefore, th
 learned model will often differ from $h_B$ and its expected risk will often be
 larger. The effect of the ``\textit{choice}'' of a finite training set on the
 generalization error can be studied using the \textit{bias-variance decomposition}
-\parencite{geman1992neural, geurts2009bias, friedman2017elements}:
+\parencite{geman1992neural, geurts2009bias, hastie2017elements}:
 
 \begin{equation}
 \label{eqn:backml:biasvariancedec}
@@ -435,8 +433,8 @@ the data, \etc.
 The \textit{capacity} or \textit{complexity} of a model is related to its ability
 to capture complex relationships in the data. Linear models (see Section
 \ref{sec:backml:svm}) are examples of low-capacity models as they are only able
-to capture linear relationships. Non-linear models such as random forests (see
-Section \ref{sec:backml:treebased}) or deep neural networks have a higher complexity
+to capture linear relationships. Non-linear models such as  random forests (see
+Section \ref{sec:backml:treebased}) or deep neural networks (see Section \ref{sec:backml:deeplearning}) have a higher complexity
 or capacity compared to linear models.
 
 Low-capacity models usually have low variance as their limited expressiveness does
@@ -444,7 +442,7 @@ not allow them to change much based on the training data but they also have high
 bias as failing to capture complex relationships prevents the model from approximating
 $h_B$ correctly. This behavior is called \textit{underfitting}. In opposition,
 high-capacity models have low bias as their expressiveness allow them to approximate
-$h_B$ more accurately but this expressiveness also leads to high-variance as the
+$h_B$ more accurately but this expressiveness also leads to high variance as the
 model can learn a function which is too expressive compared to $h_B$ and can fit
 the noise in the training data. Such models suffer from \textit{overfitting} which
 hampers generalization, although these models typically present a low empirical
@@ -485,10 +483,10 @@ where using the empirical risk only is not reliable which are \textit{model sele
 and \textit{model evaluation}. The former consists in finding the model that would
 generalize best among a set of candidates and the latter consists in evaluating
 the expected performance of a model when it will be used on new data. Both tasks
-involve evaluating the generalization of a model. There exists several approaches
+involve evaluating the generalization error of a model. There exist several approaches
 to solve these tasks.
 
-The simplest one is the use of an independant test set: the source dataset is
+The simplest one is the use of an independent test set: the source dataset is
 split into two subsets, the train and test sets, which are used to respectively
 train and evaluate the model. The size of the subsets should be made such that
 the train set is large enough for the model to be able to learn but the test set
@@ -503,7 +501,7 @@ Another approach that actually estimates the expected generalization error is
 \acrfirstit{cv} which simply repeats the train-test approach with different splits
 of the source dataset. For each train-test split, a model is trained on the train
 set and evaluated on the test set. The \acrlong{cv} score is computed by averaging
-the test scores of all splits. There exists several approaches for \acrlong{cv}
+the test scores of all splits. There exist several approaches for \acrlong{cv}
 which differ by how they generate their splits. A common approach is
 \textit{$k$-fold \acrlong{cv}} where the data is randomly split into $k$ subsets
 and each subset is selected in turn to be the test set while the remaining folds
@@ -519,11 +517,11 @@ is evaluated on the test set. When the dataset is too small for such a three-way
 split, a common approach consists in extracting a test set from the whole dataset
 and then performing \acrlong{cv} on the train set. As a general rule, every decision
 influenced one way or another by the output $y$ should be done within a validation
-loop to avoid overfitting (using either \acrlong{cv} or an independant
+loop to avoid overfitting (using either \acrlong{cv} or an independent
 test-set).
 
 These two approaches are based on a strong assumption that the extracted sets are
-independant. If they are not, this would most probably lead to overfitting and
+independent. If they are not, this would most probably lead to overfitting and
 the resulting selection or evaluation scores being overly optimistic. Therefore,
 it is sometimes not enough to split the sets randomly and domain knowledge must
 be used during the splitting procedure to enforce sets independance. This issue
@@ -542,7 +540,7 @@ performance measures. Given a supervised dataset as described in Equation
 compares to the ground truth class $y_i$. In the remainder of the thesis, when
 the higher the better for a metric, we will call it a \textit{score}. In opposition,
 when the lower the better, we will call it a \textit{loss}. In terms of notations,
-a loss and a score computed over a set of data will respectively be noted
+a loss and a score averaged over a set of data will respectively be noted
 $\mathcal{L}$ and $\mathcal{M}$.
 
 \subsubsection{Accuracy}
@@ -619,8 +617,8 @@ thresholdable number, it is relatively computationally expensive to obtain as on
 have to evaluate all possible thresholds and it only applies to binary classification.
 However, it provides a measure which is not impacted by class imbalance which is
 a very interesting property in domains where this issue is common. Another advantage
-of the the \rocaucs is its finer grasp of how a model performs as it evaluates
-the probablities unlike the accuracy where the model is either wrong or right but
+of the \rocaucs is its finer grasp of how a model performs as it evaluates
+the probabilities unlike the accuracy where the model is either wrong or right but
 there is no in-between.
 
 \begin{figure}
@@ -643,7 +641,7 @@ H(p, q) = - \sum\limits_{x_i \in \mathcal{X}} p\left(x_i\right) \log q\left(x_i\
 \end{equation}
 
 When the model outputs class probabilities, this similarity measure can be used
-to evaluate the discrepency between the prediction and the ground-truth. The
+to evaluate the discrepancy between the prediction and the ground-truth. The
 cross-entropy becomes a loss function called the
 \textit{categorical cross-entropy}:
 \begin{equation}
@@ -665,7 +663,7 @@ In the case of binary classification, the metric falls back to the
 \acrfirstit{bce}:
 \begin{equation}
 \label{eqn:backml:bce}
-\mathcal{L}_{bce} = - \frac{1}{n} \sum\limits_{i=1}^n \left(y_i \log \hat{y}_1 + (1 - y_i) \log (1 - \hat{y}_i)\right)
+\mathcal{L}_{bce} = - \frac{1}{n} \sum\limits_{i=1}^n \left(y_i \log \hat{y}_i + (1 - y_i) \log (1 - \hat{y}_i)\right)
 \end{equation}
 
 Similarly to \rocauc, the cross-entropy evaluates probabilities and therefore has
@@ -702,7 +700,7 @@ $\hat{y}_{ij}$ can be binarized using a threshold.
 
 In Part \ref{part:transfer} of this thesis, we use a relatively large set of image
 classification datasets to study \acrlong{tl}. In order to compare the different
-methods, we evaluate how it performs on those datasets. Unfortunatly, for reasons
+methods, we evaluate how it performs on those datasets. Unfortunately, for reasons
 that will be explained later, it is not possible to use the same metric for all
 datasets. Moreover, a metric computed on a dataset is not always comparable to
 the same metric computed on a different dataset. For this reason, we resort to
@@ -711,8 +709,7 @@ the methods each with their most appropriate metric and then rank them: the best
 method gets rank 1 and the worst gets rank $m$ (where $m$ is the number of methods).
 Finally, in order to draw general conclusions, we average the rankings over all
 the datasets. The average ranks therefore provides a single metric for comparing
-the methods across datasets. This metric is not ideal
-\TODO{rankings are apparently unstable metrics, would like to discuss it more but haven't found any source yet discussing the issue.}.
+the methods across datasets.
 
 % ===================
 % Methods
@@ -721,11 +718,11 @@ the methods across datasets. This metric is not ideal
 \section{Support vector machines}
 \label{sec:backml:svm}
 
-The \acrfirstit{svm} algorithm was invented in the early 1990s \parencite{boser1992training}.
+The \acrfirstit{svm} binary classification algorithm was invented in the early 1990s \parencite{boser1992training}.
 It is originally a linear method that can be used for regression and classification.
 By using the \textit{kernel trick}, \acrshort{svm} can also learn non-linear models
 but it is out of the scope of this thesis. An interested reader will learn more
-about kernel methods and the kernel trick in \parencite{friedman2017elements}.
+about kernel methods and the kernel trick in \parencite{hastie2017elements}.
 
 In general, assuming a supervised dataset where inputs are such that
 $\vect{x} \in \mathbb{R}^m$ where $m$ is the number of features, a linear model
@@ -759,14 +756,17 @@ falls back to the Lagrange dual:
 \text{subject to}~& 0 \leq \alpha_k \leq C, \forall k = 1, ..., n \\
 & \sum_{i=1}^n \alpha_i y_i = 0
 \end{align}
-
 which can be solved efficiently with classical linear solvers such as LIBLINEAR
 \parencite{fan2008liblinear}. When the optimal solution has been found, the weights
 can be derived by solving the system:
-
 \begin{equation}
 \label{eqn:backml:svmweights}
 \alpha_k\left(y_k \left(\theta^T \vect{x}_k + b\right) - 1\right) = 0, \forall k = 1, ..., n
+\end{equation}
+and the final model written as:
+\begin{equation}
+  h(\mathbf{x}) = \sum_{i=1}^m \alpha_i y_i \mathbf{x}_i^T\mathbf{x} + b
+  \label{eqn:backml:finalsvmmodel}
 \end{equation}
 
 In Equation \ref{eqn:backml:svmweights}, $\alpha_k > 0$ for the support vectors
@@ -805,7 +805,7 @@ the gutter or are misclassified which increases variance but decreases bias.
 
 \subsection{Multi-class problems}
 
-There exists few approaches to use a binary classification algorithm like
+There exist few approaches to use a binary classification algorithm like
 \acrshort{svm} in a multi-class context. One of them is called \acrfirstit{ovo}
 and consists in training $K=\frac{C(C-1)}{2}$ binary classifiers (where $C$ is
 the number of classes), one for each pair of classes of the dataset. The prediction
@@ -824,10 +824,10 @@ returned largest value. This approach is more computationally efficient than
 
 Tree-based methods are a popular family of methods invented at least twice in the
 1980s by the \acrshort{ai} \parencite{quinlan1986induction} and the statistics
-\parencite{breiman2017classification} communities. Section \ref{ssec:backml:dt}
+\parencite{breiman1984classification} communities. Section \ref{ssec:backml:dt}
 presents the basics of decision tree inference and induction, Section \ref{ssec:backml:rf}
-introduces the random forest algorithms. Section \ref{ssec:backml:et} presents a
-variant of the random forest called \acrfirstit{et} and Section \ref{ssec:backml:et_image}
+introduces the random forest algorithm. Section \ref{ssec:backml:et} presents a
+variant of random forest called \acrfirstit{et} and Section \ref{ssec:backml:et_image}
 finally explores how this method can be used for image classification.
 
 \subsection{Decision trees}
@@ -843,29 +843,29 @@ and each attribute can be either numerical or categorical (binary or multi-value
 A decision tree is a model structured as a tree of which the nodes $\mathcal{Q}$
 are divided in two subsets: the internal and leaf nodes $\mathcal{I} \subset \mathcal{Q}$
 and $\mathcal{F} \subset \mathcal{Q}$. Each internal node $q \in \mathcal{I}$
-tests an input attribute $k_q \in \left\{1,...,m\right\}$ and its $E_q$ outwards
+tests an input attribute $q.k \in \left\{1,...,m\right\}$ and its $q.E$ outwards
 edges are associated with non-overlapping subsets of this attribute's domain:
 \begin{equation}
 \label{eqn:backml:dt:splitsgeneric}
-\mathcal{A}^{(q)}_l \subset \mathcal{X}_{k_q},~l = 0,...,E_q-1
+\mathcal{A}^{(q)}_l \subset \mathcal{X}_{q.k},~l = 0,...,q.E-1
 \end{equation}
 which are called \textit{splits}. A leaf node of the tree is labelled with a
 prediction $\hat{y} \in \mathcal{Y}$. In classification, it can also be a probability
 distribution over $\mathcal{Y}$. In regression, the output is a real value
 $\hat{y} \in \mathcal{Y}$. Given $x_i$, predicting an output value consists in a
 top-down traversal of the tree. When reaching an internal node $q$ during the
-traversal, $\vect{x}_i$ will follow the edge $l$ such that $a^{(i)}_{k_q} \in \mathcal{A}^{(q)}_l$
+traversal, $\vect{x}_i$ will follow the edge $l$ such that $a^{(i)}_{q.k} \in \mathcal{A}^{(q)}_l$
 which leads to one of the children nodes of $q$. This process is repeated until
 the algorithm reaches a leaf of which the associated labelling is the output of
 the algorithm for $\vect{x}_i$.
 
-In the remainder of the thesis, we will only consider numerical attributes and
-binary splits at each internal node ($E_q = 2$). These splits are defined by a
-threshold $v_q$ such that:
+In the remainder of the thesis, we will only consider numerical attributes ($x_i \in \mathbb{R^m}$) and
+binary splits at each internal node ($q.E = 2$). These splits are defined by a
+threshold $q.v$ such that:
 \begin{align}
 \label{eqn:backml:dt:splitsbinary}
-\mathcal{A}^{(q)}_0 &= \left]-\infty, v_q\right]\\
-\mathcal{A}^{(q)}_1 &= \left]v_q, +\infty\right[
+\mathcal{A}^{(q)}_0 &= \left]-\infty, q.v\right]\\
+\mathcal{A}^{(q)}_1 &= \left]q.v, +\infty\right[
 \end{align}
 This representation allows for an efficient check at each node as the attribute
 has just to be compared to the treshold. The inference algorithm is formalized in
@@ -880,7 +880,7 @@ attributes.
   \Fn{\dtinfer{$r$, $\vect{x}_i$}}{
     $q = r$\;
     \While{$q \not\in \mathcal{F}$}{
-      \eIf{$a^{(i)}_{k_q} \leq v_q$}{
+      \eIf{$a^{(i)}_{q.k} \leq q.v$}{
         $q = q.\text{left}$\;
       }{
         $q = q.\text{right}$\;
@@ -925,9 +925,9 @@ This algorithm is formalized in Algorithm \ref{algo:backml:dtinduction}.
 
   \Fn{\dtinduct{$S$}}{
     \If{\stopsplit($S$)}{
-      \KwRet{\text{a node associated with most appropriate labelling given} $S$}\;
+      \KwRet{\text{a node associated with the most appropriate labelling given} $S$}\;
     }
-    Find the best split $v_q$ for attribute $k_q$ for new node $q$:\;
+    Find the best split $q.v$ for attribute $q.k$ for new node $q$:\;
     $\argmin{v,k} \left[\frac{|S_0|}{|S|} I\left(S_0\right) + \frac{|S_1|}{|S|} I\left(S_1\right)\right] : S_0 = \left\{(\vect{x}_i, y_i) \mid a^{(i)}_k < v\right\}, S_1 = S \setminus S_0 $\; \label{algo:backml:dtinduction:argmax}
     $q.\text{left} =~$\dtinduct{$S_0$}\;
     $q.\text{right} =~$\dtinduct{$S_1$}\;
@@ -960,7 +960,7 @@ This algorithm is formalized in Algorithm \ref{algo:backml:dtinduction}.
 A tree built using this simple stopping criterion is said to be \textit{fully-developed}.
 Such a tree is able to capture the training set perfectly which, in practice,
 hurts generalization as it usually leads to overfitting. In order to alleviate
-the problem and reduce the variance, there exists several methods such as pre-pruning
+the problem and reduce the variance, there exist several methods such as pre-pruning
 which consists in preventing the final tree to grow too deep. Simple pre-pruning
 techniques are, for example, stopping the induction when a branch reaches a certain
 depth, or ensuring that all leaf nodes contain at least a given number of samples
@@ -978,7 +978,7 @@ final prediction. Random forest is part of the family of averaging techniques
 where models are built independently and their predictions are averaged (\eg a
 majority vote for classification). It can be shown that this approach reduces
 variance compared to that of the base model (\eg decision trees) and the more
-decorrelated the individual models, the more the variance reduction.
+decorrelated the individual models, the larger the variance reduction.
 
 In random forests, decorrelation is achieved through \textit{bagging} (\aka
 bootstrap aggregating) and \textit{random attribute subset selection}. The former
@@ -988,7 +988,7 @@ set $S_t$ built by sampling $n$ examples with replacement from the original trai
 set $S$. Regarding the attribute subset selection, each tree only considers a
 subset of $K \in \left\{1,..., m\right\}$ randomly selected features when looking
 for the best split. In other words, only $K$ random features are considered when
-searching for $k_q$ at line \ref{algo:backml:dtinduction:argmax} in Algorithm
+searching for $q.k$ at line \ref{algo:backml:dtinduction:argmax} in Algorithm
 \ref{algo:backml:dtinduction}. These two sources of randomness usually increase
 the bias as the individual models do not have access to all the original training
 examples and attributes. However, the variance reduction resulting from ensembling
@@ -999,8 +999,8 @@ improvement compared to using a decision tree alone.
 \label{ssec:backml:et}
 
 The \textit{\acrlong{et}} (\acrshort{et}, \aka extra-trees) \parencite{geurts2006extremely}
-are a variant of the random forests algorithm and introduces yet another source
-of decorrelation by selecting the split $v_q$ at random during the induction
+are a variant of the random forests algorithm that introduces yet another source
+of decorrelation by selecting the split $q.v$ at random during the induction
 (instead of optimizing it, see line \ref{algo:backml:dtinduction:argmax} in
 Algorithm \ref{algo:backml:dtinduction}). Moreover, to attenuate the bias increase,
 each individual tree is built on the whole training set instead of a boostrap
@@ -1018,7 +1018,7 @@ resized to have all the target height $t_r$ and width $t_c$ and flattened into a
 vector of dimension $t_r \times t_c \times b$ ($b$, the number of color channels,
 or bands, in the image). The original dimensions of the rectangular patches are
 drawn uniformly at random in a range of proportions $s_{min}$ and $s_{max}$ of
-the image size ($0 <= s_{min} < s_{max} <= 1$). The position of the patches are
+the image size ($0 \leq s_{min} < s_{max} \leq 1$). The position of the patches are
 also drawn uniformly at random. Each subwindow is attributed the class of its
 parent image. The resulting training dataset containing $n \times n_w$ examples,
 each a vector of dimension $t_h \times t_w \times c$, can be used to train an
@@ -1048,7 +1048,7 @@ is superior to \acrshort{etdic} in terms of performance.
 As introduced in Section \ref{ssec:backml:shallowdeep}, \acrlong{dl} is a broad
 research field that has grown rapidly since the breakthrough of AlexNet in 2012.
 It encompasses many different research topics covering all areas of machine
-learning. In this section, we dive a little further in \acrlong{dl} concepts and
+learning. In this section, we dive further in \acrlong{dl} concepts and
 methods relevant to this thesis. We introduce the basic components of modern neural
 network architectures in Section \ref{ssec:backml:dp:components}. Section
 \ref{ssec:backml:dl:opti} discusses how neural networks are learned and optimized
@@ -1062,7 +1062,7 @@ discuss deep \acrlong{tl}.
 A feedforward neural network can be seen as a parametrized function approximator
 $h$ which combines several intermediate functions $h^{(l)}(\cdot, \theta^{(l)})$
 ($l=1, ..., L$), also called \textit{layers}, through composition:
-$h(\vect{x}, \theta) = (h^{(1)} \circ h^{(2)} \circ ... \circ h^{(L)})(\vect{x})$.
+$h(\vect{x}, \theta) = (h^{(L)} \circ h^{(L-1)} \circ ... \circ h^{(1)})(\vect{x})$.
 $\theta$ is the set containing all the learnable parameters of the neural network
 $h$ and $\theta^{(l)}$ are the parameters of the function $h^{(l)}$ (or layer
 $l$). The feedforward nature of the network specifies that information only flows
@@ -1092,18 +1092,17 @@ differentiable function called the \textit{activation function}, $\theta_0$ and
 $\theta_i$ are respectively the learnable bias and weights. An eligible function
 for $\sigma(x)$ should have at least two modes transitioning around $x=0$. In the
 past decades, typical $\sigma$ functions were the hyperbolic tangent, the sigmoid
-or the step function. Nowadays, the most common is the \acrfirstit{relu} function
-(see Equation \ref{eqn:backml:relu}) which is particularily efficient to compute
+or the step function. Nowadays, the most common is the \acrfirstit{relu} function:
+\begin{equation}
+  \label{eqn:backml:relu}
+  \sigma(x) = \text{ReLU}(x) = \begin{cases}
+  0\text{, if}~ x < 0\\
+  x\text{, else}
+  \end{cases}
+\end{equation}
+which is particularily efficient to compute
 and has some properties that interacts favorably with the training algorithm making
 neural networks easier to train.
-
-\begin{equation}
-\label{eqn:backml:relu}
-\sigma(x) = \text{ReLU}(x) = \begin{cases}
-0\text{, if}~ x < 0\\
-x\text{, else}
-\end{cases}
-\end{equation}
 
 The perceptron, or \textit{neuron}, is simply a linear model and is therefore not
 complex enough for many type of tasks. However, perceptrons can be combined together
@@ -1139,7 +1138,7 @@ nowadays.
 
 As introduced in Section \ref{ssec:backml:shallowdeep}, \textit{\acrlong{cnn}s}
 (\acrshort{cnn}) are the origin of the ``\acrlong{dl} revolution''. Despite the
-recently-revived interest, \acrshort{cnn}s have been reasearched since the late
+recently-revived interest, \acrshort{cnn}s have been researched since the late
 1980s \parencite{lecun1989handwritten}. A \acrshort{cnn} is a network containing
 at least one convolutional layer. Nowadays, such layers are a core component of
 all networks processing structured data (time series, images, video, etc). For
@@ -1241,7 +1240,7 @@ way, pooling layer can be seen as a special convolutional layer with stride of
 which the kernel is not learned but rather computes a possibly non-linear statistics.
 The depth of the feature maps before and after pooling does not change (\ie
 $f_{in} = f_{out}$). Pooling share some hyperparameters with convolution including
-stride and padding. Regarding the the aggregation function, the most common choices
+stride and padding. Regarding the aggregation function, the most common choices
 are \textit{max pooling} or \textit{average pooling}. The former will output the
 largest activation among the one covered by the kernel:
 \begin{equation}
@@ -1257,7 +1256,7 @@ a_{ijk} = \frac{1}{r_f \times c_f} \sum_{s=1}^{r_f} \sum_{t=1}^{c_f}  x_{i+s,j+t
 Pooling, similarly to convolution, brings equivariance to translation and increase
 the receptive field of deeper layers. The reduction of dimensionality also reduces
 the computational cost of the network as deeper layers have smaller feature maps
-to process. There exists other type of pooling layers which are described in
+to process. There exist other types of pooling layers which are described in
 \parencite{gholamalinezhad2020pooling}.
 
 \subsection{Neural network optimization}
@@ -1285,7 +1284,7 @@ where $\gamma$ is the learning rate, an hyperparameter for tuning the amplitude
 of the parameters update.
 
 Gradient descent does not guarantee convergence to a global minimum in general as
-the optimization can either reach in a local minimum or diverge. The choices of
+the optimization can either reach a local minimum or diverge. The choices of
 $\theta_0$ and $\gamma$ are important to avoid divergence. Regarding the local
 minima issue, the very high-dimensional nature of neural networks makes it unlikely
 to have no dimension along which the model can improve at a given iteration.
@@ -1295,7 +1294,7 @@ is generally unwanted as it might lead to overfitting.
 At every iteration, the original gradient descent algorithm computes gradients
 over the whole training set which is particularily inefficient when $n \gg$. A
 way of improving this consists in using \acrfirstit{sgd} where the gradients are
-approximated using subset $\mathcal{B}$ of training samples called a \textit{batch}
+approximated using a subset $\mathcal{B}$ of training samples called a \textit{batch}
 instead of the whole set. This approach has been shown to be particularily efficient
 for both generalization of the model and computational cost of training
 \parencite{bottou201113}. When $1 < |\mathcal{B}| < n$, \acrshort{sgd} becomes
@@ -1320,9 +1319,9 @@ for updating the model. The success of deep learning can be partly attributed to
 an efficient algorithm for computing these gradients called \textit{backward propagation}
 \parencite{rumelhart1986learning} (\aka backpropagation). The algorithm is based
 on the \textit{chain rule} which states that the derivative of a composition of
-functions $y(x) = (h^{(1)} \circ h^{(2)} \circ ... \circ h^{(L)})(x)$ with respect
+functions $y(x) = (h^{(L)} \circ h^{(L-1)} \circ ... \circ h^{(1)})(x)$ with respect
 to its input can be broken down into a product of derivatives. Given
-$y_i = (h^{(1)} \circ h^{(2)} \circ ... \circ h^{(i)})(x)$, the composition of
+$y_i = (h^{(i)} \circ h^{(i-1)} \circ ... \circ h^{(1)})(x)$, the composition of
 the $i^{\text{th}}$ first functions ($i = 1, ..., L$), the chain rule states
 that:
 
@@ -1343,13 +1342,13 @@ functions $h^{(l)}$ are differentiable as introduced in Section
 
 Relying on gradients of a long chain of functions for the optimization can be
 troublesome at times. Indeed, when a neural network is not build carefully,
-\textit{vanishing} or \textit{exploding gradients} can appear. Some activations
-function such as the hyperbolic tangent or the sigmoid have saturating modes as
+\textit{vanishing} or \textit{exploding gradients} can appear. Some activation
+functions such as the hyperbolic tangent or the sigmoid have saturating modes as
 they converge to constant values. As these fonctions converge towards a constant,
 their derivatives become smaller and smaller and converge to zero. Because of the
 multiplicative nature of the chain rule, one gradient in the chain is enough to
 cancel all gradients upstream which happens when the activations start working in
-their saturating regime. There exists best practices to reduce the likelihood of
+their saturating regime. There exist best practices to reduce the likelihood of
 vanishing gradients: weights must be carefully initialized, it is better to avoid
 activation functions with saturating modes (\acrshort{relu} is a good candidate)
 and some architectural tricks can help (see Sections \ref{sssec:backml:batchnorm}
@@ -1381,19 +1380,17 @@ and feature-dependent and there are probably scenarii where normalizing would hu
 performance. Therefore, the signal $\hat{\vect{x}}$ is then followed by a learnable
 linear layer allowing the network to learn to revert this normalization if
 necessary:
-
 \begin{equation}
 \label{eqn:backml:bn}
 \acrshort{bn}(\vect{x}) = \begin{bmatrix}
 \alpha_1 \left(\dfrac{\vect{x}_1 - \mu_1}{\sqrt{\sigma^2_1 + \epsilon}}\right) + \beta_1 & ... & \alpha_f \left(\dfrac{\vect{x}_f - \mu_f}{\sqrt{\sigma^2_f + \epsilon}}\right) + \beta_f \\
 \end{bmatrix}\end{equation}
-
-where the $\alpha_i$ and $\beta_i$ are the learnable parameters. During training,
+where the $\alpha_i$ and $\beta_i$ are learnable parameters. During training,
 the input statistics $\mu_i$ and $\sigma_i$ are computed on-the-fly using moving
 averages. At inference, the statistics are frozen as well as the learnable parameters
 $\alpha_i$ and $\beta_i$.
 
-Batch normalization greatly helps network optimizition by maintaining intermediate
+Batch normalization greatly helps network optimization by maintaining intermediate
 activations within acceptable ranges of values and therefore reducing the risk of
 vanishing or exploding gradients, narrowing the parameter search and allowing
 higher learning rates.
@@ -1413,7 +1410,7 @@ different input distributions.
 
 This section presents different architectures used in our contributions.
 
-\subsubsection{Simple layer-stacking architecture}
+\paragraph{Simple layer-stacking architecture}
 \label{sssec:backml:arch:layerstacking}
 After the success of AlexNet, researchers investigated the effect of model depth
 on classification performance. An architecture in particular caught the attention
@@ -1433,7 +1430,7 @@ followed by pooling. The last convolutional layer is followed by a 3-layers
   \label{fig:backml:vgg}
 \end{figure}
 
-\subsubsection{Residual architecture}
+\paragraph{Residual architecture}
 \label{sssec:backml:arch:residual}
 
 Although improving over AlexNet, very deep networks like VGGs are subject to
@@ -1444,16 +1441,14 @@ gradients to flow back given the depth of the architecture (\ie vanishing gradie
 In order to address those two issues, ResNet \parencite{he2016deep} introduces
 the \textit{residual mapping}, or \textit{skip-connection}. Given a layer
 $h^{(l)}(\vect{x})$, the residual mapping $r^{(l)}(\vect{x})$ would be:
-
 \begin{equation}
 \label{eqn:backml:residual}
-r^{(l)}(\vect{x}) = \vect{x} + h^{(l)}(\vect{x})
+r^{(l)}(\vect{x}) = \vect{x} + h^{(l)}(\vect{x}).
 \end{equation}
-
 This residual mapping makes it easier for the optimizer to simply ignore the layer
 as it just has to tune all the weights in $h^{(l)}(\vect{x})$ to 0 in which case
 $r^{(l)}(\vect{x}) = \vect{x}$. Moreover, gradients are still able to flow freely
-through the skip-connection. This increased trainability has been empirically
+through the skip connection. This increased trainability has been empirically
 confirmed as very deep residual network (up to 150 layers) have won \acrshort{ilsvrc}
 in 2015 and 2016 and have shown impressive performance in many other contexts.
 Another advantage of residual networks is that, even though they are deeper than
@@ -1471,14 +1466,14 @@ ResNet34, a similar architecture).
   \label{fig:backml:resnet}
 \end{figure}
 
-\subsubsection{Inception architecture}
+\paragraph{Inception architecture}
 \label{sssec:backml:arch:inception}
 % InceptionV3
 % InceptionResNetV2
 The winning method of \acrshort{ilsvrc}2014 was based on an architecture called
 GoogLeNet \parencite{szegedy2015going} (\aka InceptionV1). This architecture is
 based on \textit{inception modules}. An inception module is a composition of
-convolutional layers built to maintain a certain level representativeness while
+convolutional layers built to maintain a certain level of representativeness while
 reducing the number of training parameters compared to a block of plain convolutional
 layers. An example of a trick used to reduce the number of parameters is to use
 two consecutive $3 \times 3$ instead of one $5 \times 5$ convolutional layers. In
@@ -1489,7 +1484,7 @@ Inception architecture using residual connections
 \parencite{szegedy2017inception}.
 
 
-\subsubsection{Dense architecture}
+\paragraph{Dense architecture}
 \label{sssec:backml:arch:dense}
 The densely connected convolutional networks \parencite{huang2017densely} push
 further the idea of residual connection. Let us suppose a group $g$ of $L$
@@ -1508,7 +1503,7 @@ together with one convolution and one pooling layers (see Figure
   \label{fig:backml:densenet}
 \end{figure}
 
-\subsubsection{A segmentation architecture, UNet}
+\paragraph{A segmentation architecture, UNet}
 \label{sssec:backml:arch:segment}
 
 For tackling image segmentation tasks, one generally uses \textit{\acrlong{fcn}s}
@@ -1536,7 +1531,7 @@ paths.
 \subsection{Deep transfer learning}
 \label{ssec:backml:dl:deeptransfer}
 
-As presented in Section \ref{ssec:backml:transfer}, \acrlong{tl} regroup several
+As presented in Section \ref{ssec:backml:transfer}, \acrlong{tl} regroups several
 families of methods which have been and continue to be explored through the prism
 of \acrlong{dl} \parencite{tan2018survey}. In this thesis, we focus on supervised
 model-based (or network-based) \acrlong{tl} applied to image classification. With
@@ -1550,7 +1545,7 @@ by $\theta_s$, $\theta_o$ and $\theta_n$. In the remaininder of this section, we
 will designate a network interchangeably by its set of parameters $\theta_i$ or
 its function $h_i(\cdot;\theta_i)$. The network $\theta_s$ is shared between the
 source and target tasks and $\theta_o$ and $\theta_n$ are the task-specific
-networks. Both approaches first require the network $h = h_s \circ h_o$ to be
+networks. Both approaches first require the network $h = h_o \circ h_s$ to be
 trained on the source task. At the end of training, $\theta_s$ encodes the knowledge
 to be transfered.
 
@@ -1574,13 +1569,13 @@ classifier is a linear \acrshort{svm}.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{backml/transfer-ft.pdf}
-  \caption{Supervised \acrlong{tl} by \textit{fine-tuning}. The shared network is trained by supervised learning on the source task. Then, the shared part $\theta_s$ is extracted and attached $\theta_n$. The network $h_s \circ h_n$ is trained by gradient descent on the target task.}
+  \caption{Supervised \acrlong{tl} by \textit{fine-tuning}. The shared network is trained by supervised learning on the source task. Then, the shared part $\theta_s$ is extracted and attached to $\theta_n$. The network $h_n \circ h_s$ is trained by gradient descent on the target task.}
   \label{fig:backml:transfer-ft}
 \end{figure}
 
 The second transfer approach is \textit{fine-tuning} (see Figure \ref{fig:backml:transfer-ft})
 where the task-specific part of the network $\theta_{o}$ is replaced by a new
-classification network $\theta_{n}$ and the resulting network $h = h_s \circ h_n$
+classification network $\theta_{n}$ and the resulting network $h = h_c \circ h_s$
 is further trained by gradient descent on the target task. Subjecting the whole
 network to gradient descent will change the features learned on the source task
 which can cause catastrophic interference. Therefore, a way of alleviating the
@@ -1616,7 +1611,7 @@ Whereas the versatility of ImageNet initially fueled research in deep \acrlong{t
 with supervised model pre-training, several recent contributions have shown that
 pre-training could be performed differently. For instance, SimCLR \parencite{chen2020simple}
 uses contrastive learning to learn the model. This is a self-supervised approach
-which consists in generating pair of similar and dissimilar images using data
+which consists in generating pairs of similar and dissimilar images using data
 augmentation and training a network to discriminate these pairs. They have shown
 that the resulting network has learned discriminative features that can be transfered
 quite efficiently to new tasks. The \acrfirstit{vit} \parencite{dosovitskiy2020image}
@@ -1645,9 +1640,9 @@ in general.
 
 As introduced in Section \ref{ssec:backml:inbetween}, self-training is a family of \acrlong{ssl} methods. A self-training process is iterative where a typical iteration consists in using a teacher model to produce pseudo-labels for unlabeled samples from $\mathcal{D}_u$ which are then combined with labeled samples from $\mathcal{D}_l$ to train a student model. 
 
-There are several elements that characterize a self-training algorithm. An important element is the way the student and teachers models interact during the process. A common approach consists in using the current student as a teacher for the next training round during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
+There are several elements that characterize a self-training algorithm. An important element is the way the student and teachers models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
 
-Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} select which samples should be included for the next training rounds by excluding high entropy samples for instance \parencite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \parencite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \parencite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
+Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} to select which samples should be included for the next training rounds by excluding high entropy samples for instance \parencite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \parencite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \parencite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
 
 \section{Wrapping up}
 \label{sec:backml:wrapup}
@@ -1662,7 +1657,7 @@ and target tasks are related, the second contribution use homogeneous features-b
 \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data
 directly.
 
-In Chapter \ref{chap:sdist}, we move to a different type of task: image segmentation.
+In Chapter \ref{chap:strain}, we move to a different type of task: image segmentation.
 Working with an sparsely-annotated \acrlong{dp} dataset, we use self-training to
 complete the areas where annotations are missing. We train a U-Net segmentation
 model on the self-annotated segmentation.

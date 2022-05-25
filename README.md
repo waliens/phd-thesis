@@ -24,6 +24,6 @@ The parameters should be either the chapter number or the chapter short name:
 - `backdp`: background digital pathology
 - `comp`: comparison 
 - `mtask`: multi-task
-- `sdist`: self-distillation
+- `strain`: self-training
 - `biaflows`: software contributions
 - `appendix`: appendix
