@@ -1529,8 +1529,19 @@ composed of convolutional and pooling layers that progressively encodes the inpu
 images into high-level context features. The latter combines decoded high-level
 features with low-level features from the expanding path to eventually generate
 a segmentation map. The decoding of low-level features is learned using an
-upconvolution layer. Upconvolution is a layer that upsamples a signal with a
-learnable filter. In order to combine decoded high level features and low-level
+transposed convolution or upconvolution layer which upsamples a signal with a
+learnable filter. The hyperparameters of this type of layer are similar to those of 
+regular convolutional layers and include kernel size $r_f \times c_f$, stride $s$ and padding. 
+In the original U-Net implementation, padding is disabled and kernel size is set to be equal 
+to the stride: $K = r_f = c_f = s = 2$. In this specific case, the output feature $z^{(l)}_{}$ produced by 
+a transposed convolution layer is given by \TODO{formal definiton}.
+% \begin{equation}
+%   \label{eqn:backml:transposed_convolution}
+%   z^{(l)}_{iK+r,jK+t;k} = \theta_{0;k} + z^{(l-1)}_{ij} \theta_{rt;k} 
+% \end{equation}
+% where $0 \leq i < r_{in}$, $0 \leq j < c_{in}$, $0 \leq k < f_{out}$ 
+ 
+In order to combine decoded high level features and low-level
 features, U-Net uses skip connections from the contracting to the expanding
 paths.
 
@@ -1651,7 +1662,7 @@ in general.
 \subsection{Multi-task learning}
 \label{ssec:backml:dl:deepmultitask}
 
-\TODO{write}
+\TODO{Pierre: write about this}
 
 \subsection{Self-training}
 \label{ssec:backml:dl:selftraining}

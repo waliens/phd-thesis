@@ -149,7 +149,7 @@ Mounted tissue slices are almost completely transparent which would prevent any 
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.35\textwidth]{backdp/staindvsnonstained.png}
+  \includegraphics[width=5\textwidth]{backdp/staindvsnonstained.png}
   \caption{\textit{Left:} an unstained tissue section mounted on a glass slide. \textit{Middle:} \acrshort{heeo}-stained section coming from the same tissue. \textit{Right:} the source tissue embedded in a paraffin block \\ (source: \parencite{abbasi2019all})}
   \label{fig:backdp:stainedvsnonstained}
 \end{figure}
@@ -395,7 +395,7 @@ Those were only few examples of the plethora of datasets available in the natura
     & & bulk & 93 & / & / & no & no & SEG & 2 \\
     \hdashline
     (2) & \multicolumn{2}{c|}{CoNiC} & / & 4981 & 256 $\times$ 256 & no & yes & \acrshort{seg}, \acrshort{clf} & 6 \\
-    (3) & \multicolumn{2}{c|}{MIDOG} 2021 & 50 & 200 & $<$ 5k $\times$ 5k & no & yes & \acrshort{det}, \acrshort{cnt} & 2 \\
+    (3) & \multicolumn{2}{c|}{MIDOG 2021} & 50 & 200 & $<$ 5k $\times$ 5k & no & yes & \acrshort{det}, \acrshort{cnt} & 2 \\
     (4) & \multicolumn{2}{c|}{BCNB} & 1058 & / & / & no & no & \acrshort{clf} & 16$^{(a)}$ \\
     (5) & \multicolumn{2}{c|}{WSSS4LUAD} & 87 & 10k & $<$ 300 $\times$ 300 & no & no & \acrshort{clf} & 2\\
     (6) & \multicolumn{2}{c|}{BCSS} & / & 151 & $<$ 7k $\times$ 10k & no & no & \acrshort{seg} & 7\\
@@ -407,14 +407,78 @@ Those were only few examples of the plethora of datasets available in the natura
   ``AI-assist.'' columns relate to the annotation process and how it was performed. The former indicates whether or not non-pathologists 
   were involved in the process (\ie \textit{yes} for crowdsourcing). The latter indicates whether or not the annotation process involved 
   some kind of AI assistance. The ``\# targ.'' indicates the number of target categories/classes of the underlying \acrlong{ml} problem. 
-  References for the challenges: $(1)$ \TODO{\cite{}}, $(2)$ \cite{graham2021conic}, $(3)$ \cite{aubreville2021mitosis}, $(4)$ \cite{xu2021predicting}, 
-  $(5)$ \cite{han2021multilayer}, $(6)$ \cite{amgad2019structured}, $(7)$ \cite{amgad2021nucls}, $(8)$ \TODO{\cite{}}. $(a)$ The BCNB challenge 
-  proposes 6 differents classification tasks each with up to 4 classes (for a total of 16 classes). $(b)$ The expected output is not a 
+  References for the challenges: $(1)$ \cite{vanrijthoven2021tiger}, $(2)$ \cite{graham2021conic}, $(3)$ \cite{aubreville2021mitosis}, $(4)$ \cite{xu2021predicting}, 
+  $(5)$ \cite{han2021multilayer}, $(6)$ \cite{amgad2019structured}, $(7)$ \cite{amgad2021nucls}, $(8)$ \cite{kang2021paip}. \\
+  $(a)$ The BCNB challenge proposes 6 differents classification tasks each with up to 4 classes (for a total of 16 classes). $(b)$ The expected output is not a 
   classical segmentation mask but rather the boundary of the structure of interest.}
   \label{tab:backdp:datascarcity-grandchallenge}
 \end{table}
 
-In order to illustrate this point, we performed a search on the Grand Challenge website \parencite{grandchallenge}, a popular plateform which runs \acrlong{ml} challenges related to biomedical images, each challenge coming with an open-access dataset. We searched for \textit{histology} challenges published in 2021 and found 8 results (see Table \ref{tab:backdp:datascarcity-grandchallenge} for a brief description of relevant aspects of these datasets).
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.30\textwidth}
+    \centering
+    % roi-level-annotations/tissue-cells/images/TC_S01_P000183_C0001_B101_[112201, 88004, 113409, 89133].png
+    \includegraphics[width=\textwidth]{backdp/tiger_sample.png}
+    \caption{TIGER}
+    \label{sfig:backdp:challenge_sample:tiger}
+  \end{subfigure}
+  \begin{subfigure}{0.30\textwidth}
+    \centering
+    % Lizard_Image1/consep_1.png
+    \includegraphics[width=\textwidth]{backdp/lizard_sample.png}
+    \caption{CoNiC (Lizard dataset)}
+    \label{sfig:backdp:challenge_sample:conic}
+  \end{subfigure} 
+  \begin{subfigure}{0.30\textwidth}
+    \centering
+    % 200.tiff
+    \includegraphics[width=\textwidth]{backdp/midog_sample.png}
+    \caption{MIDOG 2021}
+    \label{sfig:backdp:challenge_sample:midog}
+  \end{subfigure}\\
+
+  \begin{subfigure}{0.30\textwidth}
+    \centering
+    % 1058.jpg
+    \includegraphics[width=\textwidth]{backdp/bcnb_sample.png}
+    \caption{BCNB}
+    \label{sfig:backdp:challenge_sample:bcnb}
+  \end{subfigure}
+  \begin{subfigure}{0.30\textwidth}
+    \centering
+    % train -> 436219-7159-50847-[1, 1, 0].png 
+    \includegraphics[rotate=90,width=\textwidth]{backdp/wsss4luad_sample.png}
+    \caption{WSSS4LUAD}
+    \label{sfig:backdp:challenge_sample:wsss4luad}
+  \end{subfigure}
+  \begin{subfigure}{0.30\textwidth}
+    \centering
+    % TCGA-A2-A0YM-01Z-00-DX1.A48B4C96-2CC5-464C-98B7-F0F92AE56533.svs
+    \includegraphics[width=\textwidth]{backdp/bcss_sample.png}
+    \caption{BCSS}
+    \label{sfig:backdp:challenge_sample:bcss}
+  \end{subfigure} \\
+
+  \begin{subfigure}{0.30\textwidth}
+    \centering
+    % rgbs_colorNormalized/TCGA-S3-AA10-DX1_xmin43039_ymin23986_MPP-0.2500.png
+    \includegraphics[height=0.22\textheight]{backdp/nucls_sample.png}
+    \caption{NuCLS}
+    \label{sfig:backdp:challenge_sample:nucls}
+  \end{subfigure}
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    % 
+    \TODO{???}
+    \caption{PAIP 2021}
+    \label{sfig:backdp:challenge_sample:paip2021}
+  \end{subfigure} 
+  \caption{Samples from the Grand Challenge datasets of our mini-review.}
+  \label{fig:backp:samples_challenges}
+\end{figure}
+
+In order to illustrate this point, we performed a search on the Grand Challenge website \parencite{grandchallenge}, a popular plateform which runs \acrlong{ml} challenges related to biomedical images, each challenge coming with an open-access dataset. We searched for \textit{histology} challenges published in 2021 and found 8 results (see Table \ref{tab:backdp:datascarcity-grandchallenge} for a brief description of relevant aspects and Figure \ref{fig:backp:samples_challenges} for selected samples of these datasets).
 
 A first observation is that, whether the dataset is a set of \acrshort{wsi} or \textit{\acrlong{roi}s} (\acrshort{roi}), the number of provided images is several orders of magnitude below the number of images available in natural image datasets. It can be argued that the dimensions of \acrshort{wsi} and \acrshort{roi} images in \acrlong{dp} datasets is significantly larger that natural images (\eg average image size in ImageNet is 469 $\times$ 387 pixels, the largest of the 151 \acrshort{roi} of BCSS reaches approximately 7k $\times$ 10k pixels), however this must be in perspective in relation to the prediction task. For instance, hundreds of \acrshort{wsi}s represent a very large amount of raw data (\eg few terabytes) but, when the target task is whole-slide classification, this only amounts to a hundreds of annotated samples which is significantly fewer compared to ImageNet or others and can be considered a rather small sample size from a \acrshort{ml} perspective.  
 
@@ -460,7 +524,7 @@ Later, as new ImageNet architectures emerged, their transfer potential from Imag
 
 As introduced earlier, some works have shown that transfer learning is likely to provide better performance when the source and target tasks are close \parencite{yosinski2014transferable} or if the source task includes the target domain \parencite{mensink2021factors}. This implies that pre-training models on pathology data directly is a sound approach although it requires a significant amount of source data to make a proper source task. This was confirmed in several contributions.
 
-For instance, \cite{khan2019improving} pre-train an InceptionV3 network on a custom dataset generated from Camelyon16 and then transfer the resulting model to a prostate cancer classification task. They show that their pre-trained model outperforms both training from scratch and using an ImageNet pre-trained model. \cite{medela2019few} also make use of transfer learning between two pathology tasks. \TODO{clarify} Follow a self-supervised pre-training approach rather than using a classical supervised approach. They train a siamese network to distinguish different parts of colorectal tissues. The network is then transferred as a feature extractor on the target task (tumour classification). \cite{shang2019and} use several datasets (including some unrelated to their target task such as \textit{Dogs vs. cats}) and compare ImageNet and domain-specific pre-training in order to tackle colonoscopy image classification. They also show that pre-training on domain-specific data yield superior performance compared to using ImageNet. \cite{kraus2017automated} train a custom deep neural architecture, DeepLoc, for classifying protein subcellular localization in budding yeast. Then, they assess the transferability of their pre-trained DeepLoc by fine-tuning it on different image sets, including unseen classes, and show that the pre-training is indeed beneficial.
+For instance, \cite{khan2019improving} pre-train an InceptionV3 network on a custom dataset generated from Camelyon16 and then transfer the resulting model to a prostate cancer classification task. They show that their pre-trained model outperforms both training from scratch and using an ImageNet pre-trained model. \cite{medela2019few} also use of transfer learning between two pathology tasks but rather than following a classical supervised pre-training approach, they adopt a self-supervised algorithm by training a siamese network to distinguish between different parts of colorectal tissues. The network is then transferred as a feature extractor on the target task (tumour classification). \cite{shang2019and} use several datasets (including some unrelated to their target task such as \textit{Dogs vs. cats}) and compare ImageNet and domain-specific pre-training in order to tackle colonoscopy image classification. They also show that pre-training on domain-specific data yield superior performance compared to using ImageNet. \cite{kraus2017automated} train a custom deep neural architecture, DeepLoc, for classifying protein subcellular localization in budding yeast. Then, they assess the transferability of their pre-trained DeepLoc by fine-tuning it on different image sets, including unseen classes, and show that the pre-training is indeed beneficial.
 
 \subsection{Multi-task learning}
 \label{ssec:backdp:mtl}
@@ -473,3 +537,8 @@ Multi-task learning has been applied to medical imaging. Samala \etal \parencite
 We have introduced self-training in Sections \ref{ssec:backml:inbetween} and \ref{ssec:backml:dl:selftraining}. It is not surprising that self-training has also been applied to medical image tasks to combat data scarcity \parencite{tajbakhsh2020embracing, peng2021medical} and to \acrlong{cpath} in particular. Most works in this domain currently treat with image classification \parencite{peikari2018cluster, su2019local, koohbanani2021self, jaiswal2019semi, shaw2020teacher} but detection and segmentation have also been explored. \parencite{li2018based} combine weakly-supervised learning and self-training to predict per-pixel Gleason score across entire WSIs. \parencite{li2019signet} build a signet ring cell detector using self-training. To mitigate the impact of erroneous pseudo-label, their approach features a cooperative training step where two models are trained on the pseudo-labels generated by one another during the previous round. Self-training has also been applied to segmentation for other image modalities. To segment cardiac MR images, \parencite{bai2017semi} propose a self-training approach to train a segmentation architecture. In particular, the teacher and student are the same model and the student is not reset between training rounds. Additionally, they apply a \acrfirstit{crf} to refine the model predictions on the unlabeled images. \parencite{fan2020inf} focus on lung infection segmentation in the context of the COVID-19 pandemic. Their approach features a self-training protocol where at every training round, they pseudo-label $K$ new unlabeled images which will be added to the learning set for the next round. 
 
 Semi-supervised literature also concerns the use of imperfect data which relates more to \acrlong{wsl}. This approach has also be explored for biomedical tasks. \parencite{wolny2021sparse} learn from sparse instance segmentation masks using their sparse single object loss which combines an instance-based loss and an embedding consistency loss. They also evaluate their method on two microscopy images datasets. \parencite{bokhorst2018learning} segment tissues from colorectal cancer patients into 13 classes representing different types of tissues. Their dataset is composed of both exhaustively- and sparsely-labeled images. During training, they apply a weight map to tune and balance the contribution of individual pixels to the loss. The masks ignore unannotated pixels.
+
+
+\section{Wrapping up}
+
+This chapter introduced the domains of digital and \acrlong{cpath} and gave an overview of different challenges encountered in these fields: high variability in the slide preparation and scanning processes, lack of annotated data, high data volumes, etc. These challenges for sure have slowed the advances in automated image analysis techniques but the situation is evolving quicly as many initiatives are under way to change that. Given the high practical relevance of automated tools in the domain, one can only expect that the interest in \acrlong{cpath} will continue to grow and envision a future where new image acquisition and analysis techniques will not only revolutionize image analysis iteself but also the pathology and diagnosis workflow as a whole. In this thesis, we explore transfer, multi-task and semi-supervised learning in order to tackle \acrlong{cpath} problems and attempt to work around data scarcity.
