@@ -1244,6 +1244,8 @@ map $k$ at layer $l$ is the set of pixels of the input that influence this
 activation. The larger the receptive field, the more context is considered by the
 activation.
 
+There is an interesting parallel to draw between the random sub-windows tree-based method presented in Section \ref{ssec:backml:et_image} and convolutional neural networks. Indeed, whereas the random sub-window algorithm randomly selects windows of varying scales in an input image, a convolutional layer actually processes all windows exhaustively at a given scale. In the case of a convolution layer, the window is obviously smaller (\ie few pixels wide) but because convolutional layers are stacked, the actual window processed for an activation of the last layer (\ie the receptive field) is larger and comparable to the size of window of the random subwindows algorithm. Obviously, both method differ by how they exploit these windows and deep networks are able to learn more expressive models from them because of the hierarchical structure and learning. 
+
 \subsubsection{Pooling layer}
 \label{sssec:backml:poolinglayer}
 
