@@ -70,8 +70,14 @@ def compile(argv):
             raise ValueError("-- Invalid chapter reference '{}'".format(args.chap))
         chapt_folder = os.path.join(os.getcwd(), "chapters")
         matches = [fname for fname in os.listdir(chapt_folder) if str(args.chap) in fname and fname.endswith(".tex")]
-        if len(matches) != 1:
-            raise ValueError("-- Several matches for chapter query '{}' -> {}".format(args.chap, matches))
+        if len(matches) > 1:
+            print("-- Several matches for chapter query '{}' -> {}".format(args.chap, matches), file=sys.stderr)
+            sorted_idx = sorted(range(len(matches)), key=(lambda i: 1 - (len(args.chap) / len(matches[i]))))
+            matches = [matches[sorted_idx[0]]]
+            print("--  pick best match: {}".format(matches[0]), file=sys.stderr)
+        elif len(matches) == 0:
+            raise ValueError("no match for chapter query '{}'".format(args.chap))
+
         target_file = os.path.join("chapters", matches[0])
         chap_name = os.path.basename(target_file).rsplit(".", 1)[0]
         print("-- Compile chapter {}".format(chap_name))
