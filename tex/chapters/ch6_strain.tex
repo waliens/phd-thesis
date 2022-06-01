@@ -19,12 +19,12 @@ We show that ...
 
 In the following section, we present our method, a self-training image segmentation algorithm. The self-training aspects and training implementation details are discussed separately in Sections \ref{ssec:strain:self_training} and \ref{ssec:strain:training_protocol} respectively.
 
-We will designate a segmentation dataset, or task, $\mathcal{D}$ defined over $\mathcal{X} \times \mathcal{Y}$ where $\mathcal{X}$ contains the input images and $\mathcal{Y}$ their corresponding binary segmentation masks. We will further consider a training dataset composed of two sets $\mathcal{D}_l \subset \mathcal{X}_l \times \mathcal{Y}_l$, the exhaustively-labeled set, and $\mathcal{D}_s \subset \mathcal{X}_s \times \mathcal{Y}_s$, the sparsely-labeled set. In $\mathcal{D}_l$, the masks are entirely determined as the ground truth is known for all pixels (hence the exhaustiveness). In $\mathcal{D}_s$, ground truth is only partially known: given an image $\mathbf{x} \in \mathcal{X}_s$, either a pixel $x_{ij}$ belongs to a structure of interest in which case the mask pixel $y_{ij} = 1$, or it is not labeled in which case $y_{ij} = 0$ and no assumption can be made a priori about the fact that the pixel belongs to a structure of interest or not. 
+We will designate a segmentation dataset, or task, $\mathcal{D} = \left(X, Y\right) \subset \mathcal{X} \times \mathcal{Y}$ where $X \subset \mathcal{X}$ and $Y \subset \mathcal{Y}$ respectively represent the sets of input images and their corresponding binary segmentation masks. We will further consider a training dataset composed of two sets $\mathcal{D}_l = \left(X_l, Y_l\right) \subset \mathcal{X}_l \times \mathcal{Y}_l$, the exhaustively-labeled set, and $\mathcal{D}_s = \left(X_s, Y_s\right) \subset \mathcal{X}_s \times \mathcal{Y}_s$, the sparsely-labeled set. In $\mathcal{D}_l$, the masks $Y_l$ are entirely determined as the ground truth is known for all pixels (hence the exhaustiveness). In $\mathcal{D}_s$, ground truth is only partially known: given an image $\mathbf{x} \in X_s$, either a pixel $x_{ij}$ belongs to a structure of interest in which case the mask pixel $y_{ij} = 1$, or it is not labeled in which case $y_{ij} = 0$ and no assumption can be made a priori about the fact that the pixel belongs to a structure of interest or not. 
 
 \subsection{Self-training}
 \label{ssec:strain:self_training}
  
-Our self-training algorithm is described in Algorithm \ref{algo:strain:selftraining}. It features a warm-up phase during which the model is classically trained on the set $\mathcal{D}_l$ (training implementation detail are given in Section \ref{ssec:strain:training_protocol}). The number of warm-up epochs $W > 0$ is fixed so that the model is able to converge on the labeled data. The warmed-up model is used as starting point for the self-training phase. Each self-training round $e$ starts by pseudo-labeling $\mathcal{D}_s$ with the model $\theta_{e-1}$. For an image $\mathbf{x} \in \mathcal{X}_s$, the pseudo-label assigned to pixel $x_{ij}$ is given by:
+Our self-training algorithm is described in Algorithm \ref{algo:strain:selftraining}. It features a warm-up phase during which the model is classically trained on the set $\mathcal{D}_l$ (training implementation detail are given in Section \ref{ssec:strain:training_protocol}). The number of warm-up epochs $W > 0$ is fixed so that the model is able to converge on the labeled data. The warmed-up model is used as starting point for the self-training phase. Each self-training round $e$ starts by pseudo-labeling $\mathcal{D}_s$ with the model $\theta_{e-1}$. For an image $\mathbf{x} \in X_s$, the pseudo-label assigned to pixel $x_{ij}$ is given by:
 \begin{equation}
 y^{({pl})}_{ij} = \begin{cases}
 1,\,\text{if}\, y_{ij} = 1 \\
@@ -47,9 +47,9 @@ where $\hat{y}_{ij}$ is the sigmoid output of model $\theta_{e-1}$ for pixel $(i
   }
   \For{$e \leftarrow W+1$ \KwTo $E$}{
     // \textit{Pseudo labeling} \\
-    $\hat{\mathcal{Y}}_s =$ \Predict{$\theta_{e-1}, \mathcal{X}_s$}\;  
-    $\mathcal{Y}_{pl} =$ \Combine{$\hat{\mathcal{Y}}_s, \mathcal{Y}_s$}\; 
-    $\mathcal{D}_{pl} = \mathcal{X}_s \times \mathcal{Y}_{pl}$\; 
+    $\hat{Y}_s =$ \Predict{$\theta_{e-1}, X_s$}\;  
+    $Y_{pl} =$ \Combine{$\hat{Y}_s, Y_s$}\; 
+    $\mathcal{D}_{pl} = \left(X_s, Y_{pl}\right)$\; 
     // \textit{Self-training} \\
     $\theta_e$ = \Train{$\theta_{e-1}, \mathcal{D}_l \cup \mathcal{D}_{pl}$}\;
   }
@@ -234,7 +234,7 @@ The dataset we use in this work was generated from these annotations. In particu
 In order to evaluate the method, a computer science student exhaustively annotated 20 validation and 25 test regions of interest of 2000x2000 pixels on Cytomine. The anotations are binary and correspond to the type of problem resulting from assembling all terms into one foreground class. 
 
 
-\section{Experiments}
+\section{Experimental setup}
 \label{sec:strain:experiments}
 
 In this section, we describe the experiments we have run and their results. These experiments aim at evaluating how our self-training approach performs against different baselines on the datasets described in Section \ref{sec:strain:data}. Moreover, we study the impact of different hyperparameters of our methods on the performance.
@@ -276,13 +276,34 @@ In the following sections, we report test Dice average and standard deviation ov
 
 Therefore, we have re-evaluated the models generated during our experiments using a similar protocol similar to leave-one-out cross-validation. Given a run of our algorithm, we have extracted the final model $\theta$ and the associated random seed $r$. The seed was used to randomly extract $K$ images from the related test set $\mathcal{D}_t$ which were used to tune the threshold $T$. For the sake of simplicity, instead of using a human, we have applied the same threshold optimization procedure based on the Dice score as presented in Section \ref{sssec:strain:softandhardlabels} for hard labels. The threshold was then used to evaluate the model on the remaining $|\mathcal{D}_t| - K$ images. We have repeated this procedure for all seeds and then average the results. This process is similar to a non-exhaustive $K$-fold cross validation. 
 
-\paragraph{Test set threshold optimization} Another way to evaluate the threshold without taking the risk of overfitting the training set would be to actually take $T$ such that the Dice score is maximized on the test set. This approach is not realistic in an extreme data scarcity situation as it would require a full test set (potentially larger than the training set) to use it. However, we have still decided to evaluate the performance of the models using this approach to evaluate how much our first method suffers from overfitting.   
+\paragraph{Test set threshold optimization} Another way to evaluate the threshold without taking the risk of overfitting the training set would be to actually take $T$ such that the Dice score is maximized on the test set. This approach is not realistic in an extreme data scarcity situation as it would require a fully annotated test set (in our experiments, the test sets are almost always larger than the training set). However, we have still decided to evaluate the performance of the models using this approach to evaluate how much our first threshold generation method (\ie on $\mathcal{D}_l$) suffers from overfitting.   
 
-
-\section{Results}
+\section{Experiments and results}
 \label{sec:strain:results}
 
-\section{}
+\subsection{Hard labelling outperforms soft labelling}
+
+In this section, we explore how the two choices of pseudo-label generation presented in Section \ref{sssec:strain:softandhardlabels} impact the performance of self-training. In order to answer this question, we have run our self-training approach a significant number of times with different hyperparameter settings either with hard or soft labels (see Supplementary Section \ref{app:strain:hyperparameters_selftrain} for a detailed list of hyperparameters combinations). Regarding sparsity, we have decided to study a relatively scarce regime with $\rho = 90\%$ for all datasets and $n_l$ set to $2$ for MoNuSeg, $30$ for SegPC and $8$ for GlaS (\ie between $90\%$ and $95\%$ of sparsely labeled images with $90\%$ of missing annotations).    
+
+We observe that hard labels consistently yield superior performance on all datasets. 
+
+\TODO{what if optimizing on test set?? way better perf for soft relatively to hard}
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{strain/plot_hard_vs_soft_test_hard_dice.pdf}
+  \caption{Comparing performance between using self-training with hard \vs soft labels. The reported Dice score is optimized on $\mathcal{D}_l$.}
+  \label{fig:strain:hard_vs_soft}
+\end{figure}
+
+\subsection{Overfitting can be significant when tuning $T$ on $\mathcal{D}_l$}
+
+\subsection{Self-training hyperparameters tuning matters in the extreme data scarcity regime}
+
+\subsection{Self-training hyperparameters tuning matters in the extreme data scarcity regime}
+
+\subsection{Naively using sparse data as if it was annotated data is generally a bad idea}
+
+\subsection{Exhaustive annotation is better than sparse annotation \TODO{???}}
 
 
 
