@@ -155,7 +155,7 @@ In this section, we describe the datasets we use to evaluate our method. It incl
 \label{ssec:strain:datapublicdatasets}
 We use 3 exhaustively-annotated public segmentation datasets for this purpose.
 
-MoNuSeg \parencite{kumar2019multi} contains 44 images coming from different organs, patients and hospitals with a total of 28846 annotated epithelial and stromal nuclei. The dataset is split into some training (30 images) and test (14 images) sets. Each image contains a significant number of cell annotations (few hundreds to a thousand) of which the dimensions are quite uniform. As for the images, they show great variations of appearance given the variety of sources. See Figures \ref{sfig:strain:monuseg_sample1} and 
+MoNuSeg \parencite{kumar2019multi} contains 44 images coming from different organs, patients and hospitals with a total of 28846 annotated epithelial and stromal nuclei. The dataset is split into some training (30 images, 17362 cells) and test (14 images, 11484 cells) sets. Each image contains a significant number of cell annotations (few hundreds to a thousand) of which the dimensions are quite uniform. As for the images, they show great variations of appearance given the variety of sources. See Figures \ref{sfig:strain:monuseg_sample1} and 
 \ref{sfig:strain:monuseg_sample2} for samples.
 
 GlaS \parencite{sirinukunwattana2017gland} contains 85 training and 80 test images with binary segmentation masks of intestinal glands. The image contains both benign tissue as well as colonic carcinomas. The gland annotations vary greatly in shape and size. These variations can be caused by the presence of a carcinoma or simply the axis of cut of the tissue during the slide preparation. See Figures \ref{sfig:strain:glas_sample1} and 
@@ -281,9 +281,10 @@ Therefore, we have re-evaluated the models generated during our experiments usin
 \section{Experiments and results}
 \label{sec:strain:results}
 
-\subsection{Hard labeling outperforms soft labeling}
+\subsection{Hard labeling \vs soft labeling}
+\label{ssec:strain:res:hardvssoft}
 
-In this section, we explore how the two choices of pseudo-label generation presented in Section \ref{sssec:strain:softandhardlabels} impact the performance of self-training. In order to answer this question, we have run our self-training approach a significant number of times with different hyperparameter settings either with hard or soft labels (see Supplementary Section \ref{app:strain:hyperparameters_selftrain} for a detailed list of hyperparameters combinations). Regarding sparsity, we have decided to study a relatively scarce regime with $\rho = 90\%$ for all datasets and $n_l$ set to $2$ for MoNuSeg, $30$ for SegPC and $8$ for GlaS (\ie between $90\%$ and $95\%$ of sparsely labeled images with $90\%$ of missing annotations).    
+In this section, we explore how the two choices of pseudo-label generation presented in Section \ref{sssec:strain:softandhardlabels} impact the performance of self-training. In order to answer this question, we have run our self-training approach a significant number of times with different hyperparameter settings either with hard or soft pseudo-labels. We have performed 10 runs per hyperparameter combination and with total of 45 combinations for SegPC, 42 for MoNuSeg and 22 for GlaS (see Supplementary Section \ref{app:strain:hyperparameters_selftrain} for a detailed list of hyperparameters combinations). Regarding sparsity, we have decided to study a relatively scarce regime with $\rho = 90\%$ for all datasets and $n_l$ set to $2$ for MoNuSeg, $30$ for SegPC and $8$ for GlaS (\ie between $90\%$ and $95\%$ of sparsely labeled images with $90\%$ of missing annotations).    
 
 We observe that hard labels consistently yield superior performance on all datasets. 
 
@@ -295,11 +296,47 @@ We observe that hard labels consistently yield superior performance on all datas
   \label{fig:strain:hard_vs_soft}
 \end{figure}
 
-\subsection{Overfitting can be significant when tuning $T$ on $\mathcal{D}_l$}
+\subsection{Self-training performance at fixed $n_l$}
 
-\subsection{Self-training hyperparameters tuning matters in the extreme data scarcity regime}
+In order to study how our self-training approach performs under different data scarcity regime, we have performed the following experiment. We have generated several versions of our datasets by varying $\rho$ with $n_l$ fixed and have run the baselines and different hyperparameters combinations on the generated datasets. Given the results of Section \ref{ssec:strain:res:hardvssoft}, we have used hard labels exclusively. The reported Dice scores (optimized on the test set) for these experiments can be found in Figures \ref{fig:strain:rho_exp_monuseg}, \ref{fig:strain:rho_exp_segpc} and \ref{fig:strain:rho_exp_glas}. For all datasets, the $|\mathcal{D}_s| = 0$ baseline outperforms the ``$\mathcal{D}_l$ only'' basline. 
 
-\subsection{Self-training hyperparameters tuning matters in the extreme data scarcity regime}
+\paragraph{MoNuSeg} First, on MoNuSeg, it is interesting to note that using sparsely labeled images as if they were exhaustively labeled (\ie basline $\mathcal{D}_l \cup \mathcal{D}_s$) is generally not a good idea as it is outperformed by all other approaches until $\rho = 25\%$ where it catches up with the ``$\mathcal{D}_l$ only'' baseline and one of the self-training approaches. Then, we can divide the analysis based on the scarcity regime and split it in three parts: extreme ($\rho \in [95\%, 100\%]$), significant ($\rho \in [80\%, 90\%]$) and medium ($\rho \in [25\%, 75\%]$). Overall, most self-training approaches benefit from additional sparse annotations as their score increase when $\rho$ decreases. This statement is true for all weighting strategies but the ``constant'' with $C = 0.1$ which plateau near $\rho = 85\%$. 
+
+In the extreme regime, all self-training approaches exhibit high variance and are outperformed by the ``$\mathcal{D}_l$ only'' baseline, or yield comparable performance. In this situation, it appears to be better to work in a fully supervised fashion using only images from $\mathcal{D}_l$ rather then using our self-training approach. Indeed, it seems that the noise brought by the extreme annotation sparsity (or complete lack of annotation when $\rho = 100\%$) degrades the model significantly which cannot even make efficient use of the exhaustively labeled images. For $\rho = 95\%$, two self-training approaches (``constant'' with $C = 0.1$ and ``entropy'') are on average better then the baseline but variance is so high that it is difficult to really conclude that they are more efficient. 
+
+The situation is reversed in the significant regime where most self-training approaches (except the ``consistency'' weighting strategy) outperform the ``$\mathcal{D}_l$ only'' baseline and variance decreases significantly as well. As for the $|\mathcal{D}_s| = 0$ baseline, it remains more efficient than self-training. For $\rho = 0.9$, the most efficient weighting strategy on average is ``constant'' with $C = 0.1$ which also exhibits the smallest variance of all the self-training approaches. We believe that such a low constant is particularily helpful to combat the noise brought by the high sparsity as pseudo-labeled pixels contribute way less during training. For $\rho = 85\%$ and $90\%$, the ``constant'' with $C = 0.1$ strategy plateaus and other catch up in term of performance and variance decrease with the ``entropy'' and ``merged'' approaches taking up the lead.
+
+In the medium regime, three self-training approaches reach, and even slightly surpass, the upper baseline: ``constant'' with $C = 0.5$, ``entropy'' and ``merged''. The approach ``constant'' with $C=0.1$ scores decreases with $\rho$ indicating that such a low constant prevents the model to learn efficiently from the additional annotations (compared to the significant regime).    
+
+
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{strain/monuseg_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
+  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{MoNuSeg}. ``$E / w_{min} = 0.1$'', ``$M / w_{min} = 0.1$'' and ``\textit{cnstcy}'' respectively stand for the entropy, merged (both with the specified $w_{min}$) and consistency weighting strategies. ``$C = 0.1$'', for instance, stands for the constant weighting strategy with the specified value as constant. The baselines are $|\mathcal{D}_s| = 0$, $\mathcal{D}_l$ only, $\mathcal{D}_l \cup \mathcal{D}_s$. The scores are obtained by optimizing the threshold $T$ on the test set.}
+  \label{fig:strain:rho_exp_monuseg}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{strain/segpc_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
+  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{SegPC}. See Figure \ref{fig:strain:rho_exp_monuseg} for explanation.}
+  \label{fig:strain:rho_exp_segpc}
+\end{figure}
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{strain/glas_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
+  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{GlaS}. See Figure \ref{fig:strain:rho_exp_monuseg} for explanation.}
+  \label{fig:strain:rho_exp_glas}
+\end{figure}
+
+
+
+\subsection{The MoNuSeg anomaly}
+
+
+
+\subsection{Self-training hyperparameters tuning matters in the extreme scarcity regime}
+
+\subsection{Self-training approaches are consistent in the low scarcity regime}
 
 \subsection{Naively using sparse data as if it was annotated data is generally a bad idea}
 
