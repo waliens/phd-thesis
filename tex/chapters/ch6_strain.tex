@@ -298,16 +298,7 @@ We observe that hard labels consistently yield superior performance on all datas
 
 \subsection{Self-training performance at fixed $n_l$}
 
-In order to study how our self-training approach performs under different data scarcity regime, we have performed the following experiment. We have generated several versions of our datasets by varying $\rho$ with $n_l$ fixed and have run the baselines and different hyperparameters combinations on the generated datasets. Given the results of Section \ref{ssec:strain:res:hardvssoft}, we have used hard labels exclusively. The reported Dice scores (optimized on the test set) for these experiments can be found in Figures \ref{fig:strain:rho_exp_monuseg}, \ref{fig:strain:rho_exp_segpc} and \ref{fig:strain:rho_exp_glas}. For all datasets, the $|\mathcal{D}_s| = 0$ baseline outperforms the ``$\mathcal{D}_l$ only'' basline. 
-
-\paragraph{MoNuSeg} First, on MoNuSeg, it is interesting to note that using sparsely labeled images as if they were exhaustively labeled (\ie basline $\mathcal{D}_l \cup \mathcal{D}_s$) is generally not a good idea as it is outperformed by all other approaches until $\rho = 25\%$ where it catches up with the ``$\mathcal{D}_l$ only'' baseline and one of the self-training approaches. Then, we can divide the analysis based on the scarcity regime and split it in three parts: extreme ($\rho \in [95\%, 100\%]$), significant ($\rho \in [80\%, 90\%]$) and medium ($\rho \in [25\%, 75\%]$). Overall, most self-training approaches benefit from additional sparse annotations as their score increase when $\rho$ decreases. This statement is true for all weighting strategies but the ``constant'' with $C = 0.1$ which plateau near $\rho = 85\%$. 
-
-In the extreme regime, all self-training approaches exhibit high variance and are outperformed by the ``$\mathcal{D}_l$ only'' baseline, or yield comparable performance. In this situation, it appears to be better to work in a fully supervised fashion using only images from $\mathcal{D}_l$ rather then using our self-training approach. Indeed, it seems that the noise brought by the extreme annotation sparsity (or complete lack of annotation when $\rho = 100\%$) degrades the model significantly which cannot even make efficient use of the exhaustively labeled images. For $\rho = 95\%$, two self-training approaches (``constant'' with $C = 0.1$ and ``entropy'') are on average better then the baseline but variance is so high that it is difficult to really conclude that they are more efficient. 
-
-The situation is reversed in the significant regime where most self-training approaches (except the ``consistency'' weighting strategy) outperform the ``$\mathcal{D}_l$ only'' baseline and variance decreases significantly as well. As for the $|\mathcal{D}_s| = 0$ baseline, it remains more efficient than self-training. For $\rho = 0.9$, the most efficient weighting strategy on average is ``constant'' with $C = 0.1$ which also exhibits the smallest variance of all the self-training approaches. We believe that such a low constant is particularily helpful to combat the noise brought by the high sparsity as pseudo-labeled pixels contribute way less during training. For $\rho = 85\%$ and $90\%$, the ``constant'' with $C = 0.1$ strategy plateaus and other catch up in term of performance and variance decrease with the ``entropy'' and ``merged'' approaches taking up the lead.
-
-In the medium regime, three self-training approaches reach, and even slightly surpass, the upper baseline: ``constant'' with $C = 0.5$, ``entropy'' and ``merged''. The approach ``constant'' with $C=0.1$ scores decreases with $\rho$ indicating that such a low constant prevents the model to learn efficiently from the additional annotations (compared to the significant regime).    
-
+In order to study how our self-training approach performs under different data scarcity regime, we have performed the following experiment. We have generated several versions of our datasets by varying $\rho$ with $n_l$ fixed and have run the baselines and different hyperparameters combinations on the generated datasets. Given the results of Section \ref{ssec:strain:res:hardvssoft}, we have used hard labels exclusively. The reported Dice scores are optimized on the test set. For all datasets, the upper baseline, $|\mathcal{D}_s| = 0$, outperforms the two others. 
 
 \begin{figure}
   \centering
@@ -315,12 +306,27 @@ In the medium regime, three self-training approaches reach, and even slightly su
   \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{MoNuSeg}. ``$E / w_{min} = 0.1$'', ``$M / w_{min} = 0.1$'' and ``\textit{cnstcy}'' respectively stand for the entropy, merged (both with the specified $w_{min}$) and consistency weighting strategies. ``$C = 0.1$'', for instance, stands for the constant weighting strategy with the specified value as constant. The baselines are $|\mathcal{D}_s| = 0$, $\mathcal{D}_l$ only, $\mathcal{D}_l \cup \mathcal{D}_s$. The scores are obtained by optimizing the threshold $T$ on the test set.}
   \label{fig:strain:rho_exp_monuseg}
 \end{figure}
+
+\paragraph{MoNuSeg} First, on MoNuSeg (see Figure \ref{fig:strain:rho_exp_monuseg}), it is interesting to note that using sparsely labeled images as if they were exhaustively labeled (\ie baseline $\mathcal{D}_l \cup \mathcal{D}_s$) is generally not a good idea as it is outperformed by all other approaches in most cases. However, we observe that the performance of this baseline increase as one adds more sparse labels in $\mathcal{D}_s$ (\ie $\rho$ decreases), even making it more efficient than ``$\mathcal{D}_l$ only'' at $\rho = 25\%$. 
+
+Then, we can divide the analysis by differentiating three scarcity regimes: extreme ($\rho \in [95\%, 100\%]$), significant ($\rho \in [80\%, 90\%]$) and medium ($\rho \in [25\%, 75\%]$). Overall, most self-training approaches benefit from additional sparse annotations as their score increase when $\rho$ decreases. This statement is true for all weighting strategies but the ``constant'' with $C = 0.1$ which plateau near $\rho = 85\%$, before decreasing as $\rho$ decreases. 
+
+In the extreme regime, all self-training approaches exhibit high variance and are outperformed by the ``$\mathcal{D}_l$ only'' baseline, or yield comparable performance. In this situation, it appears to be better to work in a fully supervised fashion using only images from $\mathcal{D}_l$ rather then using our self-training approach. Indeed, it seems that the noise brought by the extreme annotation sparsity (or complete lack of annotation when $\rho = 100\%$) degrades the model significantly which cannot even make efficient use of the exhaustively labeled images anymore. For $\rho = 95\%$, two self-training approaches (``constant'' with $C = 0.1$ and ``entropy'') are on average better then the baseline but variance is still high making it difficult to really conclude that they are more efficient. 
+
+The situation is reversed in the significant regime where most self-training approaches (except the ``consistency'' weighting strategy) outperform the ``$\mathcal{D}_l$ only'' baseline and variance decreases significantly as well. As for the $|\mathcal{D}_s| = 0$ baseline, it remains more efficient than self-training. For $\rho = 0.9$, the most efficient weighting strategy on average is ``constant'' with $C = 0.1$ which also exhibits the smallest variance of all the self-training approaches. We believe that such a low constant is particularily helpful to combat the noise brought by the high sparsity as pseudo-labeled pixels contribute way less during training. For $\rho = 85\%$ and $90\%$, the ``constant'' with $C = 0.1$ strategy plateaus whereas others catch up in term of performance and variance decrease with the ``entropy'' and ``merged'' approaches taking up the lead.
+
+In the medium regime, three self-training approaches reach, and even slightly surpass, the upper baseline: ``constant'' with $C = 0.5$, ``entropy'' and ``merged''. The approach ``constant'' with $C=0.1$ scores decreases with $\rho$ indicating that such a low constant prevents the model to learn efficiently from the additional annotations (compared to the significant regime). This strategy even finished below the $\mathcal{D}_l \cup \mathcal{D}_s$ baseline at $\rho = 25\%$
+
 \begin{figure}
   \centering
   \includegraphics[width=0.9\textwidth]{strain/segpc_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
   \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{SegPC}. See Figure \ref{fig:strain:rho_exp_monuseg} for explanation.}
   \label{fig:strain:rho_exp_segpc}
 \end{figure}
+
+\paragraph{SegPC} (see Figure \ref{fig:strain:rho_exp_segpc})
+
+
 \begin{figure}
   \centering
   \includegraphics[width=0.9\textwidth]{strain/glas_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
@@ -328,7 +334,7 @@ In the medium regime, three self-training approaches reach, and even slightly su
   \label{fig:strain:rho_exp_glas}
 \end{figure}
 
-
+\paragraph{GlaS} (see Figure \ref{fig:strain:rho_exp_glas}) 
 
 \subsection{The MoNuSeg anomaly}
 
