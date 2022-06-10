@@ -363,7 +363,7 @@ Among the experiments we have run, there is a specific sparsity condition that g
   \centering
   \begin{tabular}{|cc|c|c|}
     \hline
-    \multirow{2}{*}{\multicolumn{2}{|c|}{Approach}} & $T$ calibrated on \\
+    \multicolumn{2}{|c|}{\multirow{2}{*}{Approach}} &  \multicolumn{2}{c|}{$T$ calibrated on} \\
     \multicolumn{2}{|c|}{} & $\mathcal{D}_l$ & $\mathcal{D}_{test}$ \\ 
     \hline
     \multicolumn{2}{|c|}{$|\mathcal{D}|_s = 0$} & $80.25 \pm 0.44$ & $80.88 \pm 0.37$ \\
@@ -387,51 +387,52 @@ Among the experiments we have run, there is a specific sparsity condition that g
 
 \subsection{Manual threshold tuning}
 
-We have applied ``manual threshold tuning'' to the models produced by the experiments in Section \ref{ssec:strain:fixednl} by re-evaluating them following the procedure described in Section \ref{ssec:strain:evaluation}. In order to study the effects of manual tuning on overfitting, we compare the performance between the performance of tuning the threshold $T$ on $\mathcal{D}_l$, with two test images and one the whole test set. Representative plots for each dataset can be found in Figure \ref{fig:strain:manualtuning}.
+We have applied ``manual'' threshold tuning to the models produced by the experiments in Section \ref{ssec:strain:fixednl} by re-evaluating them following the procedure described in Section \ref{ssec:strain:evaluation}. In order to study the effects of manual tuning on overfitting, we compare the performance between the performance of tuning the threshold $T$ on $\mathcal{D}_l$, with two test images and one the whole test set. Representative plots for each dataset can be found in Figure \ref{fig:strain:manualtuning}.
 
+As expected, we observe that tuning the threshold $T$ on the training set ($\mathcal{D}_l$) results in overfitting (\ie compared to tuning on $\mathcal{D}_{test}$). However, for two of our three datasets (\acrshort{monuseg} and \acrshort{segpc}), we observe that tuning $T$ on only two test images results in a major performance improvement on average. On \acrshort{glas} however, it seems that using only two images hurts the performance and that, on average, this randomly selected set is overfitted. 
 
-% \begin{figure}
-%   \centering
-%   \begin{subfigure}{0.48\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{strain/manualtuning_monuseg_pred_entropy_none.pdf}
-%     \caption{\acrshort{monuseg}, entropy}
-%     \label{sfig:strain:manual:monu_entropy}
-%   \end{subfigure}
-%   \begin{subfigure}{0.48\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{strain/manualtuning_monuseg_constant_1.0.pdf}
-%     \caption{\acrshort{monuseg}, constant ($C=1.0$)}
-%     \label{sfig:strain:manual:monu_entropy}
-%   \end{subfigure} \\
-%   \begin{subfigure}{0.48\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{strain/manualtuning_glas_pred_entropy_none.pdf}
-%     \caption{\acrshort{glas}, entropy}
-%     \label{sfig:strain:manual:monu_entropy}
-%   \end{subfigure}
-%   \begin{subfigure}{0.48\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{strain/manualtuning_glas_constant_0.5.pdf}
-%     \caption{\acrshort{glas}, constant ($C=0.5$)}
-%     \label{sfig:strain:manual:monu_entropy}
-%   \end{subfigure} \\
-%   \begin{subfigure}{0.48\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{strain/manualtuning_segpc_pred_entropy_none.pdf}
-%     \caption{\acrshort{segpc}, entropy}
-%     \label{sfig:strain:manual:monu_entropy}
-%   \end{subfigure}
-%   \begin{subfigure}{0.48\textwidth}
-%     \centering
-%     \includegraphics[width=\textwidth]{strain/manualtuning_segpc_constant_0.5.pdf}
-%     \caption{\acrshort{segpc}, constant ($C=0.5$)}
-%     \label{sfig:strain:manual:monu_entropy}
-%   \end{subfigure}
-%   \caption{``Manual'' tuning performance. Reported values are the absolute Dice score differences between tuning $T$ on $\mathcal{D}_l$ (dotted green, reference) and approaches where $T$ is tuned on two test images (dashed blue), on the whole test set $\mathcal{D}_{test}$ (solid orange).}
-%   \label{fig:strain:manualtuning}
+\begin{figure}
+  \centering
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/manualtuning_monuseg_pred_entropy_none.pdf}
+    \caption{\acrshort{monuseg}, entropy}
+    \label{sfig:strain:manual:monu_entropy}
+  \end{subfigure}
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/manualtuning_monuseg_constant_1.0.pdf}
+    \caption{\acrshort{monuseg}, constant ($C=1.0$)}
+    \label{sfig:strain:manual:monu_constant}
+  \end{subfigure} \\
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/manualtuning_glas_pred_entropy_none.pdf}
+    \caption{\acrshort{glas}, entropy}
+    \label{sfig:strain:manual:_glas_pred_entropy_none}
+  \end{subfigure}
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/manualtuning_glas_constant_0.5.pdf}
+    \caption{\acrshort{glas}, constant ($C=0.5$)}
+    \label{sfig:strain:manual:_glas_constant}
+  \end{subfigure} \\
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/manualtuning_segpc_pred_entropy_none.pdf}
+    \caption{\acrshort{segpc}, entropy}
+    \label{sfig:strain:manual:_segpc_pred_entropy_none}
+  \end{subfigure}
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/manualtuning_segpc_constant_0.5.pdf}
+    \caption{\acrshort{segpc}, constant ($C=0.5$)}
+    \label{sfig:strain:manual:_segpc_constant}
+  \end{subfigure}
+  \caption{``Manual'' tuning performance. Reported values are the absolute Dice score differences between tuning $T$ on $\mathcal{D}_l$ (dotted green, reference) and approaches where $T$ is tuned on two test images (dashed blue), on the whole test set $\mathcal{D}_{test}$ (solid orange).}
+  \label{fig:strain:manualtuning}
 
-% \end{figure}
+\end{figure}
 
 
 \subsection{Experiment on Thyroid \acrshort{fnab}}
