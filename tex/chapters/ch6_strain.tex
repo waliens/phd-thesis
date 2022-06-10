@@ -363,7 +363,7 @@ Among the experiments we have run, there is a specific sparsity condition that g
   \centering
   \begin{tabular}{|cc|c|c|}
     \hline
-    \multicolumn{2}{|c|}{\multirow{2}{*}{Approach}} &  \multicolumn{2}{c|}{$T$ calibrated on} \\
+    \multicolumn{2}{|c|}{\multirow{2}{*}{Approach}} &  \multicolumn{2}{c|}{$T$ tuned on} \\
     \multicolumn{2}{|c|}{} & $\mathcal{D}_l$ & $\mathcal{D}_{test}$ \\ 
     \hline
     \multicolumn{2}{|c|}{$|\mathcal{D}|_s = 0$} & $80.25 \pm 0.44$ & $80.88 \pm 0.37$ \\
@@ -378,6 +378,7 @@ Among the experiments we have run, there is a specific sparsity condition that g
     entropy & $w_{min}=0.1$ & $80.59 \pm 0.73$ & $80.88 \pm 0.56$ \\
     \hline
   \end{tabular}
+  \caption{Performance of few self-training approaches compared to the baseline for \acrshort{monuseg} with $n_l = 15$ and $\rho = 90\%$. Few self-training approaches are able to beat the upper baseline althought they are provided with far less annotations.}
   \label{tab:strain:monuseganomaly}
 \end{table}
 
