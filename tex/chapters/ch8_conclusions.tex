@@ -1,4 +1,31 @@
 \chapter{Conclusion and future works}
 \label{chap:conclusions}
 
-My conclusion
+\section{Future works}
+
+\paragraph{Transfer from ImageNet} 
+
+% testing transfer with new cnn architectures
+% testing transfer with new architectures (eg transformers)
+
+\paragraph{Transfer from pathology data}
+
+% multi-task -> more agressive data normalization and/or augmentation
+% multi-task -> anticipate/detect negative transfer and implement a correction mechanism to alleviate or cancel its effect
+% multi-task -> add more datasets
+% multi-task -> increase/tune complexity of task specific heads
+% multi-task -> mix different types of task (segmentation, detection)
+% combine with other training techniques (self-supervised learning, self-training?)
+
+\paragraph{Self-training}
+
+% evaluate more thouroughly whether the type of dataset is important (dense or sparse annotations, large or small annotations, etc)
+% extend the method to support multi-class segmentation (pseudo labels generation ? weights ?)
+% study how the method performs on large sets D_l and D_s, is the method interesting when annotated data is plentiful, yet a large unlabeled dataset is available ? 
+% evaluate an interactive use of the algorithm, for instance to assist the labeling process of a new dataset  
+
+\paragraph{Mixing it all up}
+
+% mixing all methods:
+% - use a pre-trained model for initializing the segmentation network before starting warm-up and self-training
+% - multi task self-training ? 
