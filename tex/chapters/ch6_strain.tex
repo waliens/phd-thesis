@@ -12,9 +12,9 @@
 \section{Introduction}
 \label{sec:strain:intro}
 
-In this chapter, we investigate a method for training a binary image segmentation model in a context where the segmentation ground truth is sparse. More precisely, we focus on a setup where the training set is composed of an exhaustively labeled subset $\mathcal{D}_l$ and a sparsely labeled subset $\mathcal{D}_s$. In particular, the images in $\mathcal{D}_l$ come with exhaustively labeled segmentation masks (\ie pixels of all objects of interest have been labeled as positive) whereas in $\mathcal{D}_s$, some (unknown) pixels belonging to objects of interest have not been labeled, hence the sparsity. Typically, image segmentation methods require that the training images come with exhaustive pixel-wise labels. In our setup, it would correspond to only using $\mathcal{D}_l$ and ignoring $\mathcal{D}_s$. We believe that it is possible to include the sparsely labeled images as well, and hopefully improve the performance of a segmentation model. One way of achieving this would be to somewhat ``complete'' the sparse segmentation masks and make them exhaustively labeled. Generating pseudo-labels is precisely what self-training approaches do and, in this work, we devise a self-training workflow to exploit both our sets.
+In this chapter, we investigate a method for training a binary image segmentation model in a context where the segmentation ground truth is sparse. More precisely, we focus on a setup where the training set is composed of an exhaustively labeled subset $\mathcal{D}_l$ and a sparsely labeled subset $\mathcal{D}_s$. In particular, the images in $\mathcal{D}_l$ come with exhaustively labeled segmentation masks (\ie pixels of all objects of interest have been labeled as positive) whereas in $\mathcal{D}_s$, some (unknown) pixels belonging to objects of interest have not been labeled, hence the sparsity. Typically, image segmentation methods require that the training images come with exhaustive pixel-wise labels. In our setup, it would correspond to only using $\mathcal{D}_l$ and ignoring $\mathcal{D}_s$. We believe that it is possible to include the sparsely labeled images as well, and hopefully improve the performance over using only $\mathcal{D}_l$. One way of achieving this would be to somewhat ``complete'' the sparse segmentation masks and make them exhaustively labeled. Generating pseudo-labels is precisely what self-training approaches do and, in this work, we devise a self-training workflow to exploit both our sets.
 
-Our self-training workflow consists of two separate phases. During the '\textit{warm-up}' phase, we train a U-Net \parencite{ronneberger2015unet} model in a classical supervised manner on $\mathcal{D}_l$ for a few epochs. Then, during the '\textit{self-training}' phase, we repeat the following process for an arbitrary number of epoch : pseudo labels are generated for the unlabeled pixels from images in $\mathcal{D}_s$ using the currently trained model and the pseudo-labeled images are included in the training set for the next epoch. To control the impact of model uncertainty on pseudo-labeled pixels, we furthermore study different weighting techniques to tune their contributions to the training loss. We study the use of both soft and hard pseudo-labels and propose an auto-threshold approach for generating the latter. We investigate the interest of our method and its hyperparameters in different scarcity conditions and compare it to different baselines. We also investigate a new dataset labeling strategy motivated by our setup in order to answer the question: at a fixed annotation budget, is it better to generate label exhaustive masks or a mix of exhaustive and sparse label masks ? To support our analysis, we use four datasets including the public \acrshort{monuseg} \parencite{kumar2019multi}, \acrshort{glas} \parencite{sirinukunwattana2017gland} and \acrshort{segpc} \parencite{gupta2021segpc} and one in-house sparsely labeled dataset collected on Cytomine \parencite{maree2016collaborative}.  
+Our self-training workflow consists of two separate phases. During the '\textit{warm-up}' phase, we train a U-Net \parencite{ronneberger2015unet} model in a classical supervised manner on $\mathcal{D}_l$ for a few epochs. Then, during the '\textit{self-training}' phase, we repeat the following process for an arbitrary number of epoch : pseudo labels are generated for the unlabeled pixels from images in $\mathcal{D}_s$ using the currently trained model and the pseudo-labeled images are included in the training set for the next epoch. To control the impact of model uncertainty on pseudo-labeled pixels, we furthermore study different weighting techniques to tune their contributions to the training loss. We study the use of both soft and hard pseudo-labels and propose an auto-threshold approach for generating the latter. We investigate the interest of our method and its hyperparameters in different scarcity conditions and compare it to different baselines. We also investigate a new dataset labeling strategy motivated by our setup in order to answer the question: at a fixed annotation budget, is it better to generate label exhaustive masks or a mix of exhaustive and sparse label masks ? To support our analysis, we use four datasets including the public \acrshort{monuseg} \parencite{kumar2019multi}, \acrshort{glas} \parencite{sirinukunwattana2017gland} and \acrshort{segpc} \parencite{gupta2021segpc} and one sparsely labeled dataset collected using Cytomine \parencite{maree2016collaborative}.  
 
 When working with a dataset organized similarly to our setup ($\mathcal{D}_l$ and $\mathcal{D}_s$), we show that hard labels outperform soft labels (see Section \ref{ssec:strain:res:hardvssoft}) and that our self-training approach is beneficial as, even in significant scarcity conditions, it improves over using only exhaustively labeled data (only $\mathcal{D}_l$) in a fully supervised fashion (see Section \ref{ssec:strain:fixednl}). Surprisingly, we also observe that our self-training approach applied to a specific sparsified version of \acrshort{monuseg} is able to outperform the supervised baseline on the original fully labeled dataset (see Section \ref{ssec:strain:monuseganomaly}). However, we show that, at fixed annotation budget, it is better to focus the annotation effort on exhaustive labels rather than sparse labels (see Section \ref{ssec:strain:sparsevsexhaustive}).
 
@@ -305,7 +305,7 @@ We observe that hard labels consistently yield superior performance on all datas
 \TODO{what if optimizing on test set?? way better perf for soft relatively to hard}
 \begin{figure}
   \centering
-  \includegraphics[width=\textwidth]{strain/plot_hard_vs_soft_test_hard_dice.pdf}
+  \includegraphics[width=\textwidth]{strain/plot_hard_vs_soft_test_pxl_self_hard_dice.pdf}
   \caption{Comparing performance between using self-training with hard \vs soft labels. The reported Dice score is optimized on $\mathcal{D}_l$.}
   \label{fig:strain:hard_vs_soft}
 \end{figure}
@@ -352,30 +352,15 @@ Overall, result on MonuSeg are quite satisfactory. Although our approach is stru
 
 \paragraph{\acrshort{glas}} Before diving in the analysis for \acrshort{glas} (see Figure \ref{fig:strain:rho_exp_glas}), it is important to remember that there are much more variability in the shape and size of the annotations in this dataset. Therefore, removing an annotation versus another can lead to a very different outcome in terms of loss of information and actual sparsity increase. This might explain why the overall performance trend differs compared to the two other datasets. Indeed, in this case, the benefit from adding new annotations in $\mathcal{D}_s$ is less obvious as the performance curve for the self-training approach is flatter. Although, the self-training approaches are better than this baseline on average for most data points, the variance is such that the performance are mostly confounded until until $\rho = 25\%$.
 
-\subsection{The \acrshort{monuseg} anomaly, when sparse is better than exhaustive}
-\label{ssec:strain:monuseganomaly}
-
-\TODO{already observed in the previous experiment with even less data????}
-
-Among the experiments we have run, there is a specific sparsity condition that gave surprising results. This setup is $n_l = 15$ and $\rho = 90\%$ on \acrshort{monuseg}. We have run the three baselines and six variants of our self-training approach (see Table \ref{tab:strain:monuseganomaly}). First, we observe that at this scarcity regime, there does not seem to be a significant overfitting issue as all performance (except the $\mathcal{D}_l \cup \mathcal{D}_s$ baseline) are quite stable whether the threshold is tuned on $\mathcal{D}_l$ or on the test set directly. Then, the suprising result is that self-training (\ie the constant approach with $C=0.5$) is able to surpass the upper baseline with a Dice score difference of $0.64$ and $0.34$ when tuning $T$ respectively on the validation set and on the test set.  
-
 \begin{table}
   \centering
-  \begin{tabular}{|cc|c|c|}
+  \begin{tabular}{|cc|c|}
     \hline
-    \multicolumn{2}{|c|}{\multirow{2}{*}{Approach}} &  \multicolumn{2}{c|}{$T$ tuned on} \\
-    \multicolumn{2}{|c|}{} & $\mathcal{D}_l$ & $\mathcal{D}_{test}$ \\ 
+    \multicolumn{2}{|c|}{$|\mathcal{D}|_s = 0$} & $80.88 \pm 0.37$ \\
+    \multicolumn{2}{|c|}{$\mathcal{D}_l$ only}  & $80.14 \pm 1.06$ \\
+    \multicolumn{2}{|c|}{$\mathcal{D}_l \cup \mathcal{D}_s$} & $74.85 \pm 2.53$ \\
     \hline
-    \multicolumn{2}{|c|}{$|\mathcal{D}|_s = 0$} & $80.25 \pm 0.44$ & $80.88 \pm 0.37$ \\
-    \multicolumn{2}{|c|}{$\mathcal{D}_l$ only} & $79.78 \pm 1.13$ & $80.14 \pm 1.06$ \\
-    \multicolumn{2}{|c|}{$\mathcal{D}_l \cup \mathcal{D}_s$} & $67.92 \pm 6.00$ & $74.85 \pm 2.53$ \\
-    \hline
-    constant & $C=0.01$ & $80.43 \pm 0.86$ & $80.92 \pm 0.47$ \\
-    constant & $C=0.5$ & $80.89 \pm 0.66$ & $81.22 \pm 0.40$ \\
-    constant & $C=1.0$ & $79.61 \pm 2.65$ & $80.41 \pm 2.01$ \\
-    cnstcy & & $79.66 \pm 1.98$ & $80.39 \pm 1.79$ \\
-    merged & $w_{min}=0.1$ & $80.82 \pm 0.49$ & $81.04 \pm 0.35$ \\
-    entropy & $w_{min}=0.1$ & $80.59 \pm 0.73$ & $80.88 \pm 0.56$ \\
+    constant & $C=0.5$ & $81.22 \pm 0.40$ \\
     \hline
   \end{tabular}
   \caption{Performance of few self-training approaches compared to the baseline for \acrshort{monuseg} with $n_l = 15$ and $\rho = 90\%$. Few self-training approaches are able to beat the upper baseline althought they are provided with far less annotations.}
@@ -466,6 +451,8 @@ As expected, we observe that tuning the threshold $T$ on the training set ($\mat
 \subsection{Experiment on Thyroid \acrshort{fnab}}
 \label{ssec:strain:thyroid_exp}
 
+New scores: 
+
 As explained in Section \ref{ssec:strain:thyroidfnab}, the Thyroid \acrshort{fnab} dataset presents a great opportunity to test our dataset on a real case of sparse annotations. It is also interesting to note that this dataset is not only larger (almost 5k images total) than the three public datasets used in this study but also features both a validation set and a test set. Therefore, it allows for additional tuning of hyperparameters. In this experiment, we propose to evaluate the effect of early stopping and tuning the segmentation threshold on the validation set. We also select the best self-training hyperparameters combination on this validation set (\ie notably the weight strategy and its hyperparameters, the evaluated combinations can be found in the Supplementary \TODO{supp}). We compare the best self-training approach with two of our three baselines: $\mathcal{D}_l$ only and $\mathcal{D}_l \cup \mathcal{D}_s$. The upper baseline obviously cannot be evaluated because we do not have access to the complete ground truth. For both baselines, we also evaluate the effects of early stopping and threshold tuning with the validation set. The resulting performances are given in Table \ref{tab:strain:thyroidresults}.
 
 \TODO{done with only one random seed???}
@@ -475,19 +462,16 @@ We observe that the best self-training approach always outperforms the two basel
 
 \begin{table}
   \centering 
-  \footnotesize
-  \begin{tabular}{|cc|ccc|ccc|ccc|}
+  \begin{tabular}{|c|c|}
     \hline
-    Early & Val. & \multicolumn{3}{c|}{Validation score} & \multicolumn{3}{c|}{Test score} & \multicolumn{3}{c|}{Best self-training approach} \\
-    stopping & thresh. & $\mathcal{D}_l$ only & $\mathcal{D}_l \cup \mathcal{D}_s$ & Self-train. & $\mathcal{D}_l$ only & $\mathcal{D}_l \cup \mathcal{D}_s$ & Self-train. & H/S & Weights & Params \\
+    Method & Dice \\
     \hline
-    no & no & 62.29 & 59.90 & 80.01 & 75.17 & 80.65 & 85.12 & soft & merged & $w_{min}=0.1$ \\
-    no & yes & 63.43 & 64.66 & 86.64 & 83.58 & 80.65 & 84.71 & soft & merged & $w_{min}=0.1$ \\  
-    yes & no & 81.45 & 82.33 & 83.66 & 84.73 & 84.22 & 85.71 & hard & entropy & $w_{min}=0.75$ \\
-    yes & yes & 87.05 & 87.66 & 89.10 & 84.73 & 84.38 & 85.24 & hard & merged & $w_{min}=0.5$ \\
+    Self-traininng & $82.77 \pm 1.45$ \\
+    $\mathcal{D}_l$ only & $75.36 \pm 4.49$ \\  
+    $\mathcal{D}_l \cup \mathcal{D}_s$ & $78.24 \pm 3.09$ \\
     \hline
   \end{tabular}
-  \caption{Experiment on the Thyroid \acrshort{fnab} dataset with/without early stopping and threshold optimization on the validation set (\textit{Val. thresh.}). \textit{H/S} stands for Hard/Soft labels.}
+  \caption{Experiment on the Thyroid \acrshort{fnab}. Dice evaluated on test+val, threshold tuned on $\mathcal{D}_l$.}
   \label{tab:strain:thyroidresults}
 \end{table}
 
