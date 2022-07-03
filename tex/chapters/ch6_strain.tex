@@ -379,21 +379,21 @@ This experiment also allows to compare which labeling scheme is better for self-
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.85\textwidth]{strain/annot_strat_monuseg.pdf}
+  \includegraphics[width=\textwidth]{strain/annot_strat_monuseg.pdf}
   \caption{Performance of self-training \vs the baselines for varying $\rho$ and $n_c$ on \acrshort{monuseg}. A point corresponds to 10 runs of the given approach (see line color) and some sparsity parameters $\rho$ (see line style) and $n_c$ (given by the text label). All runs are performed on a different version of the dataset generated with some sparsity parameters. The $x$ value for a point corresponds to the average number of annotations used by the 10 generated datasets, or, alternatively, to the annotation budget dedicated for labeling the dataset.}
   \label{fig:strain:annot_strat_monuseg}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.85\textwidth]{strain/annot_strat_segpc.pdf}
+  \includegraphics[width=\textwidth]{strain/annot_strat_segpc.pdf}
   \caption{Performance of self-training \vs the baselines for varying $\rho$ and $n_c$ on \acrshort{segpc} (see Figure \ref{fig:strain:annot_strat_monuseg} for explanation).}
   \label{fig:strain:annot_strat_segpc}
 \end{figure}
 
 \begin{figure}
   \centering
-  \includegraphics[width=0.85\textwidth]{strain/annot_strat_glas.pdf}
+  \includegraphics[width=\textwidth]{strain/annot_strat_glas.pdf}
   \caption{Performance of self-training \vs the baselines for varying $\rho$ and $n_c$ on \acrshort{glas} (see Figure \ref{fig:strain:annot_strat_monuseg} for explanation).}
   \label{fig:strain:annot_strat_glas}
 \end{figure}
@@ -451,7 +451,7 @@ As expected, we observe that tuning the threshold $T$ on the training set ($\mat
 \subsection{Experiment on Thyroid \acrshort{fnab}}
 \label{ssec:strain:thyroid_exp}
 
-New scores: 
+\TODO{New scores see Table \ref{tab:strain:thyroidresults}}
 
 As explained in Section \ref{ssec:strain:thyroidfnab}, the Thyroid \acrshort{fnab} dataset presents a great opportunity to test our dataset on a real case of sparse annotations. It is also interesting to note that this dataset is not only larger (almost 5k images total) than the three public datasets used in this study but also features both a validation set and a test set. Therefore, it allows for additional tuning of hyperparameters. In this experiment, we propose to evaluate the effect of early stopping and tuning the segmentation threshold on the validation set. We also select the best self-training hyperparameters combination on this validation set (\ie notably the weight strategy and its hyperparameters, the evaluated combinations can be found in the Supplementary \TODO{supp}). We compare the best self-training approach with two of our three baselines: $\mathcal{D}_l$ only and $\mathcal{D}_l \cup \mathcal{D}_s$. The upper baseline obviously cannot be evaluated because we do not have access to the complete ground truth. For both baselines, we also evaluate the effects of early stopping and threshold tuning with the validation set. The resulting performances are given in Table \ref{tab:strain:thyroidresults}.
 
@@ -466,7 +466,7 @@ We observe that the best self-training approach always outperforms the two basel
     \hline
     Method & Dice \\
     \hline
-    Self-traininng & $82.77 \pm 1.45$ \\
+    Self-training & $82.77 \pm 1.45$ \\
     $\mathcal{D}_l$ only & $75.36 \pm 4.49$ \\  
     $\mathcal{D}_l \cup \mathcal{D}_s$ & $78.24 \pm 3.09$ \\
     \hline
