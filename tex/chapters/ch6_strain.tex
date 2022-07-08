@@ -2,9 +2,9 @@
 \label{chap:strain}
 
 \begin{overview}{Overview}
-  In this chapter, \\
+  Data scarcity is a common issue when training deep learning models for digital pathology, as large exhaustively-annotated image datasets are difficult to obtain. In this paper, we propose a self-training based approach that can exploit both (few) exhaustively annotated images and (very) sparsely-annotated images to improve the training of deep learning models for image segmentation tasks. The approach is evaluated on three public and one in-house dataset, representing a diverse set of segmentation tasks in digital pathology. The experimental results show that self-training allows to bring significant model improvement by incorporating sparsely annotated images and proves to be a good strategy to relieve labeling effort in the digital pathology domain.\\
   
-  \textbf{References:} this chapter is based on an article pending review \\
+  \textbf{References:} this chapter is an extended version of an article currently pending review at the ECCV22 workshop ``\acrshort{ai}-enabled medical image analysis'' (AIMIA22). \\
   
   Supplementary materials for this chapter can be found in Appendix Chapter \ref{app:strain}.
   \end{overview}
@@ -12,14 +12,20 @@
 \section{Introduction}
 \label{sec:strain:intro}
 
-In this chapter, we investigate a method for training a binary image segmentation model in a context where the segmentation ground truth is sparse. More precisely, we focus on a setup where the training set is composed of an exhaustively labeled subset $\mathcal{D}_l$ and a sparsely labeled subset $\mathcal{D}_s$. In particular, the images in $\mathcal{D}_l$ come with exhaustively labeled segmentation masks (\ie pixels of all objects of interest have been labeled as positive) whereas in $\mathcal{D}_s$, some (unknown) pixels belonging to objects of interest have not been labeled, hence the sparsity. Typically, image segmentation methods require that the training images come with exhaustive pixel-wise labels. In our setup, it would correspond to only using $\mathcal{D}_l$ and ignoring $\mathcal{D}_s$. We believe that it is possible to include the sparsely labeled images as well, and hopefully improve the performance over using only $\mathcal{D}_l$. One way of achieving this would be to somewhat ``complete'' the sparse segmentation masks and make them exhaustively labeled. Generating pseudo-labels is precisely what self-training approaches do and, in this work, we devise a self-training workflow to exploit both our sets.
+In this chapter, we investigate a method for training a binary image segmentation model in a context where the segmentation ground truth is sparse. More precisely, we focus on a setup where the training set is composed of an exhaustively labeled subset $\mathcal{D}_l$ and a sparsely labeled subset $\mathcal{D}_s$. In particular, the images in $\mathcal{D}_l$ come with exhaustively labeled segmentation masks (\ie pixels of all objects of interest have been labeled as positive) whereas in $\mathcal{D}_s$, some (unknown) pixels belonging to objects of interest have not been labeled, hence the sparsity. Typically, image segmentation methods require that the training images come with exhaustive pixel-wise labels. In our setup, they would allow us to only use $\mathcal{D}_l$ and force us to ignore $\mathcal{D}_s$. We believe that it is possible to include the sparsely labeled images as well, and hopefully improve the performance over using only $\mathcal{D}_l$. One way of achieving this would be to somewhat ``complete'' the sparse segmentation masks and make them exhaustively labeled. Generating pseudo-labels is precisely what self-training approaches do and, in this work, we devise a self-training workflow to exploit both our sets.
 
-Our self-training workflow consists of two separate phases. During the '\textit{warm-up}' phase, we train a U-Net \parencite{ronneberger2015unet} model in a classical supervised manner on $\mathcal{D}_l$ for a few epochs. Then, during the '\textit{self-training}' phase, we repeat the following process for an arbitrary number of epoch : pseudo labels are generated for the unlabeled pixels from images in $\mathcal{D}_s$ using the currently trained model and the pseudo-labeled images are included in the training set for the next epoch. To control the impact of model uncertainty on pseudo-labeled pixels, we furthermore study different weighting techniques to tune their contributions to the training loss. We study the use of both soft and hard pseudo-labels and propose an auto-threshold approach for generating the latter. We investigate the interest of our method and its hyperparameters in different scarcity conditions and compare it to different baselines. We also investigate a new dataset labeling strategy motivated by our setup in order to answer the question: at a fixed annotation budget, is it better to generate label exhaustive masks or a mix of exhaustive and sparse label masks ? To support our analysis, we use four datasets including the public \acrshort{monuseg} \parencite{kumar2019multi}, \acrshort{glas} \parencite{sirinukunwattana2017gland} and \acrshort{segpc} \parencite{gupta2021segpc} and one sparsely labeled dataset collected using Cytomine \parencite{maree2016collaborative}.  
+Our self-training workflow consists of two separate phases. During the ``\textit{warm-up}'' phase, we train a U-Net \parencite{ronneberger2015unet} model in a classical supervised manner on $\mathcal{D}_l$ for a few epochs. Then, during the ``\textit{self-training}'' phase (sketched in Figure \ref{fig:strain:method_diagram}), we repeat the following process for an arbitrary number of epochs : pseudo labels are generated for the unlabeled pixels from images in $\mathcal{D}_s$ using the currently trained model and the pseudo-labeled images are included in the training set for the next epoch. To control the impact of model uncertainty on pseudo-labeled pixels, we furthermore study different weighting schemes to tune their contributions to the training loss. We use binary (``hard") pseudo-labels and propose an auto-calibration approach for generating them. Experiments are carried out on three exhaustively labeled public datasets, namely \acrshort{monuseg} \parencite{kumar2019multi}, \acrshort{glas} \parencite{sirinukunwattana2017gland} and \acrshort{segpc} \parencite{gupta2021segpc}, on which sparsity is artificially enforced for evaluation purpose. Through these experiments, we investigate the interest of our method and the impact of its hyperparameters in different scarcity conditions and in comparison with different baselines. In a second stage, we apply our method on an actual sparsely labeled dataset for cytology diagnosis.
 
-When working with a dataset organized similarly to our setup ($\mathcal{D}_l$ and $\mathcal{D}_s$), we show that hard labels outperform soft labels (see Section \ref{ssec:strain:res:hardvssoft}) and that our self-training approach is beneficial as, even in significant scarcity conditions, it improves over using only exhaustively labeled data (only $\mathcal{D}_l$) in a fully supervised fashion (see Section \ref{ssec:strain:fixednl}). Surprisingly, we also observe that our self-training approach applied to a specific sparsified version of \acrshort{monuseg} is able to outperform the supervised baseline on the original fully labeled dataset (see Section \ref{ssec:strain:monuseganomaly}). However, we show that, at fixed annotation budget, it is better to focus the annotation effort on exhaustive labels rather than sparse labels (see Section \ref{ssec:strain:sparsevsexhaustive}).
+Our main contributions and conclusions are as follows: \textbf{(1)} We design a self-training pipeline for binary segmentation to handle datasets composed on both exhaustively and sparsely annotated images (Section \ref{sec:strain:methods}). \textbf{(2)} We show on three public datasets that this self-training approach is beneficial as, even in significant scarcity conditions, it improves over using only exhaustively labeled data (see Section \ref{ssec:strain:fixednl}). \textbf{(3)} We confirm the interest of the approach in a real-world scenario, where a significant improvement of performance is achieved by exploiting sparse annotations (see Section \ref{ssec:strain:thyroid_exp}). \textbf{(4)} We show that, at fixed annotation budget, it is not necessarily better to focus the annotation effort on exhaustive labels rather than sparse labels (see Section \ref{ssec:strain:sparsevsexhaustive}).
 
 Related works for this chapter can be found in Sections \ref{ssec:backml:dl:selftraining} and \ref{ssec:backdp:st}.
 
+\begin{figure}
+  \centering
+  \includegraphics[width=\textwidth]{strain/method-diagram.pdf}
+  \caption{Illustration of our self-training approach}
+  \label{fig:strain:method_diagram}
+\end{figure}
 
 % Recent progresses in computing and artificial intelligence (AI) have created exciting opportunities the field of digital pathology. Nowadays, glass slides can be digitized into Whole-Slide Images (WSI) opening the way for AI-based analysis tools to relieve pathologists workload. Given the potentially dire consequences of misdiagnosis, these tools must be robust and reliable which can be challenging given the nature of the tasks and the different sources of variability affecting the WSI acquisition process. Machine learning techniques are considered some of the most promising tools to tackle these challenges but they often require a significant amount of training data to perform well. This is an issue in digital pathology which is considered to suffer from data scarcity \parencite{tizhoosh2018artificial, litjens2017survey}: high-quality annotated pathology data are expensive and difficult to obtain. 
 
@@ -33,12 +39,13 @@ Related works for this chapter can be found in Sections \ref{ssec:backml:dl:self
 
 In the following section, we present our method, a self-training image segmentation algorithm. The self-training aspects and training implementation details are discussed separately in Sections \ref{ssec:strain:self_training} and \ref{ssec:strain:training_protocol} respectively.
 
-We will designate a segmentation dataset, or task, $\mathcal{D} = \left(X, Y\right) \subset \mathcal{X} \times \mathcal{Y}$ where $X \subset \mathcal{X}$ and $Y \subset \mathcal{Y}$ respectively represent the sets of input images and their corresponding binary segmentation masks. We will further consider a training dataset composed of two sets $\mathcal{D}_l = \left(X_l, Y_l\right) \subset \mathcal{X}_l \times \mathcal{Y}_l$, the exhaustively labeled set, and $\mathcal{D}_s = \left(X_s, Y_s\right) \subset \mathcal{X}_s \times \mathcal{Y}_s$, the sparsely labeled set. In $\mathcal{D}_l$, the masks $Y_l$ are entirely determined as the ground truth is known for all pixels (hence the exhaustiveness). In $\mathcal{D}_s$, ground truth is only partially known: given an image $\mathbf{x} \in X_s$, either a pixel $x_{ij}$ belongs to a structure of interest in which case the mask pixel $y_{ij} = 1$, or it is not labeled in which case $y_{ij} = 0$ and no assumption can be made a priori about the fact that the pixel belongs to a structure of interest or not. 
+We will denote by  $\mathcal{D} = \left(X, Y\right) \subset \mathcal{X} \times \mathcal{Y}$ a segmentation dataset, where $X$ and $Y$ respectively represent a set of input images and their corresponding binary segmentation masks. We will further consider a training dataset composed of two sets: $\mathcal{D}_l = \left(X_l, Y_l\right) \subset \mathcal{X} \times \mathcal{Y}$, the exhaustively labeled set, and $\mathcal{D}_s = \left(X_s, Y_s\right) \subset \mathcal{X} \times \mathcal{Y}$, the sparsely labeled set. In $\mathcal{D}_l$, the masks $Y_l$ are entirely determined, since the ground truth is known for all pixels (hence the exhaustiveness). In $\mathcal{D}_s$, ground truth is only partially known: given an image $\mathbf{x} \in X_s$, either a pixel $x_{ij}$ belongs to a structure of interest in which case the mask pixel $y_{ij} = 1$, or it is not labeled in which case $y_{ij} = 0$ and no assumption can be made a priori about the fact that the pixel belongs to a structure of interest or not. We will denote $n_l = |\mathcal{D}_l|$ and $n_s = |\mathcal{D}_s|$ the sizes of the sets. The total number of training images for a dataset will be denoted $n = n_l + n_s$.
+
 
 \subsection{Self-training}
 \label{ssec:strain:self_training}
  
-Our self-training algorithm is described in Algorithm \ref{algo:strain:selftraining}. It features a warm-up phase during which the model is classically trained on the set $\mathcal{D}_l$ (training implementation detail are given in Section \ref{ssec:strain:training_protocol}). The number of warm-up epochs $W > 0$ is fixed so that the model is able to converge on the labeled data. The warmed-up model is used as starting point for the self-training phase. Each self-training round $e$ starts by pseudo-labeling $\mathcal{D}_s$ with the model $\theta_{e-1}$. For an image $\mathbf{x} \in X_s$, the pseudo-label assigned to pixel $x_{ij}$ is given by:
+Our self-training algorithm is described in Algorithm \ref{algo:strain:selftraining} (and depicted in Figure \ref{fig:strain:method_diagram}). It features a warm-up phase during which the model is classically trained on the set $\mathcal{D}_l$ (training implementation details are given in Section \ref{ssec:strain:training_protocol}). The number of warm-up epochs $W > 0$ is fixed so that the model is able to converge on the labeled data. The warmed-up model is used as starting point for the self-training phase. Each self-training round $e$ starts by pseudo-labeling $\mathcal{D}_s$ with the model $\theta_{e-1}$. For an image $\mathbf{x} \in X_s$, the pseudo-label assigned to pixel $x_{ij}$ is given by:
 \begin{equation}
 y^{({pl})}_{ij} = \begin{cases}
 1,\,\text{if}\, y_{ij} = 1 \\
@@ -46,7 +53,7 @@ g(\hat{y}_{ij}),\,\text{otherwise}
 \end{cases}
 \label{eqn:strain:pseudolabeling}
 \end{equation}
-where $\hat{y}_{ij}$ is the sigmoid output of model $\theta_{e-1}$ for pixel $(i, j)$ given $\mathbf{x}$ as input and $g$ is a function for generating the pseudo-label from $\hat{y}_{ij}$ (see Section \ref{sssec:strain:softandhardlabels}). In other words, we preserve the expert ground truth as pseudo-labels when available and use the model predictions for unlabeled pixels (this is the \texttt{Combine} step from Algorithm \ref{algo:strain:selftraining}). With this strategy, entirely unlabeled images can also be included in $\mathcal{D}_s$. Our algorithm uses a single model (\ie teacher = student) which is not reset between self-training rounds. This approach has been applied in other self-training contributions \parencite{laine2016temporal, bai2017semi, li2018based}. 
+where $\hat{y}_{ij}$ is the sigmoid output of model $\theta_{e-1}$ for pixel $(i, j)$ given $\mathbf{x}$ as input and $g$ is a function for generating the pseudo-label from $\hat{y}_{ij}$ (see below). In other words, we preserve the expert ground truth as pseudo-labels when available and use the model predictions for unlabeled pixels (this is the \texttt{Combine} step from Algorithm \ref{algo:strain:selftraining}). With this strategy, entirely unlabeled images can also be included in $\mathcal{D}_s$. Our algorithm uses a single model (\ie teacher = student) which is not reset between self-training rounds. 
 
 \begin{algorithm}[t]
   \SetAlgoLined
@@ -75,32 +82,35 @@ where $\hat{y}_{ij}$ is the sigmoid output of model $\theta_{e-1}$ for pixel $(i
 \subsubsection{Soft and hard pseudo-labels}
 \label{sssec:strain:softandhardlabels}
 
-We study two different pseudo-labeling strategies, or two different $g$ functions (see Equation \ref{eqn:strain:pseudolabeling}). The first is simply taking $g$ to be the identity function $g(x) = x$ in which case the sigmoid output of the model is taken as pseudo-label. This strategy is commonly called  ``\textit{soft}'' labeling. During the next self-training round, this soft label will be compared to the network prediction which can be seen as a form of consistency constraint similar to those in \cite{laine2016temporal,tarvainen2017mean, sohn2020fixmatch}. The second strategy consists in thresholding the sigmoid output with $T_e \in [0, 1]$ in which case:
+We considered two different pseudo-labeling strategies, or two different $g$ functions (see Equation \ref{eqn:strain:pseudolabeling}). Initially, we decided to simply take $g$ to be the identity function $g(x) = x$ in which case the sigmoid output of the model was used as pseudo-label. This strategy is commonly called  ``\textit{soft}'' labeling. During the next self-training round, this soft label will be compared to the network prediction which can be seen as a form of consistency constraint similar to those in \parencite{laine2016temporal,tarvainen2017mean,sohn2020fixmatch}. However, early experiments have shown that this approach causes training instabilities. Therefore, we investigated a second strategy where the sigmoid output is binarized using a threshold $T_e \in [0, 1]$:
 \begin{equation}
 g(x) = \begin{cases}
 1,\,\text{if}\, x > T_e\\
 0,\,\text{otherwise}
 \end{cases}
 \end{equation}   
-where $e$ is a self-training round. We call this strategy ``\textit{hard}'' labeling as pseudo-labels are either 1 or 0. In addition to ensuring some sort of consistency between the pseudo-labels and the predictions like the ``\textit{soft}'' approach does, this hard approach also encourages the model to produce confident predictions (close to 0 or 1). Because we want to avoid $T_e$ to be an additional hyperparameter to tune, we propose an auto-calibration strategy based on the Dice score: 
+where $e$ is a self-training round. We call this strategy ``\textit{hard}'' labeling as pseudo-labels are either 0 or 1. In addition to ensuring some sort of consistency between the pseudo-labels and the predictions, as in the ``\textit{soft}'' approach, this thresholding also encourages the model to produce confident predictions (closer to 0 or 1). Because we want to avoid $T_e$ to be an additional hyperparameter to tune, we propose an auto-calibration strategy based on the Dice score: 
 \begin{equation}
   Dice_T(\mathbf{y},\hat{\mathbf{y}}) = \dfrac{2 \times \sum_{i,j} \left[\mathbb{1}_{\hat{y}_{ij} \geq T} \times y_{ij}\right]}{\sum_{i,j} \mathbb{1}_{\hat{y}_{ij} \geq T} + \sum_{i,j} y_{ij}}
   \label{eqn:strain:dice}
 \end{equation}
-where $T$ is the threshold applied to the model output to generate a binary prediction. The auto-calibration procedure selects $T_e$ such the Dice score (see Equation \ref{eqn:strain:dice}) is maximized for the images from the labeled set $\mathcal{D}_{l}$:
+where $T$ is the threshold applied to the model output to generate a binary prediction. The auto-calibration procedure selects $T_e$ such that the Dice score in (\ref{eqn:strain:dice}) is maximized for the images from an exhaustively labeled set  $\mathcal{D}_{a}$:
 \begin{equation}
-T_e = \arg \underset{T}{\max} \sum_{(\mathbf{x}, \mathbf{y}) \in \mathcal{D}_l} \text{Dice}_T\left(\mathbf{y},h( \mathbf{x}; \theta_{e})\right).
+T_e = \arg \underset{T}{\max} \sum_{(\mathbf{x}, \mathbf{y}) \in \mathcal{D}_a} \text{Dice}_T\left(\mathbf{y},h( \mathbf{x}; \theta_{e})\right).
 \label{eqn:strain:thresholdopt}
 \end{equation}
-This auto-calibration has the advantage of not requiring additional training data compared to using an external annotated validation set for instance. However, it induces a risk of overfitting which might hurt generalization performance. In an extreme data scarcity situation, we argue that it is better to risk overfitting $\mathcal{D}_l$ than further reducing the size of the training set by extracting a validation set. In contexts where data is less scarce, this tuning can be performed on an unseen validation set.
+The ideal choice for $\mathcal{D}_{a}$ would be to use an external validation set but, in extreme data scarcity conditions, extracting such a validation set would penalize the performance of the algorithm by removing a significant amount of training data. Therefore, in this context, we consider using the training subset $\mathcal{D}_l$ as $\mathcal{D}_a$.
+This approach has the advantage of not requiring additional training data but also induces a risk of overfitting which might hurt generalization performance. We hope that the overfitting problem would be compensated by the improvement brought by hard labeling.
 
 \subsection{Training}
 \label{ssec:strain:training_protocol}
 
 In this section, we will provide more information about the \texttt{Train} procedure from Algorithm \ref{algo:strain:selftraining} which trains a model $\theta$ with a dataset $\mathcal{D}$.
-We use UNet \parencite{ronneberger2015unet} as a segmentation architecture. We set the initial number of features maps to 8 instead of 64 in the original article. The rest of the network is scaled accordingly. 
+We use U-Net \parencite{ronneberger2015unet} as a segmentation architecture. We set the initial number of feature maps to 8 instead of 64 in the original article, with the rest of the network scaled accordingly. The main goal of this reduction of model capacity is to limit overfitting given the highly scarce data conditions explored in this work, but it would be worth exploring more complex architectures as future work.
 
-The number of rounds $W$ and $E$ and the number of training iteration per round are tuned independently per dataset. Every training iteration, we build a minibatch by sampling $B=8$ images uniformly at random with replacement from $\mathcal{D}$ and by extracting one randomly located 512x512 patch and its corresponding mask from each of these images. The batch size was selected based on hardware memory constraints. We apply random data augmentation following best practices for machine learning in general and for self-training in particular \parencite{xie2020self, sohn2020fixmatch}. We apply horizontal and vertical flips, color pertubation in the HED space \parencite{tellez2018whole} (bias and coefficient factors up to 2.5\%) \TODO{this augmentation was designed for H\&E images, 2 datasets out of 3 are not H\&E stained (thyroid, segpc)}, gaussian noise (standard deviation up to 10\%) and gaussian blur (standard deviation up to 5\%). 
+%This reduction of model capacity was chosen arbitrarily and motivated by the fact that we study mostly highly scarce data conditions in this work. Therefore, using a lower capacity model seemed relevant as less training data is available \NOTE{tjrs pas tout a fait satisfait de la manière dont ça sonne}. 
+
+The number of rounds $W$ and $E$ and the number of training iteration per round are chosen independently per dataset (see Supplementary Section \ref{app:strain:sec:expfixednl}). Every training iteration, we build a minibatch by sampling $B=8$ images uniformly at random with replacement from $\mathcal{D}_l \cup \mathcal{D}_{pl}$ and by extracting one randomly located 512x512 patch and its corresponding mask from each of these images. The batch size was selected based on hardware memory constraints. We apply random data augmentation following best practices for machine learning in general and for self-training in particular \parencite{xie2020self,sohn2020fixmatch}. We apply horizontal and vertical flips, color perturbation in the HED space \parencite{tellez2018whole} (bias and coefficient factors up to 2.5\%), Gaussian noise (standard deviation up to 10\%) and Gaussian blur (standard deviation up to 5\%). 
 
 As a training loss, we average the per-pixel binary cross-entropy $\ell$ over all pixels of the batch, as defined in:
 \begin{align}
@@ -109,20 +119,22 @@ As a training loss, we average the per-pixel binary cross-entropy $\ell$ over al
 \label{eqn:strain:overallloss}
 \end{align}
 
-We multiply the per-pixel loss by a weight $w_{ij, b}$ for pixel $(i, j)$ of $b^{th}$ image of the batch in order to tune the contribution of this pixel to the loss (see Section \ref{sssec:strain:weights}). We use Adam \parencite{kingma2014adam} as an optimizer with initial learning rate $\gamma= 0.001$ and default hyperparameters ($\beta_1 = 0.9$, $\beta_2 = 0.999$, no weight decay).
+We multiply the per-pixel loss by a weight $w_{ij, b}$ for pixel $(i, j)$ of the $b^{th}$ image of the batch in order to tune the contribution of this pixel to the loss (see Section \ref{sssec:strain:weights}).
+We use Adam \parencite{kingma2014adam} as an optimizer with initial learning rate $\gamma= 0.001$ and default hyperparameters ($\beta_1 = 0.9$, $\beta_2 = 0.999$, no weight decay).
 
 
-\subsubsection{Weights}
+\subsubsection{Weighting schemes}
 \label{sssec:strain:weights}
-In this section, we present the different strategies we evaluate for generating the per-pixel weight $w_{ij,b}$ in Equation \ref{eqn:strain:overallloss}. For the sake of simplicity, we will drop the batch identifier $b$ in the subsequent equations and denote this weight $w_{ij}$. We introduced this weight term to have a possibility to tune the contribution of pseudo-labeled pixels when computing the loss. It is important to note that this weight only applies to pseudo-labeled pixels and, therefore, the ground truth pixels will always be attributed a weight of $w_{ij} = 1$. It is also important to note that the weight is inserted as a constant in our loss and the weight function is not differentiated during back-propagation. 
 
-We study five different weighting strategies each producing an intermediate weight $w^{\xi}_{ij}$ where $\xi$ is the strategy identifier. Because we want to avoid the amplitude of the loss and gradients to be impacted by the weighting strategy, we normalize it to obtain the final weight:
-\begin{equation}
-w_{ij} = \dfrac{w^{\xi}_{ij}}{\overline{w}^{\xi}}
-\end{equation}
-where $\overline{w}^{\xi}$ is the average weight over all pixels of a patch. Our five strategies are as follows:
+Different strategies are evaluated for generating the per-pixel weight $w_{ij,b}$ in Equation \ref{eqn:strain:overallloss}. For the sake of simplicity, we will drop the batch identifier $b$ in the subsequent equations and denote this weight by $w_{ij}$. We introduced this weight term to have the possibility to tune the contribution of pseudo-labeled pixels when computing the loss. It is important to note that this weight only applies to pseudo-labeled pixels and, therefore, the ground truth pixels will always be attributed a weight of $w_{ij} = 1$. It is also important to note that the weight is inserted as a constant in our loss and the weight function is not differentiated during back-propagation. 
 
-\paragraph{Constant} This strategy consists in setting $w^{\text{cst}}_{ij} = C$ where $C \in \mathbb{R}^+$ is an hyperparameter. Because $w_{ij} = 1$ for ground truth pixels, this allows to manually balance the relative contributions of ground truth and pseudo-labeled pixels. The special case of $C = 1$ assigns the same weight to ground truth and pseudo-labels and therefore corresponds to removing $w_{ij,b}$ from Equation \ref{eqn:strain:overallloss}.
+We study five different weighting strategies each producing an intermediate weight $w^{\xi}_{ij}$ where $\xi$ is the strategy identifier. Because we want to avoid the amplitude of the loss and gradients to be impacted by the weighting strategy, we normalize it to obtain the final weight $w_{ij} = w^{\xi}_{ij}/\overline{w}^{\xi},$
+%\begin{equation}
+%$w_{ij} = \dfrac{w^{\xi}_{ij}}{\overline{w}^{\xi}},$
+%\end{equation}
+where $\overline{w}^{\xi}$ is the average weight over all pixels of a patch. Our weighting strategies are as follows:
+
+\paragraph{Constant.} This strategy consists in setting $w^{\text{cst}}_{ij} = C$ where $C \in \mathbb{R}^+$ is an hyperparameter. Because $w_{ij} = 1$ for ground truth pixels, this allows to manually balance the relative contributions of ground truth and pseudo-labeled pixels. The special case $C = 1$ assigns the same weight to ground truth and pseudo-labels and therefore corresponds to removing $w_{ij,b}$ from Equation \ref{eqn:strain:overallloss}.
 
 \paragraph{Balance} This strategy automatically assigns a value to the $C$ hyperparameter presented in the ``constant'' strategy. As a basis for this value, we use the ratio $g$ of ground truth pixels in $\mathcal{D}_l \cup \mathcal{D}_s$. The final weight is given by: 
 \begin{equation}
@@ -131,51 +143,49 @@ w^{\text{bal}}_{ij} = \frac{g}{1 - g}.
 \end{equation}
 This choice is motivated by the belief that our algorithm will provide more reliable pseudo-labels in a low data scarcity regime ($g \nearrow $) in which case it makes sense to tune up the contributions of those pseudo-labels to the loss. In the opposite situation of extreme data scarcity ($g \searrow $), we expect the algorithm to produce less reliable pseudo-labels. 
 
-\paragraph{Entropy} \label{par:strain:entropyweight} Unlike the previous ones, this strategy is not concerned with balancing the contributions but instead penalizes pseudo-labels for which the model was uncertain. It considers the prediction $\hat{y}_{ij}$ as a probability and tune the contribution down using the Shannon entropy. The use of entropy is motivated by its use in several self-training methods \parencite{grandvalet2004semi, lee2013pseudo}. First, an intermediate weight $\omega_{ij}$ is computed as: 
+\paragraph{Entropy} \label{par:strain:entropyweight} Unlike the previous, this strategy is not concerned with balancing the contributions but instead penalizes pseudo-labels for which the model was uncertain. It considers the prediction $\hat{y}_{ij}$ as a probability and tune the contribution down using the Shannon entropy. The use of entropy is motivated by its use in several self-training methods \parencite{grandvalet2004semi,lee2013pseudo}. First, an intermediate weight $\omega_{ij}$ is computed as: 
 \begin{equation}
 \omega_{ij} = 1 + \hat{y}_{ij} \log_2(\hat{y}_{ij}) + (1 - \hat{y}_{ij}) \log_2(1 - \hat{y}_{ij}).
 \label{eqn:strain:entropyweight}
 \end{equation}
-Early experiments have shown that directly using $\omega_{ij}$ as a weight resulted in unstable training. Indeed, during early self-training rounds, the model typically produces $\hat{y}_{ij} \sim 0.5$ which results in $\omega_{ij} \sim 0$ for most pixels in a patch, leaving only foreground ground truth pixels to be evaluated in the loss. In order to avoid this behavior, we introduce a new hyper-parameter $w_{min} \in \left]0, 1\right]$ which allows rescaling linearly the weights $\omega_{ij}$ to $w^{ent}_{ij} \in [w_{min},1]$ as defined in:
+Early experiments have shown that directly using $\omega_{ij}$ as a weight resulted in unstable training. Indeed, during early self-training rounds, the model typically produces $\hat{y}_{ij} \sim 0.5$ which results in $\omega_{ij} \sim 0$ for most pixels in a patch, leaving only foreground ground truth pixels to be evaluated in the loss. In order to avoid this behavior, we introduce a new hyperparameter $w_{min} \in \left]0, 1\right]$ which allows rescaling linearly the weights $\omega_{ij}$ to $w^{ent}_{ij} \in [w_{min},1]$ as defined in:
 \begin{equation}
 w^{ent}_{ij} = \left(1 - w_{\text{min}}\right) \omega_{ij} + w_{\text{min}}.
 \label{eqn:strain:wminrescale}
 \end{equation}
 
-\paragraph{Consistency} Self-training algorithms often enforce consistency between the teacher and student models predictions. Inspired from this, we exploit another form on consistency for this strategy. In structured output tasks like segmentation, there is a correlation between predictions that are spatially close, as, for most pixels, it is unlikely that the true label should differ between a pixel and its neighbors. Therefore, we use the pseudo-label consistency between a pixel and its neighbors as a proxy to evaluate reliability of this pseudo-label. The weight is given by
+\paragraph{Consistency.} Self-training algorithms often enforce consistency between the teacher and student models predictions. Inspired from this, we exploit another form of consistency for this strategy. In structured output tasks like segmentation, there is a correlation between predictions that are spatially close, as, for most pixels, it is unlikely that the true label should differ between a pixel and its neighbours. Therefore, we use the pseudo-label consistency between a pixel and its neighbours as a proxy to evaluate reliability of this pseudo-label: %The weight is given by
 \begin{equation}
-w^{\text{cty}}_{ij} = 1 - \dfrac{\sum_{k=-\eta}^{\eta} \sum_{l=-\eta}^{\eta} c(\hat{y}_{ij},  \hat{y}_{(i+k)(j+l)})}{\eta^2 - 1}
+w^{\text{cty}}_{ij} = 1 - \dfrac{\sum_{k=-\eta}^{\eta} \sum_{l=-\eta}^{\eta} (\hat{y}_{ij}- \hat{y}_{(i+k)(j+l)})^2}{\eta^2 - 1}
 \end{equation}
-where $c(y_1,y_2)$ is a consistency function for a pair of pixel and $\eta$ is the size of the neighborhood. Both are hyperparameters of the method. Regarding $\eta$, we consider a square neighborhood around the central pixel. Therefore, when $\eta = 1$ and $2$, 8 and 24 pixels are respectively compared to the central pixel. When consistency is computed on the image border, we ignore pixels outside of the image.
+where $\eta$ is the size of the neighbourhood and an hyperparameter of the method. We consider a square neighbourhood around the central pixel and ignore pixels outside of the image at the image borders. We have arbitrarly chosen $\eta = 2$ as default value for all our experiments involving the ``\textit{consistency}'' weighting strategy. This means that each pixel (except at the image borders) is compared to 24 neighbouring pixels when computing consistency. 
 
-% \begin{figure}
-%     \centering
-%     \includegraphics[scale=0.325]{images/neighbourhood.png}
-%     \caption{Neighbourhood parameter $\eta$.}
-%     \label{fig:strain:neighbourhood}
-% \end{figure}
-
-\paragraph{Merged} This strategy assigns a high weight to pixels for which the model is both certain and consistent (spatially). It achieves this by multiplying together the consistency weight $w^{\text{cty}}_{ij}$ and the entropy raw weight $\omega_{ij}$. Because $\omega_{ij}$ suffers from the issue described earlier, we apply the same re-scaling operation after multiplication:
+\paragraph{Merged.} This strategy assigns a high weight to pixels for which the model is both certain and consistent (spatially). It achieves this by multiplying together the consistency weight $w^{\text{cty}}_{ij}$ and the entropy raw weight $\omega_{ij}$. Because $\omega_{ij}$ suffers from the issue described earlier, we apply the same re-scaling operation after multiplication:
 \begin{equation}
 w^{\text{mgd}}_{ij} = (1 - w_{min}) \left(w^{\text{cty}}_{ij} \times \omega_{ij}\right) + w_{min}.
 \end{equation}
 
-
 \section{Data}
 \label{sec:strain:data}
-In this section, we describe the datasets we use to evaluate our method. It includes three public datasets (see Section \ref{ssec:strain:datapublicdatasets}) and an in-house sparsely-annotated dataset which has initially motivated this work (see Section \ref{ssec:strain:thyroidfnab}). 
 
-\subsection{\acrshort{monuseg}, \acrshort{glas} and \acrshort{segpc}}
-\label{ssec:strain:datapublicdatasets}
-We use 3 exhaustively-annotated public segmentation datasets for this purpose.
+In this section, we describe the datasets we use to evaluate our method. It includes three public exhaustively labeled segmentation datasets: \acrshort{monuseg} \parencite{kumar2019multi}, \acrshort{glas} \parencite{sirinukunwattana2017gland} and \acrshort{segpc} \parencite{gupta2021segpc}. The datasets are described in Table \ref{tab:strain:datasets_statistics} and illustrated in Figure \ref{fig:strain:datasets_samples}. \acrshort{monuseg} contains images of tissues coming from different organs, patients and hospitals where epithelial and stromal nuclei are annotated. Given the variety of sources, the images exhibit significant variations of staining and morphology. The density of annotations is also quite high compared to the other datasets. \acrshort{glas} features images containing both benign tissues and malignant tissues with colonic carcinomas. The gland annotations vary greatly in shape and size. Originally, \acrshort{segpc} contains 3 classes: background, cytoplasm and nucleus. In this work, we merge the two latter classes as we focus on binary segmentation. One of the challenges of this dataset is the presence of non-plasma cells which should be ignored by the algorithm although they are very similar to plasma cells. Moreover, artefacts are present on the images (\eg cracked scanner glass in foreground, scale reference or magnification written on the image).
 
-\acrshort{monuseg} \parencite{kumar2019multi} contains 44 images coming from different organs, patients and hospitals with a total of 28846 annotated epithelial and stromal nuclei. The dataset is split into some training (30 images, 17362 cells) and test (14 images, 11484 cells) sets. Each image contains a significant number of cell annotations (few hundreds to a thousand) of which the dimensions are quite uniform. As for the images, they show great variations of appearance given the variety of sources. See Figures \ref{sfig:strain:monuseg_sample1} and 
-\ref{sfig:strain:monuseg_sample2} for samples.
+\begin{table}
+  \caption{Summary statistics for the four datasets used in this work. An image is a region of interest extracted from a whole-slide image.}
+  \centering
+  \begin{tabular}{|c|cc|cc|}
+    \hline
+    \multirow{2}{*}{Dataset} & \multicolumn{2}{c|}{Training set} & \multicolumn{2}{c|}{Test set}\\
+    & Images & Annots    & Images & Annots  \\
+    \hline
+    \acrshort{monuseg} & 30 & 17362 & 14 & 11484\\
+    \acrshort{glas} & 85 & 763 & 80 & 781 \\
+    \acrshort{segpc} & 298 & 1643 & 300 & 900 \\
+    \hline
+  \end{tabular}
+  \label{tab:strain:datasets_statistics}
+\end{table}
 
-\acrshort{glas} \parencite{sirinukunwattana2017gland} contains 85 training and 80 test images with binary segmentation masks of intestinal glands. The image contains both benign tissue as well as colonic carcinomas. The gland annotations vary greatly in shape and size. These variations can be caused by the presence of a carcinoma or simply the axis of cut of the tissue during the slide preparation. See Figures \ref{sfig:strain:glas_sample1} and 
-\ref{sfig:strain:glas_sample2} for samples.  
-
-\acrshort{segpc} \parencite{gupta2021segpc} contains 2633 annotated plasma cells over 498 annotated images. The original segmentation problem features 3 classes: background, cytoplasm and nucleus. In this work, we merge the two latter classes as we are only interested in binary segmentation. Only the training (298 images) and the validation sets are publicly available (200 images). One of the challenges of this dataset is the presence of non-plasma cells which should be ignored by the algorithm although they are very similar to plasma cells. Moreover, artefacts are present on the images (\eg cracked scanner glass in foreground, scale reference or magnification written on the image). See Figures \ref{sfig:strain:segpc_sample1} and \ref{sfig:strain:segpc_sample2} for samples.
 
 \begin{figure}
   \centering
@@ -222,13 +232,12 @@ We use 3 exhaustively-annotated public segmentation datasets for this purpose.
   \label{fig:strain:datasets_samples}
 \end{figure}
 
-
 \subsection{Thyroid \acrshort{fnab}}
 \label{ssec:strain:thyroidfnab}
 
-We use an in-house sparsely-annotated dataset collected on the Cytomine platform. This dataset contains a set of 81 WSIs with fine-needle aspiration biopsies (\acrshort{fnab}) from thyroid nodules stained with Diff-Quik. These images were digitized using \TODO{several scanners (Aperio, Hammamatsu)???} at a 0.226 $\mu m$/pixel resolution and uploaded to Cytomine. 
+In addition to the three public datasets, we use a dataset that actually motivated the development of our method, a sparsely labeled dataset for thyroid nodule malignancy assessment. Pathologists\footnote{ULB Erasme hospital, Belgium, team of Pr. Isabelle Salmon.} sparsely annotated nuclei and cell aggregates with polygon annotations in 85 whole-slide images using Cytomine \parencite{maree2016collaborative}. The training set consists of 4742 crops, one for each polygon annotation. The test set is a set of 45 regions of interest (2000x2000 pixels each) with annotations highlighting structures of interest (nuclei features and architectural cell patterns) made by a computer science student. This dataset is illustrated in Figure \TODO{fig thyroid}.
 
-Expert pathologists from the ULB Erasme hospital (Brussels, Belgium) highlighted structures of interest in these WSIs using polygon annotations. These structures can be broadly grouped into two categories: nuclear features (individual nuclei or cells) and architectural patterns (groups of cells). Both categories contain malignant and healthy entities. \TODO{(not sure if necessary to include)The complete ontology can be found in Table??}. The pathologists were not given any precise directions during the labeling process. Therefore, they navigated the images and, as they went, annotated examples of the ontology terms. They did not exhaustively annotate any region of interest. The resulting annotations can therefore be considered sparse as can be seen in Figure \TODO{???}. 
+\TODO{add split explanation}
 
 % \begin{figure*}
 %   \centering
@@ -243,54 +252,39 @@ Expert pathologists from the ULB Erasme hospital (Brussels, Belgium) highlighted
 %   \label{fig:strain:thyroid_example_annotations}
 % \end{figure*}
 
-The dataset we use in this work was generated from these annotations. In particular, we have extracted crops centered around each annotation of interest with a minimum image size of 512 $\times$ 512 pixels at maximum resolution. If the annotation was larger than that, the crop was built to contain exactly the annotation. We are interested in binary segmentation therefore, for each crop image, we have extracted a binary mask where each pixel $y_{ij}$ is labeled $1$ (foreground) if it is contained in an annotated object (whether or not this object is the cropped annotation) and the rest of them are assigned label $0$ (background). The resulting dataset contains 4742 crops with 3003 nuclear features and 1739 architectural patterns. 
-
-In order to evaluate the method, a computer science student exhaustively annotated 20 validation and 25 test regions of interest of 2000x2000 pixels on Cytomine. The anotations are binary and correspond to the type of problem resulting from assembling all terms into one foreground class. 
-
 
 \section{Experimental setup}
 \label{sec:strain:experiments}
 
-In this section, we describe the experiments we have run and their results. These experiments aim at evaluating how our self-training approach performs against different baselines on the datasets described in Section \ref{sec:strain:data}. Moreover, we study the impact of different hyperparameters of our methods on the performance.
+In this section, we present context information for our experiments: what are our baselines, how we have simulated sparse datasets from the public datasets and what evaluation protocol we have applied.
 
-\subsection{Transforming the datasets}
+\subsubsection{Transforming the datasets}
 
-In order to fit the sparsely-annotated settings described in Section \ref{sec:strain:methods}, we generate new datasets from \acrshort{segpc}, Glas and \acrshort{monuseg}. Because we want to study the effects of varying levels of sparsity, we randomly pick a certain amount of images $n_l$ for the set $\mathcal{D}_l$ and the rest are added to the set $\mathcal{D}_s$. To make the masks in $\mathcal{D}_s$ sparse, we randomly remove a certain percentage $\rho$ the annotated instances. For \acrshort{monuseg}, we remove $\rho$ \% of the instances in each image. For \acrshort{segpc} and Glas, because the number of instances per image is small, we remove $\rho$ \% of the instances from the complete list of instances. As a result, some training images can be missing ground truth. We study different values of $\rho$ and $n_l$ to evaluate the behavior of the method with different levels of sparsity.
+In order to fit the sparsely labeled settings described in Section \ref{sec:strain:methods}, we generate new datasets from \acrshort{segpc}, \acrshort{glas} and \acrshort{monuseg}. This generation is controlled by two parameters: $n_l$ and $\rho$. The former is the number of images to keep in the exhaustively labeled set $\mathcal{D}_l$. These images are chosen at random without replacement in the original training set. The latter parameter $\rho$ is the percentage of annotations to remove from the images to make the remaining images sparsely labeled.
 
-Because the thyroid dataset is sparse from the start, we cannot adopt the same strategy and therefore keep it as-is. In order to fit the sparsely-annotated settings, we hypothesize that crops of nuclear features are more likely to be sparse than the crops of architectural patterns given the annotation process. Therefore, we use the former set as $\mathcal{D}_s$ and the latter as $\mathcal{D}_l$.
+For \acrshort{monuseg}, we remove $\rho \%$ of the instances in each image selected for the sparse set. For \acrshort{segpc} and \acrshort{glas}, because the number of instances per image is small (up to two or three dozen), we remove $\rho \%$ of the instances from the complete list of instances. As a result, some sparse training images from these  datasets can be completely void of ground truth. However, this is not a problem as our pseudo-labeling process is designed to support such images. 
 
-\subsection{Baselines}
+\subsubsection{Baselines}
+\label{ssec:strain:baselines}
 
-We compare our self-training approach to three baselines. The first consists in using the full dataset, without removing any ground truth (\ie $|\mathcal{D}_s| = 0$). Given that our experiments are performed on versions of the datasets where annotated instances were removed, this first baseline should be an upper-bound on the performance of self-training. The second consists in using the sparsely-annotated set $\mathcal{D}_s$ as if it was exhaustively annotated ($\mathcal{D}_{train} = \mathcal{D}_l \cup \mathcal{D}_s$). This strategy makes sense especially for moderately sparse datasets. Indeed, convolutional layers (which compose UNet) are able to cope with a bit of label noise given that gradients are averaged over feature maps to update the parameters. Therefore, a bit of noise in certain parts of the images can be compensated by the feedback of ground truth labels in other locations. The last baseline consists in not using the sparsely-annotated images during the training process (\ie $\mathcal{D}_{train} = \mathcal{D}_l$). Our self-training approach is of interest if it outperforms the two latter baselines, moreover, the closer to the first baseline the better.
+We compare our self-training approach to three baselines. The first one, referred to as ``\textit{upper}'', consists in using the full dataset, without removing any ground truth (\ie $|\mathcal{D}_l| = n$ and $|\mathcal{D}_s| = 0$). Since it has access to all the annotations, this baseline is expected to represent an upper bound for all other strategies. 
 
-\subsection{Hyperparameters study}
+The second baseline consists in using the sparsely-annotated set $\mathcal{D}_s$ as if it was exhaustively annotated ($\mathcal{D}_{train} = \mathcal{D}_l \cup \mathcal{D}_s$). This strategy makes sense especially for moderately sparse datasets. Indeed, convolutional layers (as in U-Net) are able to cope with a bit of label noise given that gradients are averaged over feature maps to update the model parameters. Therefore, a bit of noise in certain parts of the images can be compensated by the feedback of ground truth labels in other locations. This baseline will be referred to as ``$\mathcal{D}_l \cup \mathcal{D}_s$''.
 
-Our self-training approach and our weighting strategies in particular come with a set of hyperparameters that we study in different scarcity conditions on the three datasets. In general, we will list the studied values alongside the associated results in the relevant sections (see Section \ref{sec:strain:results}). In this section, we comment and motivate the choices of hyperparameters values in general. 
+The third and last baseline, referred to as ``\textit{$\mathcal{D}_l$ only}'', consists in not using at all the sparsely-annotated images during the training process (\ie $\mathcal{D}_{train} = \mathcal{D}_l$).
 
-Regarding the ``\textit{constant}'' strategy, we study selected values of $C$ to cover an interval going from $0.01$ to $2$. The specific value $C = 1$ corresponds to to the absence of weights in the loss. We believe that $C < 1$ should be preferrable in higher scarcity regimes as pseudo-labels are likely to impact negatively the training process so it makes sense to tune down their contributions to the loss. 
+Our self-training approach is of practical interest if it outperforms the two latter baselines. Moreover, the closer to the ``\textit{upper}'' baseline the better.
 
-As a consistency function $c(y_1, y_2)$, we study both the absolute error $|y_1-y_2|$ and the squared error $(y_1-y_2)^2$. For the size of the neighborhood, we study $\eta \in \left\{1, 2\right\}$ which corresponds to the smallest possible neighborhoods. This ensures that the close pixels labels consistency assumption holds except at the very close vicinity of instance boundaries and to keep the computational cost of the method under control.
-
-Regarding the minimum weight for the ``\textit{entropy}'' and ``\textit{merged}'' strategies, we evaluate $w_{\text{min}} \in \left\{0.01, 0.05, 0.1, 0.25, 0.5, 0.75\right\}$. These values were picked following the same motivations as hyperparameter $C$. The case $w_{min} = 1$ is not considered as it falls back to the case $C = 1$ with the ``\textit{constant}'' strategy discussed earlier.
-
-\subsection{Evaluation}
+\subsubsection{Evaluation}
 \label{ssec:strain:evaluation}
 
-We have built an evaluation protocol in order to ensure a fair comparison between the different strategies and the baselines. Ultimately, all approaches must produce a model $\theta$ and a threshold $T \in [0, 1]$ which we use to evaluate the model on the test sets of the datasets. We compare the test masks against the thresholded (with $T$) output of model $\theta$ for images of the test sets using the Dice score (see Equation \ref{eqn:strain:dice}). 
+We have built an evaluation protocol in order to ensure a fair comparison between the different strategies and the baselines. Ultimately, all approaches produce a segmentation model $\theta$ that will be the one evaluated. As an evaluation metric, we use the Dice score introduced in Equation \ref{eqn:strain:dice} which requires a threshold $T$ to turn the probability map produced by the model into a binary segmentation. To assess the performance of a model independently of the thresholding strategy, we pick $T$ so that the Dice score is maximized on the test set. In other words, in order to determine the threshold, we apply the optimization procedure described in Equation \ref{eqn:strain:thresholdopt} where $\mathcal{D}_a$ is the test set $\mathcal{D}_{\text{test}}$. The Dice score resulting from this optimization will be referred to as ``$\text{Dice}^*$''. Obviously, in a context of extreme data scarcity, it will not be possible to tune the threshold this way because of the lack of a sufficiently large validation or test set. We will leave the design of fully automatic strategies to tune such threshold as future work but we believe that visually tuning such threshold on new images would be feasible in interactive applications where the segmentation models would be mostly used to assist the labeling of new images.
 
-For all experiments except the $|\mathcal{D}_s| = 0$ baseline, we select as $\theta$ the model produced by the last training round and tune the threshold on $\mathcal{D}_l$ similarly as for the hard label strategy (see Equation \ref{eqn:strain:thresholdopt}). As mentioned earlier, tuning the threshold on the training data entails a risk of overfitting. However, in a context of extreme data scarcity, it is not always possible to obtain a sufficiently large validation set to tune this threshold. Therefore, we believe it is a realistic choice to use $\mathcal{D}_l$ as the tuning set.  
+Every experiment and hyperparameters combination we evaluate is run with ten random seeds to evaluate the variability. The seed affects the dataset sparsity ($n_l$ and $\rho$), model initialization, mini-batch sampling and data augmentation. We report Dice average and standard deviation over these random seeds.  
 
-For the $|\mathcal{D}_s| = 0$ baseline, we have access to the fully annotated datasets and therefore can rely on more classical evaluation and tuning protocols. In this case, we extract approximately 10\% of the training images and masks to build a validation set. We evaluate the model every training round on this validation set using the Dice score. As a final model $\theta$ and threshold $T$, we select the model which yielded the best Dice score and its corresponding threshold. 
+% \paragraph{Manual threshold tuning} As previously explained, we tune the threshold on $\mathcal{D}_l$ for most experiments which implies a risk of overfitting. Therefore, we wanted to try another strategy. In practice, one could imaging a setup where a human would run the algorithm and generate $\theta$ then set $T$ by tuning it manually on a few test images. This protocol raises questions related to bias (human-related) and small sample size but depending on the final application (\eg AI-assisted annotation), they might not really be an issue. This protocol would also alleviate the issue of training set overfitting. 
 
-Every experiment and hyper-parameter combination we evaluate is run with ten different random seeds to evaluate the variability. The seed affects the dataset sparsification, model initialization, mini-batch sampling and data augmentation. In the case of the $|\mathcal{D}_s| = 0$ baseline, the seed affects the selection of the validation set. 
-
-In the following sections, we report test Dice average and standard deviation over these random seeds.  
-
-\paragraph{Manual threshold tuning} As previously explained, we tune the threshold on $\mathcal{D}_l$ for most experiments which implies a risk of overfitting. Therefore, we wanted to try another strategy. In practice, one could imaging a setup where a human would run the algorithm and generate $\theta$ then set $T$ by tuning it manually on a few test images. This protocol raises questions related to bias (human-related) and small sample size but depending on the final application (\eg \acrshort{ai}-assisted annotation), they might not really be an issue. This protocol would also alleviate the issue of training set overfitting. 
-
-Therefore, we have re-evaluated the models generated during our experiments using a similar protocol similar to leave-one-out cross-validation. Given a run of our algorithm, we have extracted the final model $\theta$ and the associated random seed $r$. The seed was used to randomly extract $K$ images from the related test set $\mathcal{D}_t$ which were used to tune the threshold $T$. For the sake of simplicity, instead of using a human, we have applied the same threshold optimization procedure based on the Dice score as presented in Section \ref{sssec:strain:softandhardlabels} for hard labels. The threshold was then used to evaluate the model on the remaining $|\mathcal{D}_t| - K$ images. We have repeated this procedure for all seeds and then average the results. This process is similar to a non-exhaustive $K$-fold cross validation. 
-
-\paragraph{Test set threshold optimization} Another way to evaluate the threshold without taking the risk of overfitting the training set would be to actually take $T$ such that the Dice score is maximized on the test set. This approach is not realistic in an extreme data scarcity situation as it would require a fully annotated test set (in our experiments, the test sets are almost always larger than the training set). However, we have still decided to evaluate the performance of the models using this approach to evaluate how much our first threshold generation method (\ie on $\mathcal{D}_l$) suffers from overfitting.   
+% Therefore, we have re-evaluated the models generated during our experiments using a similar protocol similar to leave-one-out cross-validation. Given a run of our algorithm, we have extracted the final model $\theta$ and the associated random seed $r$. The seed was used to randomly extract $K$ images from the related test set $\mathcal{D}_t$ which were used to tune the threshold $T$. For the sake of simplicity, instead of using a human, we have applied the same threshold optimization procedure based on the Dice score as presented in Section \ref{sssec:strain:softandhardlabels} for hard labels. The threshold was then used to evaluate the model on the remaining $|\mathcal{D}_t| - K$ images. We have repeated this procedure for all seeds and then average the results. This process is similar to a non-exhaustive $K$-fold cross validation. 
 
 \section{Experiments and results}
 \label{sec:strain:results}
@@ -298,7 +292,7 @@ Therefore, we have re-evaluated the models generated during our experiments usin
 \subsection{Hard labeling \vs soft labeling}
 \label{ssec:strain:res:hardvssoft}
 
-In this section, we explore how the two choices of pseudo-label generation presented in Section \ref{sssec:strain:softandhardlabels} impact the performance of self-training. In order to answer this question, we have run our self-training approach a significant number of times with different hyperparameter settings either with hard or soft pseudo-labels. We have performed 10 runs per hyperparameter combination and with total of 45 combinations for \acrshort{segpc}, 42 for \acrshort{monuseg} and 22 for \acrshort{glas} (see Supplementary Section \ref{app:strain:hyperparameters_selftrain} for a detailed list of hyperparameters combinations). Regarding sparsity, we have decided to study a relatively scarce regime with $\rho = 90\%$ for all datasets and $n_l$ set to $2$ for \acrshort{monuseg}, $30$ for \acrshort{segpc} and $8$ for \acrshort{glas} (\ie between $90\%$ and $95\%$ of sparsely labeled images with $90\%$ of missing annotations).    
+In this section, we explore how the two choices of pseudo-label generation presented in Section \ref{sssec:strain:softandhardlabels} impact the performance of self-training. In order to answer this question, we have run our self-training approach a significant number of times with different hyperparameter settings either with hard or soft pseudo-labels. We have performed 10 runs per hyperparameter combination and with total of 45 combinations for \acrshort{segpc}, 42 for \acrshort{monuseg} and 22 for \acrshort{glas} (see Supplementary Section \TODO{appendix for this experiment} for a detailed list of hyperparameters combinations). Regarding sparsity, we have decided to study a relatively scarce regime with $\rho = 90\%$ for all datasets and $n_l$ set to $2$ for \acrshort{monuseg}, $30$ for \acrshort{segpc} and $8$ for \acrshort{glas} (\ie between $90\%$ and $95\%$ of sparsely labeled images with $90\%$ of missing annotations).    
 
 We observe that hard labels consistently yield superior performance on all datasets. 
 
@@ -313,89 +307,80 @@ We observe that hard labels consistently yield superior performance on all datas
 \subsection{Self-training performance at fixed $n_l$}
 \label{ssec:strain:fixednl}
 
-In order to study how our self-training approach performs under different data scarcity regime, we have performed the following experiment. We have generated several versions of our datasets by varying $\rho$ with $n_l$ fixed and have run the baselines and different hyperparameters combinations on the generated datasets. Given the results of Section \ref{ssec:strain:res:hardvssoft}, we have used hard labels exclusively. The reported Dice scores are optimized on the test set. For all datasets, the upper baseline, $|\mathcal{D}_s| = 0$, outperforms the two others. 
+In order to study how our self-training approach performs under different data scarcity conditions, we have generated several versions of our datasets by varying $\rho$ with $n_l$ fixed and have run the baselines and different hyperparameters combinations on the generated datasets. As discussed in Section \ref{ssec:strain:self_training}, we have used hard labels exclusively. The detailed hyperparameter combinations used in this section are provided in Supplementary Section \ref{app:strain:sec:expfixednl}.
 
-\begin{figure}
+Results are shown for all three datasets in Figure \ref{fig:strain:rho_exp}. In general, self-training is always able to outperform significantly the ``\textit{$\mathcal{D}_l$ only}'' and ``$\mathcal{D}_l \cup \mathcal{D}_s$'' baselines with a significantly reduced amount of sparse annotations (the exact value is dataset dependant, see below). Regarding the baselines, ``\textit{upper}''  outperforms the two others. Moreover, using sparsely labeled images as if they were exhaustively labeled (\ie $\mathcal{D}_l \cup \mathcal{D}_s$) appears not to be a good idea as it is outperformed by all self-training approaches and baselines in almost all scarcity conditions. The performance of this baseline increases as one adds more sparse annotations however and is able to catch up with the ``\textit{$\mathcal{D}_l$ only}'' baseline in the lowest scarcity conditions validating the hypothesis presented in Section \ref{ssec:strain:baselines}. 
+
+\begin{figure}[th]
   \centering
-  \includegraphics[width=0.9\textwidth]{strain/monuseg_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
-  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{\acrshort{monuseg}}. ``$E / w_{min} = 0.1$'', ``$M / w_{min} = 0.1$'' and ``\textit{cnstcy}'' respectively stand for the entropy, merged (both with the specified $w_{min}$) and consistency weighting strategies. ``$C = 0.1$'', for instance, stands for the constant weighting strategy with the specified value as constant. The baselines are $|\mathcal{D}_s| = 0$, $\mathcal{D}_l$ only, $\mathcal{D}_l \cup \mathcal{D}_s$. The scores are obtained by optimizing the threshold $T$ on the test set.}
-  \label{fig:strain:rho_exp_monuseg}
+    \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/monuseg_test_pxl_self_hard_dice_rho.pdf}
+    \caption{\acrshort{monuseg}}
+      \label{fig:strain:rho_exp_monuseg}
+  \end{subfigure} \\
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/segpc_test_pxl_self_hard_dice_rho.pdf}
+    \caption{\acrshort{segpc}}
+    \label{fig:strain:rho_exp_segpc}
+  \end{subfigure} \\
+  \begin{subfigure}{\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/glas_test_pxl_self_hard_dice_rho.pdf}
+    \caption{\acrshort{glas}}
+    \label{fig:strain:rho_exp_glas}
+  \end{subfigure}
+  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$. We only report the weighting schemes that show representative behaviour. Other weighting strategies are evaluated and reported in Supplementary Section \ref{app:strain:sec:additionalfixednl}.}
+  \label{fig:strain:rho_exp}
 \end{figure}
 
-\paragraph{\acrshort{monuseg}} First, on \acrshort{monuseg} (see Figure \ref{fig:strain:rho_exp_monuseg}), it is interesting to note that using sparsely labeled images as if they were exhaustively labeled (\ie baseline $\mathcal{D}_l \cup \mathcal{D}_s$) is generally not a good idea as it is outperformed by all other approaches in most cases. However, we observe that the performance of this baseline increase as one adds more sparse labels in $\mathcal{D}_s$ (\ie $\rho$ decreases), even making it more efficient than ``$\mathcal{D}_l$ only'' at $\rho = 25\%$. 
+\paragraph{\acrshort{monuseg}.} On this dataset, we can divide the analysis by differentiating three scarcity regimes: extreme ($\rho \in [95\%, 100\%]$), significant ($\rho \in [80\%, 90\%]$) and medium ($\rho \in [25\%, 75\%]$). Overall, most self-training approaches benefit from additional sparse annotations as their score increase when $\rho$ decreases. This statement is true for all weighting strategies but the ``\textit{constant}'' with $C = 0.1$ of which the performance plateau near $\rho = 85\%$, before decreasing as $\rho$ decreases. 
 
-Then, we can divide the analysis by differentiating three scarcity regimes: extreme ($\rho \in [95\%, 100\%]$), significant ($\rho \in [80\%, 90\%]$) and medium ($\rho \in [25\%, 75\%]$). Overall, most self-training approaches benefit from additional sparse annotations as their score increase when $\rho$ decreases. This statement is true for all weighting strategies but the ``constant'' with $C = 0.1$ which plateau near $\rho = 85\%$, before decreasing as $\rho$ decreases. 
+In the extreme regime, all self-training approaches exhibit high variance and are outperformed by the ``\textit{$\mathcal{D}_l$ only}'' baseline, or yield comparable performance. In this situation, it appears to be better to work in a fully supervised fashion using only images from $\mathcal{D}_l$ rather then using our self-training approach. Indeed, it seems that the noise brought by the extreme annotation sparsity (or complete lack of annotation when $\rho = 100\%$) degrades the model significantly which cannot even make efficient use of the exhaustively labeled images anymore. For $\rho = 95\%$, two self-training approaches (``\textit{constant}'' with $C = 0.1$ and ``\textit{entropy}'') are on average better then the baseline but variance is still high making it difficult to really conclude that they are more efficient. 
 
-In the extreme regime, all self-training approaches exhibit high variance and are outperformed by the ``$\mathcal{D}_l$ only'' baseline, or yield comparable performance. In this situation, it appears to be better to work in a fully supervised fashion using only images from $\mathcal{D}_l$ rather then using our self-training approach. Indeed, it seems that the noise brought by the extreme annotation sparsity (or complete lack of annotation when $\rho = 100\%$) degrades the model significantly which cannot even make efficient use of the exhaustively labeled images anymore. For $\rho = 95\%$, two self-training approaches (``constant'' with $C = 0.1$ and ``entropy'') are on average better then the baseline but variance is still high making it difficult to really conclude that they are more efficient. 
+The situation is reversed in the significant regime where most self-training approaches (except the ``\textit{consistency}'' weighting strategy) outperform the ``\textit{$\mathcal{D}_l$ only}'' baseline and variance decreases significantly as well. As for the ``\textit{upper}'' baseline, it remains more efficient than self-training. For $\rho = 90\%$, the most efficient weighting strategy on average is ``\textit{constant}'' with $C = 0.1$ which also exhibits the smallest variance of all the self-training approaches. We believe that such a low constant is particularly helpful to combat the noise brought by the high sparsity as pseudo-labeled pixels contribute way less during training. For $\rho = 85\%$ and $90\%$, the ``\textit{constant}'' with $C = 0.1$ strategy plateaus whereas others catch up in terms of performance and variance decrease with the ``\textit{entropy}'' and ``\textit{merged}'' (plot for this strategy can be found in Supplementary Figure \ref{app:strain:fig:rho_exp_monuseg}) approaches taking up the lead.
 
-The situation is reversed in the significant regime where most self-training approaches (except the ``consistency'' weighting strategy) outperform the ``$\mathcal{D}_l$ only'' baseline and variance decreases significantly as well. As for the $|\mathcal{D}_s| = 0$ baseline, it remains more efficient than self-training. For $\rho = 0.9$, the most efficient weighting strategy on average is ``constant'' with $C = 0.1$ which also exhibits the smallest variance of all the self-training approaches. We believe that such a low constant is particularily helpful to combat the noise brought by the high sparsity as pseudo-labeled pixels contribute way less during training. For $\rho = 85\%$ and $90\%$, the ``constant'' with $C = 0.1$ strategy plateaus whereas others catch up in terms of performance and variance decrease with the ``entropy'' and ``merged'' approaches taking up the lead.
+In the medium regime, three self-training approaches reach, and even slightly surpass, the upper baseline: ``\textit{constant}'' with $C = 0.5$, ``\textit{entropy}'' and ``\textit{merged}''. This result is interesting because it means that our self-training approach is able to reach the performance of a fully supervised approach but using only $\sim 30\%$ of the original annotations (\ie $\rho = 75\%$, approximately 5k annotations instead of 17k) which is a significant annotation budget saving. The approach ``\textit{constant} $(C=0.1)$'' decreases with $\rho$ indicating that such a low $C$ prevents the model to learn efficiently from the additional annotations (compared to the significant regime). This strategy even finished below the $\mathcal{D}_l \cup \mathcal{D}_s$ baseline at $\rho = 25\%$. 
 
-In the medium regime, three self-training approaches reach, and even slightly surpass, the upper baseline: ``constant'' with $C = 0.5$, ``entropy'' and ``merged''. This result is interesting because it means that our self-training approach is able to reach the performance of a fully supervised approach but using only $\sim 30\%$ of the orignal annotations (\ie $\rho = 75\%$, approximately 5k annotations instead of 17k) which is a very significant annotation budget saving. The approach ``constant'' with $C=0.1$ scores decreases with $\rho$ indicating that such a low constant prevents the model to learn efficiently from the additional annotations (compared to the significant regime). This strategy even finished below the $\mathcal{D}_l \cup \mathcal{D}_s$ baseline at $\rho = 25\%$. 
+Overall, results on \acrshort{monuseg}  are quite satisfactory. Although our approach is struggling in an extreme scarcity regime, it quickly catches up with the ``\textit{upper}'' baseline as one adds more annotations to $\mathcal{D}_s$. In this case, the choice of weighting strategy matters and depends on the sparsity of the dataset.
 
-Overall, result on MonuSeg are quite satisfactory. Although our approach is struggling in an extreme scarcity regime, it quickly catches up with the upper baseline as one adds more annotations to $\mathcal{D}_s$. In this case, the choice of weighting strategy matters and depends on the sparsity of the dataset.
+\paragraph{\acrshort{segpc}.} Regarding the trend, our self-training approach behaves similarly on \acrshort{segpc} (see Figure \ref{fig:strain:rho_exp_segpc}) compared to \acrshort{monuseg}: all self-training approaches without exception seem to benefit from additional annotations in $\mathcal{D}_s$. Moreover, the $\mathcal{D}_l \cup \mathcal{D}_s$ baseline is particularly inefficient and finishes just below the ``\textit{$\mathcal{D}_l$ only}'' baseline at $\rho = 25\%$. However, in the extreme regime, the gap between self-training and the ``\textit{$\mathcal{D}_l$ only}'' baseline is less than on \acrshort{monuseg}. The rate at which our approach improves over the ``\textit{$\mathcal{D}_l$ only}'' is also slower as it takes a larger $\rho$ (around $75\%$) for the performance of self-training to become significantly better than this baseline. The best-performing weighting strategies also differ. The best strategies overall are ``\textit{constant}'' (with $C = 0.5$ or $1$) and ``\textit{consistency}''. The ``\textit{merged}'' and ``\textit{entropy}'' are worse than the others, although the latter catches up at $\rho = 25\%$. On this dataset, only the ``constant`` and ``entropy'' strategies come close to catching up with the upper baseline but it takes proportionally more annotations compared to \acrshort{monuseg} as it happens around $\rho = 25\%$.
 
-\begin{figure}
-  \centering
-  \includegraphics[width=0.9\textwidth]{strain/segpc_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
-  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{\acrshort{segpc}}. See Figure \ref{fig:strain:rho_exp_monuseg} for explanation. The baseline $\mathcal{D}_l \cup \mathcal{D}_s$ performs significantly worse than all approaches and is therefore out of the range of interest. \TODO{show full range in appendix?}}
-  \label{fig:strain:rho_exp_segpc}
-\end{figure}
-
-\paragraph{\acrshort{segpc}} Regarding the trend, our self-training approach behaves similary on \acrshort{segpc} (see Figure \ref{fig:strain:rho_exp_segpc}) compared to \acrshort{monuseg}: all self-training without exceptions seem to benefit from additional annotations in $\mathcal{D}_s$. Moreover, the $\mathcal{D}_l \cup \mathcal{D}_s$ baseline is particularily inefficient and finishes just below the ``$\mathcal{D}_l$ only'' baseline at $\rho = 25\%$. However, in the extreme regime, the gap between self-training and the ``$\mathcal{D}_l$ only'' baseline is less than compared to \acrshort{monuseg}. The rate at which our approach improves over the ``$\mathcal{D}_l$ only'' is also slower as it takes a larger $\rho$ (around $75\%$) for the performance of self-training to become significantly better than this baseline. The best-performing weighting strategies also differ. The best strategies overall are ``constant'' (with $C = 0.5$ or $1$) and ``consistency''. The ``merged'' and ``entropy'' are worse than the others, although the latter catches up at $\rho = 25\%$. Unfortunately, on this dataset, the self-training approaches are not able to reach the upper baseline. 
-
-\begin{figure}
-  \centering
-  \includegraphics[width=0.9\textwidth]{strain/glas_test_pxl_self_hard_dice_rho_limTrue_errTrue.pdf}
-  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$ on \textbf{\acrshort{glas}}. See Figure \ref{fig:strain:rho_exp_monuseg} for explanation.}
-  \label{fig:strain:rho_exp_glas}
-\end{figure}
-
-\paragraph{\acrshort{glas}} Before diving in the analysis for \acrshort{glas} (see Figure \ref{fig:strain:rho_exp_glas}), it is important to remember that there are much more variability in the shape and size of the annotations in this dataset. Therefore, removing an annotation versus another can lead to a very different outcome in terms of loss of information and actual sparsity increase. This might explain why the overall performance trend differs compared to the two other datasets. Indeed, in this case, the benefit from adding new annotations in $\mathcal{D}_s$ is less obvious as the performance curve for the self-training approach is flatter. Although, the self-training approaches are better than this baseline on average for most data points, the variance is such that the performance are mostly confounded until until $\rho = 25\%$.
-
-\begin{table}
-  \centering
-  \begin{tabular}{|cc|c|}
-    \hline
-    \multicolumn{2}{|c|}{$|\mathcal{D}|_s = 0$} & $80.88 \pm 0.37$ \\
-    \multicolumn{2}{|c|}{$\mathcal{D}_l$ only}  & $80.14 \pm 1.06$ \\
-    \multicolumn{2}{|c|}{$\mathcal{D}_l \cup \mathcal{D}_s$} & $74.85 \pm 2.53$ \\
-    \hline
-    constant & $C=0.5$ & $81.22 \pm 0.40$ \\
-    \hline
-  \end{tabular}
-  \caption{Performance of few self-training approaches compared to the baseline for \acrshort{monuseg} with $n_l = 15$ and $\rho = 90\%$. Few self-training approaches are able to beat the upper baseline althought they are provided with far less annotations.}
-  \label{tab:strain:monuseganomaly}
-\end{table}
+\paragraph{\acrshort{glas}.} On this dataset, all self-training approaches benefit from additional sparse annotations in $\mathcal{D}_s$. Compared to the ``\textit{$\mathcal{D}_l$ only}'' baseline, the self-training approaches are never worse, even in the extreme scarcity regime, and it takes a $\rho$ between $60\%$ and $75\%$ for self-training to become significantly better. Self-training is not able to catch up the ``\textit{upper}'' baseline in this case. 
 
 \subsection{Labeling a new dataset: sparsely or exhaustively?}
 \label{ssec:strain:sparsevsexhaustive}
 
-The fact that self-training is able to equal or outperform the ``$\mathcal{D}_l$ only'' and $|\mathcal{D}_s| = 0$ baselines suggests that it might be more interesting to consider an alternate annotating strategy than exhaustive labeling when annotating a new dataset. Therefore, we have conducted an experiment where we investigate whether or not it is more interesting to combine sparse labeling and self-training rather than performing fully supervised training on an exhaustively labeled dataset ($\mathcal{D}_l$ only). To answer this question, we have conducted a set of experiments where we compare a self-training approach (entropy weighting strategy, $w_{min} = 0.1$) and the baselines all run against different sparsity regimes with varying both $\rho \in \{0.9, 0.5, 0.25\}$ and $n_c$ (values depending on the target dataset, see \TODO{APPENDIX} for exact values). The results of these experiments are given in Figures \ref{fig:strain:annot_strat_monuseg}, \ref{fig:strain:annot_strat_segpc} and \ref{fig:strain:annot_strat_glas} where performance of the different methods are reported together over a common metric, the percentage of annotations used which can be equated with the annotation budget for the dataset.
+The fact that self-training is able to equal or outperform the ``\textit{$\mathcal{D}_l$ only}'' and ``\textit{upper}'' baselines suggests that it might be more interesting to consider an alternative annotation strategy to exhaustive labeling when annotating a new dataset. %Therefore, we have conducted an experiment where we % investigate whether or not 
+It might indeed be more interesting to combine sparse labeling and self-training rather than performing fully supervised training on an exhaustively labeled dataset (\ie $\mathcal{D}_l$ only). To answer this question, we have conducted a set of experiments where we compare a self-training approach (entropy weighting strategy, $w_{min} = 0.1$) and the baselines all run against different sparsity regimes, varying both $\rho \in \{90\%, 50\%, 25\%\}$ and $n_l$ (values are dataset specific). The results of these experiments are given in Figures \ref{fig:strain:annot_strat_monuseg}, \ref{fig:strain:annot_strat_segpc} and \ref{fig:strain:annot_strat_glas} where the different values of $n_l$ we have used are also specified. In these plots, the performance of all methods are reported over a common metric, the percentage of annotations used, which can be equated with the annotation budget for creating the dataset.
 
-Our experiments show very dataset-dependent results. On \acrshort{monuseg}, we observe that self-training is able to outperform supervised training for all tested annotation budgets. This indicates that it would have been more interesting to sparsely annotate this dataset. However, this conclusion does not hold for the other datasets as, within the same annotation budget, using ``$\mathcal{D}_l$ only'' outperforms self-training.
+Our experiments show very dataset-dependent results. On \acrshort{monuseg}, we observe that self-training outperforms supervised training for all tested budgets. This indicates that it would have been more interesting to sparsely annotate this dataset. However, this conclusion does not hold for the other datasets as, within the same annotation budget, using ``\textit{$\mathcal{D}_l$ only}'' outperforms self-training.
 
-This experiment also allows to compare which labeling scheme is better for self-training: for a given annotation budget, is it better to favor a larger set $\mathcal{D}_l$ or to add more sparse annotations in $\mathcal{D}_s$? For \acrshort{monuseg} and \acrshort{segpc}, it appears that, for a similar annotation budget, self-training performance are comparable whatever the values of $n_c$ and $\rho$. Therefore, for those datasets, it does not really matter if the annotation budget is spent for exhaustive or sparse labeling. For \acrshort{glas}, however, there is a performance loss when switching from a lower $\rho$ value to a higher (\eg going from $(\rho, n_c) = (0.9, 40)$ to $(0.5, 8)$ in Figure \ref{fig:strain:annot_strat_glas}). It indicates that, it is more interesting to exhaustively label images rather than sparsely for this dataset.
+This experiment also allows to compare which labeling scheme is better for self-training: for a given annotation budget, is it better to favor a larger set $\mathcal{D}_l$ or to add more sparse annotations in $\mathcal{D}_s$? For \acrshort{monuseg} and \acrshort{segpc}, it appears that, for a similar annotation budget, self-training performance are comparable whatever the values of $n_l$ and $\rho$. Therefore, for those datasets, it does not really matter if the annotation budget is spent for exhaustive or sparse labeling. For \acrshort{glas}, however, there is a performance loss when switching from a lower $\rho$ value to a higher (\eg going from $(\rho, n_l) = (90\%, 40)$ to $(50\%, 8)$ in Figure \ref{fig:strain:annot_strat_glas}). It indicates that, it is more interesting to label images exhaustively rather than sparsely for this dataset.
 
-
-\begin{figure}
+\begin{figure}[t]
   \centering
-  \includegraphics[width=\textwidth]{strain/annot_strat_monuseg.pdf}
-  \caption{Performance of self-training \vs the baselines for varying $\rho$ and $n_c$ on \acrshort{monuseg}. A point corresponds to 10 runs of the given approach (see line color) and some sparsity parameters $\rho$ (see line style) and $n_c$ (given by the text label). All runs are performed on a different version of the dataset generated with some sparsity parameters. The $x$ value for a point corresponds to the average number of annotations used by the 10 generated datasets, or, alternatively, to the annotation budget dedicated for labeling the dataset.}
-  \label{fig:strain:annot_strat_monuseg}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{strain/annot_strat_segpc.pdf}
-  \caption{Performance of self-training \vs the baselines for varying $\rho$ and $n_c$ on \acrshort{segpc} (see Figure \ref{fig:strain:annot_strat_monuseg} for explanation).}
-  \label{fig:strain:annot_strat_segpc}
-\end{figure}
-
-\begin{figure}
-  \centering
-  \includegraphics[width=\textwidth]{strain/annot_strat_glas.pdf}
-  \caption{Performance of self-training \vs the baselines for varying $\rho$ and $n_c$ on \acrshort{glas} (see Figure \ref{fig:strain:annot_strat_monuseg} for explanation).}
-  \label{fig:strain:annot_strat_glas}
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/annot_strat_monuseg.pdf}
+    \caption{\acrshort{monuseg}, $n_l = \{2, 5, 10, 15\}$ }
+    \label{fig:strain:annot_strat_monuseg}
+  \end{subfigure}
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/annot_strat_segpc.pdf}
+    \caption{\acrshort{segpc}, $n_l = \{30, 50, 100, 150\}$ }
+    \label{fig:strain:annot_strat_segpc}
+  \end{subfigure} \\
+  \begin{subfigure}{0.48\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{strain/annot_strat_glas.pdf}
+    \caption{\acrshort{glas}, $n_l = \{8, 16, 32, 40\}$ }
+    \label{fig:strain:annot_strat_glas}
+  \end{subfigure}
+  \caption{Performance of self-training \vs the baselines for varying $\rho$ and $n_l$. A point corresponds to 10 runs of a given approach (see line color) and some sparsity parameters, $\rho$ (see line style) and $n_l$ (see subcaptions, increasing from left to right on a constant $\rho$ curve, see ``\textit{$\mathcal{D}_l$ only}'' for example). A new dataset is generated for each run, with the corresponding $n_l$ and $\rho$ values. The $x$ value of a point corresponds to the average percentage of annotations used by the 10 datasets, or, alternatively, to the annotation budget dedicated for labeling the dataset.}
+  \label{fig:straing:annot_strat}
 \end{figure}
 
 \subsection{Manual threshold tuning}
@@ -448,39 +433,35 @@ As expected, we observe that tuning the threshold $T$ on the training set ($\mat
 \end{figure}
 
 
-\subsection{Experiment on Thyroid \acrshort{fnab}}
+\subsection{Experiments on Thyroid cytology\acrshort{fnab}}
 \label{ssec:strain:thyroid_exp}
 
-\TODO{New scores see Table \ref{tab:strain:thyroidresults}}
+The Thyroid \acrshort{fnab} dataset presents a great opportunity to test our method on a real case of sparsely labeled dataset. It is also interesting to note that this dataset is larger than the three public datasets used in this study (almost 5k images in total). In order to fit the sparsely-labeled settings we have introduced, we split the dataset in two subsets based on the nature of the annotations. The set $\mathcal{D}_l$ is assigned annotations of cell aggregates and $\mathcal{D}_s$ is assigned annotations of individual cells and nuclei. The motivation for this split is presented in Supplementary Section \ref{app:strain:sec:thyroidsplit}.
 
-As explained in Section \ref{ssec:strain:thyroidfnab}, the Thyroid \acrshort{fnab} dataset presents a great opportunity to test our dataset on a real case of sparse annotations. It is also interesting to note that this dataset is not only larger (almost 5k images total) than the three public datasets used in this study but also features both a validation set and a test set. Therefore, it allows for additional tuning of hyperparameters. In this experiment, we propose to evaluate the effect of early stopping and tuning the segmentation threshold on the validation set. We also select the best self-training hyperparameters combination on this validation set (\ie notably the weight strategy and its hyperparameters, the evaluated combinations can be found in the Supplementary \TODO{supp}). We compare the best self-training approach with two of our three baselines: $\mathcal{D}_l$ only and $\mathcal{D}_l \cup \mathcal{D}_s$. The upper baseline obviously cannot be evaluated because we do not have access to the complete ground truth. For both baselines, we also evaluate the effects of early stopping and threshold tuning with the validation set. The resulting performances are given in Table \ref{tab:strain:thyroidresults}.
+Based on the results of Section \ref{ssec:strain:fixednl}, we have chosen to use the ``\textit{entropy}'' weighting strategy with $w_{min} = 0.1$ for our self-training approach, as it provides consistently good results across datasets. We compare this approach with two of our three baselines: ``\textit{$\mathcal{D}_l$ only}'' and ``$\mathcal{D}_l \cup \mathcal{D}_s$''. The ``\textit{upper}'' baseline obviously cannot be evaluated because we do not have access to the complete ground truth. The resulting performances are given in Table \ref{tab:strain:thyroidresults}.
 
-\TODO{done with only one random seed???}
-\TODO{validation and test sets are not very consistent -> in the (no, no) experiment, the baselines should not exhibit such a different variations between validation and test set as nothing is optimized on the validation set. There seems to be major discrepencies between both sets.}
+We observe that our self-training approach significantly outperforms the two baselines and remains quite stable as its standard deviation is below $1\%$. This confirms the interest of self-training when working with a sparse dataset. 
 
-We observe that the best self-training approach always outperforms the two baselines and remains quite stable whether or not we perform early stopping or threshold optimization on the validation set. 
-
-\begin{table}
+\begin{table}[t]
+\caption{Experiment on the Thyroid \acrshort{fnab} dataset. The self-training approach uses the ``\textit{entropy}'' weighting strategy and $w_{min} = 0.1$.}
+  \label{tab:strain:thyroidresults}
   \centering 
   \begin{tabular}{|c|c|}
     \hline
-    Method & Dice \\
+    Method & $\text{Dice}^*$ \\
     \hline
-    Self-training & $82.77 \pm 1.45$ \\
-    $\mathcal{D}_l$ only & $75.36 \pm 4.49$ \\  
-    $\mathcal{D}_l \cup \mathcal{D}_s$ & $78.24 \pm 3.09$ \\
+    Self-training & $89.05 \pm 0.85$ \\
+    $\mathcal{D}_l$ only & $80.30 \pm 5.39$\\  
+    $\mathcal{D}_l \cup \mathcal{D}_s$ & $83.62 \pm 3.52$\\
     \hline
   \end{tabular}
-  \caption{Experiment on the Thyroid \acrshort{fnab}. Dice evaluated on test+val, threshold tuned on $\mathcal{D}_l$.}
-  \label{tab:strain:thyroidresults}
+  
 \end{table}
-
-\subsection{Discussion}
-\label{ssec:strain:discussion}
-Our results show that our self-training approach is effective at exploiting sparse annotations within our $\mathcal{D}_l$/$\mathcal{D}_s$ setup. Indeed, our approach is able to outperform using only 
 
 \section{Conclusion}
 \label{sec:strain:conclusion}
 
+In this work, we have introduced a method based on self-training for training a deep binary segmentation model with sparsely labeled data. Using 4 datasets, including an actual sparsely labeled one, we have shown that the method could indeed make use of sparse annotations to improve model performance over using only exhaustively labeled data. For one of our datasets, our self-training approach using only $30\%$ of the original training annotations is even able to reach performance comparable to using all of them in a supervised way.
 
-\parencite{haridas2015interactive, petit2018handling, petit2021iterative}
+In the future, we want to extend the method to multi-class segmentation and further study the impact of various training choices and hyperparameters (model complexity, weighting strategies, soft pseudo-labeling, \etc.) that we could not explore due to time and computing resources constraints. We also want to further study how the type of dataset (variability in images, density of ground truth, large or small annotations, \etc.) impacts the performance margins of self-training. Moreover, in this work, we have removed annotation randomly from the datasets. In practice, it is unlikely that the existing annotations are really randomly chosen and it would be interesting to study the effect of the labeling process. This work has mostly been focused on high scarcity conditions but self-training methods have also shown to be beneficial with very large labeled and unlabeled sets in other contexts. In computational pathology, whole slide images usually offer a great potential for a large pool of unlabeled data. Therefore, we would like to study how our method would perform in such a context. Finally, we would also like to explore how our self-training algorithm could be used in an interactive mode to assist new dataset labeling. %Eventually, we want to implement the algorithm on the Cytomine platform. 
+
