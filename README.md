@@ -6,7 +6,7 @@
 Compilation can be done with a docker container.
 
 ```
-docker pull rmormont/thesis-tex-compile:1.1
+docker pull rmormont/thesis-tex-compile:1.2
 ```
 
 Run the compile script:
