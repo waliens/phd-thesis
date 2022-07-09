@@ -258,13 +258,13 @@ In addition to the three public datasets, we use a dataset that actually motivat
 
 In this section, we present context information for our experiments: what are our baselines, how we have simulated sparse datasets from the public datasets and what evaluation protocol we have applied.
 
-\subsubsection{Transforming the datasets}
+\subsection{Transforming the datasets}
 
 In order to fit the sparsely labeled settings described in Section \ref{sec:strain:methods}, we generate new datasets from \acrshort{segpc}, \acrshort{glas} and \acrshort{monuseg}. This generation is controlled by two parameters: $n_l$ and $\rho$. The former is the number of images to keep in the exhaustively labeled set $\mathcal{D}_l$. These images are chosen at random without replacement in the original training set. The latter parameter $\rho$ is the percentage of annotations to remove from the images to make the remaining images sparsely labeled.
 
 For \acrshort{monuseg}, we remove $\rho \%$ of the instances in each image selected for the sparse set. For \acrshort{segpc} and \acrshort{glas}, because the number of instances per image is small (up to two or three dozen), we remove $\rho \%$ of the instances from the complete list of instances. As a result, some sparse training images from these  datasets can be completely void of ground truth. However, this is not a problem as our pseudo-labeling process is designed to support such images. 
 
-\subsubsection{Baselines}
+\subsection{Baselines}
 \label{ssec:strain:baselines}
 
 We compare our self-training approach to three baselines. The first one, referred to as ``\textit{upper}'', consists in using the full dataset, without removing any ground truth (\ie $|\mathcal{D}_l| = n$ and $|\mathcal{D}_s| = 0$). Since it has access to all the annotations, this baseline is expected to represent an upper bound for all other strategies. 
@@ -275,7 +275,7 @@ The third and last baseline, referred to as ``\textit{$\mathcal{D}_l$ only}'', c
 
 Our self-training approach is of practical interest if it outperforms the two latter baselines. Moreover, the closer to the ``\textit{upper}'' baseline the better.
 
-\subsubsection{Evaluation}
+\subsection{Evaluation}
 \label{ssec:strain:evaluation}
 
 We have built an evaluation protocol in order to ensure a fair comparison between the different strategies and the baselines. Ultimately, all approaches produce a segmentation model $\theta$ that will be the one evaluated. As an evaluation metric, we use the Dice score introduced in Equation \ref{eqn:strain:dice} which requires a threshold $T$ to turn the probability map produced by the model into a binary segmentation. To assess the performance of a model independently of the thresholding strategy, we pick $T$ so that the Dice score is maximized on the test set. In other words, in order to determine the threshold, we apply the optimization procedure described in Equation \ref{eqn:strain:thresholdopt} where $\mathcal{D}_a$ is the test set $\mathcal{D}_{\text{test}}$. The Dice score resulting from this optimization will be referred to as ``$\text{Dice}^*$''. Obviously, in a context of extreme data scarcity, it will not be possible to tune the threshold this way because of the lack of a sufficiently large validation or test set. We will leave the design of fully automatic strategies to tune such threshold as future work but we believe that visually tuning such threshold on new images would be feasible in interactive applications where the segmentation models would be mostly used to assist the labeling of new images.
