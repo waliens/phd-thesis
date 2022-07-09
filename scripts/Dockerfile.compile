@@ -20,17 +20,52 @@ ENV PATH="/usr/local/texlive/2022/bin/x86_64-linux:${PATH}"
 ENV HOME /data
 WORKDIR /data
 
+RUN tlmgr update --self
+
 # Install latex packages
 RUN tlmgr install latexmk
 
 # install texlive
-RUN tlmgr install scheme-full
-
-# 
-RUN tlmgr install biblatex-ext
+#RUN tlmgr install scheme-full
+RUN tlmgr install \
+    adjustbox \
+    algorithm2e \
+    arydshln \
+    biber \
+    biblatex \
+    biblatex-ext \
+    booktabs \
+    caption \
+    collectbox \
+    collection-fontsrecommended \
+    csquotes \ 
+    datatool \
+    environ \
+    etoolbox \
+    glossaries \
+    ifoddpage \
+    koma-script \
+    lipsum \
+    mfirstuc \
+    multirow \
+    pdflscape \
+    pgf \
+    placeins \
+    relsize \
+    setspace \
+    siunitx \
+    tcolorbox \
+    textcase \
+    titlesec \
+    tocloft \
+    tracklang \
+    varwidth \
+    xcolor \
+    xfor \
+    xkeyval \
+    xpatch 
 
 # add compile script
 ADD compile.py /scripts/compile.py
-
 
 VOLUME ["/data"]
