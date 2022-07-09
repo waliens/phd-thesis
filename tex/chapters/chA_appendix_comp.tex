@@ -37,7 +37,7 @@ For the baseline ET-FL, we tune the size of the windows $\left(w_{min}, w_{max}\
 \section{Best features}
 \label{app:comp:sec:bestfeatures}
 
-In order to investigate the best features (according to feature importances) for a given network, we compute the minimum size of the best features subset so that at least one feature is in this subset for all datasets. The resulting sizes for all networks are given in Table \ref{app:comp:tab:best_subset_size}. We also compute the percentages of overlap between subsets of selected features by RFE for all pairs of datasets (see Tablez \ref{app:comp:tab:rfe_sub_overlap} and \ref{app:comp:tab:rfe_sub_overlap2})
+In order to investigate the best features (according to feature importances) for a given network, we compute the minimum size of the best features subset so that at least one feature is in this subset for all datasets. The resulting sizes for all networks are given in Table \ref{app:comp:tab:best_subset_size}. We also compute the percentages of overlap between subsets of selected features by \acrshort{rfe} for all pairs of datasets (see Tablez \ref{app:comp:tab:rfe_sub_overlap} and \ref{app:comp:tab:rfe_sub_overlap2})
 
 \begin{table}
 \centering
@@ -61,36 +61,7 @@ DenseNet & 1477 & 76.93 \\
 \section{Features and cut points information}
 \label{app:comp:sec:features_and_cut_points}
 
-In the paper, we investigate the usage of features from inside the networks. Therefore, we have selected the layers from which we would extract the features. As stated in the paper, we limit the number of possible cut points to the bottlenecks of the networks, a bottleneck being a point were several paths are merged into a single one. For ResNet, we have selected the ReLU activations of the merging layer after each residual block. 
-For IncResV2, considering all the bottlenecks after inception-resnet and reduction blocks yields approximately fifty possible cut points, that is more than 100k features. We have decided to subsample those cut points to obtain a number of features closer to those of other networks while covering the network as uniformly as possible along its depth. As far as DenseNet is concerned, we extract features only at the end of dense blocks and after pooling blocks. Indeed, extracting features inside dense blocks would have resulted in duplicated features.  
-
-In Table \ref{app:comp:tab:n_features_per_net} are given the information about the generated features vectors for the ``\textit{Last layer}", ``\textit{Merging features across networks}" and ``\textit{Merging layers features}" experiments. Information about the dimensions of the extracted features from inside the networks (before global average pooling) for ResNet, IncResV2 and DenseNet are respectively given in Tables \ref{app:comp:tab:inner_layers_resnet}, \ref{app:comp:tab:inner_layers_incresv2} and \ref{app:comp:tab:inner_layers_densenet}. The layer names given in those tables are the ones given by the Keras package \parencite{chollet2015keras}. 
-
- \begin{table}
-     \center 
-     \begin{tabular}{|c|c|c|c|}
-         \hline
-         \multirow{2}{*}{$\mathcal{N}$} & \multicolumn{1}{c|}{\textbf{Last layer}} & \multicolumn{2}{c|}{\textbf{Merged layers}} \\
-         \cline{2-4}
-         & \# feat. & \# feat. & \# cut \\
-         \hline
-         Mobile & 1024 & / & /\\ 
-         DenseNet & 1920 & 7744 & 9 \\ 
-         IncResV2 & 1536 & 17088 & 12 \\ 
-         ResNet & 2048 & 15168 & 17 \\ 
-%          IncV3 & 2048 & 10112 & 12 \\ 
-         IncV3 & 2048 & / & / \\ 
-         VGG19 & 512 & / & / \\ 
-         VGG16 & 512 & / & / \\  
-         \hline
-         \textbf{Total} & 9600 & / & / \\
-         \hline 
-     \end{tabular}
-     \caption{Number of features extracted for the ``\textit{Last layer}'' experiment. Total number of features for the ``\textit{Merging features across networks}". Number of features and cut points for the ``\textit{Mering layers features}'' experiment.}
-     \label{app:comp:tab:n_features_per_net}
- \end{table}
- 
-
+This section provides more details about the inner layers we have considered in our experiments. The inner layers information for ResNet, IncResV2 and DenseNet can be respectively found in Tables \ref{app:comp:tab:inner_layers_resnet}, \ref{app:comp:tab:inner_layers_incresv2} and \ref{app:comp:tab:inner_layers_densenet}. 
 
 \begin{table}
 \centering
@@ -182,7 +153,7 @@ bn (last)& 7 & 7 & 1920 \\
 \end{table}
 
 
-\section{Features selected with RFE}
+\section{Features selected with \acrshort{rfe}}
 \label{app:comp:sec:rfe_selection}
 A summary of the number of selected features and the cross-validation curves for all datasets and networks are respectively given in Table \ref{app:comp:tab:rfe_selected} and FigureS \ref{app:comp:fig:rfe_1} and \ref{app:comp:fig:rfe_2}.
 
@@ -204,7 +175,7 @@ A summary of the number of selected features and the cross-validation curves for
          \hline
          
      \end{tabular}
-     \caption{Number of features selected by RFE for all datasets and networks.}
+     \caption{Number of features selected by \acrshort{rfe} for all datasets and networks.}
      \label{app:comp:tab:rfe_selected}
  \end{table}
  
@@ -227,7 +198,7 @@ A summary of the number of selected features and the cross-validation curves for
          Average & 2.52 & 6.88 & 3.41 & 2.56 & 6.02 & 18.70 & 7.26 & 13.31 & \textbf{7.58} \\
          \hline
      \end{tabular}
-     \caption{Proportion of features selected by RFE for all datasets and networks.}
+     \caption{Proportion of features selected by \acrshort{rfe} for all datasets and networks.}
      \label{app:comp:tab:rfe_selected_prop}
  \end{table}
  
@@ -258,7 +229,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \includegraphics[width=\textwidth]{comp/supp/rfe_resnet50.png}
     \caption{ResNet}
   \end{subfigure}
-  \caption{RFE curves for last layers features from InceptionV3, VGG19 and VGG16.}
+  \caption{\acrshort{rfe} curves for last layers features from InceptionV3, VGG19 and VGG16.}
   \label{app:comp:fig:rfe_1}
 \end{figure}
 
@@ -362,7 +333,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \caption{ResNet}
   \end{subtable} \\
 
-  \caption{Percentages of overlap between features selected by RFE on the studied datasets (part 1, see Figure \ref{app:comp:tab:rfe_sub_overlap2} for part 2). The tables can be read as follows: the number at row $i$ and column $j$ is the percentage of features among the ones selected for dataset $j$ that were also selected for the dataset $i$.}
+  \caption{Percentages of overlap between features selected by \acrshort{rfe} on the studied datasets (part 1, see Figure \ref{app:comp:tab:rfe_sub_overlap2} for part 2). The tables can be read as follows: the number at row $i$ and column $j$ is the percentage of features among the ones selected for dataset $j$ that were also selected for the dataset $i$.}
   \label{app:comp:tab:rfe_sub_overlap}
 \end{table}
 
@@ -425,7 +396,7 @@ Detailed scores for all datasets, experiments and networks are given in Tables \
     \caption{DenseNet}
   \end{subtable}
 
-  \caption{Percentages of overlap between features selected by RFE on the studied datasets (part 2, see Figure \ref{app:comp:tab:rfe_sub_overlap} for part 1).}
+  \caption{Percentages of overlap between features selected by \acrshort{rfe} on the studied datasets (part 2, see Figure \ref{app:comp:tab:rfe_sub_overlap} for part 1).}
   \label{app:comp:tab:rfe_sub_overlap2}
 \end{table}
 
