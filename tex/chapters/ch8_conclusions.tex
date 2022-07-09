@@ -1,6 +1,20 @@
 \chapter{Conclusion and future works}
 \label{chap:conclusions}
 
+\section{Wrapping up}
+
+In this thesis, we investigated how image classification and segmentation \acrlong{ml} techniques can be applied in the context of \acrlong{dp}. In particular, we studied how different methods can be used to alleviate the consequences of data scarcity, a prevalent issue in \acrlong{dp}. Causes and consequences of data scarcity are numerous and are discussed Chapter \ref{chap:backdp}. Some of the consequences include small dataset size, lack of variety and oversimplification of the learning tasks, \etc. These can have a significant negative impact on the efficiency of machine and especially \acrlong{dl} methods which are known to be particularly data-hungry. 
+
+In Part \ref{part:transfer}, we first investigated transfer learning. In Chapter \ref{chap:comp}, we compared different ways seven popular \acrlong{dl} architecture pretrained on ImageNet could be transferred to pathology classification tasks. We studied both feature extraction and fine tuning. Regarding features extraction, we considered features from not only at the last layer of the networks but also from inner layers. Moreover, we devised an experiment to evaluate the redundancy of these features using \acrlong{rfe}. We showed that, although source (\ie natural images) and target (\ie pathology images) domains are quite dissimilar, both feature extraction and fine-tuning from ImageNet were effective transfer techniques as they were able to improve significantly over our baseline. Moreover, fine-tuning proved to be more efficient than feature extraction. Among the architectures we have tested, ResNet50 and DenseNet121 often yielded the best performance. We also showed that last layer features were redundant as only a small fraction of them were actually useful for the prediction but the useful subset is actually task-dependent. 
+
+Moving on to Chapter \ref{chap:mtask}, guided by the fact that transfer learning is known to perform better when source and target tasks are close, we searched for a way to create a transferrable model pretrained on pathology data. However, because of data scarcity, it was (and still is to this date) not possible to find a sufficently large and versatile enough pathology dataset to pretrain a \acrlong{dl} model. Therefore, we decided to exploit the fact that many small and medium pathology datasets had been released over the years and decided to pretrain our model in a multi-task fashion using as many datasets as possible. We collected 22 classification tasks featuring 81 classes and almost 900k images and designed a multi-task pretraining protocol to exploit them. We showed that our models used as feature extractors either outperformed or provided comparable performance compared to ImageNet-pretrained models. We also observed that fine-tuning multi-task or ImageNet pre-trained models yields comparable performance, indicating that fine-tuning was able to recover lack of specificity of ImageNet features. We also confirmed the conclusions from Chapter \ref{chap:comp} as we showed fine-tuning to outperform feature extraction. Moreover, we also confirmed that both transfer approach were more efficient than training from scratch.
+
+% transfer learning
+
+% multi task pre-training
+
+% self-training
+
 \section{Future works}
 
 \paragraph{Transfer from ImageNet} 
