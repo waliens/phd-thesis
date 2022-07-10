@@ -80,8 +80,8 @@ provided with a training set
 where $y_i \in \mathcal{Y}$ is the output signal for the observation
 $\vect{x}_i \in \mathcal{X}$. The learning algorithm objective is to find a model
 $h \in \mathcal{H}$ that approximates at best the output. In general, one wants to train 
-a model that minimizes the generalization error (see Equation \ref{eqn:backml:expriskmin}, 
-see Section \ref{ssec:backml:modelselection} for more details) or, alternatively, that 
+a model that minimizes the generalization error (see Equation \ref{eqn:backml:expriskmin} and 
+Section \ref{ssec:backml:modelselection} for more details) or, alternatively, that 
 performs well on unseen data by predicting the most appropriate output.
 
 When the output space is a finite set of discrete values
@@ -148,7 +148,7 @@ with
 \end{equation}
 and attempts to extract information from this dataset. A common unsupervised task
 is \textit{density estimation} where the goal is to model the generating distribution
-$p(\vect{x})$ but there also exists other types of methods. With \textit{clustering},
+$p(\vect{x})$ but there also exist other types of methods. With \textit{clustering},
 for instance, the algorithm searches for natural groups of observations or features.
 Another example is \textit{dimensionality reduction} where the algorithm projects
 high-dimensional data into a lower-dimensional space while attempting to preserve
@@ -170,7 +170,7 @@ from the original data without human intervention.
 
 The families discussed in Sections \ref{ssec:backml:sl} and \ref{ssec:backml:usl}
 do not cover all existing \acrlong{ml} methods but are rather at the ends of a
-spectrum. There also exists intermediate families of methods. Halfway between
+spectrum. There also exist intermediate families of methods. Halfway between
 supervised and \acrlong{usl} is \acrfirstit{ssl} which focuses on methods that
 use a dataset where only a part of the observations have an associated output
 signal. The dataset is composed of two subsets:
@@ -195,7 +195,7 @@ coarse training signal.
 \label{ssec:backml:shallowdeep}
 
 Many things in our world can be viewed as hierarchies of concepts. For instance,
-a human body is composed of body parts like the head for instance. The head itself
+a human body is composed of body parts like the head. The head itself
 includes the face which is itself composed of several elements: cheeks, eyes,
 nose, \etc. This kind of decomposition could also be applied to other concepts.
 Grasping hierarchies is key for understanding and learning efficiently. As humans,
@@ -308,7 +308,7 @@ thesis is the transfer of a model trained for natural image classification to
 medical image classification. In this case, the tasks are different as the first
 consists in identifying the presence of a type of object in the image whereas the
 other consists in assessing the malignancy of a tumor from an image of a tissue.
-The input distributions also differ as medical images have completely different
+The inputs distributions also differ as medical images have completely different
 content and appearance.
 
 There exist many different transfer approaches. Based on how they operate,
@@ -377,7 +377,7 @@ We explore further \acrlong{mtl} in the context of deep learning in Section
 \label{sec:backml:modeleval}
 
 As stated in Section \ref{sec:backml:whatisml}, evaluation is a core principle of
-\acrlong{ml} as a learning algorithms should select a model that maximizes a
+\acrlong{ml} as a learning algorithm should select a model that maximizes a
 performance criterion. In this section, we introduce different concepts related
 to the evaluation and selection of machine learning models. In Sections
 \ref{ssec:backml:modelselection} and \ref{ssec:backml:bvtradeoff}, we discuss the
@@ -428,7 +428,7 @@ generalization error can be studied using the \textit{bias-variance decompositio
 \parencite{geman1992neural, geurts2009bias, hastie2017elements}:
 \begin{equation}
 \label{eqn:backml:biasvariancedec}
-\mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(y, h_{LS}(\vect{x})\right)\right\}\right\} = \text{noise}(\vect{x}) + \text{bias}^2(\vect{x}) + \text{variance}(\vect{x})
+\mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(y, h_{\mathcal{D}}(\vect{x})\right)\right\}\right\} = \text{noise}(\vect{x}) + \text{bias}^2(\vect{x}) + \text{variance}(\vect{x})
 \end{equation}
 where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that
 can be extracted from $p(\vect{x},y)$ and $h_{\mathcal{D}} \in \mathcal{H}$ is
@@ -482,7 +482,7 @@ Typically, it is not uncommon to find tasks for which \acrlong{dl} models reach
 an empirical risk close to zero but actually generalize well to unseen data
 \parencite{zhang2021understanding}. Although the models are able to basically
 memorize the training data, the learned function is actually very robust and
-generalize well. This phenomenon is currently being investigated and several
+generalizes well. This phenomenon is currently being investigated and several
 explanations have been proposed such as the deep double-descent
 \parencite{belkin2019reconciling}.
 
@@ -540,8 +540,8 @@ it is sometimes not enough to split the sets randomly and domain knowledge must
 be used during the splitting procedure to enforce sets independance. This issue
 is sometimes called \textit{data leakage} \parencite{kaufman2012leakage} as
 information ``leaks'' between the sets. This topic will be discussed in Section
-\ref{ssec:backdp:dataleakage} as \acrlong{dp} datasets must treated carefully to avoid
-this issue.
+\ref{ssec:backdp:dataleakage} as \acrlong{dp} datasets must be treated carefully 
+to avoid this issue.
 
 \subsection{Metrics}
 \label{ssec:backml:metrics}
@@ -594,7 +594,7 @@ scores.
 
 \begin{equation}
 \label{eqn:backml:specifity}
-\textit{Specifity} = \frac{TN}{TN + FP} = 1 - \frac{FP}{N}
+\textit{Specificity} = \frac{TN}{TN + FP} = 1 - \frac{FP}{N}
 \end{equation}
 
 \begin{equation}
@@ -625,12 +625,12 @@ applied to these probabilities in order to generate several points to plot. Thes
 points form a visual metric called the \acrfirstit{roc} curve (see Figure
 \ref{fig:backml:roc-curve}) which can be derived into a score: the
 \textit{area under the \acrshort{roc} curve} (\rocauc). This
-score can only be computed for model which produce a meaningfully
+score can only be computed for models which produce a meaningfully
 thresholdable number and it only applies to binary classification in its basic form.
 However, it provides a measure which is not impacted by class imbalance which is
 a very interesting property in domains where this issue is common. Another advantage
 of the \rocaucs is its finer grasp of how a model performs as it evaluates
-the probabilities unlike the accuracy where the model is either wrong or right but
+the probabilities, unlike the accuracy where the model is either wrong or right but
 there is no in-between.
 
 \begin{figure}
@@ -720,7 +720,7 @@ using \textit{rankings of methods}. First, for each dataset in our pool, we eval
 the methods each with their most appropriate metric and then rank them: the best
 method gets rank 1 and the worst gets rank $m$ (where $m$ is the number of methods).
 Finally, in order to draw general conclusions, we average the rankings over all
-the datasets. The average ranks therefore provides a single metric for comparing
+the datasets. The average ranks therefore provide a single metric for comparing
 the methods across datasets.
 
 % ===================
@@ -796,7 +796,7 @@ the need for linear separability of the training data and allows for training
 examples to lie within the gutter or to be misclassified. Low values of $C$ make
 the optimal solution tolerate more of such examples. Reducing the dependency of
 the model on very few points also decreases the variance but increases the bias.
-In opposition, high values of $C$ puts a large penalty on points that lie withing
+In opposition, high values of $C$ puts a large penalty on points that lie within
 the gutter or are misclassified which increases variance but decreases bias.
 
 \begin{figure}
@@ -811,7 +811,7 @@ the gutter or are misclassified which increases variance but decreases bias.
     \includegraphics[width=\textwidth]{backml/svm_c25.pdf}
     \caption{$C=25$. Notice the new points \\ of class $1$ in the class $0$ cluster.}
   \end{subfigure}
-  \caption{Examples of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with bold colored border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
+  \caption{Examples of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with bold coloured border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
   \label{fig:backml:svm}
 \end{figure}
 
@@ -1086,8 +1086,8 @@ Unlike decision trees, for instance, which learn the tree structure automaticall
 the architecture of a neural network is built manually (most of the time) and
 consists in choosing and combining the appropriate functions $h^{(l)}$ for the
 task at hand. Although it introduces some complexity when it comes to finding the
-best architecture for a problem, this modularity actually offers a unprecedented
-way of approaching model design as an engineering porblem and implementing inductive
+best architecture for a problem, this modularity actually offers an unprecedented
+way of approaching model design as an engineering problem and implementing inductive
 bias. Moreover, as long as the chosen functions are differentiable, the final
 network can be trained using the \textit{backpropagation} algorithm (see Section
 \ref{ssec:backml:dl:opti}) independently of the architectural choices.
@@ -1114,11 +1114,11 @@ or the step function. Nowadays, the most common is the \acrfirstit{relu} functio
   \end{cases}
 \end{equation}
 which is particularily efficient to compute
-and has some properties that interacts favorably with the training algorithm making
+and has some properties that interact favorably with the training algorithm making
 neural networks easier to train.
 
 The perceptron, or \textit{neuron}, is simply a linear model and is therefore not
-complex enough for many type of tasks. However, perceptrons can be combined together
+complex enough for many types of tasks. However, perceptrons can be combined together
 into a perceptron layer: a parallel combination of $f$ perceptrons ($f$ is the
 width of the layer) each with their own set of weights and biases and all taking
 the same vector as input. A perceptron layer therefore outputs a vector
@@ -1244,15 +1244,16 @@ map $k$ at layer $l$ is the set of pixels of the input that influence this
 activation. The larger the receptive field, the more context is considered by the
 activation.
 
-There is an interesting parallel to draw between the random sub-windows tree-based method presented in Section \ref{ssec:backml:et_image} and convolutional neural networks. Indeed, whereas the random sub-window algorithm randomly selects windows of varying scales in an input image, a convolutional layer actually processes all windows exhaustively at a given scale. In the case of a convolution layer, the window is obviously smaller (\ie few pixels wide) but because convolutional layers are stacked, the actual window processed for an activation of the last layer (\ie the receptive field) is larger and comparable to the size of window of the random subwindows algorithm. Obviously, both method differ by how they exploit these windows and deep networks are able to learn more expressive models from them because of the hierarchical structure and learning. 
+There is an interesting parallel to draw between the random sub-windows tree-based method presented in Section \ref{ssec:backml:et_image} and convolutional neural networks. Indeed, whereas the random sub-window algorithm randomly selects windows of varying scales in an input image, a convolutional layer actually processes all windows exhaustively at a given scale. In the case of a convolution layer, the window is obviously smaller (\ie few pixels wide) but because convolutional layers are stacked, the actual window processed for an activation of the last layer (\ie the receptive field) is larger and comparable to the size of window of the random subwindows algorithm. Obviously, both methods differ by how they exploit these windows and deep networks are able to learn more expressive models from them because of the hierarchical structure and learning. 
 
 \subsubsection{Pooling layer}
 \label{sssec:backml:poolinglayer}
 
 Pooling layers are another common components of \acrshort{cnn}s. Their role is to
 reduce the dimensionality of feature maps by aggregating close activations. In a
-way, pooling layer can be seen as a special convolutional layer with stride of
-which the kernel is not learned but rather computes a possibly non-linear statistics.
+way, a pooling layer can be seen as a special convolutional layer with stride. However, 
+unlike the convolutional layer, the kernel is not learned but rather computes a (possibly 
+non-linear) statistic of its input.
 The depth of the feature maps before and after pooling does not change (\ie
 $f_{in} = f_{out}$). Pooling share some hyperparameters with convolution including
 stride and padding. Regarding the aggregation function, the most common choices
@@ -1413,12 +1414,10 @@ higher learning rates.
 Unfortunately, the use of batch statistics can also be an issue. When there is a
 sudden change in the model input distribution, the batch statistics are likely to
 change quickly but the linear layer, restricted by the learning rate, will probably
-not be able to adapt as quickly. This can cause instabilities while the networks
+not be able to adapt as quickly. This can cause instabilities while the network
 adapts its \acrlong{bn} layers for the new distribution. This situation can occur
 for instance with \acrlong{tl} where source and target tasks can have drastically
 different input distributions.
-
-\TODO{explain our solution here for batchnorm in transfer issue? or section on in deep \acrlong{tl} ? or in multi task chapter?}
 
 \subsection{Modern network architectures}
 \label{ssec:backml:dl:modernarchi}
@@ -1431,9 +1430,9 @@ After the success of AlexNet, researchers investigated the effect of model depth
 on classification performance. An architecture in particular caught the attention
 by ending up a runner up for a later edition of \acrshort{ilsvrc} in 2014. This
 architecture is named VGG \parencite{simonyan2014very} after the team who participated
-the challenge. It has two implementations we use in this thesis: VGG16 and VGG19.
+to the challenge. It has two implementations that we use in this thesis: VGG16 and VGG19.
 The number is the count of layers with trainable weights in the architecture.
-These architectures are pretty straightfoward (see Figure \ref{fig:backml:vgg})
+These architectures are pretty simple (see Figure \ref{fig:backml:vgg})
 as they only stack blocks of few convolutional layers with \acrshort{relu} activation
 followed by pooling. The last convolutional layer is followed by a 3-layers
 \acrshort{mlp}.
@@ -1523,7 +1522,7 @@ together with one convolution and one pooling layers (see Figure
 
 For tackling image segmentation tasks, one generally uses \textit{\acrlong{fcn}s}
 (\acrshort{fcn}) which is a kind of network where (almost) all layers are
-convolutional. One of the most popular architecture for segmentation is a U-shaped
+convolutional. One of the most popular architectures for segmentation is a U-shaped
 network called U-Net \parencite{ronneberger2015unet}. This architecture is composed
 of a contracting and an expanding paths (hence the ``U'', see Figure
 \ref{fig:backml:unet}). Similarly as for classification networks, the former is
@@ -1606,7 +1605,7 @@ is further trained by gradient descent on the target task. Subjecting the whole
 network to gradient descent will change the features learned on the source task
 which can cause catastrophic interference. Therefore, a way of alleviating the
 issue is to use a small learning rate (compared to the initial training learning
-rate). Another of way preventing this issue consists in freezing a part of
+rate). Another way of preventing this issue consists in freezing a part of
 $\theta_s$, usually the first layers.
 
 The feature extraction approach only emerged recently with works on the Overfeat
@@ -1664,14 +1663,14 @@ in general.
 \subsection{Multi-task learning}
 \label{ssec:backml:dl:deepmultitask}
 
-\TODO{Pierre: write about this}
+\TODO{write about this}
 
 \subsection{Self-training}
 \label{ssec:backml:dl:selftraining}
 
 As introduced in Section \ref{ssec:backml:inbetween}, self-training is a family of \acrlong{ssl} methods. A self-training process is iterative where a typical iteration consists in using a teacher model to produce pseudo-labels for unlabeled samples from $\mathcal{D}_u$ which are then combined with labeled samples from $\mathcal{D}_l$ to train a student model. 
 
-There are several elements that characterize a self-training algorithm. An important element is the way the student and teachers models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
+There are several elements that characterize a self-training algorithm. An important element is the way the student and teacher models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
 
 Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} to select which samples should be included for the next training rounds by excluding high entropy samples for instance \parencite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \parencite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \parencite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
 
@@ -1684,13 +1683,11 @@ and \ref{chap:mtask}, both contributions explore heterogeneous model-based
 target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp}
 (more on this in Chapter \ref{chap:backdp}). The first contribution studies transfer
 from ImageNet. Motivated by the fact that transfer works better when the source
-and target tasks are related, the second contribution use homogeneous features-based
+and target tasks are related, the second contribution uses homogeneous features-based
 \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data
 directly.
 
 In Chapter \ref{chap:strain}, we move to a different type of task: image segmentation.
-Working with an sparsely-annotated \acrlong{dp} dataset, we use self-training to
+Working with a sparsely-annotated \acrlong{dp} dataset, we use self-training to
 complete the areas where annotations are missing. We train a U-Net segmentation
 model on the self-annotated segmentation.
-
-\TODO{chapter on software contributions}
