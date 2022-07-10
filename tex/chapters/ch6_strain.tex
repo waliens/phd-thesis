@@ -154,11 +154,11 @@ w^{ent}_{ij} = \left(1 - w_{\text{min}}\right) \omega_{ij} + w_{\text{min}}.
 \label{eqn:strain:wminrescale}
 \end{equation}
 
-\paragraph{Consistency.} Self-training algorithms often enforce consistency between the teacher and student models predictions. Inspired from this, we exploit another form of consistency for this strategy. In structured output tasks like segmentation, there is a correlation between predictions that are spatially close, as, for most pixels, it is unlikely that the true label should differ between a pixel and its neighbours. Therefore, we use the pseudo-label consistency between a pixel and its neighbours as a proxy to evaluate reliability of this pseudo-label: %The weight is given by
+\paragraph{Consistency.} Self-training algorithms often enforce consistency between the teacher and student models predictions. Inspired from this, we exploit another form of consistency for this strategy. In structured output tasks like segmentation, there is a correlation between predictions that are spatially close, as, for most pixels, it is unlikely that the true label should differ between a pixel and its neighbors. Therefore, we use the pseudo-label consistency between a pixel and its neighbors as a proxy to evaluate reliability of this pseudo-label: %The weight is given by
 \begin{equation}
 w^{\text{cty}}_{ij} = 1 - \dfrac{\sum_{k=-\eta}^{\eta} \sum_{l=-\eta}^{\eta} (\hat{y}_{ij}- \hat{y}_{(i+k)(j+l)})^2}{\eta^2 - 1}
 \end{equation}
-where $\eta$ is the size of the neighbourhood and an hyperparameter of the method. We consider a square neighbourhood around the central pixel and ignore pixels outside of the image at the image borders. We have arbitrarly chosen $\eta = 2$ as default value for all our experiments involving the ``\textit{consistency}'' weighting strategy. This means that each pixel (except at the image borders) is compared to 24 neighbouring pixels when computing consistency. 
+where $\eta$ is the size of the neighborhood and an hyperparameter of the method. We consider a square neighborhood around the central pixel and ignore pixels outside of the image at the image borders. We have arbitrarly chosen $\eta = 2$ as default value for all our experiments involving the ``\textit{consistency}'' weighting strategy. This means that each pixel (except at the image borders) is compared to 24 neighboring pixels when computing consistency. 
 
 \paragraph{Merged.} This strategy assigns a high weight to pixels for which the model is both certain and consistent (spatially). It achieves this by multiplying together the consistency weight $w^{\text{cty}}_{ij}$ and the entropy raw weight $\omega_{ij}$. Because $\omega_{ij}$ suffers from the issue described earlier, we apply the same re-scaling operation after multiplication:
 \begin{equation}
@@ -334,7 +334,7 @@ Results are shown for all three datasets in Figure \ref{fig:strain:rho_exp}. In 
     \caption{\acrshort{glas}}
     \label{fig:strain:rho_exp_glas}
   \end{subfigure}
-  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$. We only report the weighting schemes that show representative behaviour. Other weighting strategies are evaluated and reported in Supplementary Section \ref{app:strain:sec:additionalfixednl}.}
+  \caption{Performance of our baselines and self-training approaches with different hyperparameters combinations with a varying $\rho$ and a fixed labeled set size $n_l$. We only report the weighting schemes that show representative behavior. Other weighting strategies are evaluated and reported in Supplementary Section \ref{app:strain:sec:additionalfixednl}.}
   \label{fig:strain:rho_exp}
 \end{figure}
 
