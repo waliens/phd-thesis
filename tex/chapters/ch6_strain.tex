@@ -289,25 +289,28 @@ Every experiment and hyperparameters combination we evaluate is run with ten ran
 \section{Experiments and results}
 \label{sec:strain:results}
 
-\subsection{Hard labeling \vs soft labeling}
+\subsection{Hard \vs soft pseudo-labeling}
 \label{ssec:strain:res:hardvssoft}
 
-In this section, we explore how the two choices of pseudo-label generation presented in Section \ref{sssec:strain:softandhardlabels} impact the performance of self-training. In order to answer this question, we have run our self-training approach a significant number of times with different hyperparameter settings either with hard or soft pseudo-labels. We have performed 10 runs per hyperparameter combination and with total of 45 combinations for \acrshort{segpc}, 42 for \acrshort{monuseg} and 22 for \acrshort{glas} (see Supplementary Section \TODO{appendix for this experiment} for a detailed list of hyperparameters combinations). Regarding sparsity, we have decided to study a relatively scarce regime with $\rho = 90\%$ for all datasets and $n_l$ set to $2$ for \acrshort{monuseg}, $30$ for \acrshort{segpc} and $8$ for \acrshort{glas} (\ie between $90\%$ and $95\%$ of sparsely labeled images with $90\%$ of missing annotations).    
+\TODO{discuter de cette section, revoir section méthode "hard vs soft" pour qu'elle soit cohérente} 
 
-We observe that hard labels consistently yield superior performance on all datasets. 
+In this section, we explore how the two choices of pseudo-label generation presented in Section \ref{sssec:strain:softandhardlabels} impact the performance of self-training. In order to answer this question, we have run our self-training approach with different hyperparameter settings either with hard or soft pseudo-labels. We have performed 10 runs per hyperparameter combination and considered 24 combinations for \acrshort{segpc}, 20 for \acrshort{monuseg} and 22 for \acrshort{glas} (see Supplementary Section \ref{app:strain:sec:hardvssoft} for a detailed list of hyperparameters combinations). This experiment was carried out during the exploratory phase of the work where we studied a significantly scarce regime with $\rho = 90\%$ for all datasets and $n_l$ set to $2$ for \acrshort{monuseg}, $30$ for \acrshort{segpc} and $8$ for \acrshort{glas} (\ie between $90\%$ and $95\%$ of sparsely labeled images with $90\%$ of missing annotations).
 
-\TODO{what if optimizing on test set?? way better perf for soft relatively to hard}
+The resulting performance are reported in Figure \ref{fig:strain:hard_vs_soft}. We observe that, for all datasets except \acrshort{glas}, the range of performance obtained with soft pseudo-labels fits within the range of performance of hard pseudo-labels. This indicates that soft labels yield more stable performance and are less impacted by the choice of a weighting strategy and its hyperparameters. This also seems to indicate that when appropriately selecting the hyperparameters, hard pseudo-labels are able to produce better performance. However, it also means that a bad choice of self-training hyperparameters when using hard labels would have a more significative negative on the performance . For \acrshort{glas}, the performance obtained using soft labels are inferior to those of hard labels. 
+
+As a disclaimer, this analysis holds for the studied scarcity regime as the impact of hard and soft pseudo-labels could change in different conditions which we have not evaluated due to time and computational resources constraints. 
+
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{strain/plot_hard_vs_soft_test_pxl_self_hard_dice.pdf}
-  \caption{Comparing performance between using self-training with hard \vs soft labels. The reported Dice score is optimized on $\mathcal{D}_l$.}
+  \caption{Comparing performance between using self-training with hard and soft labels.}
   \label{fig:strain:hard_vs_soft}
 \end{figure}
 
 \subsection{Self-training performance at fixed $n_l$}
 \label{ssec:strain:fixednl}
 
-In order to study how our self-training approach performs under different data scarcity conditions, we have generated several versions of our datasets by varying $\rho$ with $n_l$ fixed and have run the baselines and different hyperparameters combinations on the generated datasets. As discussed in Section \ref{ssec:strain:self_training}, we have used hard labels exclusively. The detailed hyperparameter combinations used in this section are provided in Supplementary Section \ref{app:strain:sec:expfixednl}.
+In order to study how our self-training approach performs under different data scarcity conditions, we have generated several versions of our datasets by varying $\rho$ with $n_l$ fixed and have run the baselines and different hyperparameters combinations on the generated datasets. As discussed in Sections \ref{ssec:strain:self_training} and , we have used hard labels exclusively. The detailed hyperparameter combinations used in this section are provided in Supplementary Section \ref{app:strain:sec:expfixednl}.
 
 Results are shown for all three datasets in Figure \ref{fig:strain:rho_exp}. In general, self-training is always able to outperform significantly the ``\textit{$\mathcal{D}_l$ only}'' and ``$\mathcal{D}_l \cup \mathcal{D}_s$'' baselines with a significantly reduced amount of sparse annotations (the exact value is dataset dependant, see below). Regarding the baselines, ``\textit{upper}''  outperforms the two others. Moreover, using sparsely labeled images as if they were exhaustively labeled (\ie $\mathcal{D}_l \cup \mathcal{D}_s$) appears not to be a good idea as it is outperformed by all self-training approaches and baselines in almost all scarcity conditions. The performance of this baseline increases as one adds more sparse annotations however and is able to catch up with the ``\textit{$\mathcal{D}_l$ only}'' baseline in the lowest scarcity conditions validating the hypothesis presented in Section \ref{ssec:strain:baselines}. 
 

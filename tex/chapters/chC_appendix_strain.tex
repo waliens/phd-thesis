@@ -1,6 +1,68 @@
 \chapter{Appendices for Chapter \ref{chap:strain}}
 \label{app:strain}
 
+\section{Hyperparameters for soft \vs hard labels experiment}
+\label{app:strain:sec:hardvssoft}
+
+In this section, we list the hyperparameters we have used in our soft \vs hard labels experiment. They are reported in Tables \ref{app:strain:tab:hardvssoft_monuseg}, \ref{app:strain:tab:hardvssoft_segpc}, \ref{app:strain:tab:hardvssoft_glas} for \acrshort{monuseg}, \acrshort{segpc} and \acrshort{glas} respectively.
+
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|l|}
+    \hline
+    Weighting scheme & \# comb. & Hyperparameters \\
+    \hline
+    Constant & 6 & $C \in \left\{0.01, 0.05, 0.1, 0.25, 0.5, 1.0 \right\}$\\
+    Balance & 1 &  / \\
+    Entropy & 6 & $w_{min} \in \left\{0.01, 0.05, 0.1, 0.25, 0.5, 0.75\right\}$\\
+    Consistency & 1 & $\eta = 2$\\
+    Merged & 6 & all combinations of $w_{min}, c(y_1, y_2)$ and $\eta$ listed above\\
+    \hline
+    \textbf{Total} & 20 & \\
+    \hline
+  \end{tabular}
+  \caption{Hyperparameters for the soft \vs hard labels experiment on \acrshort{monuseg}.}
+  \label{app:strain:tab:hardvssoft_monuseg}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|l|}
+    \hline
+    Weighting scheme & \# comb. & Hyperparameters \\
+    \hline
+    Constant & 10  & $C \in \left\{0.01, 0.05, 0.1, 0.25, 0.5, 1, 1.25, 1.75, 1.5, 2 \right\}$\\
+    Balance & 1 &  / \\
+    Entropy & 6 & $w_{min} \in \left\{0.01, 0.05, 0.1, 0.25, 0.5, 0.75\right\}$\\
+    Consistency & 1 & $\eta = 2$\\
+    Merged & 6 & all combinations of $w_{min}, c(y_1, y_2)$ and $\eta$ listed above\\
+    \hline
+    \textbf{Total} & 24 & \\
+    \hline
+  \end{tabular}
+  \caption{Hyperparameters for the soft \vs hard labels experiment on \acrshort{segpc}.}
+  \label{app:strain:tab:hardvssoft_segpc}
+\end{table}
+
+\begin{table}
+  \centering
+  \begin{tabular}{|c|c|l|}
+    \hline
+    Weighting scheme & \# comb. & Hyperparameters \\
+    \hline
+    Constant & 8 & $C \in \left\{ 0.01, 0.05, 0.1, 0.25, 0.5, 1, 2, 3 \right\}$\\
+    Balance & 1 &  / \\
+    Entropy & 6 & $w_{min} \in \left\{ 0.01, 0.05, 0.1, 0.25, 0.5, 0.75 \right\}$\\
+    Consistency & 1 & $\eta =2$\\
+    Merged & 6 & all combinations of $w_{min}, c(y_1, y_2)$ and $\eta$ listed above\\
+    \hline
+    \textbf{Total} & 22 & \\
+    \hline
+  \end{tabular}
+  \caption{Hyperparameters for the soft \vs hard labels experiment on \acrshort{glas}.}
+  \label{app:strain:tab:hardvssoft_glas}
+\end{table}
+
 \section{Hyperparameters for self-training performance at fixed $n_l$}
 \label{app:strain:sec:expfixednl}
 This section provides a detailed list of the chosen hyperparameters foreach dataset. Self-training hyperparameters can be found in Table \ref{app:strain:tab:sthyperparamsfixednl}. The other hyperparameters are listed in Table \ref{app:strain:tab:otherhyperparamsfixednl}.
