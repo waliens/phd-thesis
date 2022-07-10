@@ -2,6 +2,7 @@
 \label{chap:conclusions}
 
 \section{Wrapping up}
+\label{sec:concl:wrappingup}
 
 In this thesis, we investigated how image classification and segmentation \acrlong{ml} techniques can be applied in the context of \acrlong{dp}. In particular, we studied how different methods can be used to alleviate the consequences of data scarcity, a prevalent issue in \acrlong{dp}. Causes and consequences of data scarcity are numerous and are discussed Chapter \ref{chap:backdp}. Some of the consequences include small dataset size, lack of variety and oversimplification of the learning tasks, \etc. These can have a significant negative impact on the efficiency of machine and especially \acrlong{dl} methods which are known to be particularly data-hungry. 
 
@@ -9,37 +10,38 @@ In Part \ref{part:transfer}, we first investigated transfer learning. In Chapter
 
 Moving on to Chapter \ref{chap:mtask}, guided by the fact that transfer learning is known to perform better when source and target tasks are close, we searched for a way to create a transferrable model pretrained on pathology data. However, because of data scarcity, it was (and still is to this date) not possible to find a sufficently large and versatile enough pathology dataset to pretrain a \acrlong{dl} model. Therefore, we decided to exploit the fact that many small and medium pathology datasets had been released over the years and decided to pretrain our model in a multi-task fashion using as many datasets as possible. We collected 22 classification tasks featuring 81 classes and almost 900k images and designed a multi-task pretraining protocol to exploit them. We showed that our models used as feature extractors either outperformed or provided comparable performance compared to ImageNet-pretrained models. We also observed that fine-tuning multi-task or ImageNet pre-trained models yields comparable performance, indicating that fine-tuning was able to recover lack of specificity of ImageNet features. We also confirmed the conclusions from Chapter \ref{chap:comp} as we showed fine-tuning to outperform feature extraction. Moreover, we also confirmed that both transfer approach were more efficient than training from scratch.
 
-% transfer learning
+In Part \ref{part:segmentation} and Chapter \ref{chap:strain}, we focused on \acrlong{ssl} and self-training in particular. We proposed a self-training algorithm for image segmentation able to make use of both exhaustively and sparsely labeled data. Every training epoch, our approach generates pseudo-labels for unlabeled pixels in the training set using the currently trained model and combines them with the sparse ground truth. The model can then be refined using this pseudo-labeled set as well as an exhaustively labeled set. Using three exhaustively labeled datasets that we artificially made sparse, we showed that our self-training approach was able to improve performance compared to only using the exhaustively labeled data. For one of our datasets, self-training was even able to reach performance of a model trained on a completely annotated dataset with only $~30\%$ of the training annotations. We confirmed our findings on an in-house sparsely labeled dataset where self-training improved performance by a $5\%$ margin compared to our baselines. We also showed that when annotating a new dataset, it is not necessarily better to annotated it exhaustively. 
 
-% multi task pre-training
-
-% self-training
+\TODO{a final word to conclude }
 
 \section{Future works}
+\label{sec:concl:futureworks}
 
-\paragraph{Transfer from ImageNet} 
+In this section, we discuss future perspectives for our works.
 
-% testing transfer with new cnn architectures
-% testing transfer with new architectures (eg transformers)
+\paragraph{Transfer with new architectures.} In 2018, when we experimented with deep \acrlong{tl}, we investigated the \acrlong{tl} potential of many neural network architectures that were quite recent at that time. Since we published our first article (which is the subject of Chapter \ref{chap:comp}), many new architectures have been proposed and it would be interesting to evaluate how good these architectures would be in terms of transfer performance to pathology tasks. This includes new \acrlong{cnn} architectures such as \TODO{list few} but more prominently transformer architectures like \acrshort{vit} which are currently \acrlong{sota} on ImageNet \TODO{cite}.
 
-\paragraph{Transfer from pathology data}
+\paragraph{Improve transfer performance with multi-task pretraining.} There are several areas of improvement to investigate for our multi-task pretraining approach. For instance, we did not implement a way to prevent catastrophic interference which might hinder the transfer performance of the resulting model. This could be achieved by normalizing the input images with a normalization strategy tailored for each input task. The strategy could be as simple as a statistical normalization but we could also investigate normalization techniques specific to pathology like stain normalization. Similarly, data augmentation is known to help with model generalization but we have only applied a minimal augmentation procedure with random flipping and cropping. Therefore, it would be interesting to considerto consider other augmentation techniques: color perturbation, blurring, \etc. 
 
-% multi-task -> more agressive data normalization and/or augmentation
-% multi-task -> anticipate/detect negative transfer and implement a correction mechanism to alleviate or cancel its effect
-% multi-task -> add more datasets
-% multi-task -> increase/tune complexity of task specific heads
-% multi-task -> mix different types of task (segmentation, detection)
-% combine with other training techniques (self-supervised learning, self-training?)
+\paragraph{Consider more tasks and types of task.} We have used 22 classification tasks for pretraining our models. It would be interesting to add more tasks to the pool to reinforce even more the pretrained model. Since the publication or the related article in 2020, new pathology datasets have been released and would be good candidate to be integrated (\eg CoNiC and NuCLS introduced in Table \ref{tab:backdp:datascarcity-grandchallenge}).  Moreover, only supporting classification tasks is restrictive as it prevents from exploiting other kind of datasets like detection or segmentation (those that cannot be easily converted to classification at least) . One way of including these types of task would be to use new head architectures. For instance, the classification head could be replaced by a decoder from a UNet model to support a segmentation task. This kind of change would require careful consideration because adding a large head for a bunch of tasks would increase the memory and time requirements for training the model. In the same spirit, it would be interesting to study the effects of using more complex heads for classification as well.  
 
-\paragraph{Self-training}
+\paragraph{Study further our self-training method.} It would be interesting to test our self-training approach with more than our four datasets. This would allow to study more precisely what would be the effect of the density or size of annotations on self-training performance, especially with regard to the weighting strategy as it seems that the choice of such a strategy is dataset dependent. It would be also interesting to study further how hyperameters of the weighting strategies or training hyperparameters (\eg learning rate, model complexity, \etc.) impact self-training performance.
 
-% evaluate more thouroughly whether the type of dataset is important (dense or sparse annotations, large or small annotations, etc), random nature of removed annotation? 
+\paragraph{Extend the method to multi-class segmentation.} Currently, the method only supports binary segmentation. This extension would start by changing the sigmoid output layer of UNet by a softmax function which implies that a label (and by extention a pseudo-label) is not a probability anymore but rather a probability distribution. Many aspects of our approach can be trivially adapted to this change (cross-entropty loss, soft labeling, entropy weighting strategy, \etc.). There are two elements in particular that require a little more thoughts. The first is hard labeling as thresholding is not relevant anymore. The second is the consistency weighting strategy as a new function to compare probability distributions must be chosen.      
+
+\paragraph{Study self-training with larger datasets.} We have mostly studied how our method performed in high data scarcity conditions. However, self-training methods have shown to improve performance in context where data is plentiful \TODO{cite}. This can be done for instance by pseudo-labeling entirely unlabeled datasets. When working with \acrshort{wsi}s, it is common to only have regions of interest annotated instead of entire slides. Therefore, this leaves out many unlabeled area that could be included as training data after pseudo-labeling. It would be interesting to study how including these kind of data would help improve performance. 
+
+\paragraph{Self-training as an interactive annotation algorithm.} More and more, \acrlong{ai} methods are used to assist dataset annotation. Because a dataset being annotated is sparse by nature, we believe that a self-training approach could be leveraged to train a model using the data being annotated. The resulting model could then be used to suggest annotation that could be refined by the annotator.   
+
+\paragraph{Mixing it all up.} There is nothing that prevents the different methods explored in this thesis to be used together. Indeed, transfer learning can be used to initialize the encoder part of a Unet, multi-task learning can be used to train a segmentation model. More interestingly, we could use self-training and multi-task learning together to train a classification or segmentation model. For instance, we could train a multi-task UNet on the datasets used in Chapter \ref{chap:strain} (\acrshort{monuseg}, \acrshort{segpc} and \acrshort{glas} and Thyroid \acrshort{fnab}) simultaneously. Every epoch we would pseudo-label unlabeled regions of the Thyroid \acrlong{wsi}s that could be included as training data for the next training epoch.
+
+
+
 % differential learn weighting strategy
-% extend the method to support multi-class segmentation (pseudo labels generation ? weights ?)
-% study how the method performs on large sets D_l and D_s, is the method interesting when annotated data is plentiful, yet a large unlabeled dataset is available ? 
+
 % evaluate an interactive use of the algorithm, for instance to assist the labeling process of a new dataset  
 
-\paragraph{Mixing it all up}
+% \paragraph{Mixing it all up}
 
 % mixing all methods:
 % - use a pre-trained model for initializing the segmentation network before starting warm-up and self-training
