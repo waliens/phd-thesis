@@ -19,10 +19,13 @@ def random_string(n):
     return "".join([random.choice(string.ascii_letters) for _ in range(n)])
 
 
-def make_target(include):
+def make_target(include, draft=False):
     with open("root.tex", "r", encoding="utf8") as root_file:
         tex = root_file.read()
-        tex = tex.replace("\\begin{document}\\end{document}", "\\begin{document}\\input{" + include + "}\\end{document}")
+        replace_str = "\\begin{document}\\input{" + include + "}\\end{document}"
+        if draft:
+            replace_str = "\PassOptionsToPackage{draft}{graphicx}" + os.linesep + replace_str
+        tex = tex.replace("\\begin{document}\\end{document}", replace_str)
         tmp_target_filename = "{}_target.tex".format(os.path.basename(include).rsplit(".", 1)[0])
         with open(tmp_target_filename, "w+", encoding="utf8") as tmp_target:
             tmp_target.write(tex)
@@ -57,8 +60,10 @@ def compile(argv):
     parser = ArgumentParser()
     parser.add_argument("chap", nargs="?", default=None)
     parser.add_argument("-c", "--clean", action="store_true", dest="clean")
+    parser.add_argument("-d", "--draft", action="store_true", dest="draft")
     parser.add_argument("-gg", action="store_true", dest="gg")
-    parser.set_defaults(clean=False, gg=False)
+
+    parser.set_defaults(clean=False, gg=False, draft=False)
     args, others = parser.parse_known_args(argv)
 
     if args.chap is None:
@@ -83,7 +88,8 @@ def compile(argv):
         print("-- Compile chapter {}".format(chap_name))
         jobname = "thesis_{}".format(chap_name)
 
-    target_fname = make_target(target_file)
+    target_fname = make_target(target_file, draft=args.draft) 
+
     try:
         proc = subprocess.run(latexmk_cline(name=jobname, target=target_fname, gg=args.gg))
 
