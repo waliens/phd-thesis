@@ -29,7 +29,7 @@ the \textit{hypothesis space}, a performance measure $P$ for a model and an
 optimization strategy. As input, the algorithm is provided with \textit{training data}
 (the experience $E$, \aka learning or training set) that it uses to build and
 optimize the model. The algorithm output is a model $h \in \mathcal{H}$ that
-maximises the performance criterion. A model being built by a learning algorithm
+maximizes the performance criterion. A model being built by a learning algorithm
 is said to be in the \textit{training phase}. When this model has been trained
 and is used on new data, it is said to be in the \textit{inference phase}.
 
@@ -130,7 +130,7 @@ examples. Such guidance allows using well-studied methods and usually helps lear
 strong models but also comes at the cost of human intervention. This is especially
 aggravated when the target task is difficult as, the more complex, the more data
 is required to sample sufficiently the input space. In some domains, annotations
-are particularily cumbersome to obtain because one lacks raw data, or because the
+are particularly cumbersome to obtain because one lacks raw data, or because the
 annotation process requires the intevention of experts (\eg medical data). This
 issue is referred to as \textit{data scarcity}. In general, the lack of data
 hampers successful application of \acrlong{sl} but several approaches exist to
@@ -242,7 +242,7 @@ trained on the raw images directly \cite{krizhevsky2012imagenet}. They beat
 the second best method by a margin of 11\% error rate. This extraordinary improvement
 revived the interest of the \acrlong{ml} community for neural networks and launched
 the ``\acrlong{dl} revolution''. The success of this method can be partly attributed
-to some particularily beneficial \textit{inductive bias}, a set of assumptions
+to some particularly beneficial \textit{inductive bias}, a set of assumptions
 that narrow the search of a good model in the hypothesis space. This inductive
 bias includes the use of a trainable multi-layered (hence ``deep'') structure that
 can automatically learn hierarchical concepts from the data directly. In other
@@ -313,7 +313,7 @@ content and appearance.
 
 There exist many different transfer approaches. Based on how they operate,
 \cite{yang2020transfer} have identified four different categories of \acrlong{tl}
-algorithms. The case when knowledge transfered corresponds to the weights attached
+algorithms. The case when knowledge transferred corresponds to the weights attached
 to the source examples is called \textit{instance-based} \acrlong{tl}. Is referred
 to as \textit{feature-based} \acrlong{tl} the case when knowledge is represented
 by a subspace spanned by the features in the source and target domains. The
@@ -325,7 +325,7 @@ is referred to as \textit{relation-based}.
 Transfer learning performance is influenced by several factors including how well
 the method is able to capture and use transferable knowledge. The task-relatedness
 is also an important factor: usually the more similar the tasks, the better the
-performance. Sometimes, performance are worsen by the use of \acrlong{tl}. This
+performance. Sometimes, performance are worsened by the use of \acrlong{tl}. This
 happens for instance when the source and target tasks are not related enough.
 Moreover, the training process on the target task can cause some of the
 previously-learned knowledge to be lost as most \acrlong{ml} methods do not have
@@ -356,7 +356,7 @@ independently. In opposition, it happens that antagonistic tasks worsen the
 resulting individual tasks performance. This issue is related to negative transfer
 and catastrophic interference introduced in Section \ref{ssec:backml:transfer}.
 
-Similarily to \acrlong{tl}, \acrlong{mtl} methods can be either \textit{heterogeneous}
+Similarly to \acrlong{tl}, \acrlong{mtl} methods can be either \textit{heterogeneous}
 when the tasks are of different types (\eg supervised, unsupervised, classification,
 regression), or \textit{homogeneous} when tasks have only one type. In supervised
 \acrlong{mtl}, \citeauthor{zhang2017survey} \cite{zhang2017survey} have identified three families of
@@ -436,7 +436,7 @@ the model learned from a learning set $\mathcal{D} \in LS$. This decomposition c
 be exactly demonstrated when using the squared loss (see Equation 
 \ref{eqn:backml:squaredloss}) as $\ell$. For other losses, the decomposition is not 
 exactly equivalent but the intuition is similar. The \textit{noise}
-term is the error of $h_B$ and is therefore irreductible. The \text{bias} is the
+term is the error of $h_B$ and is therefore irreducible. The \text{bias} is the
 error of the average model (over models generated from $LS$) with respect to $h_B$.
 The \textit{variance} measures the variability of the predictions around the
 average model caused by the training set randomness.
@@ -475,7 +475,7 @@ this trade-off.
 \subsubsection{Over-parametrized models}
 
 With the advent of \acrlong{dl}, model complexity has exploded as typical \acrlong{dl}
-models have millions or even billons of parameters (see Section
+models have millions or even billions of parameters (see Section
 \ref{ssec:backml:dl:modernarchi}). The bias-variance trade-off tells us that these
 models should be extremely prone to overfitting but the reality is different.
 Typically, it is not uncommon to find tasks for which \acrlong{dl} models reach
@@ -537,7 +537,7 @@ These two approaches are based on a strong assumption that the extracted sets ar
 independent. If they are not, this would most probably lead to overfitting and
 the resulting selection or evaluation scores being overly optimistic. Therefore,
 it is sometimes not enough to split the sets randomly and domain knowledge must
-be used during the splitting procedure to enforce sets independance. This issue
+be used during the splitting procedure to enforce sets independence. This issue
 is sometimes called \textit{data leakage} \cite{kaufman2012leakage} as
 information ``leaks'' between the sets. This topic will be discussed in Section
 \ref{ssec:backdp:dataleakage} as \acrlong{dp} datasets must be treated carefully 
@@ -811,7 +811,7 @@ the gutter or are misclassified which increases variance but decreases bias.
     \includegraphics[width=\textwidth]{backml/svm_c25.pdf}
     \caption{$C=25$. Notice the new points \\ of class $1$ in the class $0$ cluster.}
   \end{subfigure}
-  \caption{Examples of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with bold coloured border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
+  \caption{Examples of an hyperplane (the thick black line) learned with \acrshort{svm} applied to a binary classification task ($\vect{x} = (x_1, x_2) \in \mathcal{X} \subseteq \mathbb{R}^2$ and $\mathcal{Y} = \left\{0, 1\right\}$). The support vectors are delineated with bold colored border. A large value of $C$ penalizes more severely points in the gutter or misclassified.}
   \label{fig:backml:svm}
 \end{figure}
 
@@ -862,14 +862,14 @@ edges are associated with non-overlapping subsets of this attribute's domain:
 \label{eqn:backml:dt:splitsgeneric}
 \mathcal{A}^{(q)}_l \subset \mathcal{X}_{q.k},~l = 0,...,q.E-1
 \end{equation}
-which are called \textit{splits}. A leaf node of the tree is labelled with a
+which are called \textit{splits}. A leaf node of the tree is labeled with a
 prediction $\hat{y} \in \mathcal{Y}$. In classification, it can also be a probability
 distribution over $\mathcal{Y}$. In regression, the output is a real value
 $\hat{y} \in \mathcal{Y}$. Given $x_i$, predicting an output value consists in a
 top-down traversal of the tree. When reaching an internal node $q$ during the
 traversal, $\vect{x}_i$ will follow the edge $l$ such that $a^{(i)}_{q.k} \in \mathcal{A}^{(q)}_l$
 which leads to one of the children nodes of $q$. This process is repeated until
-the algorithm reaches a leaf of which the associated labelling is the output of
+the algorithm reaches a leaf of which the associated labeling is the output of
 the algorithm for $\vect{x}_i$.
 
 In the remainder of the thesis, we will only consider numerical attributes ($x_i \in \mathbb{R^m}$) and
@@ -938,7 +938,7 @@ This algorithm is formalized in Algorithm \ref{algo:backml:dtinduction}.
 
   \Fn{\dtinduct{$S$}}{
     \If{\stopsplit($S$)}{
-      \KwRet{\text{a node associated with the most appropriate labelling given} $S$}\;
+      \KwRet{\text{a node associated with the most appropriate labeling given} $S$}\;
     }
     Find the best split $q.v$ for attribute $q.k$ for new node $q$:\;
     $\argmin{v,k} \left[\frac{|S_0|}{|S|} I\left(S_0\right) + \frac{|S_1|}{|S|} I\left(S_1\right)\right] : S_0 = \left\{(\vect{x}_i, y_i) \mid a^{(i)}_k < v\right\}, S_1 = S \setminus S_0 $\; \label{algo:backml:dtinduction:argmax}
@@ -1017,7 +1017,7 @@ of decorrelation by selecting the split $q.v$ at random during the induction
 (instead of optimizing it, see line \ref{algo:backml:dtinduction:argmax} in
 Algorithm \ref{algo:backml:dtinduction}). Moreover, to attenuate the bias increase,
 each individual tree is built on the whole training set instead of a boostrap
-sample. These choices makes the algorithm particularily computationally efficient
+sample. These choices makes the algorithm particularly computationally efficient
 as it is not necessary to iterate over the training samples to optimize the split
 anymore.
 
@@ -1113,7 +1113,7 @@ or the step function. Nowadays, the most common is the \acrfirstit{relu} functio
   x\text{, else}
   \end{cases}
 \end{equation}
-which is particularily efficient to compute
+which is particularly efficient to compute
 and has some properties that interact favorably with the training algorithm making
 neural networks easier to train.
 
@@ -1308,10 +1308,10 @@ Moreover, finding parameters that achieve the global minimum of the training los
 is generally unwanted as it might lead to overfitting.
 
 At every iteration, the original gradient descent algorithm computes gradients
-over the whole training set which is particularily inefficient when $n \gg$. A
+over the whole training set which is particularly inefficient when $n \gg$. A
 way of improving this consists in using \acrfirstit{sgd} where the gradients are
 approximated using a subset $\mathcal{B}$ of training samples called a \textit{batch}
-instead of the whole set. This approach has been shown to be particularily efficient
+instead of the whole set. This approach has been shown to be particularly efficient
 for both generalization of the model and computational cost of training
 \cite{bottou201113}. When $1 < |\mathcal{B}| < n$, \acrshort{sgd} becomes
 \textit{mini-batch gradient descent} which is the most used optimization strategy
@@ -1377,7 +1377,7 @@ feature automatic differentiation. Automatic differentiation means that every
 basic mathematical function present in the library is associated with its analytical
 derivative. Therefore, during backpropagation, the algorithm can compute the
 gradients automatically and exactly based on this information. The combination of
-these two features makes training a neural network particularily easy as everything
+these two features makes training a neural network particularly easy as everything
 is automated.
 
 \subsubsection{Batch normalization}
@@ -1389,7 +1389,7 @@ activations in neural networks. Given a signal
 $\vect{x} = \left(\vect{x}_1, \vect{x}_2, ..., \vect{x}_f\right) \in \mathbb{R}^f$
 (\eg the output of a convolutional layer), the \acrshort{bn} layer maintains an
 estimate of the mean $\mu_i$ and variance $\sigma_i$ ($i = 1, ..., f$) of the
-preceeding layer output computed over the batch. These estimates are used to
+preceding layer output computed over the batch. These estimates are used to
 normalize the inputs into an intermediate signal $\hat{\vect{x}}$. Obviously,
 whether this normalization is actually beneficial for the network is task-, layer-
 and feature-dependent and there are probably scenarii where normalizing would hurt
@@ -1504,7 +1504,7 @@ The densely connected convolutional networks \cite{huang2017densely} push
 further the idea of residual connection. Let us suppose a group $g$ of $L$
 consecutive convolutional layers $h^{(l)}$ ($l = 1, ..., L$) taking $\vect{x}$ as
 input. In this group, each layer $h^{(l)}$ receives as input the outputs of all
-preceeding layers $h^{(i)}$ ($i = 1, ..., l-1$) and the input signal $\vect{x}$.
+preceding layers $h^{(i)}$ ($i = 1, ..., l-1$) and the input signal $\vect{x}$.
 This group $g$ is called a \textit{dense block} and is the basis for the densely
 connected networks. Such networks typically stack several dense blocks connected
 together with one convolution and one pooling layers (see Figure
@@ -1562,7 +1562,7 @@ of \acrlong{dl} \cite{tan2018survey}. In this thesis, we focus on supervised
 model-based (or network-based) \acrlong{tl} applied to image classification. With
 this approach, knowledge is encoded through the parameters of a model. This model
 is first trained on a source task, usually a large image classification dataset,
-then transfered to the target task.
+then transferred to the target task.
 
 There are two approaches for transfering a deep neural network to a target task.
 Let us consider three networks $h_s$, $h_o$ and $h_n$ respectively parametrized
@@ -1572,7 +1572,7 @@ its function $h_i(\cdot;\theta_i)$. The network $\theta_s$ is shared between the
 source and target tasks and $\theta_o$ and $\theta_n$ are the task-specific
 networks. Both approaches first require the network $h = h_o \circ h_s$ to be
 trained on the source task. At the end of training, $\theta_s$ encodes the knowledge
-to be transfered.
+to be transferred.
 
 \begin{figure}
   \centering
@@ -1638,7 +1638,7 @@ pre-training could be performed differently. For instance, SimCLR \cite{chen2020
 uses contrastive learning to learn the model. This is a self-supervised approach
 which consists in generating pairs of similar and dissimilar images using data
 augmentation and training a network to discriminate these pairs. They have shown
-that the resulting network has learned discriminative features that can be transfered
+that the resulting network has learned discriminative features that can be transferred
 quite efficiently to new tasks. The \acrfirstit{vit} \cite{dosovitskiy2020image}
 is another approach based on transformers, a recent and popular family of
 attention-based methods. Attention is a mechanism of selection of information
@@ -1647,7 +1647,7 @@ It has initially been applied with great successes on \acrfirstit{nlp} problems
 but \acrshort{vit} has shown that attention-based architectures are also applicable
 to vision. In this framework, the transfer process is very similar to supervised
 pre-training as the model is first trained in a supervised manner on a large
-database, then transfered to the target task. The only difference is that the
+database, then transferred to the target task. The only difference is that the
 attention-based network does not use convolution and takes as input a sequence of
 non-overlapping patches of the image. Other contributions focus on improving
 classical supervised pre-training approach. For instance, \cite{wang2019pay}
