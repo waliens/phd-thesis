@@ -20,12 +20,17 @@ headsepline, % Uncomment to get a line under the header
 
 \usepackage{mathpazo} % Use the Palatino font by default
 
-\usepackage[backend=biber, style=ext-authoryear, maxnames=2, maxbibnames=4, natbib=true]{biblatex} 
+\usepackage[
+  backend=biber,
+  maxbibnames=4, 
+  natbib=true,
+  citestyle=numeric
+]{biblatex}
 
 \addbibresource{thesis.bib} % The filename of the bibliography
 
 % for having brackets when citing
-\DeclareOuterCiteDelims{parencite}{\bibopenbracket}{\bibclosebracket}
+% \DeclareOuterCiteDelims{parencite}{\bibopenbracket}{\bibclosebracket}
 
 \DeclareFieldFormat{citehyperref}{%
   \DeclareFieldAlias{bibhyperref}{noformat}% Avoid nested links
@@ -60,8 +65,6 @@ headsepline, % Uncomment to get a line under the header
   \printtext[textcitehyperref]{%
     \restorebibmacro{textcite}%
     \usebibmacro{textcite}}}
-
-\usepackage{lipsum}
 
 % ========== %
 %  Acronyms  %

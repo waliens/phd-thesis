@@ -284,7 +284,7 @@ we will assume that the source tasks are also supervised.
 
 \begin{definition}
   \label{def:backml:homotransfer}
-  Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t \neq \emptyset$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(\vect{x}) \neq p_t(\vect{x})$ or $p_s(y|\vect{x}) \neq p_t(y|\vect{x})$.
+  Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{homogeneous} when $\mathcal{X}_s = \mathcal{X}_t$ and $\mathcal{Y}_s = \mathcal{Y}_t$ but $p_s(\vect{x}) \neq p_t(\vect{x})$ or $p_s(y|\vect{x}) \neq p_t(y|\vect{x})$.
 \end{definition}
 
 Transfer learning can be \textit{homogeneous} (see Definition \ref{def:backml:homotransfer})
@@ -299,7 +299,7 @@ inputs distributions differ is called \textit{domain adaptation}.
 
 \begin{definition}
   \label{def:backml:heterotransfer}
-  Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \cap \mathcal{X}_t = \emptyset$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
+  Transfer learning between a source task $\left(\mathcal{X}_{s}, \mathcal{Y}_{s}, p_{s}(\vect{x}, y)\right)$ and a target task $\left(\mathcal{X}_t, \mathcal{Y}_t, p_t(\vect{x}, y)\right)$ is said to be \textbf{heterogeneous} when $\mathcal{X}_s \neq \mathcal{X}_t$ and/or $\mathcal{Y}_s \neq \mathcal{Y}_t$.
 \end{definition}
 
 Transfer learning can be \textit{heterogeneous} (see Definition
@@ -359,7 +359,7 @@ and catastrophic interference introduced in Section \ref{ssec:backml:transfer}.
 Similarily to \acrlong{tl}, \acrlong{mtl} methods can be either \textit{heterogeneous}
 when the tasks are of different types (\eg supervised, unsupervised, classification,
 regression), or \textit{homogeneous} when tasks have only one type. In supervised
-\acrlong{mtl}, \cite{zhang2017survey} have identified three families of
+\acrlong{mtl}, \citeauthor{zhang2017survey} \cite{zhang2017survey} have identified three families of
 methods. \textit{Feature-based} \acrlong{mtl} is about sharing knowledge through
 learning features common among all tasks. With \textit{instance-based} \acrlong{mtl},
 knowledge is shared through examples deemed useful. Finally, \textit{model} or
@@ -1670,7 +1670,7 @@ in general.
 
 As introduced in Section \ref{ssec:backml:inbetween}, self-training is a family of \acrlong{ssl} methods. A self-training process is iterative where a typical iteration consists in using a teacher model to produce pseudo-labels for unlabeled samples from $\mathcal{D}_u$ which are then combined with labeled samples from $\mathcal{D}_l$ to train a student model. 
 
-There are several elements that characterize a self-training algorithm. An important element is the way the student and teacher models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
+There are several elements that characterize a self-training algorithm. An important element is the way the student and teacher models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \citeauthor{pham2021meta} \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
 
 Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} to select which samples should be included for the next training rounds by excluding high entropy samples for instance \parencite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \parencite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \parencite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
 
