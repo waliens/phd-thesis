@@ -15,7 +15,7 @@ of tasks $T$ and performance measure $P$ if its performance at tasks in $T$, as
 measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}.
 Machine learning concerns the study of such programs, commonly referred to as
 \textit{models}, and how to build them by learning. A \textit{model} $h$ can be
-seen a function taking an input $\vect{x} \in \mathcal{X}$ (\aka observation,
+seen as a function taking an input $\vect{x} \in \mathcal{X}$ (\aka observation,
 example, instance) and producing an ouput $h(\vect{x})$ or $\hat{y} \in \mathcal{Y}$.
 Entities $\vect{x}$ and $h(\vect{x})$ are n-dimensional tensors and can encode
 many kind of data types: data record, image, graph, time series, text... When
@@ -615,7 +615,7 @@ scores.
   \label{tab:backml:confusion}
 \end{table}
 
-\textit{Sensitivity} and $1 - \textit{specificity}$ are also called \acrfirstit{tpr}
+\textit{Sensitivity} and $(1 - \textit{Specificity})$ are also called \acrfirstit{tpr}
 and \acrfirstit{fpr} respectively. These metrics should always be studied together
 as it is often possible to optimize one at the expense of the other. Therefore a
 common analysis consists in plotting a model as a point $(\acrshort{tpr}, \acrshort{fpr})$
@@ -881,7 +881,7 @@ threshold $q.v$ such that:
 \mathcal{A}^{(q)}_1 &= \left]q.v, +\infty\right[
 \end{align}
 This representation allows for an efficient check at each node as the attribute
-has just to be compared to the treshold. The inference algorithm is formalized in
+has just to be compared to the threshold. The inference algorithm is formalized in
 Algorithm \ref{algo:backml:dtinference} for classification with numerical
 attributes.
 
