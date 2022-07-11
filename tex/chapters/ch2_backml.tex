@@ -12,7 +12,7 @@ Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} an
 
 A computer program is said to learn from experience $E$ with respect to some class
 of tasks $T$ and performance measure $P$ if its performance at tasks in $T$, as
-measured by $P$, improves with experience $E$ \parencite{mitchell1997machine}.
+measured by $P$, improves with experience $E$ \cite{mitchell1997machine}.
 Machine learning concerns the study of such programs, commonly referred to as
 \textit{models}, and how to build them by learning. A \textit{model} $h$ can be
 seen as a function taking an input $\vect{x} \in \mathcal{X}$ (\aka observation,
@@ -153,10 +153,10 @@ for instance, the algorithm searches for natural groups of observations or featu
 Another example is \textit{dimensionality reduction} where the algorithm projects
 high-dimensional data into a lower-dimensional space while attempting to preserve
 as much information as possible. An interested reader will find more information
-about these methods in \parencite{hastie2017elements}. There exists another
+about these methods in \cite{hastie2017elements}. There exists another
 family of \acrlong{usl} methods that was first explored in the 1980s with autoencoders
-\parencite{ballard1987modular, le1987modeles, bourlard1988auto} but has gained much traction recently. It is called \textit{self-supervised learning}
-\parencite{lecun2021self}. The idea behind this family of methods is to exploit
+\cite{ballard1987modular, le1987modeles, bourlard1988auto} but has gained much traction recently. It is called \textit{self-supervised learning}
+\cite{lecun2021self}. The idea behind this family of methods is to exploit
 supervised learning algorithms but rather than guiding the learning process with
 human annotations, the training signal is found in the data itself. An example of
 such methods is \textit{image reconstruction}. Random parts of the input images
@@ -179,9 +179,9 @@ signal. The dataset is composed of two subsets:
 \mathcal{D}_u = \left\{\vect{x}_i \mid i = 1,...,n_u; \vect{x}_i \sim p_u(\vect{x})\right\}
 \end{eqnarray}
 These methods make some assumptions about the ``closeness'' of the input distributions
-$p_a(\vect{x})$ and $p_u(\vect{x})$ \parencite{chapelle2006semi} which allow
+$p_a(\vect{x})$ and $p_u(\vect{x})$ \cite{chapelle2006semi} which allow
 exploiting both sets to solve some particular tasks. One of the earliest forms of
-\acrlong{ssl} is \textit{self-training} \parencite{scudder1965probability, yarowsky1995unsupervised} which consists in an iterative process of which a typical iteration, or round, is composed of two steps. First, the \textit{teacher} model is used to generate pseudo-labels for unlabeled samples from $\mathcal{D}_u$. Then, these samples are used alongside samples from $\mathcal{D}_l$ to train a model, the \textit{student}. We will discuss self-training more thoroughly in Section \ref{ssec:backml:dl:selftraining}.
+\acrlong{ssl} is \textit{self-training} \cite{scudder1965probability, yarowsky1995unsupervised} which consists in an iterative process of which a typical iteration, or round, is composed of two steps. First, the \textit{teacher} model is used to generate pseudo-labels for unlabeled samples from $\mathcal{D}_u$. Then, these samples are used alongside samples from $\mathcal{D}_l$ to train a model, the \textit{student}. We will discuss self-training more thoroughly in Section \ref{ssec:backml:dl:selftraining}.
 
 Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the
 annotations are noisy (\eg $y$ can be incorrect or imprecise), incomplete (similar
@@ -199,7 +199,7 @@ a human body is composed of body parts like the head. The head itself
 includes the face which is itself composed of several elements: cheeks, eyes,
 nose, \etc. This kind of decomposition could also be applied to other concepts.
 Grasping hierarchies is key for understanding and learning efficiently. As humans,
-our visual cortex process information in a hierarchical manner \parencite{van1994neural}.
+our visual cortex process information in a hierarchical manner \cite{van1994neural}.
 Similarly, this can be applied to computer vision. An image can be seen as a
 hierarchy going from the actual objects it contains down to the pixels. Direct
 interpretation of individual pixels is rarely enough for learning anything
@@ -212,7 +212,7 @@ understanding by learning.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{backml/image-hierarchy.png}
-  \caption{A custom hierarchical model illustrating the compositionnality and hierarchical nature of vision tasks (source: \parencite{leonardis2010learning}).}
+  \caption{A custom hierarchical model illustrating the compositionnality and hierarchical nature of vision tasks (source: \cite{leonardis2010learning}).}
   \label{fig:backml:hierarchy}
 \end{figure}
 
@@ -226,19 +226,19 @@ is called \textit{manual feature extraction} or \textit{engineering} and has bee
 an important part of the application of machine learning algorithms. In computer
 vision, a great body of work has been focused on creating complicated pipelines
 of feature extraction that produce hundreds of different features that can be used
-for image understanding (\eg SURF \parencite{bay2006surf}, ORB \parencite{rublee2011orb}).
+for image understanding (\eg SURF \cite{bay2006surf}, ORB \cite{rublee2011orb}).
 However, more recently ``\acrlong{dl}'' methods based on neural networks have
 shown that manual feature extraction was usually not the best performing approach
 for a wide variety of tasks.
 
 Although neural network research is as old as machine learning itself, the real
 breakthrough of \acrlong{dl} happened in 2012 at the occasion of the third iteration
-of a \acrlong{ml} challenge called \acrfirstit{ilsvrc} \parencite{russakovsky2015imagenet}.
+of a \acrlong{ml} challenge called \acrfirstit{ilsvrc} \cite{russakovsky2015imagenet}.
 One of the tasks was image classification and all but the best method used
 combinations of shallow learning algorithms and feature extraction. However, the
 winning team followed a different approach. Building upon neural network research
 form the previous decades, they used a deep convolutional neural network, AlexNet,
-trained on the raw images directly \parencite{krizhevsky2012imagenet}. They beat
+trained on the raw images directly \cite{krizhevsky2012imagenet}. They beat
 the second best method by a margin of 11\% error rate. This extraordinary improvement
 revived the interest of the \acrlong{ml} community for neural networks and launched
 the ``\acrlong{dl} revolution''. The success of this method can be partly attributed
@@ -263,11 +263,11 @@ someone who has no music education at all. In a way, we ``transfer'' knowledge
 and skills from a task to another.
 
 This idea has been applied in \acrlong{ml} and from this application emerged
-\acrfirstit{tl} \parencite{yang2020transfer}. This field studies the ways knowledge
+\acrfirstit{tl} \cite{yang2020transfer}. This field studies the ways knowledge
 learned from one or more tasks, called the \textit{source tasks}, can be exploited
 to learn more effectively on another task, the \textit{target task}. This subject
 has been researched for few decades now, as the first contributions about \acrlong{tl}
-date back to the end of the 1970s \parencite{bozinovski2020reminder}. A surge of
+date back to the end of the 1970s \cite{bozinovski2020reminder}. A surge of
 interest happened in the 1990s notably with a NIPS-95 workshop called
 ``\textit{Learning to Learn: Knowledge Consolidation and Transfer in Inductive Systems}''
 which discussed the importance of retaining previously-learned information for
@@ -312,7 +312,7 @@ The inputs distributions also differ as medical images have completely different
 content and appearance.
 
 There exist many different transfer approaches. Based on how they operate,
-\parencite{yang2020transfer} have identified four different categories of \acrlong{tl}
+\cite{yang2020transfer} have identified four different categories of \acrlong{tl}
 algorithms. The case when knowledge transfered corresponds to the weights attached
 to the source examples is called \textit{instance-based} \acrlong{tl}. Is referred
 to as \textit{feature-based} \acrlong{tl} the case when knowledge is represented
@@ -330,8 +330,8 @@ happens for instance when the source and target tasks are not related enough.
 Moreover, the training process on the target task can cause some of the
 previously-learned knowledge to be lost as most \acrlong{ml} methods do not have
 an explicit memory mechanism to retain information. These two phenomena are
-respectively called \textit{negative transfer} \parencite{zhang2020overcoming}
-and \textit{catastrophic interference} \parencite{french1999catastrophic}. Although
+respectively called \textit{negative transfer} \cite{zhang2020overcoming}
+and \textit{catastrophic interference} \cite{french1999catastrophic}. Although
 some methods have been proposed to tackle these challenges, how to anticipate and
 correct them are still open research questions.
 
@@ -393,7 +393,7 @@ thesis.
 As stated in the introduction, the objective of a learning algorithm is to find
 a model $h \in \mathcal{H}$ that maximizes a performance measure or, alternatively,
 minimizes the expected risk $R(h)$ (for a supervised problem)
-\parencite{vapnik1992principles}:
+\cite{vapnik1992principles}:
 \begin{equation}
 \label{eqn:backml:expriskmin}
 R(h) = \mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(y, h(\vect{x})\right)\right\}
@@ -425,7 +425,7 @@ practice, one does not have access to an infinitely-large dataset. Therefore, th
 learned model will often differ from $h_B$ and its expected risk will often be
 larger. The effect of the ``\textit{choice}'' of a finite training set on the
 generalization error can be studied using the \textit{bias-variance decomposition} 
-\parencite{geman1992neural, geurts2009bias, hastie2017elements}:
+\cite{geman1992neural, geurts2009bias, hastie2017elements}:
 \begin{equation}
 \label{eqn:backml:biasvariancedec}
 \mathbb{E}_{LS}\left\{\mathbb{E}_{\mathcal{X},\mathcal{Y}}\left\{\ell\left(y, h_{\mathcal{D}}(\vect{x})\right)\right\}\right\} = \text{noise}(\vect{x}) + \text{bias}^2(\vect{x}) + \text{variance}(\vect{x})
@@ -480,11 +480,11 @@ models have millions or even billons of parameters (see Section
 models should be extremely prone to overfitting but the reality is different.
 Typically, it is not uncommon to find tasks for which \acrlong{dl} models reach
 an empirical risk close to zero but actually generalize well to unseen data
-\parencite{zhang2021understanding}. Although the models are able to basically
+\cite{zhang2021understanding}. Although the models are able to basically
 memorize the training data, the learned function is actually very robust and
 generalizes well. This phenomenon is currently being investigated and several
 explanations have been proposed such as the deep double-descent
-\parencite{belkin2019reconciling}.
+\cite{belkin2019reconciling}.
 
 \subsection{Model selection and evaluation in practice}
 \label{ssec:backml:modelselinpractice}
@@ -538,7 +538,7 @@ independent. If they are not, this would most probably lead to overfitting and
 the resulting selection or evaluation scores being overly optimistic. Therefore,
 it is sometimes not enough to split the sets randomly and domain knowledge must
 be used during the splitting procedure to enforce sets independance. This issue
-is sometimes called \textit{data leakage} \parencite{kaufman2012leakage} as
+is sometimes called \textit{data leakage} \cite{kaufman2012leakage} as
 information ``leaks'' between the sets. This topic will be discussed in Section
 \ref{ssec:backdp:dataleakage} as \acrlong{dp} datasets must be treated carefully 
 to avoid this issue.
@@ -730,11 +730,11 @@ the methods across datasets.
 \section{Support vector machines}
 \label{sec:backml:svm}
 
-The \acrfirstit{svm} binary classification algorithm was invented in the early 1990s \parencite{boser1992training}.
+The \acrfirstit{svm} binary classification algorithm was invented in the early 1990s \cite{boser1992training}.
 It is originally a linear binary classification method that has been extended for regression and multi-class classification.
 By using the \textit{kernel trick}, \acrshort{svm} can also learn non-linear models
 but it is out of the scope of this thesis. An interested reader will learn more
-about kernel methods and the kernel trick in \parencite{hastie2017elements}.
+about kernel methods and the kernel trick in \cite{hastie2017elements}.
 
 In general, assuming a supervised dataset where inputs are such that
 $\vect{x} \in \mathbb{R}^m$ where $m$ is the number of features, a linear model
@@ -769,7 +769,7 @@ falls back to the Lagrange dual:
 & \sum_{i=1}^n \alpha_i y_i = 0
 \end{align}
 which can be solved efficiently with classical linear solvers such as LIBLINEAR
-\parencite{fan2008liblinear}. When the optimal solution has been found, the weights
+\cite{fan2008liblinear}. When the optimal solution has been found, the weights
 can be derived by solving the system:
 \begin{equation}
 \label{eqn:backml:svmweights}
@@ -836,8 +836,8 @@ returned largest value. This approach is more computationally efficient than
 \label{sec:backml:treebased}
 
 Tree-based methods are a popular family of methods invented at least twice in the
-1980s by the \acrshort{ai} \parencite{quinlan1986induction} and the statistics
-\parencite{breiman1984classification} communities. Section \ref{ssec:backml:dt}
+1980s by the \acrshort{ai} \cite{quinlan1986induction} and the statistics
+\cite{breiman1984classification} communities. Section \ref{ssec:backml:dt}
 presents the basics of decision tree inference and induction, Section \ref{ssec:backml:rf}
 introduces the random forest algorithm. Section \ref{ssec:backml:et} presents a
 variant of random forest called \acrfirstit{et} and Section \ref{ssec:backml:et_image}
@@ -985,7 +985,7 @@ of their high variance.
 \subsection{Random forests}
 \label{ssec:backml:rf}
 
-Random forests \parencite{breiman2001random} is an ensemble method based on decision
+Random forests \cite{breiman2001random} is an ensemble method based on decision
 trees. Ensemble methods combine the predictions of several models to produce a
 final prediction. Random forest is part of the family of averaging techniques
 where models are built independently and their predictions are averaged (\eg a
@@ -1011,7 +1011,7 @@ improvement compared to using a decision tree alone.
 \subsection{Extremely randomized trees}
 \label{ssec:backml:et}
 
-The \textit{\acrlong{et}} (\acrshort{et}, \aka extra-trees) \parencite{geurts2006extremely}
+The \textit{\acrlong{et}} (\acrshort{et}, \aka extra-trees) \cite{geurts2006extremely}
 are a variant of the random forests algorithm that introduces yet another source
 of decorrelation by selecting the split $q.v$ at random during the induction
 (instead of optimizing it, see line \ref{algo:backml:dtinduction:argmax} in
@@ -1024,7 +1024,7 @@ anymore.
 \subsection{Image classification with extra-trees}
 \label{ssec:backml:et_image}
 
-Extra-trees can be used for image classification as presented in \parencite{maree2016towards}.
+Extra-trees can be used for image classification as presented in \cite{maree2016towards}.
 The core idea behind this algorithm is to represent an image as a set of $n_w$
 random subwindows. Subwindows are rectangle patches extracted from the image,
 resized to have all the target height $t_r$ and width $t_c$ and flattened into a
@@ -1093,7 +1093,7 @@ network can be trained using the \textit{backpropagation} algorithm (see Section
 \ref{ssec:backml:dl:opti}) independently of the architectural choices.
 
 The idea behind one of the first machine learning algorithm ever published, the
-perceptron \parencite{rosenblatt1958perceptron}, is still at the core of most
+perceptron \cite{rosenblatt1958perceptron}, is still at the core of most
 \acrlong{dl} architectures today. Loosely modeling the working of brain neurons,
 the perceptron can be represented as:
 \begin{equation}
@@ -1127,13 +1127,13 @@ $\vect{z} \in \mathbb{R}^f$.
 In the spirit of learning a hierarchy, perceptron layers can be connected one
 after another to form a \acrfirstit{mlp} (see Figure \ref{fig:backml:mlp}). It
 can be shown that sufficiently complex \acrshort{mlp}s are universal function
-approximators (\ie they can learn any function) \parencite{hornik1989multilayer}
+approximators (\ie they can learn any function) \cite{hornik1989multilayer}
 which is an interesting property. However, realistically dimensioned \acrshort{mlp}s
 have the drawback of being very complex models easily reaching millions or even
 billions of learnable parameters. This makes them difficult to optimize and prone
 to overfitting. Regularization techniques exist to reduce model complexity such
 as weight decay (\ie smaller absolute weights values are preferred over large
-ones) or dropout \parencite{srivastava2014dropout} (\ie during training, some
+ones) or dropout \cite{srivastava2014dropout} (\ie during training, some
 neurons are disabled at random) but unfortunately are often not enough. Therefore,
 whereas \acrshort{mlp}s still have their use in some applications and or as part
 of larger and more diverse architectures, they are rarely used by themselves
@@ -1152,7 +1152,7 @@ nowadays.
 As introduced in Section \ref{ssec:backml:shallowdeep}, \textit{\acrlong{cnn}s}
 (\acrshort{cnn}) are the origin of the ``\acrlong{dl} revolution''. Despite the
 recently-revived interest, \acrshort{cnn}s have been researched since the late
-1980s \parencite{lecun1989handwritten}. A \acrshort{cnn} is a network containing
+1980s \cite{lecun1989handwritten}. A \acrshort{cnn} is a network containing
 at least one convolutional layer. Nowadays, such layers are a core component of
 all networks processing structured data (time series, images, video, etc). For
 instance, in image classification, typical architectures (see Figure \ref{fig:backml:cnn})
@@ -1163,7 +1163,7 @@ section and the pooling layer in Section \ref{sssec:backml:poolinglayer}.
 \begin{figure}
   \centering
   \includegraphics[width=0.75\textwidth]{backml/convnet.png}
-  \caption{A \acrlong{cnn} (source \parencite{millar2019using}).}
+  \caption{A \acrlong{cnn} (source \cite{millar2019using}).}
   \label{fig:backml:cnn}
 \end{figure}
 
@@ -1236,7 +1236,7 @@ not have to learn this invariance which makes training easier. It has also been
 shown that, for image classification, the learned kernels are similar to classical
 computer vision filters capturing edges or color patterns in early layers and, as
 one ascends the network, kernels show compositionability, invariance and class
-discrimination \parencite{zeiler2014visualizing} confirming the ability of such
+discrimination \cite{zeiler2014visualizing} confirming the ability of such
 a network to learn and use the inherent hierarchical structure of the data. Stacking
 convolutional layers also brings the benefit of increasing the receptive field of
 late layers. The receptive field of an activation $a^{(l)}_{ijk}$ in a feature
@@ -1273,7 +1273,7 @@ Pooling, similarly to convolution, brings equivariance to translation and increa
 the receptive field of deeper layers. The reduction of dimensionality also reduces
 the computational cost of the network as deeper layers have smaller feature maps
 to process. There exist other types of pooling layers which are described in
-\parencite{gholamalinezhad2020pooling}.
+\cite{gholamalinezhad2020pooling}.
 
 \subsection{Neural network optimization}
 \label{ssec:backml:dl:opti}
@@ -1313,7 +1313,7 @@ way of improving this consists in using \acrfirstit{sgd} where the gradients are
 approximated using a subset $\mathcal{B}$ of training samples called a \textit{batch}
 instead of the whole set. This approach has been shown to be particularily efficient
 for both generalization of the model and computational cost of training
-\parencite{bottou201113}. When $1 < |\mathcal{B}| < n$, \acrshort{sgd} becomes
+\cite{bottou201113}. When $1 < |\mathcal{B}| < n$, \acrshort{sgd} becomes
 \textit{mini-batch gradient descent} which is the most used optimization strategy
 for training neural networks nowadays. The batch size is often chosen based on
 practical considerations like the amount of memory available on the hardware
@@ -1322,7 +1322,7 @@ running the learning algorithm.
 Several adjustements to the gradient descent formulation of Equation
 \ref{eqn:backml:gradientdescent} have shown to be effective for convergence and
 stability of the optimization. In the thesis, whenever we optimize a neural network
-by gradient descent, we use the Adam optimizer \parencite{kingma2014adam} approach
+by gradient descent, we use the Adam optimizer \cite{kingma2014adam} approach
 which normalizes the gradients using moving estimates of their mean and uncentered
 variance. This method is efficient and does not require much tuning of the
 hyperparameters yet makes training more robust.
@@ -1333,7 +1333,7 @@ hyperparameters yet makes training more robust.
 Gradient descent, as its name suggests, heavily relies on gradient of parameters
 for updating the model. The success of deep learning can be partly attributed to
 an efficient algorithm for computing these gradients called \textit{backward propagation}
-\parencite{rumelhart1986learning} (\aka backpropagation). The algorithm is based
+\cite{rumelhart1986learning} (\aka backpropagation). The algorithm is based
 on the \textit{chain rule} which states that the derivative of a composition of
 functions $y(x) = (h^{(L)} \circ h^{(L-1)} \circ ... \circ h^{(1)})(x)$ with respect
 to its input can be broken down into a product of derivatives. Given
@@ -1383,7 +1383,7 @@ is automated.
 \subsubsection{Batch normalization}
 \label{sssec:backml:batchnorm}
 
-The \acrfirstit{bn} \parencite{ioffe2015batch} layer is part of the family of
+The \acrfirstit{bn} \cite{ioffe2015batch} layer is part of the family of
 normalization layers. This layer acts as a regularizer and is usually placed before
 activations in neural networks. Given a signal
 $\vect{x} = \left(\vect{x}_1, \vect{x}_2, ..., \vect{x}_f\right) \in \mathbb{R}^f$
@@ -1429,7 +1429,7 @@ This section presents different architectures used in our contributions.
 After the success of AlexNet, researchers investigated the effect of model depth
 on classification performance. An architecture in particular caught the attention
 by ending up a runner up for a later edition of \acrshort{ilsvrc} in 2014. This
-architecture is named VGG \parencite{simonyan2014very} after the team who participated
+architecture is named VGG \cite{simonyan2014very} after the team who participated
 to the challenge. It has two implementations that we use in this thesis: VGG16 and VGG19.
 The number is the count of layers with trainable weights in the architecture.
 These architectures are pretty simple (see Figure \ref{fig:backml:vgg})
@@ -1440,7 +1440,7 @@ followed by pooling. The last convolutional layer is followed by a 3-layers
 \begin{figure}
   \centering
   \includegraphics[rotate=-90, scale=0.28]{backml/vgg1619.png}
-  \caption{VGG16 and VGG19 architectures (source: \parencite{img:vgg1619})}
+  \caption{VGG16 and VGG19 architectures (source: \cite{img:vgg1619})}
   \label{fig:backml:vgg}
 \end{figure}
 
@@ -1452,7 +1452,7 @@ training difficulties: beyond a certain model depth, accuracies sometimes start
 to decrease. This can be attributed to the fact that, for a given task, adding
 layers beyond a certain depth is not necessary. Moreover, it can be difficult for
 gradients to flow back given the depth of the architecture (\ie vanishing gradients).
-In order to address those two issues, ResNet \parencite{he2016deep} introduces
+In order to address those two issues, ResNet \cite{he2016deep} introduces
 the \textit{residual mapping}, or \textit{skip-connection}. Given a layer
 $h^{(l)}(\vect{x})$, the residual mapping $r^{(l)}(\vect{x})$ would be:
 \begin{equation}
@@ -1476,7 +1476,7 @@ ResNet34, a similar architecture).
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{backml/resnet34.png}
-  \caption{ResNet34, same design as ResNet50 but less layers. Residual connections are placed every two convolutional layers (source: \parencite{he2016deep}).}
+  \caption{ResNet34, same design as ResNet50 but less layers. Residual connections are placed every two convolutional layers (source: \cite{he2016deep}).}
   \label{fig:backml:resnet}
 \end{figure}
 
@@ -1485,22 +1485,22 @@ ResNet34, a similar architecture).
 % InceptionV3
 % InceptionResNetV2
 The winning method of \acrshort{ilsvrc}2014 was based on an architecture called
-GoogLeNet \parencite{szegedy2015going} (\aka InceptionV1). This architecture is
+GoogLeNet \cite{szegedy2015going} (\aka InceptionV1). This architecture is
 based on \textit{inception modules}. An inception module is a composition of
 convolutional layers built to maintain a certain level of representativeness while
 reducing the number of training parameters compared to a block of plain convolutional
 layers. An example of a trick used to reduce the number of parameters is to use
 two consecutive $3 \times 3$ instead of one $5 \times 5$ convolutional layers. In
-this thesis, we use InceptionV3 \parencite{szegedy2016rethinking}, the third
+this thesis, we use InceptionV3 \cite{szegedy2016rethinking}, the third
 iteration of the architecture, which essentially scales it up by using factorized
 convolutions and regularization. We also use InceptionResNetV2, a version of the
 Inception architecture using residual connections
-\parencite{szegedy2017inception}.
+\cite{szegedy2017inception}.
 
 
 \paragraph{Dense architecture}
 \label{sssec:backml:arch:dense}
-The densely connected convolutional networks \parencite{huang2017densely} push
+The densely connected convolutional networks \cite{huang2017densely} push
 further the idea of residual connection. Let us suppose a group $g$ of $L$
 consecutive convolutional layers $h^{(l)}$ ($l = 1, ..., L$) taking $\vect{x}$ as
 input. In this group, each layer $h^{(l)}$ receives as input the outputs of all
@@ -1513,7 +1513,7 @@ together with one convolution and one pooling layers (see Figure
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{backml/densenet.png}
-  \caption{A densely connected network (source: \parencite{huang2017densely}).}
+  \caption{A densely connected network (source: \cite{huang2017densely}).}
   \label{fig:backml:densenet}
 \end{figure}
 
@@ -1523,7 +1523,7 @@ together with one convolution and one pooling layers (see Figure
 For tackling image segmentation tasks, one generally uses \textit{\acrlong{fcn}s}
 (\acrshort{fcn}) which is a kind of network where (almost) all layers are
 convolutional. One of the most popular architectures for segmentation is a U-shaped
-network called U-Net \parencite{ronneberger2015unet}. This architecture is composed
+network called U-Net \cite{ronneberger2015unet}. This architecture is composed
 of a contracting and an expanding paths (hence the ``U'', see Figure
 \ref{fig:backml:unet}). Similarly as for classification networks, the former is
 composed of convolutional and pooling layers that progressively encodes the input
@@ -1549,7 +1549,7 @@ paths.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{backml/unet.png}
-  \caption{U-Net architecture (source: \parencite{ronneberger2015unet}).}
+  \caption{U-Net architecture (source: \cite{ronneberger2015unet}).}
   \label{fig:backml:unet}
 \end{figure}
 
@@ -1558,7 +1558,7 @@ paths.
 
 As presented in Section \ref{ssec:backml:transfer}, \acrlong{tl} regroups several
 families of methods which have been and continue to be explored through the prism
-of \acrlong{dl} \parencite{tan2018survey}. In this thesis, we focus on supervised
+of \acrlong{dl} \cite{tan2018survey}. In this thesis, we focus on supervised
 model-based (or network-based) \acrlong{tl} applied to image classification. With
 this approach, knowledge is encoded through the parameters of a model. This model
 is first trained on a source task, usually a large image classification dataset,
@@ -1609,40 +1609,40 @@ rate). Another way of preventing this issue consists in freezing a part of
 $\theta_s$, usually the first layers.
 
 The feature extraction approach only emerged recently with works on the Overfeat
-\parencite{sermanet2013overfeat, razavian2014cnn} and Decaf \parencite{donahue2014decaf}
+\cite{sermanet2013overfeat, razavian2014cnn} and Decaf \cite{donahue2014decaf}
 convolutional architectures. The authors trained their AlexNet-based networks in
 a supervised manner on the large ImageNet source dataset composed of 1.2 millions
 natural images and 1000 distinct classes. They both showed that these networks
 were able to produce discriminative features for tasks they were not trained on.
 
-Building upon these results, \parencite{yosinski2014transferable} analyzed the
+Building upon these results, \cite{yosinski2014transferable} analyzed the
 transferability of deep neural networks using both approaches in more details.
 Their most prominent conclusion is that features in a neural network become less
 transferable as one moves deeper in the network indicating that the network features
 shift from generic to specific along the network. This result is consistent with
-\parencite{zeiler2014visualizing} as early layers typically learn classical computer
+\cite{zeiler2014visualizing} as early layers typically learn classical computer
 vision filters. This motivates freezing only the first layers of the network to
 avoid catastrophic interference as they are more generic and therefore should not
 require much tuning. They also studied how task similarity impacted transfer
 performance and found that similar tasks indeed benefited better from transfer
-than dissimilar ones. This was confirmed in \parencite{mensink2021factors} who 
+than dissimilar ones. This was confirmed in \cite{mensink2021factors} who 
 showed that for a variety of tasks, there exists a source task that outperforms
 ImageNet, especially when this task incorporates in some ways the target domain.
-More recently, \parencite{kornblith2019better} showed that there is a correlation 
+More recently, \cite{kornblith2019better} showed that there is a correlation 
 between model performance on the source task (in this case  ImageNet) and transfer 
 performance on the target task. 
 
 Whereas the versatility of ImageNet initially fueled research in deep \acrlong{tl}
 with supervised model pre-training, several recent contributions have shown that
-pre-training could be performed differently. For instance, SimCLR \parencite{chen2020simple}
+pre-training could be performed differently. For instance, SimCLR \cite{chen2020simple}
 uses contrastive learning to learn the model. This is a self-supervised approach
 which consists in generating pairs of similar and dissimilar images using data
 augmentation and training a network to discriminate these pairs. They have shown
 that the resulting network has learned discriminative features that can be transfered
-quite efficiently to new tasks. The \acrfirstit{vit} \parencite{dosovitskiy2020image}
+quite efficiently to new tasks. The \acrfirstit{vit} \cite{dosovitskiy2020image}
 is another approach based on transformers, a recent and popular family of
 attention-based methods. Attention is a mechanism of selection of information
-which can be implemented in different ways in neural networks \parencite{niu2021review}.
+which can be implemented in different ways in neural networks \cite{niu2021review}.
 It has initially been applied with great successes on \acrfirstit{nlp} problems
 but \acrshort{vit} has shown that attention-based architectures are also applicable
 to vision. In this framework, the transfer process is very similar to supervised
@@ -1650,7 +1650,7 @@ pre-training as the model is first trained in a supervised manner on a large
 database, then transfered to the target task. The only difference is that the
 attention-based network does not use convolution and takes as input a sequence of
 non-overlapping patches of the image. Other contributions focus on improving
-classical supervised pre-training approach. For instance, \parencite{wang2019pay}
+classical supervised pre-training approach. For instance, \cite{wang2019pay}
 combine \acrlong{tl} and model compression as the fine-tuning process excludes
 non-informative feature maps from the final model based on their \acrfirstit{afds}
 mechanism.
@@ -1663,16 +1663,16 @@ in general.
 \subsection{Multi-task learning}
 \label{ssec:backml:dl:deepmultitask}
 
-Multi-task learning \cite{zhang2017survey} has been applied with great successes for a wide-range of application such as image and video understanding \cite{kokkinos2017ubernet}, natural language processing \cite{collobert2008unified}, face recognition \cite{zhu2012face, chen2014joint, zhang2014facial, ranjan2017hyperface}, information retrieval \cite{liu2015representation}, art classification \cite{strezoski2017omniart}, \etc. The success of \acrlong{mtl} is notably due to the fact that leveraging several tasks and/or datasets alleviates the need for large amounts of data. Moreover, training in multi-task has a regularization effect preventing the model to overfit a particular task therefore yielding a better generalizable model. The modularity of neural networks also allows to embed multi-task specific components hence facilitating its application to \acrlong{dl} \cite{caruana1997multitask, zhang2017survey}. There are many ways how \acrlong{mtl} can be implemented within \acrlong{dl} with, for instance, architecture tricks \cite{misra2016cross, strezoski2019many} and weights sharing \cite{caruana1997multitask}.
+Multi-task learning \cite{zhang2017survey} has been applied with great successes for a wide-range of application such as image and video understanding \cite{kokkinos2017ubernet}, natural language processing \cite{collobert2008unified}, face recognition \cite{zhu2012face, chen2014joint, zhang2014facial, ranjan2017hyperface}, information retrieval \cite{liu2015representation}, art classification \cite{strezoski2017omniart}, \etc. The success of \acrlong{mtl} is notably due to the fact that leveraging several tasks and/or datasets alleviates the need for large amounts of data. Moreover, training in multi-task has a regularization effect preventing the model to overfit a particular task therefore yielding a better generalizable model. The modularity of neural networks also allows to embed multi-task specific components hence facilitating its application to \acrlong{dl} \cite{caruana1997multitask, zhang2017survey}. There exist many ways how \acrlong{mtl} can be implemented within \acrlong{dl} with, for instance, architecture tricks \cite{misra2016cross, strezoski2019many} and weights sharing \cite{caruana1997multitask}.
 
 \subsection{Self-training}
 \label{ssec:backml:dl:selftraining}
 
 As introduced in Section \ref{ssec:backml:inbetween}, self-training is a family of \acrlong{ssl} methods. A self-training process is iterative where a typical iteration consists in using a teacher model to produce pseudo-labels for unlabeled samples from $\mathcal{D}_u$ which are then combined with labeled samples from $\mathcal{D}_l$ to train a student model. 
 
-There are several elements that characterize a self-training algorithm. An important element is the way the student and teacher models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \parencite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \parencite{tarvainen2017mean}. \citeauthor{pham2021meta} \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
+There are several elements that characterize a self-training algorithm. An important element is the way the student and teacher models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \cite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \cite{tarvainen2017mean}. \citeauthor{pham2021meta} \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
 
-Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} to select which samples should be included for the next training rounds by excluding high entropy samples for instance \parencite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \parencite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \parencite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
+Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} to select which samples should be included for the next training rounds by excluding high entropy samples for instance \cite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \cite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \cite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
 
 \section{Wrapping up}
 \label{sec:backml:wrapup}
