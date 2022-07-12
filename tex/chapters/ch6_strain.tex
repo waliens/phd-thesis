@@ -489,7 +489,7 @@ As expected, we observe that tuning the threshold $T$ on the training set ($\mat
 \subsection{Experiments on Thyroid \acrshort{fnab}}
 \label{ssec:strain:thyroid_exp}
 
-The Thyroid \acrshort{fnab} dataset introduced in Section \ref{ssec:strain:thyroid_data} offers a great opportunity to test our method on a real case of sparsely labeled data. It is interesting to note that this dataset is larger than the three public datasets used in this study (almost 5k images in total).
+The Thyroid \acrshort{fnab} dataset introduced in Section \ref{ssec:strain:thyroidfnab} offers a great opportunity to test our method on a real case of sparsely labeled data. It is interesting to note that this dataset is larger than the three public datasets used in this study (almost 5k images in total).
 
 Based on the results of Section \ref{ssec:strain:fixednl}, we have chosen to use the ``\textit{entropy}'' weighting strategy with $w_{min} = 0.1$ for our self-training approach, as it provides consistently good results across datasets. We compare this approach with two of our three baselines: ``\textit{$\mathcal{D}_l$ only}'' and ``$\mathcal{D}_l \cup \mathcal{D}_s$''. The ``\textit{upper}'' baseline obviously cannot be evaluated because we do not have access to the complete ground truth. The resulting performances are given in Table \ref{tab:strain:thyroidresults}.
 
