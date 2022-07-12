@@ -128,8 +128,8 @@ This section reports performance for all the weighting schemes actually evaluate
     \label{app:strain:fig:rho_exp_glas}
 \end{figure}
   
-\section{About splitting Thyroid \acrshort{fnab} training set into $\mathcal{D}_l$ and $\mathcal{D}_s$}
-\label{app:strain:sec:thyroidsplit}
+\section{The Thyroid \acrshort{fnab} ontology}
+\label{app:strain:sec:thyroidontology}
 
 The Thyroid \acrshort{fnab} dataset was labeled by experienced pathologists who followed a detailed ontology to categorize their annotations:
 
@@ -161,67 +161,4 @@ The Thyroid \acrshort{fnab} dataset was labeled by experienced pathologists who 
 		\item Background
 	\end{itemize}
 \end{enumerate}
-
-Given how the labeling process was carried out, we hypothesize that crops of architectural patterns are less likely to contain unlabeled cells than crops of nuclear features. Indeed, the former usually consist in large polygons delineating areas containing cell aggregates. Nuclear features, unlike architectural patterns, were usually labeled more sparsely and it is frequent to find annotations of a single cell within an unlabeled cell aggregate. This can be seen in Figures \ref{app:strain:fig:patterns_examples} and \ref{app:strain:fig:cells_examples}. These observations and hypothesis motivate the assignment of architectural patterns to $\mathcal{D}_l$ and nuclear features to $\mathcal{D}_s$.
-
-\begin{figure}
-    \centering
-    \begin{subfigure}{.48\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/patterns1.png}
-      \caption{}
-      \label{app:strain:sfig:pattern1}
-    \end{subfigure}
-    \begin{subfigure}{.48\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/patterns2.png}
-      \caption{}
-      \label{app:strain:sfig:pattern2}
-    \end{subfigure} \\
-    \begin{subfigure}{.48\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/patterns3.png}
-      \caption{}
-      \label{app:strain:sfig:pattern3}
-    \end{subfigure}
-    \begin{subfigure}{.48\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/patterns4.png}
-      \caption{}
-      \label{app:strain:sfig:pattern4}
-    \end{subfigure}
-    \caption{Examples of architectural patterns annotations made by pathologists for Thyroid \acrshort{fnab}.}
-    \label{app:strain:fig:patterns_examples}
-\end{figure}
-
-
-\begin{figure}
-    \centering
-    \begin{subfigure}{.235\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/cells1.png}
-      \caption{}
-      \label{app:strain:sfig:cell1}
-    \end{subfigure}
-    \begin{subfigure}{.235\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/cells2.png}
-      \caption{}
-      \label{app:strain:sfig:cell2}
-    \end{subfigure}
-    \begin{subfigure}{.235\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/cells3.png}
-      \caption{}
-      \label{app:strain:sfig:cell3}
-    \end{subfigure}
-    \begin{subfigure}{.235\textwidth}
-      \centering
-      \includegraphics[width=\textwidth]{strain/cells4.png}
-      \caption{}
-      \label{app:strain:sfig:cell4}
-    \end{subfigure}
-    \caption{Examples of nuclear features annotations made by pathologists for Thyroid \acrshort{fnab}.}
-    \label{app:strain:fig:cells_examples}
-\end{figure}
 

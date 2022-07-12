@@ -171,7 +171,6 @@ w^{\text{mgd}}_{ij} = (1 - w_{min}) \left(w^{\text{cty}}_{ij} \times \omega_{ij}
 In this section, we describe the datasets we use to evaluate our method. It includes three public exhaustively labeled segmentation datasets: \acrshort{monuseg} \cite{kumar2019multi}, \acrshort{glas} \cite{sirinukunwattana2017gland} and \acrshort{segpc} \cite{gupta2021segpc}. The datasets are described in Table \ref{tab:strain:datasets_statistics} and illustrated in Figure \ref{fig:strain:datasets_samples}. \acrshort{monuseg} contains images of tissues coming from different organs, patients and hospitals where epithelial and stromal nuclei are annotated. Given the variety of sources, the images exhibit significant variations of staining and morphology. The density of annotations is also quite high compared to the other datasets. \acrshort{glas} features images containing both benign tissues and malignant tissues with colonic carcinomas. The gland annotations vary greatly in shape and size. Originally, \acrshort{segpc} contains 3 classes: background, cytoplasm and nucleus. In this work, we merge the two latter classes as we focus on binary segmentation. One of the challenges of this dataset is the presence of non-plasma cells which should be ignored by the algorithm although they are very similar to plasma cells. Moreover, artefacts are present on the images (\eg cracked scanner glass in foreground, scale reference or magnification written on the image).
 
 \begin{table}
-  \caption{Summary statistics for the four datasets used in this work. An image is a region of interest extracted from a whole-slide image.}
   \centering
   \begin{tabular}{|c|cc|cc|}
     \hline
@@ -183,6 +182,7 @@ In this section, we describe the datasets we use to evaluate our method. It incl
     \acrshort{segpc} & 298 & 1643 & 300 & 900 \\
     \hline
   \end{tabular}
+  \caption{Summary statistics for the four datasets used in this work. An image is a region of interest extracted from a whole-slide image.}
   \label{tab:strain:datasets_statistics}
 \end{table}
 
@@ -235,22 +235,71 @@ In this section, we describe the datasets we use to evaluate our method. It incl
 \subsection{Thyroid \acrshort{fnab}}
 \label{ssec:strain:thyroidfnab}
 
-In addition to the three public datasets, we use a dataset that actually motivated the development of our method, a sparsely labeled dataset for thyroid nodule malignancy assessment. Pathologists\footnote{ULB Erasme hospital, Belgium, team of Pr. Isabelle Salmon.} sparsely annotated nuclei and cell aggregates with polygon annotations in 85 whole-slide images using Cytomine \cite{maree2016collaborative}. The training set consists of 4742 crops, one for each polygon annotation. The test set is a set of 45 regions of interest (2000x2000 pixels each) with annotations highlighting structures of interest (nuclei features and architectural cell patterns) made by a computer science student. This dataset is illustrated in Figure \TODO{fig thyroid}.
+In addition to the three public datasets, we use a dataset that actually motivated the development of our method, a sparsely labeled dataset for thyroid nodule malignancy assessment. Pathologists\footnote{ULB Erasme hospital, Belgium, team of Pr. Isabelle Salmon.} sparsely annotated nuclear features (see Figure \ref{fig:strain:cells_examples}) and architectural patterns (see Figure \ref{fig:strain:patterns_examples}) with polygon annotations in 85 whole-slide images using Cytomine \cite{maree2016collaborative}. Each polygon was associated with a term from the ontology given in Supplementary Section \ref{app:strain:sec:thyroidontology}. The training set consists of 4742 crops, one for each polygon annotation. The test set is a set of 45 regions of interest (2000x2000 pixels each) with annotations highlighting structures of interest (binary annotations, background \vs nuclei features and architectural cell patterns) made by a computer science student.
 
-\TODO{add split explanation}
+Given how the labeling process was carried out, we hypothesize that crops of architectural patterns are less likely to contain unlabeled cells than crops of nuclear features. Indeed, the former usually consist in large polygons delineating areas containing cell aggregates. Nuclear features, unlike architectural patterns, were usually labeled more sparsely and it is frequent to find annotations of a single cell within an unlabeled cell aggregate. From these observations, we have decided to assign the architectural patterns to $\mathcal{D}_l$ and nuclear features to $\mathcal{D}_s$.
 
-% \begin{figure*}
-%   \centering
-%   \subfloat[Nuclear feature 1]{\includegraphics[height=87.5pt]{images/nuclfeatures_sparse.png}}
-%   \hspace{3pt}
-%   \subfloat[Nuclear feature 2]{\includegraphics[height=87.5pt]{images/nuclfeatures_sparse2.png}}
-%   \hspace{3pt}
-%   \subfloat[Nuclear feature 3]{\includegraphics[height=87.5pt]{images/nuclfeatures_sparse3.png}}
-%   \hspace{3pt}
-%   \subfloat[Architectural patterns]{\includegraphics[height=87.5pt]{images/archpattern_sparse.png}}
-%   \caption{Example annotations of nuclear features and architectural patterns captured on Cytomine. Notice the sparseness of the annotations.}
-%   \label{fig:strain:thyroid_example_annotations}
-% \end{figure*}
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.48\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/patterns1.png}
+      \caption{}
+      \label{sfig:strain:pattern1}
+    \end{subfigure}
+    \begin{subfigure}{.48\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/patterns2.png}
+      \caption{}
+      \label{sfig:strain:pattern2}
+    \end{subfigure} \\
+    \begin{subfigure}{.48\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/patterns3.png}
+      \caption{}
+      \label{sfig:strain:pattern3}
+    \end{subfigure}
+    \begin{subfigure}{.48\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/patterns4.png}
+      \caption{}
+      \label{sfig:strain:pattern4}
+    \end{subfigure}
+    \caption{Examples of architectural patterns annotations made by pathologists for Thyroid \acrshort{fnab}.}
+    \label{fig:strain:patterns_examples}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \begin{subfigure}{.235\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/cells1.png}
+      \caption{}
+      \label{sfig:strain:cell1}
+    \end{subfigure}
+    \begin{subfigure}{.235\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/cells2.png}
+      \caption{}
+      \label{sfig:strain:cell2}
+    \end{subfigure}
+    \begin{subfigure}{.235\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/cells3.png}
+      \caption{}
+      \label{sfig:strain:cell3}
+    \end{subfigure}
+    \begin{subfigure}{.235\textwidth}
+      \centering
+      \includegraphics[width=\textwidth]{strain/cells4.png}
+      \caption{}
+      \label{sfig:strain:cell4}
+    \end{subfigure}
+    \caption{Examples of nuclear features annotations made by pathologists for Thyroid \acrshort{fnab}.}
+    \label{fig:strain:cells_examples}
+\end{figure}
 
 
 \section{Experimental setup}
@@ -436,18 +485,16 @@ As expected, we observe that tuning the threshold $T$ on the training set ($\mat
 \end{figure}
 
 
-\subsection{Experiments on Thyroid cytology\acrshort{fnab}}
+\subsection{Experiments on Thyroid \acrshort{fnab}}
 \label{ssec:strain:thyroid_exp}
 
-The Thyroid \acrshort{fnab} dataset presents a great opportunity to test our method on a real case of sparsely labeled dataset. It is also interesting to note that this dataset is larger than the three public datasets used in this study (almost 5k images in total). In order to fit the sparsely-labeled settings we have introduced, we split the dataset in two subsets based on the nature of the annotations. The set $\mathcal{D}_l$ is assigned annotations of cell aggregates and $\mathcal{D}_s$ is assigned annotations of individual cells and nuclei. The motivation for this split is presented in Supplementary Section \ref{app:strain:sec:thyroidsplit}.
+The Thyroid \acrshort{fnab} dataset introduced in Section \ref{ssec:strain:thyroid_data} offers a great opportunity to test our method on a real case of sparsely labeled data. It is interesting to note that this dataset is larger than the three public datasets used in this study (almost 5k images in total).
 
 Based on the results of Section \ref{ssec:strain:fixednl}, we have chosen to use the ``\textit{entropy}'' weighting strategy with $w_{min} = 0.1$ for our self-training approach, as it provides consistently good results across datasets. We compare this approach with two of our three baselines: ``\textit{$\mathcal{D}_l$ only}'' and ``$\mathcal{D}_l \cup \mathcal{D}_s$''. The ``\textit{upper}'' baseline obviously cannot be evaluated because we do not have access to the complete ground truth. The resulting performances are given in Table \ref{tab:strain:thyroidresults}.
 
 We observe that our self-training approach significantly outperforms the two baselines and remains quite stable as its standard deviation is below $1\%$. This confirms the interest of self-training when working with a sparse dataset. 
 
 \begin{table}[t]
-\caption{Experiment on the Thyroid \acrshort{fnab} dataset. The self-training approach uses the ``\textit{entropy}'' weighting strategy and $w_{min} = 0.1$.}
-  \label{tab:strain:thyroidresults}
   \centering 
   \begin{tabular}{|c|c|}
     \hline
@@ -458,7 +505,8 @@ We observe that our self-training approach significantly outperforms the two bas
     $\mathcal{D}_l \cup \mathcal{D}_s$ & $83.62 \pm 3.52$\\
     \hline
   \end{tabular}
-  
+  \caption{Experiment on the Thyroid \acrshort{fnab} dataset. The self-training approach uses the ``\textit{entropy}'' weighting strategy and $w_{min} = 0.1$.}
+  \label{tab:strain:thyroidresults}
 \end{table}
 
 \section{Conclusion}
