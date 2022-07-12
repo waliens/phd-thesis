@@ -1685,9 +1685,7 @@ target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp}
 from ImageNet. Motivated by the fact that transfer works better when the source
 and target tasks are related, the second contribution uses homogeneous features-based
 \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data
-directly.
-
-In Chapter \ref{chap:strain}, we move to a different type of task: image segmentation.
-Working with a sparsely-annotated \acrlong{dp} dataset, we use self-training to
-complete the areas where annotations are missing. We train a U-Net segmentation
-model on the self-annotated segmentation.
+directly. In Chapter \ref{chap:strain}, we move to a different type of task: image segmentation.
+We investigate a \acrlong{ssl} approach leveraging self-training to train U-Net segmentation
+model from sparsely labeled \acrlong{dp} datasets. The model is used to complete the unlabeled area which are 
+then included in the training set. 
