@@ -100,7 +100,8 @@ T_e = \arg \underset{T}{\max} \sum_{(\mathbf{x}, \mathbf{y}) \in \mathcal{D}_a} 
 \label{eqn:strain:thresholdopt}
 \end{equation}
 The ideal choice for $\mathcal{D}_{a}$ would be to use an external validation set but, in extreme data scarcity conditions, extracting such a validation set would penalize the performance of the algorithm by removing a significant amount of training data. Therefore, in this context, we consider using the training subset $\mathcal{D}_l$ as $\mathcal{D}_a$.
-This approach has the advantage of not requiring additional training data but also induces a risk of overfitting which might hurt generalization performance. We hope that the overfitting problem would be compensated by the improvement brought by hard labeling.
+This approach has the advantage of not requiring additional training data but also induces a risk of overfitting which might hurt generalization performance. We hope that the overfitting problem would be compensated by the improvement brought by hard labeling. 
+A performance comparison of these two pseudo-labeling strategies is given in Section \ref{ssec:strain:res:hardvssoft} and motivates the use of the second strategy.
 
 \subsection{Training}
 \label{ssec:strain:training_protocol}
