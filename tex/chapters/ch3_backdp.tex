@@ -222,8 +222,6 @@ Whereas it is included by-design in web-based tools, remote slide viewing is als
 
 Beyond software, hardware considerations are important for efficient viewing, especially when implemented at the scale of a laboratory or pathology service \cite{temprana2022digipatics}. Personnal workstations should be equipped with a quality screen able to render image without loss of quality (color and resolution). They also must be equipped with adequate computing resources (memory and \acrshort{cpu}/\acrshort{gpu}) in particular if analysis algorithms are supposed to be executed on them. The network should be robust enough to support the exchange of information (\ie download and upload of large files and data). Servers should have enough disk space to store the digitized slides and data and implement mechanisms in order to minimize the risk of data corruption or loss. 
 
-% \TODO{variations of appearance due to using a tool vs another \cite{cheng2020evaluating} ??}
-
 \subsection{Discussion}
 
 As presented in the previous sections, the preparation process has a significant impact on the final quality of a slide. Every step in the process introduces variability and has a chance of creating artifacts that can be both harmful to the analysis. Fortunately, automation reduces significantly the variability and makes the risk of artifacts acceptably low, although not absent. The dehydration, paraffin embedding and staining steps can all be automated with dedicated machines nowadays but microtomy remains mostly manual due to the high-precision requirements of the process. For scanned slide, there exist automated quality control tools such as HistoQC \cite{janowczyk2019histoqc} or PathProfiler \cite{haghighat2021pathprofiler} to verify that a \acrshort{wsi} has a sufficient quality to be considered for analysis. 
@@ -334,12 +332,6 @@ Although the earliest application of \acrlong{ai} to nodule malignancy assessmen
   \caption{Views of an intracellular inclusion at different zoom levels. In the top left corner of each image are the absolute and relative magnifications.}
   \label{fig:backdp:thyroid_needle_haystack}
 \end{figure}
-
-
-
-%\subsection{Registration}
-%\label{ssec:backdp:analysis_registration}
-%\TODO{illustrate with some of my datasets}
 
 
 \section{Computational pathology and machine learning}
@@ -488,8 +480,6 @@ In order to illustrate this point, we performed a search on the Grand Challenge 
 A first observation is that, whether the dataset is a set of \acrshort{wsi} or \textit{\acrlong{roi}s} (\acrshort{roi}), the number of provided images is several orders of magnitude below the number of images available in natural image datasets. It can be argued that the dimensions of \acrshort{wsi} and \acrshort{roi} images in \acrlong{dp} datasets is significantly larger that natural images (\eg average image size in ImageNet is 469 $\times$ 387 pixels, the largest of the 151 \acrshort{roi} of BCSS reaches approximately 7k $\times$ 10k pixels), however this must be put in perspective in relation to the prediction task. For instance, hundreds of \acrshort{wsi}s represent a very large amount of raw data (\eg few terabytes) but, when the target task is whole-slide classification, this only amounts to a hundred of annotated samples which is significantly fewer compared to ImageNet or others and can be considered a rather small sample size from a \acrshort{ml} perspective.  
 
 Beyond the size of datasets, it is interesting to note that most prediction tasks in \acrlong{dp} only feature few classes (at most 12 in our Grand Challenge sample). It is common to encounter tasks presented as binary (\eg malignant \vs benign) even though it is often a simplification of the underlying biological or medical problem. Datasets with a large variety of classes have shown to be effective for learning efficient models on natural images. Therefore, on this matter, \acrlong{cpath} is still lagging behind significantly. 
-
-% To the best of our knowledge, there is no single dataset that features more than 100 classes. \TODO{what is the largest?}
 
 It is also interesting to consider how these datasets were built. Among them, four datasets use internal data acquired and annotated specifically for the challenge (PAIP 2021, MIDOG 2021, BCNB, BCSS), two of them mix both internal and external data (TIGER, WSSS4LUAD) and the last two use exclusively data from external sources (CoNiC, NuCLS). Regarding the use of external data, it either means that external \acrshort{wsi} were imported and annotated for the challenge or that data from other datasets were combined together. For instance, the CoNiC challenge is based on the Lizard dataset \cite{graham2021lizard} which combines data from the \acrfirstit{tcga} \cite{weinstein2013cancer}, PanNuke \cite{gamper2019pannuke}, CRAG \cite{graham2019mild}, CoNSeP \cite{graham2019hover}, GlaS \cite{sirinukunwattana2017gland} and DigestPath \cite{li2019signet}. The \acrshort{tcga} is an open platform gathering various data related to cancer genomic including a little more than 30k \acrlong{wsi}s, making it one of the largest open databases of \acrshort{wsi} to date. It is no surprise that, over the years, many datasets have been built using the \acrshort{tcga} as one of their sources. This also includes WSSS4LUAD, TIGER and NuCLS from our Grand Challenge sample. Interestingly, one of the components of Lizard, PanNuke has also been built from \acrfirst{tcga} and three external datasets of which two were built on top of the same platform (MoNuSeg \cite{kumar2019multi} and CMP17 \cite{vu2019methods}). Although it raises the question of the risk of data leakage, assembling existing datasets to form a larger one certainly helps fighting data scarcity.
 

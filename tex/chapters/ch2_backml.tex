@@ -21,7 +21,7 @@ Entities $\vect{x}$ and $h(\vect{x})$ are n-dimensional tensors and can encode
 many kind of data types: data record, image, graph, time series, text... When
 $\vect{x}$ is a vector, its components are commonly called \textit{features},
 \textit{variables} or \textit{attributes}. A model can have several inputs (\resp
-outputs) in which case $\vect{x}$ (\resp $y$) is a tuple.
+outputs) in which case $\vect{x}$ (\resp $y$) is a tuple. 
 
 In \acrlong{ml}, a model is built by a \textit{learning algorithm}. Formally, a
 learning algorithm is defined by a set $\mathcal{H}$ of candidate models called
@@ -94,8 +94,9 @@ output class given an example:
 \begin{equation}
 \hat{y}_i = \argmax{y_k \in \mathcal{Y}} p(y=y_k|\vect{x}=\vect{x}_i).
 \end{equation}
-Examples of classification tasks are for instance assigning a label to an image
-or detecting whether an email is a spam or not.
+Examples of classification tasks are for instanc assigning a label to an image
+or detecting whether an email is a spam or not. The example presented in Section 
+\ref{sec:backml:whatisml} is another one.
 
 When the output space is continuous and the output is a real scalar value, the
 problem is called \textit{regression}. In this case, in order to minimize the squared loss
@@ -153,9 +154,11 @@ for instance, the algorithm searches for natural groups of observations or featu
 Another example is \textit{dimensionality reduction} where the algorithm projects
 high-dimensional data into a lower-dimensional space while attempting to preserve
 as much information as possible. An interested reader will find more information
-about these methods in \cite{hastie2017elements}. There exists another
-family of \acrlong{usl} methods that was first explored in the 1980s with autoencoders
-\cite{ballard1987modular, le1987modeles, bourlard1988auto} but has gained much traction recently. It is called \textit{self-supervised learning}
+about these methods in \cite{hastie2017elements}. 
+
+There exists another family of \acrlong{usl} methods that was first 
+explored in the 1980s with autoencoders \cite{ballard1987modular, le1987modeles, bourlard1988auto} 
+but has gained much traction recently. It is called \textit{self-supervised learning}
 \cite{lecun2021self}. The idea behind this family of methods is to exploit
 supervised learning algorithms but rather than guiding the learning process with
 human annotations, the training signal is found in the data itself. An example of
@@ -181,7 +184,14 @@ signal. The dataset is composed of two subsets:
 These methods make some assumptions about the ``closeness'' of the input distributions
 $p_a(\vect{x})$ and $p_u(\vect{x})$ \cite{chapelle2006semi} which allow
 exploiting both sets to solve some particular tasks. One of the earliest forms of
-\acrlong{ssl} is \textit{self-training} \cite{scudder1965probability, yarowsky1995unsupervised} which consists in an iterative process of which a typical iteration, or round, is composed of two steps. First, the \textit{teacher} model is used to generate pseudo-labels for unlabeled samples from $\mathcal{D}_u$. Then, these samples are used alongside samples from $\mathcal{D}_l$ to train a model, the \textit{student}. We will discuss self-training more thoroughly in Section \ref{ssec:backml:dl:selftraining}.
+\acrlong{ssl} is \textit{self-training} \cite{scudder1965probability, yarowsky1995unsupervised} which consists in an 
+iterative process of which a typical iteration, or round, is composed of two steps. First, the \textit{teacher} model is 
+used to generate pseudo-labels for unlabeled samples from $\mathcal{D}_u$. Then, these samples are used alongside samples 
+from $\mathcal{D}_l$ to train a model, the \textit{student}. We will discuss self-training more thoroughly in 
+Section \ref{ssec:backml:dl:selftraining}. Self-training is not to be confused with self-supervised learning (discussed in 
+the previous section) as the latter involves finding the training signal in the input data rather than producing 
+pseudo-labels for unlabeled data with the model being trained. 
+
 
 Closer to \acrlong{sl} is \acrfirstit{wsl} which focuses on methods where the
 annotations are noisy (\eg $y$ can be incorrect or imprecise), incomplete (similar
