@@ -230,7 +230,60 @@ When developing a multi-task algorithm, a crucial question is what should be sha
 
 As previously mentioned, each head $\theta_i$ is randomly initialized, whereas we initialize $\theta_s$ with ImageNet pre-trained weights as it has been shown that doing so accelerates convergence in a single-task setting \cite{mormont2018comparison}. However, it means that trained features of $\theta_s$ are followed directly by the random layers of the heads. This is known to hurt performance in a single-task transfer setting as reported in Yosinski \etal \cite{yosinski2014transferable} and is aggravated in a multi-task setting. Indeed, during the first training iterations, the heads gradients will be relatively large and will work to turn each head weights from random to relevant with respect to its task. However, the resulting back-propagated gradients in the last layer of $\theta_s$ will be an average of the potentially contradictory signals coming from all the heads. In order to attenuate or eliminate this problem, a simple idea consists in making each head weights relevant to its task before training the whole network by running a warm up phase during which $\theta_s$ is frozen (\ie no weights update, no batch normalization update) and only the heads $\theta_i$ are trained with a learning rate $\gamma_w$. 
 
-While preparing our experiments, we have noticed an issue with batch normalization \cite{ioffe2015batch} which is a consequence of the \acrlong{tl} settings. Indeed, it has been shown that using a batch normalization-equipped network with datasets across different domains can hurt performance \cite{li2018adaptive, chang2019domain}. We have applied a simple procedure detailed in Supplementary Section \ref{app:mtask:sec:batch_norm} in order to correct the problem. Moreover, the fact that samples are routed in different heads during training requires careful treatment of the gradients after the forward phase. This question is discussed in Supplementary Section \ref{app:mtask:sec:gradients}.
+While preparing our experiments, we have noticed two issues: one with batch normalization \cite{ioffe2015batch} and one with the heads gradients. The former is a consequence of the \acrlong{tl} settings whereas the second is a consequence of the task-based routing of samples in the heads. Both are discussed below.
+
+\subsubsection{Issue with batch normalization} 
+\label{sssec:mtask:batchnormissue}
+
+It has been shown that a network equipped with batch normalization \cite{ioffe2015batch} can exhibit issues when it is used across different domains \cite{li2018adaptive, chang2019domain}. A similar issue occurs when transferring such network to one or several target tasks of which the input distributions differs greatly from the source task. Indeed, the first iteration will propagate through the network samples from an unseen and likely different distribution which will trigger a massive change of batch normalization module statistics ($\mu_\mathcal{B}$ and $\sigma_\mathcal{B}$). However, the batch normalization trainable parameters ($\beta$ and $\gamma$) will themselves be updated much more slowly (especially when the training learning rate is small) preventing them to adapt properly to the shift in distribution and statistics. 
+
+In the context of this work, early experiments have shown that it had an undesirable negative effect on training basically destroying the purpose of transfer, as the training curves exhibited a similar behavior to training from scratch. This problem was aggravated in multi-task learning when several tasks, with different input distributions, were used. We have applied a simple procedure to attenuate this effect. Our idea consists in updating parameters $\beta$ and $\gamma$ of each batch normalization module before starting training such that the output of the module is preserved when the shift in distribution occurs. Given a source task $\mathcal{D}_s$ and a target task $\mathcal{D}_t$, few batches of the target task are forwarded into the network to estimate the new statistics $\mu_{\mathcal{B}_t}$ and $\sigma_{\mathcal{B}_t}$ of each batch normalization module input. Based on the obtained statistics, the new parameters $\beta_s$ and $\gamma_s$ for a module are given by (see below for the derivation of these formulas):
+\begin{eqnarray}
+\gamma_t &=& \gamma_s \dfrac{\sigma^{(\epsilon)}_{\mathcal{B}_t}}{\sigma^{(\epsilon)}_{\mathcal{B}_s}}\label{app:mtask:eqn:bn_update_gamma}\\
+\beta_t &=& \beta_s + \gamma_s  \dfrac{(\mu_{\mathcal{B}_t}-\mu_{\mathcal{B}_s})}{\sigma^{(\epsilon)}_{\mathcal{B}_s}}\label{app:mtask:eqn:bn_update_beta}
+\end{eqnarray}
+where $\mu_{\mathcal{B}_s}$, $\sigma^{(\epsilon)}_{\mathcal{B}_s}$, $\beta_s$ and $\gamma_s$ are the original source task's statistics and parameters. The expression $\sigma^{(\epsilon)}_{\mathcal{B}_x}$ denotes an altered version of standard deviation presented in the original paper which is given by $\sqrt{\sigma_{\mathcal{B}_x}^2 + \epsilon}$ with a $\epsilon$ constant added for numerical stability. In our multi-task setting, we have used batches containing samples from all tasks during the new statistics estimation in order to mimic the actual inputs distributions at training time.
+
+\paragraph{Deriving the formulas} A batch normalization module being a composition of linear functions, it is therefore linear and can be re-expressed as:
+\begin{equation} \label{app:mtask:eqn:batch_norm_is_linear}
+y_k = BN_k(x) = m_k x + p_k
+\end{equation}
+where $y_k$ and $x$ respectively denote the output of the batch normalization module for task $k$ (\ie using task $k$ statistics and parameters) and the input of the batch normalization module. Using the definition of the module, Equation \ref{app:mtask:eqn:batch_norm_is_linear} can be rewritten as:
+\begin{equation} \label{app:mtask:eqn:batch_norm_is_linear_rewritten}
+y_k = \underbrace{\dfrac{\gamma_k}{\sigma^{(\epsilon)}_{\mathcal{B}_k}}}_{m_k} x + \underbrace{\beta_k - \gamma_k\ \dfrac{\mu_{\mathcal{B}_k}}{\sigma^{(\epsilon)}_{\mathcal{B}_k}}}_{p_k}.
+\end{equation}
+The formula in Equations \ref{app:mtask:eqn:bn_update_gamma} and \ref{app:mtask:eqn:bn_update_beta} are obtained by ensuring $y_t = y_s$ for any $x$, or similarly solving the following system:
+\begin{align}
+\begin{cases}
+m_s = m_t\\
+p_s = p_t\\
+\end{cases}
+\end{align}
+
+\subsubsection{Issue with heads gradients}
+\label{sssec:mtask:gradientissue}
+
+Because samples are routed through their respective task head in our architecture, all parts of the network do not see the same number of samples from a batch which causes the gradients to be underestimated in the network heads. This can be shown by developing the derivative of our loss with respect to one of the logits of a head. Let $r^{(i)}_{k}$ be the class $k$ logit of task $t_i$. The derivatives of the loss ${\cal L}$ (Equation 1, in the original publication) with respect to $r^{(i)}_k$ is given by:
+\begin{equation} 
+    \label{app:mtask:eqn:rescale_grad}
+    \frac{\partial \mathcal{L}}{\partial r^{(i)}_{k}} = - \frac{1}{B} \sum_{j=1}^{\left|\mathcal{B}_{t_i}\right|} \frac{\partial \ell^{(i)}_j}{\partial r^{(i)}_{k}},
+\end{equation}
+where $\ell^{(i)}_j$ is the loss term for the $j$th sample of task $t_i$ in the batch sample. Equation \ref{app:mtask:eqn:rescale_grad} shows that the gradients are divided by the batch size although they are estimated using $\left|\mathcal{B}_{t_i}\right|$ samples (\ie the number of samples from task $t_i$ in the batch). This applies also to the gradients used for updating the parameters $\theta_i$ of the head. Given a task $t_i$, this magnitude reduction has the same effect as dividing the learning rate for head $\theta_i$ by a variable factor that depends on the number of samples of task $t_i$ that are present in the batch. If tasks are sampled uniformly to create a batch, one can expect this factor to be equal to the number of tasks $T$ on average. In order to avoid this phenomenon, we applied a simple trick that consists in re-scaling the gradients of each head $\theta_i$ by multiplying them by $\phi_{t_i}$:
+\begin{equation}
+\phi_{t_i} = \frac{B}{\left|\mathcal{B}_{t_i}\right|}.
+\end{equation}
+
+
+%% Equation \ref{app:mtask:eqn:rescale_grad} can be derived by developing the derivative of the loss by the logits of one head:
+
+%% \begin{align}
+%%     \frac{\partial \mathcal{T}}{\partial r^{(i)}_{k}} &= \frac{\partial}{\partial r^{(i)}_{k}} \left[- \frac{1}{B} \sum_{m=1}^T \sum_{j=1}^{\left|\mathcal{B}_{t_m}\right|} \ell^{(m)}_j \right] \\
+%%     &= - \frac{1}{B} \sum_{j=1}^{\left|\mathcal{B}_{t_i}\right|} \frac{\partial \ell^{(i)}_j}{\partial r^{(i)}_{k}} \\
+%% \end{align}
+
+% \[
+%   \frac{B}{\left|\mathcal{B}_{t_i}\right|} \frac{\partial \mathcal{T}}{\partial r^{(i)}_{k}} = -  \frac{1}{\left|\mathcal{B}_{t_i}\right|} \sum_{j=1}^{\left|\mathcal{B}_{t_i}\right|} \frac{\partial \ell^{(i)}_j}{\partial r^{(i)}_{k}} 
+% \]
 
 \subsection{Transferring a multi-task pre-trained network}
 \label{ssec:mtask:transfer_techniques}
