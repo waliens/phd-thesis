@@ -12,7 +12,7 @@ Moving on to Chapter \ref{chap:mtask}, guided by the fact that transfer learning
 
 In Part \ref{part:segmentation} and Chapter \ref{chap:strain}, we focused on \acrlong{ssl} and self-training in particular. We proposed a self-training algorithm for image segmentation able to make use of both exhaustively and sparsely-labeled data. Every training epoch, our approach generates pseudo-labels for unlabeled pixels in the training set using the currently trained model and combines them with the sparse ground truth. The model can then be trained on the combination of the pseudo-labeled and exhaustively-labeled set. Using three exhaustively-labeled datasets that we artificially made sparse, we showed that our self-training approach was able to improve performance over a fully supervised approach learning from the exhaustively-labeled data only. For one of our datasets, self-training was even able to reach performance of a model trained on a completely annotated dataset with only $~30\%$ of the training annotations. We confirmed our findings on an in-house sparsely-labeled dataset where self-training improved performance by a $5\%$ margin compared to our baselines. We finally showed that when annotating a new dataset, it was not necessarily better to annotate it exhaustively. 
 
-We hope that, with these three contributions, we have confirmed that data scarcity in digital pathology was not an inextricable issue and that there exists algorithmic solutions to at least alleviate it. 
+We hope that, with these three contributions, we have confirmed that data scarcity in \acrlong{dp} was not an inextricable issue and that there exists algorithmic solutions to at least alleviate it. 
 
 \section{Future works}
 \label{sec:concl:futureworks}
