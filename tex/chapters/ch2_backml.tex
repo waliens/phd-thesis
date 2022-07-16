@@ -4,7 +4,7 @@
 \begin{overview}{Overview}
 The goal of this chapter is to provide machine learning background and keys to understand our contributions. It is not aimed at being an exhaustive tour of the field of machine learning but rather an overview of topics relevant to this thesis. For the readers who would still like to deepen their knowledge about these methods, we provide pointers to relevant literature. In this chapter, we also introduce the notations that we use throughout this thesis.
 
-Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} and a first example of an \acrshort{ml} problem. Section \ref{sec:backml:families} explores the different ways the field of \acrlong{ml} can be structured (\eg supervised vs. unsupervised learning, classification vs. regression, classical machine vs. \acrlong{dl}...) in order to position our work in its context. Section \ref{sec:backml:modeleval} discusses what guides \acrlong{ml} model training from a theoretical point of view. Then, it presents practical concerns regarding model selection and evaluation. It finally provides a description of different evaluation metrics used in this thesis. This chapter then shifts its focus on specific machine learning methods and algorithms: \acrlong{svm} in Section \ref{sec:backml:svm}, tree-based methods in \ref{sec:backml:treebased} and \acrlong{dl} in Section \ref{sec:backml:deeplearning} in which we also discuss more thoroughly deep transfer learning (see Section \ref{ssec:backml:dl:deeptransfer}). In the final Section \ref{sec:backml:wrapup}, we wrap up by positioning our work in the context of \acrlong{ml}.
+Section \ref{sec:backml:whatisml} provides a short definition of \acrlong{ml} and a first example of an \acrshort{ml} problem. Section \ref{sec:backml:families} explores different ways the field of \acrlong{ml} can be structured (\eg supervised vs. unsupervised learning, classification vs. regression, classical machine vs. \acrlong{dl}...) in order to position our work in its context. Section \ref{sec:backml:modeleval} discusses what guides \acrlong{ml} model training from a theoretical point of view. Then, it presents practical concerns regarding model selection and evaluation. It finally provides a description of different evaluation metrics used in this thesis. This chapter then shifts its focus on specific machine learning methods and algorithms: \acrlong{svm} in Section \ref{sec:backml:svm}, tree-based methods in \ref{sec:backml:treebased} and \acrlong{dl} in Section \ref{sec:backml:deeplearning} in which we also discuss more thoroughly deep transfer learning (see Section \ref{ssec:backml:dl:deeptransfer}). In the final Section \ref{sec:backml:wrapup}, we wrap up by positioning our work in the context of \acrlong{ml}.
 \end{overview}
 
 \section{What is machine learning ?}
@@ -94,9 +94,8 @@ output class given an example:
 \begin{equation}
 \hat{y}_i = \argmax{y_k \in \mathcal{Y}} p(y=y_k|\vect{x}=\vect{x}_i).
 \end{equation}
-Examples of classification tasks are for instanc assigning a label to an image
-or detecting whether an email is a spam or not. The example presented in Section 
-\ref{sec:backml:whatisml} is another one.
+Examples of classification tasks are for instance assigning a label to an image (\ie the example presented in Section 
+\ref{sec:backml:whatisml}) or detecting whether an email is a spam or not.
 
 When the output space is continuous and the output is a real scalar value, the
 problem is called \textit{regression}. In this case, in order to minimize the squared loss
@@ -164,7 +163,7 @@ supervised learning algorithms but rather than guiding the learning process with
 human annotations, the training signal is found in the data itself. An example of
 such methods is \textit{image reconstruction}. Random parts of the input images
 are truncated (\eg replaced by black squares) and the model must be able to
-re-generate the truncated parts. In this case, input and output signal are
+re-generate the truncated parts. In this case, input and output signals are
 respectively the original and the truncated image. The model input can be generated
 from the original data without human intervention.
 
@@ -317,7 +316,7 @@ Transfer learning can be \textit{heterogeneous} (see Definition
 thesis is the transfer of a model trained for natural image classification to
 medical image classification. In this case, the tasks are different as the first
 consists in identifying the presence of a type of object in the image whereas the
-other consists in assessing the malignancy of a tumor from an image of a tissue.
+other consists in assessing the malignancy of a tumor from an image of a tissue, for instance.
 The inputs distributions also differ as medical images have completely different
 content and appearance.
 
@@ -359,7 +358,7 @@ tasks simultaneously. Compared to learning each task individually, this approach
 has several advantages: it increases the total amount of data available for training
 a model, a more robust and universal representation can be learned by sharing
 knowledge between tasks and, to a certain extent, it prevents the model to
-overfit\footnote{See more on overfitting in Section \ref{ssec:backml:bvtradeoff}.}
+overfit\footnote{More on overfitting in Section \ref{ssec:backml:bvtradeoff}.}
 a specific task. In the best scenarii, the use of \acrlong{mtl} improves the
 performance of each individual task compared to a setup where the tasks are treated
 independently. In opposition, it happens that antagonistic tasks worsen the
@@ -483,6 +482,7 @@ this trade-off.
 \end{figure}
 
 \subsubsection{Over-parametrized models}
+\label{sssec:backml:overparam}
 
 With the advent of \acrlong{dl}, model complexity has exploded as typical \acrlong{dl}
 models have millions or even billions of parameters (see Section
@@ -728,10 +728,14 @@ datasets. Moreover, a metric computed on a dataset is not always comparable to
 the same metric computed on a different dataset. For this reason, we resort to
 using \textit{rankings of methods}. First, for each dataset in our pool, we evaluate
 the methods each with their most appropriate metric and then rank them: the best
-method gets rank 1 and the worst gets rank $m$ (where $m$ is the number of methods).
-Finally, in order to draw general conclusions, we average the rankings over all
-the datasets. The average ranks therefore provide a single metric for comparing
-the methods across datasets.
+method gets rank $m$ and the worst gets rank $1$ (where $m$ is the number of methods, this 
+convention is used in Chapter \ref{chap:comp}). Finally, in order to draw general 
+conclusions, we average the rankings over all the datasets. The average ranks therefore 
+provide a single metric for comparing
+the methods across datasets. In Chapter \ref{chap:mtask}, we use the opposite convention 
+for ranks as the best method is attributed rank $1$ whereas the worst is attributed rank $m$.
+However, this change of convention does not change the interpretation of rankings except 
+that they can be considered a loss rather than a score. 
 
 % ===================
 % Methods
@@ -752,7 +756,7 @@ is an hyperplane:
 
 \begin{equation}
 \label{eqn:backml:linearmodel}
-f(\vect{x}) = \theta_0 + \sum_{j=1}^m \theta_j x_j
+f(\vect{x};\pmb{\theta}) = \theta_0 + \sum_{j=1}^m \theta_j x_j
 \end{equation}
 
 where $\theta_0$ and the $\theta_j$ are the learnable parameters, respectively
@@ -840,7 +844,7 @@ Another approach is called \acrfirstit{ovr} and consists in training $C$ models
 each of which deals with the classification problem of a class versus all the
 others. The final prediction is given by the model of which the decision function
 returned largest value. This approach is more computationally efficient than
-\acrshort{ovo} as only $C$ classifier have to be trained.
+\acrshort{ovo} as only $C$ classifiers have to be trained.
 
 \section{Tree-based methods}
 \label{sec:backml:treebased}
@@ -864,8 +868,8 @@ attributes:
 \end{equation}
 and each attribute can be either numerical or categorical (binary or multi-valued).
 A decision tree is a model structured as a tree of which the nodes $\mathcal{Q}$
-are divided in two subsets: the internal and leaf nodes $\mathcal{I} \subset \mathcal{Q}$
-and $\mathcal{F} \subset \mathcal{Q}$. Each internal node $q \in \mathcal{I}$
+are divided in two subsets: the internal nodes $\mathcal{I} \subset \mathcal{Q}$ and leaf nodes
+$\mathcal{F} \subset \mathcal{Q}$. Each internal node $q \in \mathcal{I}$
 tests an input attribute $q.k \in \left\{1,...,m\right\}$ and its $q.E$ outwards
 edges are associated with non-overlapping subsets of this attribute's domain:
 \begin{equation}
@@ -1076,8 +1080,8 @@ methods relevant to this thesis. We introduce the basic components of modern neu
 network architectures in Section \ref{ssec:backml:dp:components}. Section
 \ref{ssec:backml:dl:opti} discusses how neural networks are learned and optimized
 in practice. Section \ref{ssec:backml:dl:modernarchi} presents few modern neural
-network architectures. Finally, in Section \ref{ssec:backml:dl:deeptransfer}, we
-discuss deep \acrlong{tl}.
+network architectures. Finally, in Sections \ref{ssec:backml:dl:deeptransfer}, \ref{ssec:backml:dl:deepmultitask} and \ref{ssec:backml:dl:selftraining}, we
+respectively discuss deep \acrlong{tl}, \acrlong{mtl} and self-training and present works and methods related to ours. 
 
 \subsection{Components of modern neural networks}
 \label{ssec:backml:dp:components}
@@ -1104,7 +1108,7 @@ network can be trained using the \textit{backpropagation} algorithm (see Section
 
 The idea behind one of the first machine learning algorithms ever published, the
 perceptron \cite{rosenblatt1958perceptron}, is still at the core of most
-\acrlong{dl} architectures today. Loosely modeling the working of brain neurons,s
+\acrlong{dl} architectures today. Loosely modeling the working of brain neurons,
 the perceptron can be represented as:
 \begin{equation}
 \label{eqn:backml:perceptron}
@@ -1153,7 +1157,7 @@ nowadays.
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{backml/mlp.pdf}
-  \caption{A \acrlong{mlp} with 2 hidden layers $h^{(1)}$ and $h^{(^2)}$ for a two-dimensional input $\vect{x}$.}
+  \caption{A \acrlong{mlp} with 2 hidden layers $h^{(1)}$ and $h^{(^2)}$ for an input $\vect{x}$ with two features.}
   \label{fig:backml:mlp}
 \end{figure}
 
@@ -1165,7 +1169,7 @@ As introduced in Section \ref{ssec:backml:shallowdeep}, \textit{\acrlong{cnn}s}
 recently-revived interest, \acrshort{cnn}s have been researched since the late
 1980s \cite{lecun1989handwritten}. A \acrshort{cnn} is a network containing
 at least one convolutional layer. Nowadays, such layers are a core component of
-all networks processing structured data (time series, images, video, etc). For
+all networks processing structured data (time series, images, video, \etc.). For
 instance, in image classification, typical architectures (see Figure \ref{fig:backml:cnn})
 stack several convolutional and pooling layers followed by a fully-connected
 network (\ie a \acrshort{mlp}). The convolutional layer is introduced in this
@@ -1174,7 +1178,7 @@ section and the pooling layer in Section \ref{sssec:backml:poolinglayer}.
 \begin{figure}
   \centering
   \includegraphics[width=0.75\textwidth]{backml/convnet.png}
-  \caption{A \acrlong{cnn} (source \cite{millar2019using}).}
+  \caption{A \acrlong{cnn} (source: \cite{millar2019using}).}
   \label{fig:backml:cnn}
 \end{figure}
 
@@ -1199,7 +1203,7 @@ convolutional layers can also be generalized for 1D (\eg time series) or 3D (\eg
 \paragraph{Formal definition.} A two-dimensional convolutional layer $h$ can be seen as 
 a function generating an arbitrary number $f_{out}$ of \textit{feature maps}
 $\vect{z}^{(out)} \in \mathbb{R}^{r_{out} \times c_{out} \times f_{out}}$ from an input
-$\vect{z}^{(in)} \in \mathbb{R}^{r_{in} \times c_{in} \times f_{in}}$. Feature map
+$\vect{z}^{(in)} \in \mathbb{R}^{r_{in} \times c_{in} \times f_{in}}$. Feature
 map $k \in \left\{1, 2, ..., f_{out}\right\}$ is the result of convoluting a
 learnable weight tensor $\pmb{\theta}_k \in \mathbb{R}^{r_f \times c_f \times f_{in}}$
 called \textit{kernel} or \textit{filter} over the input $\vect{z}^{(in)}$:
@@ -1238,15 +1242,14 @@ and stride are illustrated in Figure \ref{fig:backml:paddingstride}.
 
 \paragraph{Transposed convolution layer.} This type of layer can be seen as the opposite 
 operation of convolution. It is commonly used to upsample a signal with a learnable filter. 
-The hyperparameters of this type 
-of layer are similar to those of regular convolutional layers and include kernel size 
+Its hyperparameters are similar to those of regular convolutional layers and include kernel size 
 $r_f \times c_f$, stride $s$ and padding. For instance, supposing a transposed 
 convolution with no padding and a kernel size equal to the stride ($K = r_f = c_f = s = 2$, 
 \ie no overlap between transposed convolution window), the activation map 
 is given by:
 \begin{equation}
   \label{eqn:backml:transposed_convolution}
-  a_{i,j,k} = \theta_{k;0} + \sum_{f=1}^{f_{l-1}} z^{(in)}_{\left(\left\lfloor\frac{i}{2}\right\rfloor, \left\lfloor\frac{j}{2}\right\rfloor, f\right)} \theta_{(k; i~\text{mod}~2,j~\text{mod}~2,f)}
+  a_{ijk} = \theta_{k;0} + \sum_{f=1}^{f_{l-1}} z^{(in)}_{\left\lfloor\frac{i}{2}\right\rfloor, \left\lfloor\frac{j}{2}\right\rfloor, f} \theta_{k; i~\text{mod}~2,j~\text{mod}~2,f}
 \end{equation}
 where $\vect{z}^{(in)} \in \mathbb{R}^{r_{in} \times c_{in} \times f_{in}}$ are the input feature maps and $\theta_{k;0} \in \mathbb{R}$ and $\pmb{\theta}_k \in \mathbb{R}^{r_f \times c_f \times f_{in}}$ are the learnable bias and weights. The output feature maps $\vect{z}^{(out)} \in \mathbb{R}^{r_{out} \times c_{out} \times f_{out}}$ are computed similarly as in Equation \ref{eqn:backml:convnetwithactiv} with $r_{out} = 2 \times r_{in}$ and $c_{out} = 2 \times c_{in}$. 
 
@@ -1269,7 +1272,7 @@ map $k$ at layer $l$ is the set of pixels of the input that influence this
 activation. The larger the receptive field, the more context is considered by the
 activation.
 
-There is an interesting parallel to draw between the random sub-windows tree-based method presented in Section \ref{ssec:backml:et_image} and convolutional neural networks. Indeed, whereas the random sub-window algorithm randomly selects windows of varying scales in an input image, a convolutional layer actually processes all windows exhaustively at a given scale. In the case of a convolution layer, the window is obviously smaller (\ie few pixels wide) but because convolutional layers are stacked, the actual window processed for an activation of the last layer (\ie the receptive field) is larger and comparable to the size of window of the random subwindows algorithm. Obviously, both methods differ by how they exploit these windows and deep networks are able to learn more expressive models from them because of the hierarchical structure and learning. 
+There is an interesting parallel to draw between the random subwindows tree-based method presented in Section \ref{ssec:backml:et_image} and convolutional neural networks. Indeed, whereas the random subwindow algorithm randomly selects windows of varying scales in an input image, a convolutional layer actually processes all windows exhaustively at a given scale. In the case of a convolution layer, the window is obviously smaller (\ie few pixels wide) but because convolutional layers are stacked, the actual window processed for an activation of the last layer (\ie the receptive field) is larger and comparable to the size of window of the random subwindows algorithm. Obviously, both methods differ by how they exploit these windows and deep networks are able to learn more expressive models from them because of the hierarchical structure and learning. 
 
 \subsubsection{Pooling layer}
 \label{sssec:backml:poolinglayer}
@@ -1333,7 +1336,9 @@ $\theta_0$ and $\gamma$ are important to avoid divergence. Regarding the local
 minima issue, the very high-dimensional nature of neural networks makes it unlikely
 to have no dimension along which the model can improve at a given iteration.
 Moreover, finding parameters that achieve the global minimum of the training loss
-is generally unwanted as it might lead to overfitting.
+is generally unwanted as it might lead to overfitting. Nevertheless, this last remark can be 
+questioned by the recent research on over-parametrization discussed in Section 
+\ref{sssec:backml:overparam}.
 
 At every iteration, the original gradient descent algorithm computes gradients
 over the whole training set which is particularly inefficient when $n \gg$. A
@@ -1582,14 +1587,14 @@ this approach, knowledge is encoded through the parameters of a model. This mode
 is first trained on a source task, usually a large image classification dataset,
 then transferred to the target task.
 
-There are two approaches for transfering a deep neural network to a target task.
+There are two approaches for transferring a deep neural network to a target task.
 Let us consider three networks $h_s$, $h_o$ and $h_n$ respectively parametrized
 by $\theta_s$, $\theta_o$ and $\theta_n$. In the remaininder of this section, we
 will designate a network interchangeably by its set of parameters $\theta_i$ or
 its function $h_i(\cdot;\theta_i)$. The network $\theta_s$ is shared between the
 source and target tasks and $\theta_o$ and $\theta_n$ are the task-specific
 networks. Both approaches first require the network $h = h_o \circ h_s$ to be
-trained on the source task. At the end of training, $\theta_s$ encodes the knowledge
+pre-trained on the source task. At the end of pre-training, $\theta_s$ encodes the knowledge
 to be transferred.
 
 \begin{figure}
@@ -1633,20 +1638,20 @@ a supervised manner on the large ImageNet source dataset composed of 1.2 million
 natural images and 1000 distinct classes. They both showed that these networks
 were able to produce discriminative features for tasks they were not trained on.
 
-Building upon these results, \cite{yosinski2014transferable} analyzed the
+Building upon these results, \citeauthor{yosinski2014transferable} \cite{yosinski2014transferable} analyzed the
 transferability of deep neural networks using both approaches in more details.
 Their most prominent conclusion is that features in a neural network become less
 transferable as one moves deeper in the network indicating that the network features
 shift from generic to specific along the network. This result is consistent with
-\cite{zeiler2014visualizing} as early layers typically learn classical computer
+\citeauthor{zeiler2014visualizing} \cite{zeiler2014visualizing} as early layers typically learn classical computer
 vision filters. This motivates freezing only the first layers of the network to
 avoid catastrophic interference as they are more generic and therefore should not
 require much tuning. They also studied how task similarity impacted transfer
 performance and found that similar tasks indeed benefited better from transfer
-than dissimilar ones. This was confirmed in \cite{mensink2021factors} who 
+than dissimilar ones. This was confirmed in \citeauthor{mensink2021factors} \cite{mensink2021factors} who 
 showed that for a variety of tasks, there exists a source task that outperforms
 ImageNet, especially when this task incorporates in some ways the target domain.
-More recently, \cite{kornblith2019better} showed that there is a correlation 
+More recently, \citeauthor{kornblith2019better} \cite{kornblith2019better} showed that there is a correlation 
 between model performance on the source task (in this case  ImageNet) and transfer 
 performance on the target task. 
 
@@ -1662,13 +1667,13 @@ is another approach based on transformers, a recent and popular family of
 attention-based methods. Attention is a mechanism of selection of information
 which can be implemented in different ways in neural networks \cite{niu2021review}.
 It has initially been applied with great successes on \acrfirstit{nlp} problems
-but \acrshort{vit} has shown that attention-based architectures are also applicable
+but \acrshort{vit} has shown that attention-based architectures were also applicable
 to vision. In this framework, the transfer process is very similar to supervised
 pre-training as the model is first trained in a supervised manner on a large
 database, then transferred to the target task. The only difference is that the
 attention-based network does not use convolution and takes as input a sequence of
 non-overlapping patches of the image. Other contributions focus on improving
-classical supervised pre-training approach. For instance, \cite{wang2019pay}
+classical supervised pre-training approach. For instance, \citeauthor{wang2019pay} \cite{wang2019pay}
 combine \acrlong{tl} and model compression as the fine-tuning process excludes
 non-informative feature maps from the final model based on their \acrfirstit{afds}
 mechanism.
@@ -1681,27 +1686,27 @@ in general.
 \subsection{Multi-task learning}
 \label{ssec:backml:dl:deepmultitask}
 
-Multi-task learning \cite{zhang2017survey} has been applied with great successes for a wide-range of application such as image and video understanding \cite{kokkinos2017ubernet}, natural language processing \cite{collobert2008unified}, face recognition \cite{zhu2012face, chen2014joint, zhang2014facial, ranjan2017hyperface}, information retrieval \cite{liu2015representation}, art classification \cite{strezoski2017omniart}, \etc. The success of \acrlong{mtl} is notably due to the fact that leveraging several tasks and/or datasets alleviates the need for large amounts of data. Moreover, training in multi-task has a regularization effect preventing the model to overfit a particular task therefore yielding a better generalizable model. The modularity of neural networks also allows to embed multi-task specific components hence facilitating its application to \acrlong{dl} \cite{caruana1997multitask, zhang2017survey}. There exist many ways how \acrlong{mtl} can be implemented within \acrlong{dl} with, for instance, architecture tricks \cite{misra2016cross, strezoski2019many} and weights sharing \cite{caruana1997multitask}.
+Multi-task learning, introduced in Section \ref{ssec:backml:mtl}, has been applied with great successes for a wide-range of application \cite{zhang2017survey} such as image and video understanding \cite{kokkinos2017ubernet}, natural language processing \cite{collobert2008unified}, face recognition \cite{zhu2012face, chen2014joint, zhang2014facial, ranjan2017hyperface}, information retrieval \cite{liu2015representation}, art classification \cite{strezoski2017omniart}, \etc. The success of \acrlong{mtl} is notably due to the fact that leveraging several tasks and/or datasets alleviates the need for large amounts of data. Moreover, training in multi-task has a regularization effect preventing the model to overfit a particular task therefore yielding a better generalizable model. The modularity of neural networks also allows to embed multi-task specific components hence facilitating its application to \acrlong{dl} \cite{caruana1997multitask, zhang2017survey}. There exist many ways how \acrlong{mtl} can be implemented within \acrlong{dl} with, for instance, architecture tricks \cite{misra2016cross, strezoski2019many} and weights sharing \cite{caruana1997multitask}.
 
 \subsection{Self-training}
 \label{ssec:backml:dl:selftraining}
 
-As introduced in Section \ref{ssec:backml:inbetween}, self-training is a family of \acrlong{ssl} methods. A self-training process is iterative where a typical iteration consists in using a teacher model to produce pseudo-labels for unlabeled samples from $\mathcal{D}_u$ which are then combined with labeled samples from $\mathcal{D}_l$ to train a student model. 
+As introduced in Section \ref{ssec:backml:inbetween}, self-training is a family of \acrlong{ssl} methods. Self-training is an iterative process where a typical iteration consists in using a teacher model to produce pseudo-labels for unlabeled samples from $\mathcal{D}_u$ which are then combined with labeled samples from $\mathcal{D}_l$ to train a student model. 
 
 There are several elements that characterize a self-training algorithm. An important element is the way the student and teacher models interact during the process. A common approach consists in using the current student as a teacher for the next training round, during which a new student is trained from scratch \cite{yarowsky1995unsupervised, xie2020self}. A different approach consists in building a teacher of which the model parameters are a moving average of the student parameters at the end of each training round \cite{tarvainen2017mean}. \citeauthor{pham2021meta} \cite{pham2021meta} update both the student and teacher networks by back-propagation during the self-training round. 
 
-Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} to select which samples should be included for the next training rounds by excluding high entropy samples for instance \cite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \cite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \cite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
+Another characteristic element is how the algorithm exploits the pseudo-labels. Some techniques use pseudo-labels \textit{uncertainty} to select which samples should be included for the next training rounds by excluding high entropy samples for instance \cite{grandvalet2004semi, lee2013pseudo}. Another way of exploiting the pseudo-labels in the training signal is to exploit \textit{consistency}. Several self-training approaches ensure consistency between the predictions of the teacher and of a noisy student \cite{xie2020self, zhu2020improving, sohn2020fixmatch, tarvainen2017mean}. The student is said to be noisy because of the stochastic nature of the data augmentation and network training (\eg caused by dropout, stochastic depth). \citeauthor{laine2016temporal} \cite{laine2016temporal} propose a variation of this by enforcing consistency between the current model and the pseudo-labels generated and aggregated over the past training rounds (so-called temporal ensemble).
 
 \section{Wrapping up}
 \label{sec:backml:wrapup}
 
 In the previous sections, we gave an overview of different topics. We can now position our work in this context. In Chapters \ref{chap:comp}
 and \ref{chap:mtask}, both contributions explore heterogeneous model-based
-\acrlong{tl} by transfering \acrlong{dl} classification models. We use several
+\acrlong{tl} by transferring \acrlong{dl} classification models. We use several
 target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp}
-(more on this in Chapter \ref{chap:backdp}). The first contribution studies transfer
+(more on this in Chapter \ref{chap:backdp}). The first contribution (see Chapter \ref{chap:comp}) studies transfer
 from ImageNet. Motivated by the fact that transfer works better when the source
-and target tasks are related, the second contribution uses homogeneous features-based
+and target tasks are related, the second contribution (see Chapter \ref{chap:mtask}) uses homogeneous features-based
 \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data
 directly. In Chapter \ref{chap:strain}, we move to a different type of task: image segmentation.
 We investigate a \acrlong{ssl} approach leveraging self-training to train U-Net segmentation
