@@ -14,7 +14,7 @@
 
     \fullcite{mormont2018comparison} \\
 
-    Supplementary materials can be found in Appendix Chapter \ref{app:comp}.
+    Supplementary materials can be found in Appendix \ref{app:comp}.
 \end{overview}
 
 %-------------------------------------------------------------------------------------------------------------------
@@ -27,7 +27,7 @@
 
 % In parallel, \acrshort{dl} has recently had an impressive impact over the computer vision field starting with work of \citeauthor{krizhevsky2012imagenet} \cite{krizhevsky2012imagenet}, which improved previous natural image recognition performances by a large margin. More recently, researchers have been working at applying those new techniques to biomedical imaging \cite{greenspan2016guest,litjens2017survey}. While current results are promising, improvements were not as impressive as they had been for traditional computer vision tasks (recognition of natural scenes or objects such as ImageNet \cite{deng2009imagenet}, face recognition...) which can likely be attributed to the lack of annotated data.
 
-Data scarcity in \acrlong{cpath} is a recurrent problem which can be tackled in several ways, one of them being transfer learning (see Section \ref{ssec:backdp:datascarcity}). In this chapter, we explore how \acrlong{cnn}s pre-trained on ImageNet \cite{deng2009imagenet} (source task) can be transferred to \acrlong{cpath} target tasks as these architectures have shown interesting transfer properties \cite{donahue2014decaf,yosinski2014transferable,sermanet2013overfeat}. We study and compare both feature extraction and fine-tuning. At the time of writing the article this chapter is based on (early 2018), both strategies had not been compared thoroughly yet in \acrlong{cpath} and there was no consensus about whether one was better than the other (see Sections \ref{ssec:backml:dl:deeptransfer} and \ref{ssec:backdp:tl} for related works). Moreover, most works involving transfer learning in medical imaging used old architectures such as AlexNet \cite{shin2016deep,bayramoglu2016transfer,antony2016quantifying,ravishankar2016understanding,tajbakhsh2016convolutional,kumar2017comparative,kim2016deep}, GoogLeNet \cite{shin2016deep,bayramoglu2016transfer} or VGG \cite{kieffer2017convolutional,bayramoglu2016transfer,antony2016quantifying,yu2017deep,hou2016automatic,kumar2017comparative}. To the best of our knowledge, only one article used residual networks for transfer learning at that time \cite{yu2017deep} and none were using dense networks.
+Data scarcity in \acrlong{cpath} is a recurrent problem which can be tackled in several ways, one of them being transfer learning (see Section \ref{ssec:backdp:datascarcity}). In this chapter, we explore how \acrlong{cnn}s pre-trained on ImageNet \cite{deng2009imagenet} (source task) can be transferred to \acrlong{cpath} target tasks as these architectures have shown interesting transfer properties \cite{donahue2014decaf,yosinski2014transferable,sermanet2013overfeat}. At the time of writing the article this chapter is based on (early 2018), the feature extraction and fine-tuning transfer approaches had not been compared thoroughly yet in \acrlong{cpath} and there was no consensus about whether one was better than the other (see related works in Sections \ref{ssec:backml:dl:deeptransfer} and \ref{ssec:backdp:tl}). Moreover, most works involving transfer learning in medical imaging used old architectures such as AlexNet \cite{shin2016deep,bayramoglu2016transfer,antony2016quantifying,ravishankar2016understanding,tajbakhsh2016convolutional,kumar2017comparative,kim2016deep}, GoogLeNet \cite{shin2016deep,bayramoglu2016transfer} or VGG \cite{kieffer2017convolutional,bayramoglu2016transfer,antony2016quantifying,yu2017deep,hou2016automatic,kumar2017comparative}. To the best of our knowledge, only one article used residual networks for transfer learning at that time \cite{yu2017deep} and none were using dense networks.
 
 Therefore, we study thoroughly and compare several strategies that involve feature extraction and fine-tuning. We carry out several experiments over eight object classification histology and cytology datasets. Different combinations of \acrlong{sota} networks and feature selection techniques using random forests are proposed in order to answer questions of high pratical relevance: which network provides best-performing features? How should those features be extracted and then exploited to get the best performance? Is fine-tuning better than using features from off-the-shelf networks? More generally, our empirical study also contributes to confirm the interest of deep transfer learning for tackling the recurrent data scarcity problem in \acrlong{cpath}.
 
@@ -114,7 +114,7 @@ This chapter is organized as follows. We first introduce the eight datasets we h
 \end{figure}
  
 
-Our experimental study uses datasets collected over the years by biomedical researchers and pathologists using the Cytomine \cite{maree2016collaborative} web application. Using this platform, eight image classification datasets were collected which are summarized in Table \ref{tab:comp:dataset_information}. These contain tissues and cells from human or animal organs (thyroid, kidney, breast, lung, \ldots).
+Our experimental study uses datasets collected over the years by biomedical researchers and pathologists using the Cytomine \cite{maree2016collaborative} web application. Using this platform, eight image classification datasets were collected which are summarized in Table \ref{tab:comp:dataset_information}. These contain tissues and cells from human or animal organs (thyroid, kidney, breast, lung, \etc.).
 
 For all datasets except Breast, each sample image is the crop of an annotated object extracted from a whole-slide image, a crop being a rectangle image containing exactly the object. The Breast dataset is composed of patches for which the label encodes the type of tissue in which the central pixel is located. Selected image samples for each dataset are shown in Figure \ref{fig:comp:dataset_samples}. 
 
@@ -126,21 +126,21 @@ In this section, we introduce the architectures we have used in Section \ref{sse
 \subsection{Deep networks}
 \label{ssec:comp:deep_networks}
 
-We follow the feature extraction and classification process presented in Figure \ref{fig:comp:diag_feat_extract}, which starts from a deep \acrlong{cnn} $\theta_s$ pre-trained on a source task $\mathcal{D}_s$. In particular, we use ImageNet as the source dataset $\mathcal{D}_s$ and, for each network, the pre-trained weights were retrieved from Keras \cite{chollet2015keras}. For the network $\theta_s$, we evaluate several architectures that have been or are \acrlong{sota} on the ImageNet classification dataset \cite{deng2009imagenet} or that present interesting trade-off between computational requirements and performances: VGG16, VGG19 \cite{simonyan2014very}, InceptionV3 \cite{szegedy2016rethinking}, ResNet50 \cite{he2016deep}, InceptionResNetV2 \cite{szegedy2017inception}, DenseNet201 \cite{huang2017densely}, and MobileNet \cite{howard2017mobilenets}. In the sequel, those networks will be respectively referred to as VGG16, VGG19, IncV3, ResNet, IncResV2, DenseNet, and Mobile. These networks can be used as feature extractors or fine-tuned, as explained in the following sections.
+We follow the feature extraction and classification process presented in Figure \ref{fig:comp:diag_feat_extract}, which starts from a deep \acrlong{cnn} $\theta_s$ pre-trained on a source task $\mathcal{D}_s$. In particular, we use ImageNet as the source dataset $\mathcal{D}_s$ and, for each network, the pre-trained weights were retrieved from Keras \cite{chollet2015keras}. For the network $\theta_s$, we evaluate several architectures that have been \acrlong{sota} on the ImageNet classification dataset \cite{deng2009imagenet} or that present interesting trade-off between computational requirements and performances: VGG16, VGG19 \cite{simonyan2014very}, InceptionV3 \cite{szegedy2016rethinking}, ResNet50 \cite{he2016deep}, InceptionResNetV2 \cite{szegedy2017inception}, DenseNet201 \cite{huang2017densely}, and MobileNet \cite{howard2017mobilenets}. In the sequel, those networks will be respectively referred to as VGG16, VGG19, IncV3, ResNet, IncResV2, DenseNet, and Mobile. These networks can be used as feature extractors or fine-tuned, as explained in the following sections.
 
 \subsection{Feature extraction}
 \label{ssec:comp:feature_extr}
 
 \begin{figure*}
     \center
-    \includegraphics[scale=0.50]{comp/offtheshelf_schema.png}
+    \includegraphics[scale=0.50]{comp/offtheshelf_schema.pdf}
     \caption{Feature extraction from pre-trained convolutional neural networks}
     \label{fig:comp:diag_feat_extract}
 \end{figure*}
 
-Images are first resized to match the input dimension of the network. Respectively denoting by $h_I \times w_I \times c$ the height, width, and number of channels of the input image $I$, we extract a square patch $\mathbf{p}$ of (maximum) height and width $min\left(h_I, w_I\right)$ in the center of the image, which is then resized to the network input size $h_p\times w_p\times c$. This extraction process is parameter-free and preserves the aspect ratio of the image, since all pre-trained networks takes square images as inputs (\ie $h_p=w_p$).
+Images are first resized to match the input dimension of the network. Respectively denoting by $r_I \times c_I \times b$ the height, width, and number of channels of the input image $I$, we extract a square patch $\mathbf{p}$ of (maximum) height and width $min\left(r_I, c_I\right)$ in the center of the image, which is then resized to the network input size $r_p\times c_p\times b$. This extraction process is parameter-free and preserves the aspect ratio of the image, since all pre-trained networks takes square images as inputs (\ie $r_p=c_p$).
 
-The resized patch is then forwarded through $\theta_s$ (loaded with pre-trained weights). Given this input, the output $\mathbf{a}$ of an arbitrary layer $l$ (\ie a set of feature maps) of dimensions $h_a \times w_a \times d$ is extracted where $d$ is the number of feature maps and $h_a$ and $w_a$ are respectively their height and width. Because this tensor can be high-dimensional, one usually applies a dimensionality reduction procedure (\eg global average pooling, principal component analysis,...) to reduce it to $k$ features, yielding a feature vector $\mathbf{f}\in \mathbb{R}^k$.  Here, we limit our analysis to global average pooling (\ie feature maps averaging), which, unlike principal component analysis for example, has the advantage of being parameter-free.
+The resized patch is then forwarded through $\theta_s$ (loaded with pre-trained weights). Given this input, the output $\mathbf{a}$ of an arbitrary layer $l$ (\ie a set of feature maps) of dimensions $r_a \times c_a \times d$ is extracted where $d$ is the number of feature maps and $r_a$ and $c_a$ are respectively their height and width. Because this tensor can be high-dimensional, one usually applies a dimensionality reduction procedure (\eg global average pooling, principal component analysis, \etc.) to reduce it to $f$ features, yielding a feature vector $\mathbf{z} \in \mathbb{R}^f$.  Here, we limit our analysis to global average pooling (\ie feature maps averaging), which, unlike principal component analysis for example, has the advantage of being parameter-free.
 
 \subsection{Fine-tuned feature extraction}
 \label{ssec:comp:meth_fine_tuning}
@@ -167,9 +167,9 @@ In this section, we propose and thoroughly compare different strategies for extr
 \label{ssec:comp:protocol}
 For performance evaluation, each dataset (presented in Section \ref{sec:comp:datasets}) is randomly splitted into training, validation and test sets. Following the guidelines in \cite{maree2017need}, image patches from the same slide (or patient when this information was available) are all put in the same set to avoid any data leakage (see Section \ref{ssec:backdp:dataleakage}). %Ideally, one should also avoid putting images from the same patient in different sets but this information was not available, except for the Breast data (which was therefore splitted accordingly).  
 
-To evaluate the different transfer strategies, we use two different metrics: the area under the receiving operating curve (ROC AUC) for binary classification problems and the classification accuracy for the multiclass problems. For the sake of readibility, a summary of the scores for all experiments and datasets is given in Table \ref{tab:comp:res_best_scores_per_strategy} whereas the detailed scores are only given in Appendix Section \ref{app:comp:sec:detailed_scores}. In all figures, we plot instead for each method its rank among all methods compared in the same graph averaged over all eight datasets. To associate high rank with best results, we compute the rank when methods are sorted in reverse order of performance (AUC or accuracy). For example, since ten methods are compared in Figure \ref{fig:comp:res_avg_ranks_ft}, the maximum average rank is 10, corresponding to a method being the best one on all eight datasets, and the minimum average rank is 1, corresponding to a method always worse than all others.
+To evaluate the different transfer strategies, we use two different metrics: the area under the receiving operating curve (ROC AUC) for binary classification problems and the classification accuracy for the multiclass problems. For the sake of readibility, a summary of the scores for all experiments and datasets is given in Table \ref{tab:comp:res_best_scores_per_strategy} whereas the detailed scores are only given in Appendix Section \ref{app:comp:sec:detailed_scores}. In all figures, we plot instead for each method its rank among all methods compared in the same graph averaged over all eight datasets. To associate high rank with best results, we compute the rank when methods are sorted in reverse order of performance (AUC or accuracy). For example, since ten methods are compared in Figure \ref{fig:comp:avg_ranks_last_layer}, the maximum average rank is 22, corresponding to a method being the best one on all eight datasets, and the minimum average rank is 1, corresponding to a method always worse than all others.
 
-As a baseline for comparison, we use the \acrshort{etfl} variant of the tree-based random subwindows classification algorithm presented in Section \ref{ssec:backml:et_image} because it is fast, generic and requires only few parameters tuning. Hyperparameters for this method are either set to their default value or tuned by \acrlong{cv} (see in Appendix Section \ref{app:comp:sec:selectedhyperparameters} for default values and ranges).
+As a baseline for comparison, we use the \acrshort{etfl} variant of the tree-based random subwindows classification algorithm presented in Section \ref{ssec:backml:et_image} because it is fast, generic and requires only a slight tuning of the hyperparameters which are either set to their default value or tuned by \acrlong{cv} (see in Appendix Section \ref{app:comp:sec:selectedhyperparameters} for default values and ranges). We do not compare to training from scratch as it has already been shown that transfer learning from ImageNet was generally superior this this approach \cite{shin2016deep, tajbakhsh2016convolutional}.
 
 \subsection{Last layer features}
 \label{ssec:comp:exp_last_layer}
@@ -181,75 +181,7 @@ As a baseline for comparison, we use the \acrshort{etfl} variant of the tree-bas
     \label{fig:comp:avg_ranks_last_layer}
 \end{figure}
 
-Our first strategy follows the common approach where features are extracted at the last layer of a pre-trained network. In our case, we take the features from the last feature maps before the first fully connected layer (the numbers of extracted features per network are given in Table \ref{tab:comp:n_features_per_net}. For each dataset and network, we then tune and train the three types of classifiers $h_c$ (\acrshort{et}, \acrshort{svm}, and \acrshort{fc}) with the extracted features, on the union of the training and validation sets, and then we evaluate them on the test set. The resulting average ranks for all classifiers and all datasets are given in Figure \ref{fig:comp:avg_ranks_last_layer}.
-
-We observe that \acrshort{svm} and single layer perceptron are more efficient at classifying from deep features than extremely randomized trees, with a slight advantage to \acrshort{svm}. Mobile, DenseNet, IncResV2 and ResNet yield best performances when combined with \acrshort{svm} or single layer perceptron, while for extremely randomized trees, only DenseNet and ResNet are leading the way. Last layer features from VGG16, VGG19 and IncV3 allow most of the time to beat the baseline but they are clearly not competitive with features from the other networks whatever the classifier. Overall, the best performance is obtained by combining ResNet features with \acrshort{svm}.
-
-\subsection{Last layer feature subset selection}
-\label{ssec:comp:exp_feat_sel}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\textwidth]{comp/rfe_last_et_bars.png}
-    \caption{Average ranks for last layers' features classified with \acrshort{et} before (orange) and after (green) selection with \acrlong{rfe}.}
-    \label{fig:comp:exp_rfe_last_et_cmp}
-\end{figure}
-
-%% While carrying out the ``\textit{Last layer features}'' experiment (see Section \ref{ssec:comp:exp_last_layer}), we have analyzed the feature importances produced by extremely randomized trees. We have noticed that few features of the last layer seemed actually important for predicting the outcome.
-Our second strategy aims at checking whether all features extracted from the last layer of the network are important for the final classification or if a small subset of them would be sufficient to obtain optimal performance. To answer this question, we use cross-validated \acrfirstit{rfe} \cite{guyon2002gene} using importance scores derived from extremely randomized trees to rank the features (where the importance of a given feature is computed by adding up the weighted impurity decreases for all tree nodes where the feature is used, averaged over all trees). This method outputs a sequence $\{(S_t,s_t)|t=1,\ldots,T\}$ (built in reverse), where $S_t$ are nested feature subsets of increasing sizes (with $|S_1|=1$ and $|S_T|=k$) and $s_t$ is the \acrlong{cv} performance of an \acrshort{et} model trained on $S_t$. From this sequence, we compute for each dataset:
-$$k_{min} = \min_{\{t=1,\ldots,T: s_t\geq \underset{t'}{max} (s_{t'}-l_a)\}} |S_t|,$$
-where $l_a$ is a small performance tolerance (set to $0.005$ in our experiment). $k_{min}$ is thus the minimum number of features needed to reach a performance not smaller than the optimal one by more than $l_a$.
-
-On average across datasets and networks, this method selected 7.5 \% of the features (detailed numbers are given in Appendix Tables \ref{app:comp:tab:rfe_selected} and
-\ref{app:comp:tab:rfe_selected_prop}). The models re-trained using the selected features yielded comparable performance when using \acrshort{et} as classifier (see Figure \ref{fig:comp:exp_rfe_last_et_cmp}). Feature selection even improved \acrshort{et} performance on the IncV3, VGG19, and VGG16 networks. Using \acrshort{svm} on the selected features however leads to a performance drop compared to \acrshort{svm} with all features. We believe that this difference is due to the fact that the selection is optimized for \acrshort{et} and it is thus likely to remove features that are useful for linear \acrshort{svm} and not for \acrshort{et}, which are non-linear approximators.
-
-Our experiments show that, among the available features from the last layer, most of them are uninformative or redundant and therefore only few of them are actually needed for the prediction. This conclusion can also be drawn by observing the \acrlong{rfe} \acrlong{cv} curves (see Appendix Figures \ref{app:comp:fig:rfe_1} and 
-\ref{app:comp:fig:rfe_2}). For all datasets and networks, the accuracy converges very abruptly to a plateau when the number of selected features increases, which indicates that removing features from the learning set does not impact negatively the predictive power of the models.
-
-It is also interesting to note that the selected features are not the same across datasets. For instance with DenseNet, for a feature to appear in the subset of best features (determined with the importances obtained during the ``\textit{Last layer features}" experiment) for all datasets, we need to consider a subset of size 1477 (\ie 77\% of the features). We observe similar results for the other networks (see Appendix Table \ref{app:comp:tab:best_subset_size}). On the other hand, there can be a significant overlap between features selected by \acrshort{rfe} for specific pairs of datasets (see Appendix Tables \ref{app:comp:tab:rfe_sub_overlap} and \ref{app:comp:tab:rfe_sub_overlap2}). These results suggest that the best features are task-dependent and that there would be no interest in restricting a priori the subset of transferred features, even when focusing on the domain of \acrlong{cpath}.
- 
-
-
-
-
- %-------------------------------------------------------------------------------------------------------------------
-\subsection{Merging features across networks}
-\label{ssec:comp:exp_merge_net}
-
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\textwidth]{comp/merged_all_merged_perc.png}
-    \caption{Average relative importances (across datasets) brought by each studied network when all their last layer features are aggregated. The black bars quantify the proportion of features of each network. The colors indicate the information brought by features of decreasing importances: blue and red features are respectively the most informative and least informative ones. Blue, orange, green and red bars regroup importances of features that respectively and cumulatively bring 10\%, 25\%, 50\% and 100\% of the information for predicting the outcome.}
-    \label{fig:comp:models_merged_avg_imp}
-\end{figure} 
-
-
-The third strategy consists in merging features from the last layer of all the studied networks. Aggregating all features results in a feature vector of size $9600$. We observe in Table \ref{tab:comp:res_best_scores_per_strategy} and Figure \ref{fig:comp:res_avg_ranks_all_methods} that despite the fact that features from all networks are combined, this strategy gives performance results similar to but not better than using the best single network, both with \acrshort{et} and \acrshort{svm}.
-
-Using forest importance ranking procedure described previously, we further analyze the information brought by the last layer of each network (feature importances averaged across datasets are given in Figure \ref{fig:comp:models_merged_avg_imp}). We observe that the features of DenseNet bring more than 25\% of information on average while they only account for 20\% of all the features. Moreover, the proportion of information brought by the most informative features of DenseNet is higher than for any other network. Following DenseNet, the next most informative networks are IncResV2, ResNet, IncV3 and finally the Mobile, VGG16 and VGG19 networks. 
-Surprisingly, the importances brought by the VGG networks relatively to the number of features is non-negligible and higher than the one of ResNet and IncV3. This may indicate that features of those networks are redundant with features of DenseNet and IncResV2 while features of VGG16 and VGG19 are not.
-
-
-\subsection{Merging features across layers}
-\label{ssec:comp:exp_merged_layers}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\textwidth]{comp/merged_layers_all_bars.png}
-    \caption{Average ranks for models learned on merged layers of networks compared to the baseline.}
-    \label{fig:comp:res_avg_ranks_merged_layers}
-\end{figure}
-
- 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\textwidth]{comp/ft_baseline_bars.png}
-    \caption{Average ranks for fine-tuned networks compared to the baseline. Evaluation was done either by using \acrshort{svm} (orange) or \acrlong{et} (green) on the fine-tuned features or by predicting the outcome using the fine-tuned \acrlong{fc} layer directly (red).}
-    \label{fig:comp:res_avg_ranks_ft}
-\end{figure}
-
-This strategy aims at merging features across layers (at several depths) for a given network. Given the results in Section \ref{ssec:comp:exp_last_layer}, we limit our analysis to the IncResV2, ResNet and DenseNet networks. Those three networks have complex structures and many layers which yield plenty of possible cut points for feature extraction. To reduce the number of possibilities, we limit the extraction to bottlenecks of the networks, a bottleneck being a point were several paths are merged into a single one. For ResNet, we have selected the \acrshort{relu} activations of the merging layer after each residual block. For IncResV2, considering all bottlenecks (following an inception-resnet or a reduction block) yields approximately fifty possible cut points, that is more than 100k features. We have decided to subsample those cut points to obtain a number of features closer to those of other networks while covering the network as uniformly as possible along its depth. As far as DenseNet is concerned, we extract features only at the end of dense blocks and after pooling blocks. Indeed, extracting features inside dense blocks would have resulted in duplicated features because of the dense connections.  
+Our first strategy follows the common approach where features are extracted at the last layer of a pre-trained network. In our case, we take the features from the last feature maps before the first fully connected layer (the numbers of extracted features per network are given in Table \ref{tab:comp:n_features_per_net}). For each dataset and network, we then tune and train the three types of classifiers $h_c$ (\acrshort{et}, \acrshort{svm}, and \acrshort{fc}) with the extracted features, on the union of the training and validation sets, and then we evaluate them on the test set. The resulting average ranks for all classifiers and all datasets are given in Figure \ref{fig:comp:avg_ranks_last_layer}.
 
 \begin{table}
     \center 
@@ -274,6 +206,96 @@ This strategy aims at merging features across layers (at several depths) for a g
     \caption{Number of features extracted for the ``\textit{Last layer}'' experiment. Total number of features for the ``\textit{Merging features across networks}". Number of features and cut points for the ``\textit{Mering layers features}'' experiment.}
     \label{tab:comp:n_features_per_net}
 \end{table}
+
+We observe that \acrshort{svm} and single layer perceptron are more efficient at classifying from deep features than extremely randomized trees, with a slight advantage to \acrshort{svm}. Mobile, DenseNet, IncResV2 and ResNet yield best performances when combined with \acrshort{svm} or single layer perceptron, while for extremely randomized trees, only DenseNet and ResNet are leading the way. Last layer features from VGG16, VGG19 and IncV3 allow most of the time to beat the baseline but they are clearly not competitive with features from the other networks whatever the classifier. Overall, the best performance is obtained by combining ResNet features with \acrshort{svm}.
+
+\subsection{Last layer feature subset selection}
+\label{ssec:comp:exp_feat_sel}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{comp/rfe_last_et_bars.png}
+    \caption{Average ranks for last layers' features classified with \acrshort{et} before (orange) and after (green) selection with \acrlong{rfe}.}
+    \label{fig:comp:exp_rfe_last_et_cmp}
+\end{figure}
+
+%% While carrying out the ``\textit{Last layer features}'' experiment (see Section \ref{ssec:comp:exp_last_layer}), we have analyzed the feature importances produced by extremely randomized trees. We have noticed that few features of the last layer seemed actually important for predicting the outcome.
+Our second strategy aims at checking whether all features extracted from the last layer of the network are important for the final classification or if a small subset of them would be sufficient to obtain optimal performance. To answer this question, we use cross-validated \acrfirstit{rfe} \cite{guyon2002gene} using importance scores derived from extremely randomized trees to rank the features (where the importance of a given feature is computed by adding up the weighted impurity decreases for all tree nodes where the feature is used, averaged over all trees). This method outputs a sequence $\{(S_t,s_t)|t=1,\ldots,T\}$ (built in reverse), where $S_t$ are nested feature subsets of increasing sizes (with $|S_1|=1$ and $|S_T|=k$) and $s_t$ is the \acrlong{cv} performance of an \acrshort{et} model trained on $S_t$. From this sequence, we compute for each dataset:
+$$k_{min} = \min_{\{t=1,\ldots,T: s_t\geq \underset{t'}{max} (s_{t'}-l_a)\}} |S_t|,$$
+where $l_a$ is a small performance tolerance (set to $0.005$ in our experiment). $k_{min}$ is thus the minimum number of features needed to reach a performance not smaller than the optimal one by more than $l_a$.
+
+On average across datasets and networks, this method selected 7.5 \% of the features (detailed numbers are given in Appendix Tables \ref{app:comp:tab:rfe_selected} and
+\ref{app:comp:tab:rfe_selected_prop}). The models re-trained using the selected features yielded comparable performance when using \acrshort{et} as classifier (see Figure \ref{fig:comp:exp_rfe_last_et_cmp}). Feature selection even improved \acrshort{et} performance on the IncV3, VGG19, and VGG16 networks. Using \acrshort{svm} on the selected features however leads to a performance drop compared to \acrshort{svm} with all features (see Appendix Table \ref{app:comp:tab:detailed_first}). We believe that this difference is due to the fact that the selection is optimized for \acrshort{et} and it is thus likely to remove features that are useful for linear \acrshort{svm} and not for \acrshort{et}, which are non-linear approximators.
+
+Our experiments show that, among the available features from the last layer, most of them are uninformative or redundant and therefore only few of them are actually needed for the prediction when using \acrshort{et} as classifier. This conclusion can also be drawn by observing the \acrlong{rfe} \acrlong{cv} curves (see Appendix Figures \ref{app:comp:fig:rfe_1} and 
+\ref{app:comp:fig:rfe_2}). For all datasets and networks, the accuracy converges very abruptly to a plateau when the number of selected features increases, which indicates that removing features from the learning set does not impact negatively the predictive power of the models.  
+
+It is also interesting to note that the selected features are not the same across datasets. For instance with DenseNet, for a feature to appear in the subset of best features (determined with the importances obtained during the ``\textit{Last layer features}" experiment) for all datasets, we need to consider a subset of size 1477 (\ie 77\% of the features). We observe similar results for the other networks (see Appendix Table \ref{app:comp:tab:best_subset_size}). On the other hand, there can be a significant overlap between features selected by \acrshort{rfe} for specific pairs of datasets (see Appendix Tables \ref{app:comp:tab:rfe_sub_overlap} and \ref{app:comp:tab:rfe_sub_overlap2}). These results suggest that the best features are task-dependent and that there would be no interest in restricting a priori the subset of transferred features, even when focusing on the domain of \acrlong{cpath}. The fact that we observe a drop of performance when using the best features subset with \acrshort{svm} also suggests that these conclusions cannot be extended to other classifiers without applying \acrshort{rfe} to them as well.
+ 
+ %-------------------------------------------------------------------------------------------------------------------
+\subsection{Merging features across networks}
+\label{ssec:comp:exp_merge_net}
+
+\begin{figure}
+    \centering 
+    \includegraphics[height=\textheight]{comp/all_exp_bars.png}
+    \caption{Average ranks for all the evaluated methods.}
+    \label{fig:comp:res_avg_ranks_all_methods}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{comp/merged_all_merged_perc.png}
+    \caption{Average relative importances (across datasets) brought by each studied network when all their last layer features are aggregated. The black bars quantify the proportion of features of each network. The colors indicate the information brought by features of decreasing importances: blue and red features are respectively the most informative and least informative ones. Blue, orange, green and red bars regroup importances of features that respectively and cumulatively bring 10\%, 25\%, 50\% and 100\% of the information for predicting the outcome. For example, the DenseNet bar  reaches approximately $26\%$, meaning that DenseNet features brings about $26\%$ of the information for predicting the outcome. Moreover, the orange and blue segments for DenseNet together reach approximately $10\%$, meaning that, when selecting the subset of most informative features bringing $25\%$ of the information (orange + blue), those of DenseNet bring $10\%$ of information (or $40\%$ of the information of the subset).}
+    \label{fig:comp:models_merged_avg_imp}
+\end{figure} 
+
+\begin{table}
+    \center
+    \small
+    \begin{tabular}{|l||c|c|c|c|c||c|c|c|}   
+      \hline 
+      & \multicolumn{8}{c|}{\textbf{Datasets}} \\
+      \hline 
+      \textbf{Strategy} & \textbf{C} & \textbf{P} & \textbf{G} & \textbf{N} & \textbf{B} & \textbf{M} & \textbf{L} & \textbf{H} \\
+      \hline
+      Baseline (ET-FL)      & 0.9250 & 0.8268 & 0.9551 & 0.9805	& 0.9345 & 0.7568 & 0.8547 & 0.6960 \\
+      Last layer    & 0.9822 & 0.8893 & 0.9938 & \cellcolor{Dandelion}0.9982 & 0.9603 & 0.7996 & 0.9133	& 0.7820 \\
+      Feat. select.	& 0.9676	& 0.8861	& 0.9843	& \cellcolor{LimeGreen}0.9994	& 0.9597	& 0.7438	& 0.8941	& 0.7703 \\
+      Merg. networks	& \cellcolor{Dandelion}0.9897	& \cellcolor{LimeGreen}0.8984	& 0.9948	& 0.9864	& 0.9549	& \cellcolor{Dandelion}0.8169	& 0.9155	& 0.7928 \\
+      Merg. layers	& 0.9808	& 0.8906	& 0.9944	& 0.9964	& 0.9639	& 0.7941	& 0.9268	& 0.7977 \\
+      Inner ResNet	& 0.9748	& \cellcolor{Dandelion}0.8959	& 0.9949	& 0.9964	& 0.9664	& 0.8131	& \cellcolor{Dandelion}0.9291	& \cellcolor{Dandelion}0.8113 \\
+      Inner DenseNet	& 0.9862	& \cellcolor{LimeGreen}0.8984	& \cellcolor{Dandelion}0.9962	& 0.9917	& 0.9699	& 0.8012	& 0.9268	& 0.7967 \\
+      Inner IncResV2	& 0.9873	& 0.8948	& \cellcolor{Dandelion}0.9962	& \cellcolor{Dandelion}0.9982	& \cellcolor{Dandelion}0.9720	& 0.8137	& 0.9234	& 0.7713 \\
+%       Inner IncV3		& 0.9836	& 0.8899	& 0.9951	& 0.9964	& 0.9731	& 0.8104	& 0.9201	& 0.7507 \\
+       Fine-tuning		& \cellcolor{LimeGreen}0.9926	& 0.8797	& \cellcolor{LimeGreen}0.9977	& 0.9970	& \cellcolor{LimeGreen}0.9873	& \cellcolor{LimeGreen}0.8727	& \cellcolor{LimeGreen}0.9405	& \cellcolor{LimeGreen}0.8641 \\
+%%      \hline
+%%      \textbf{Best} & 0.9926 & 0.8984 & 0.9977 & 0.9994 & 0.9873 & 0.8727 & 0.9405 & 0.8641 \\
+      \hline
+      \textbf{Metric} & \multicolumn{5}{c||}{Roc AUC} & \multicolumn{3}{c|}{Accuracy (multi-class)} \\
+      \hline
+    \end{tabular}
+      \caption{Best score for each strategy and each dataset. The best and second best scores are respectively highlighted in green and orange.}
+    \label{tab:comp:res_best_scores_per_strategy}
+\end{table}
+
+The third strategy consists in merging features from the last layer of all the studied networks. Aggregating all features results in a feature vector of size $9600$. We observe in Table \ref{tab:comp:res_best_scores_per_strategy} and Figure \ref{fig:comp:res_avg_ranks_all_methods} that despite the fact that features from all networks are combined, this strategy gives performance results similar to but not better than using the best single network, both with \acrshort{et} and \acrshort{svm}.
+
+Using forest importance ranking procedure described previously, we further analyze the information brought by the last layer of each network (feature importances averaged across datasets are given in Figure \ref{fig:comp:models_merged_avg_imp}). We observe that the features of DenseNet bring about $26\%$ of information on average while they only account for $20\%$ of all the features. Moreover, the proportion of information brought by the most informative features of DenseNet is higher than for any other network. Following DenseNet, the next most informative networks are IncResV2, ResNet, IncV3 and finally the Mobile, VGG16 and VGG19 networks. 
+Surprisingly, the importances brought by the VGG networks relatively to the number of features is non-negligible and higher than the one of ResNet and IncV3. This may indicate that features of those networks are redundant with features of DenseNet and IncResV2 while features of VGG16 and VGG19 are not.
+
+
+\subsection{Merging features across layers}
+\label{ssec:comp:exp_merged_layers}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{comp/merged_layers_all_bars.png}
+    \caption{Average ranks for models learned on merged layers of networks compared to the baseline.}
+    \label{fig:comp:res_avg_ranks_merged_layers}
+\end{figure}
+
+This strategy aims at merging features across layers (at several depths) for a given network. Given the results in Section \ref{ssec:comp:exp_last_layer}, we limit our analysis to the IncResV2, ResNet and DenseNet networks. Those three networks have complex structures and many layers which yield plenty of possible cut points for feature extraction. To reduce the number of possibilities, we limit the extraction to bottlenecks of the networks, a bottleneck being a point were several paths are merged into a single one. For ResNet, we have selected the \acrshort{relu} activations of the merging layer after each residual block. For IncResV2, considering all bottlenecks (following an inception-resnet or a reduction block) yields approximately fifty possible cut points, that is more than 100k features. We have decided to subsample those cut points to obtain a number of features closer to those of other networks while covering the network as uniformly as possible along its depth. As far as DenseNet is concerned, we extract features only at the end of dense blocks and after pooling blocks. Indeed, extracting features inside dense blocks would have resulted in duplicated features because of the dense connections.  
 
 In Table \ref{tab:comp:n_features_per_net} are given the information about the generated features vectors for the ``\textit{Last layer}", ``\textit{Merging features across networks}" and ``\textit{Merging layers features}" experiments. Information about the dimensions of the extracted features from inside the networks (before global average pooling) for ResNet, IncResV2 and DenseNet are respectively given in Appendix Tables \ref{app:comp:tab:inner_layers_resnet}, \ref{app:comp:tab:inner_layers_incresv2} and \ref{app:comp:tab:inner_layers_densenet}. The layer names given in those tables are the ones given by the Keras package \cite{chollet2015keras}. 
 
@@ -311,8 +333,8 @@ Merging features from several layers results in large feature vectors for descri
 \label{ssec:comp:exp_inner_layers}
 
 \begin{figure}
-    \center 
-    \includegraphics[scale=0.8]{comp/all_per_layer_bars.png}
+    \centering
+    \includegraphics[width=0.7\textwidth]{comp/all_per_layer_bars.png}
     \caption{Average ranks for the baseline and the models trained using features from layers inside the networks. For each network, the layers are sorted by decreasing depth (from top to bottom).}
     \label{fig:comp:res_avg_ranks_per_layer}
 \end{figure}
@@ -325,68 +347,35 @@ Average ranks for each inner layer and each network are given in Figure \ref{fig
 \subsection{Fine-tuned features}
 \label{ssec:comp:exp_fine_tuning}
 
+\begin{figure}
+    \centering
+    \includegraphics[width=0.8\textwidth]{comp/ft_baseline_bars.png}
+    \caption{Average ranks for fine-tuned networks compared to the baseline. Evaluation was done either by using \acrshort{svm} (orange) or \acrlong{et} (green) on the fine-tuned features or by predicting the outcome using the fine-tuned \acrlong{fc} layer directly (red).}
+    \label{fig:comp:res_avg_ranks_ft}
+\end{figure}
+
 All previous experiments explored strategies using features extracted from off-the-shelf networks. In this last strategy, we investigate fine-tuning as described in Section \ref{ssec:comp:meth_fine_tuning}. We focus on the same three networks as in the previous sections (ResNet, IncResV2 and DenseNet).
 
 The average ranks for the different fine-tuning methods are given in Figure \ref{fig:comp:res_avg_ranks_ft}. With the three networks, best performances are obtained by making predictions directly from the fine-tuned fully connected layer. \acrshort{svm} and \acrshort{et} trained on the features extracted from the fine-tuned networks are clearly inferior, in particular with IncResV2. Note that, for the other two, last layer features extracted from the fine-tuned network are nevertheless better than last layer features from the original network, when used as inputs to \acrshort{svm} (see Figure \ref{fig:comp:res_avg_ranks_all_methods}). Fine-tuning is thus globally improving the quality of the features for these two networks. Overall, the best performance is obtained with fine-tuned DenseNet.
 
-
-\begin{figure}
-    \centering 
-    \includegraphics[scale=0.75]{comp/all_exp_bars.png}
-    \caption{Average ranks for all the evaluated methods.}
-    \label{fig:comp:res_avg_ranks_all_methods}
-\end{figure}
 
 \subsection{Discussion}
 \label{ssec:comp:exp_comparing}
 
 To allow comparison of all strategies, the best scores per strategy and dataset are summarized in Table \ref{tab:comp:res_best_scores_per_strategy} and the average ranks of all methods evaluated in the previous experiments are given in Figure \ref{fig:comp:res_avg_ranks_all_methods}.
 
-\begin{table}
-    \center
-    \small
-    \begin{tabular}{|l||c|c|c|c|c||c|c|c|}   
-      \hline 
-      & \multicolumn{8}{c|}{\textbf{Datasets}} \\
-      \hline 
-      \textbf{Strategy} & \textbf{C} & \textbf{P} & \textbf{G} & \textbf{N} & \textbf{B} & \textbf{M} & \textbf{L} & \textbf{H} \\
-      \hline
-      Baseline (ET-FL)      & 0.9250 & 0.8268 & 0.9551 & 0.9805	& 0.9345 & 0.7568 & 0.8547 & 0.6960 \\
-      Last layer    & 0.9822 & 0.8893 & 0.9938 & \cellcolor{Dandelion}0.9982 & 0.9603 & 0.7996 & 0.9133	& 0.7820 \\
-      Feat. select.	& 0.9676	& 0.8861	& 0.9843	& \cellcolor{LimeGreen}0.9994	& 0.9597	& 0.7438	& 0.8941	& 0.7703 \\
-      Merg. networks	& \cellcolor{Dandelion}0.9897	& \cellcolor{LimeGreen}0.8984	& 0.9948	& 0.9864	& 0.9549	& \cellcolor{Dandelion}0.8169	& 0.9155	& 0.7928 \\
-      Merg. layers	& 0.9808	& 0.8906	& 0.9944	& 0.9964	& 0.9639	& 0.7941	& 0.9268	& 0.7977 \\
-      Inner ResNet	& 0.9748	& \cellcolor{Dandelion}0.8959	& 0.9949	& 0.9964	& 0.9664	& 0.8131	& \cellcolor{Dandelion}0.9291	& \cellcolor{Dandelion}0.8113 \\
-      Inner DenseNet	& 0.9862	& \cellcolor{LimeGreen}0.8984	& \cellcolor{Dandelion}0.9962	& 0.9917	& 0.9699	& 0.8012	& 0.9268	& 0.7967 \\
-      Inner IncResV2	& 0.9873	& 0.8948	& \cellcolor{Dandelion}0.9962	& \cellcolor{Dandelion}0.9982	& \cellcolor{Dandelion}0.9720	& 0.8137	& 0.9234	& 0.7713 \\
-%       Inner IncV3		& 0.9836	& 0.8899	& 0.9951	& 0.9964	& 0.9731	& 0.8104	& 0.9201	& 0.7507 \\
-       Fine-tuning		& \cellcolor{LimeGreen}0.9926	& 0.8797	& \cellcolor{LimeGreen}0.9977	& 0.9970	& \cellcolor{LimeGreen}0.9873	& \cellcolor{LimeGreen}0.8727	& \cellcolor{LimeGreen}0.9405	& \cellcolor{LimeGreen}0.8641 \\
-%%      \hline
-%%      \textbf{Best} & 0.9926 & 0.8984 & 0.9977 & 0.9994 & 0.9873 & 0.8727 & 0.9405 & 0.8641 \\
-      \hline
-      \textbf{Metric} & \multicolumn{5}{c||}{Roc AUC} & \multicolumn{3}{c|}{Accuracy (multi-class)} \\
-      \hline
-    \end{tabular}
-      \caption{Best score for each strategy and each dataset. The best and second best scores are respectively highlighted in green and orange.}
-    \label{tab:comp:res_best_scores_per_strategy}
-\end{table}
-
 Concerning the networks, ResNet and DenseNet often yield the best performing models whatever the way they are exploited. They are followed by the IncResV2, Mobile, and IncV3 networks. Performances obtained with the VGG networks are below those of the others.
 
-Concerning the methods, fine-tuning (and predicting with the network) usually outperforms all other methods whatever the network. Especially, this strategy yields significant improvements for the multi-class datasets. For binary datasets, the improvement is often not as impressive, but on three of these datasets, the performances of all methods are already very high (greater than 0.9).
+Regarding the methods, fine-tuning (and predicting with the network) usually outperforms all other methods whatever the network. Especially, this strategy yields significant improvements for the multi-class datasets. For binary datasets, the improvement is often not as impressive, but on three of these datasets, the performances of all methods are already very high (greater than 0.9).
 
 Moreover, for each dataset, there is at least one inner layer that yields the best or second best scores and this best layer is never the last one. This is confirmed by the rank plot (see Figure \ref{fig:comp:res_avg_ranks_per_layer}) that shows that the ranks of the models learned on last layer features are below those using inner layer features. This might be explained by the fact that last layer features are too specific to the source task (\ie natural images).
 
-Merging features across networks and layers yield results similar to using last layer features but they are outperformed by the best inner layers and also by fine-tuning. The inferior performances of these methods could be attributed to the fact that important features are lost among many redundant and uninformative ones and they are thus suffering from overfitting. One way to improve these methods could be to perform feature selection. However, given that these methods are already more computationally demanding, they are definitely less interesting than fine-tuning and selecting the best inner layer. In particular, merging features across networks requires a forward-pass through all the selected networks. Although only one pass is needed when merging the layers, it still yields a large feature vector which makes further training and tuning slower, especially for \acrshort{et}.
+Merging features across networks and layers yield results similar to using last layer features but they are outperformed by the best inner layers and also by fine-tuning. The inferior performances of these methods could be attributed to the fact that important features are lost among many redundant and/or uninformative ones and they are thus suffering from overfitting. One way to improve these methods could be to perform feature selection. However, given that these methods are already more computationally demanding, they are definitely less interesting than fine-tuning and selecting the best inner layer. In particular, merging features across networks requires a forward-pass through all the selected networks. Although only one pass is needed when merging the layers, it still yields a large feature vector which makes further training and tuning slower, especially for \acrshort{et}.
 
-Throughout the experiments, we have also gained more insights about the extracted features. By performing feature selection, we have discovered that very few features are actually useful for learning efficient classifiers on our datasets and the best features are task-dependent.
-
+Throughout the experiments, we have also gained more insights about the extracted features. By performing feature selection, we have discovered that very few features are actually useful for learning efficient \acrshort{et} classifiers on our datasets and the best features are task-dependent. This conclusion might extend to other classifiers as well but it would require additional experiments to prove it.
 
 \section{Conclusion}
 \label{sec:comp:conclusion}
 
 We have empirically investigated various deep transfer learning strategies for recognition in \acrlong{cpath}. We have observed that residual and densely connected networks often yielded best performances across the various experiments and datasets. We have also observed that fine-tuning outperformed features from the last layer of off-the-shelf networks. It also appeared that using one network's inner layer features yielded performances slightly superior to using those of the last layer and inferior to fine-tuning but with the advantage of not having to re-train the network. 
 
-% We hope our thorough study and our results will help practitioners to devise best practices for efficient usage of existing deep networks. 
-
-% In the future, we want to study further deep transfer learning (e.g. combining inner layers and fine-tuning strategies). We also aim at collecting and merging larger annotated biomedical datasets to train networks using a large-scale source dataset closer to our target tasks.  We also plan to integrate these strategies into the Cytomine \cite{maree2016collaborative} web application to ease their application on novel datasets.
