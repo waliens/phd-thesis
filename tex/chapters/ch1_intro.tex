@@ -27,7 +27,7 @@ Part \ref{part:background} introduces \acrlong{ml} and \acrlong{dp}. Chapter \re
 
 Part \ref{part:transfer} presents our first and second contributions which are both related to \acrlong{tl}. In Chapter \ref{chap:comp}, we first review, compare and study different deep \acrlong{tl} techniques using 8 classification datasets in order to evaluate the viability and best practices of \acrlong{tl} in \acrlong{dp}. We confirm the current scientific consensus that using neural networks pre-trained on a dataset unrelated to \acrlong{dp} (\ie ImageNet \cite{deng2009imagenet}) is indeed interesting in terms of performance. We draw guidelines from our experiments on how the transfer should be performed. In Chapter \ref{chap:mtask}, we then propose a \acrlong{mtl} architecture and training scheme for pre-training a network based on an ensemble of potentially-small datasets rather than a single large dataset. We use these in order to pre-train a neural network on 22 classification \acrlong{dp} datasets and show that our resulting models yield competitive results compared to networks pre-trained on ImageNet. 
 
-Part \ref{part:segmentation} and Chapter \ref{chap:strain} presents our third contribution. We use a \acrlong{ml} technique called self-training to train an image segmentation model on sparsely-labeled data. With our approach, the \acrlong{ml} model is both trained and used to predict missing annotations in the dataset. We show that our approach is able to make efficient use of the sparsely-labeled data to improve the segmentation performance. Moreover, we show that it is not always necessary to exhaustively label a dataset to obtain competitive performance. 
+Part \ref{part:segmentation} and Chapter \ref{chap:strain} present our third contribution. We use a \acrlong{ml} technique called self-training to train an image segmentation model on sparsely-labeled data. With our approach, the \acrlong{ml} model is trained and then used to predict missing annotations in the dataset. We show that our approach is able to make efficient use of the sparsely-labeled data to improve the segmentation performance. Moreover, we show that it is not always necessary to exhaustively label a dataset to obtain competitive performance. 
 
 The manuscript ends with Chapter \ref{chap:conclusions} which presents our conclusions and discussion of future works.
 
@@ -40,7 +40,7 @@ This thesis is based on the following publications:
   \item \TODO{publication selftraining}
 \end{itemize}
 
-During the course of the PhD, I have contributed to the development of Biaflows (\url{biaflows-doc.neubias.org}), an extended version of Cytomine designed for standardized benchmarking of bioimage analysis workflows. This work is not presented in the thesis but resulted in the following publication: 
+During the course of the PhD, I have contributed to the development of Biaflows (\url{biaflows-doc.neubias.org}), a platform build on top of Cytomine designed for standardized benchmarking of bioimage analysis workflows. This work is not presented in the thesis but resulted in the following publication: 
 \begin{itemize}
   \item \AtNextCite{\defcounter{minnames}{2}}\fullcite{rubens2020biaflows}
 \end{itemize}
