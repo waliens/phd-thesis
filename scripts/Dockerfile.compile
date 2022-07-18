@@ -65,6 +65,9 @@ RUN tlmgr install \
     xkeyval \
     xpatch 
 
+# install latexdiff
+RUN tlmgr install ulem latexdiff latexpand
+
 # add compile script
 ADD compile.py /scripts/compile.py
 
