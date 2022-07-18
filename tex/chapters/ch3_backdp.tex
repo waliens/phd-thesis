@@ -393,17 +393,17 @@ Those were only few examples of the plethora of datasets available in the natura
     \hline
     \multicolumn{3}{|c|}{Challenge} & \# \acrshort{wsi} & \# \acrshort{roi} & \acrshort{roi} size & Crowd & AI-assist. & Task & \# targ. \\
     \hline
-    \multirow{3}{*}{TIGER} & \multirow{3}{*}{\cite{vanrijthoven2021tiger}} & tils & 82 & / &  / & yes & yes & REG & $r \in \left[1, 100\right]$\\
+    \multirow{3}{*}{\cite{vanrijthoven2021tiger}} & \multirow{3}{*}{TIGER} & tils & 82 & / &  / & yes & yes & REG & $r \in \left[1, 100\right]$\\
     & & rois & 195 & 2032 & $<$ 1.5k $\times$ 1.5k & no & no & SEG & 7\\
     & & bulk & 93 & / & / & no & no & SEG & 2 \\
     \hdashline
-    \multicolumn{2}{|c|}{CoNiC} & \cite{graham2021conic} & / & 4981 & 256 $\times$ 256 & no & yes & \acrshort{seg}, \acrshort{clf} & 6 \\
-    \multicolumn{2}{|c|}{MIDOG 2021} & \cite{aubreville2021mitosis} & 50 & 200 & $<$ 5k $\times$ 5k & no & yes & \acrshort{det}, \acrshort{cnt} & 2 \\
-    \multicolumn{2}{|c|}{BCNB} & \cite{xu2021predicting} & 1058 & / & / & no & no & \acrshort{clf} & 16$^{(1)}$ \\
-    \multicolumn{2}{|c|}{WSSS4LUAD} & \cite{han2021multilayer} & 87 & 10k & $<$ 300 $\times$ 300 & no & no & \acrshort{clf} & 2\\
-    \multicolumn{2}{|c|}{BCSS} & \cite{amgad2019structured} & / & 151 & $<$ 7k $\times$ 10k & no & no & \acrshort{seg} & 7\\
-    \multicolumn{2}{|c|}{NuCLS} &\cite{amgad2021nucls} &  / & 3944 & $<$ 300 $\times$ 300 & yes & yes & \acrshort{seg}, \acrshort{det} & 12 \\
-    \multicolumn{2}{|c|}{PAIP 2021} & \cite{kang2021paip} & 150 & / & / & no & no & \acrshort{seg}$^{(2)}$ & 4 \\
+    \cite{graham2021conic} & \multicolumn{2}{c|}{CoNiC} & / & 4981 & 256 $\times$ 256 & no & yes & \acrshort{seg}, \acrshort{clf} & 6 \\
+    \cite{aubreville2021mitosis} & \multicolumn{2}{c|}{MIDOG 2021} & 50 & 200 & $<$ 5k $\times$ 5k & no & yes & \acrshort{det}, \acrshort{cnt} & 2 \\
+    \cite{xu2021predicting} & \multicolumn{2}{c|}{BCNB} & 1058 & / & / & no & no & \acrshort{clf} & 16$^{(1)}$ \\
+    \cite{han2021multilayer} & \multicolumn{2}{c|}{WSSS4LUAD} & 87 & 10k & $<$ 300 $\times$ 300 & no & no & \acrshort{clf} & 2\\
+    \cite{amgad2019structured} & \multicolumn{2}{c|}{BCSS} & / & 151 & $<$ 7k $\times$ 10k & no & no & \acrshort{seg} & 7\\
+    \cite{amgad2021nucls} & \multicolumn{2}{c|}{NuCLS} &  / & 3944 & $<$ 300 $\times$ 300 & yes & yes & \acrshort{seg}, \acrshort{det} & 12 \\
+    \cite{kang2021paip} & \multicolumn{2}{c|}{PAIP 2021} & 150 & / & / & no & no & \acrshort{seg}$^{(2)}$ & 4 \\
     \hline
   \end{tabular}
   \caption{List of challenges published in 2021 with the ``histology'' modality on the Grand Challenge website. The ``Crowd'' and 
