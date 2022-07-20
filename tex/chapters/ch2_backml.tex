@@ -164,7 +164,7 @@ human annotations, the training signal is found in the data itself. An example o
 such methods is \textit{image reconstruction}. Random parts of the input images
 are truncated (\eg replaced by black squares) and the model must be able to
 re-generate the truncated parts. In this case, input and output signals are
-respectively the original and the truncated image. The model input can be generated
+respectively the truncated and the original image. The model input can be generated
 from the original data without human intervention.
 
 \subsection{Between supervised and unsupervised learning}
@@ -304,7 +304,7 @@ at hands another dataset of pictures taken with a camera equipped with another
 type of sensor (source dataset $A$). Each captor has a certain noise pattern which
 results in dataset $A$ and $B$ to have a slighlty different distributions in the
 pixel intensities (\ie $p_A(x) \neq p_B(x)$). This specific setup where only the
-inputs distributions differ is called \textit{domain adaptation}.
+input distributions differ is called \textit{domain adaptation}.
 
 \begin{definition}
   \label{def:backml:heterotransfer}
@@ -317,7 +317,7 @@ thesis is the transfer of a model trained for natural image classification to
 medical image classification. In this case, the tasks are different as the first
 consists in identifying the presence of a type of object in the image whereas the
 other consists in assessing the malignancy of a tumor from an image of a tissue, for instance.
-The inputs distributions also differ as medical images have completely different
+The input distributions also differ as medical images have completely different
 content and appearance.
 
 There exist many different transfer approaches. Based on how they operate,
@@ -441,10 +441,10 @@ generalization error can be studied using the \textit{bias-variance decompositio
 \end{equation}
 where $\mathbb{E}_{LS}$ is the expectation over all training sets of size $n$ that
 can be extracted from $p(\vect{x},y)$ and $h_{\mathcal{D}} \in \mathcal{H}$ is
-the model learned from a learning set $\mathcal{D} \in LS$. This decomposition can
-be exactly demonstrated when using the squared loss (see Equation 
-\ref{eqn:backml:squaredloss}) as $\ell$. For other losses, the decomposition is not 
-exactly equivalent but the intuition is similar. The \textit{noise}
+the model learned from a learning set $\mathcal{D} \in LS$. This additive 
+decomposition can be exactly demonstrated when using the squared loss (see Equation 
+\ref{eqn:backml:squaredloss}) as $\ell$. For other losses, the decomposition may not apply
+but the intuition is similar. The \textit{noise}
 term is the error of $h_B$ and is therefore irreducible. The \text{bias} is the
 error of the average model (over models generated from $LS$) with respect to $h_B$.
 The \textit{variance} measures the variability of the predictions around the
@@ -493,7 +493,7 @@ an empirical risk close to zero but actually generalize well to unseen data
 \cite{zhang2021understanding}. Although the models are able to basically
 memorize the training data, the learned function is actually very robust and
 generalizes well. This phenomenon is currently being investigated and several
-explanations have been proposed such as the deep double-descent
+explanations have been proposed, such as the deep double-descent
 \cite{belkin2019reconciling}.
 
 \subsection{Model selection and evaluation in practice}
@@ -563,7 +563,7 @@ performance measures. Given a supervised dataset as described in Equation
 compares to the ground truth class $y_i$. In the remainder of the thesis, when
 the higher the better for a metric, we will call it a \textit{score}. In opposition,
 when the lower the better, we will call it a \textit{loss}. In terms of notations,
-a loss and a score averaged over a set of data will respectively be noted
+a loss and a score averaged over a set of data will respectively be denoted
 $\mathcal{L}$ and $\mathcal{M}$.
 
 \subsubsection{Accuracy}
@@ -728,8 +728,8 @@ datasets. Moreover, a metric computed on a dataset is not always comparable to
 the same metric computed on a different dataset. For this reason, we resort to
 using \textit{rankings of methods}. First, for each dataset in our pool, we evaluate
 the methods each with their most appropriate metric and then rank them: the best
-method gets rank $m$ and the worst gets rank $1$ (where $m$ is the number of methods, this 
-convention is used in Chapter \ref{chap:comp}). Finally, in order to draw general 
+method gets rank $m$ and the worst gets rank $1$ (where $m$ is the number of methods). This 
+convention is used in Chapter \ref{chap:comp}. Finally, in order to draw general 
 conclusions, we average the rankings over all the datasets. The average ranks therefore 
 provide a single metric for comparing
 the methods across datasets. In Chapter \ref{chap:mtask}, we use the opposite convention 
@@ -753,12 +753,10 @@ about kernel methods and the kernel trick in \cite{hastie2017elements}.
 In general, assuming a supervised dataset where inputs are such that
 $\vect{x} \in \mathbb{R}^m$ where $m$ is the number of features, a linear model
 is an hyperplane:
-
 \begin{equation}
 \label{eqn:backml:linearmodel}
 f(\vect{x};\pmb{\theta}) = \theta_0 + \sum_{j=1}^m \theta_j x_j
 \end{equation}
-
 where $\theta_0$ and the $\theta_j$ are the learnable parameters, respectively
 called the \textit{bias} and the \textit{weights}. This model can be used for
 regression in which case the model $h(\vect{x}) = f(\vect{x})$. A linear model
@@ -782,16 +780,16 @@ falls back to the Lagrange dual:
 \text{subject to}~& 0 \leq \alpha_k \leq C, \forall k = 1, ..., n \\
 & \sum_{i=1}^n \alpha_i y_i = 0
 \end{align}
-which can be solved efficiently with classical linear solvers such as LIBLINEAR
+which can be solved efficiently with classical solvers such as LIBLINEAR
 \cite{fan2008liblinear}. When the optimal solution has been found, the weights
 can be derived by solving the system:
 \begin{equation}
 \label{eqn:backml:svmweights}
-\alpha_k\left(y_k \left(\theta^T \vect{x}_k + b\right) - 1\right) = 0, \forall k = 1, ..., n
+\alpha_k\left(y_k \left(\theta^T \vect{x}_k + \theta_0 \right) - 1\right) = 0, \forall k = 1, ..., n
 \end{equation}
 and the final model written as:
 \begin{equation}
-  h(\mathbf{x}) = \sum_{i=1}^m \alpha_i y_i \mathbf{x}_i^T\mathbf{x} + b
+  h(\mathbf{x}) = \sum_{i=1}^m \alpha_i y_i \mathbf{x}_i^T\mathbf{x} + \theta_0
   \label{eqn:backml:finalsvmmodel}
 \end{equation}
 
@@ -1249,7 +1247,7 @@ convolution with no padding and a kernel size equal to the stride ($K = r_f = c_
 is given by:
 \begin{equation}
   \label{eqn:backml:transposed_convolution}
-  a_{ijk} = \theta_{k;0} + \sum_{f=1}^{f_{l-1}} z^{(in)}_{\left\lfloor\frac{i}{2}\right\rfloor, \left\lfloor\frac{j}{2}\right\rfloor, f} \theta_{k; i~\text{mod}~2,j~\text{mod}~2,f}
+  a_{ijk} = \theta_{k;0} + \sum_{f=1}^{f_{in}} z^{(in)}_{\left\lfloor\frac{i}{2}\right\rfloor, \left\lfloor\frac{j}{2}\right\rfloor, f} \theta_{k; i~\text{mod}~2,j~\text{mod}~2,f}
 \end{equation}
 where $\vect{z}^{(in)} \in \mathbb{R}^{r_{in} \times c_{in} \times f_{in}}$ are the input feature maps and $\theta_{k;0} \in \mathbb{R}$ and $\pmb{\theta}_k \in \mathbb{R}^{r_f \times c_f \times f_{in}}$ are the learnable bias and weights. The output feature maps $\vect{z}^{(out)} \in \mathbb{R}^{r_{out} \times c_{out} \times f_{out}}$ are computed similarly as in Equation \ref{eqn:backml:convnetwithactiv} with $r_{out} = 2 \times r_{in}$ and $c_{out} = 2 \times c_{in}$. 
 
@@ -1625,13 +1623,19 @@ The second transfer approach is \textit{fine-tuning} (see Figure \ref{fig:backml
 where the task-specific part of the network $\theta_{o}$ is replaced by a new
 classification network $\theta_{n}$ and the resulting network $h = h_c \circ h_s$
 is further trained by gradient descent on the target task. Subjecting the whole
-network to gradient descent will change the features learned on the source task
-which can cause catastrophic interference. Therefore, a way of alleviating the
-issue is to use a small learning rate (compared to the initial training learning
-rate). Another way of preventing this issue consists in freezing a part of
+network to gradient descent will change the features learned on the source task and 
+can cause catastrophic interference. Forgetting what the model has previously learned might 
+not be an issue if this knowledge is not useful and prevents the model to 
+reach the best possible performance on the target task. However, this phenomenon can also cause features 
+that are good for both the source and target tasks to be forgotten which is undesirable. 
+Therefore, a way of alleviating the issue is to use a small learning rate (compared to the initial 
+training learning rate). Another way of preventing this issue consists in freezing a part of
 $\theta_s$, usually the first layers.
 
-The feature extraction approach only emerged recently with works on the Overfeat
+which is however not a problem if one is only interested 
+in reaching the best possible performance on the target task.
+
+The feature extraction approach only emerged during the last decade with works on the Overfeat
 \cite{sermanet2013overfeat, razavian2014cnn} and Decaf \cite{donahue2014decaf}
 convolutional architectures. The authors trained their AlexNet-based networks in
 a supervised manner on the large ImageNet source dataset composed of 1.2 millions
@@ -1678,11 +1682,6 @@ combine \acrlong{tl} and model compression as the fine-tuning process excludes
 non-informative feature maps from the final model based on their \acrfirstit{afds}
 mechanism.
 
-Because of its ability to tackle data scarcity, \acrlong{tl} has been a method of
-choice in many applications where this problem occurs. In Section \ref{ssec:backdp:tl},
-we explore further applications of \acrlong{tl} to \acrlong{dp} and medical imaging
-in general.
-
 \subsection{Multi-task learning}
 \label{ssec:backml:dl:deepmultitask}
 
@@ -1706,9 +1705,11 @@ and \ref{chap:mtask}, both contributions explore heterogeneous model-based
 target tasks to study how \acrlong{tl} performs in the context of \acrlong{dp}
 (more on this in Chapter \ref{chap:backdp}). The first contribution (see Chapter \ref{chap:comp}) studies transfer
 from ImageNet. Motivated by the fact that transfer works better when the source
-and target tasks are related, the second contribution (see Chapter \ref{chap:mtask}) uses homogeneous features-based
+and target tasks are related, the second contribution (see Chapter \ref{chap:mtask}) uses homogeneous feature-based
 \acrlong{mtl} as a way to pre-train a model for transfer on \acrlong{dp} data
 directly. In Chapter \ref{chap:strain}, we move to a different type of task: image segmentation.
 We investigate a \acrlong{ssl} approach leveraging self-training to train U-Net segmentation
 model from sparsely-labeled \acrlong{dp} datasets. The model is used to complete the unlabeled area which are 
 then included in the training set. 
+
+Before diving into these contributions, we review in the next chapter relevant background related to our application domain, \acrlong{dp}. This chapter also extends our presentation of related works covering similar methods of \acrlong{tl}, \acrlong{mtl} and self-training (see Sections \ref{ssec:backdp:tl}, \ref{ssec:backdp:mtl} and \ref{ssec:backdp:st} respectively) applied in the context of medical and pathology image analysis.

@@ -21,7 +21,7 @@ The subfield of \acrlong{dp} focusing on automating the analysis of pathology da
 
 \section{Contributions and outline}
 
-In this thesis, we explore different ways of tackling data scarcity in \acrlong{dp} using \acrlong{dl}, a sub-field of \acrlong{ml} which focuses on deep neural networks. Our contributions leverage \acrfirst{tl}, \acrfirst{mtl} and self-training which we apply to the tasks of image classification and segmentation. Our contributions are as follows. The manuscript is structured in three parts which are preceded by this introduction.
+In this thesis, we explore different ways of tackling data scarcity in \acrlong{dp} using \acrlong{dl}, a sub-field of \acrlong{ml} which focuses on deep neural networks. Our contributions leverage \acrfirst{tl}, \acrfirst{mtl} and self-training which we apply to the tasks of image classification and segmentation. The manuscript is structured in three parts which are preceded by this introduction.
 
 Part \ref{part:background} introduces \acrlong{ml} and \acrlong{dp}. Chapter \ref{chap:backml} focuses on \acrlong{ml} and presents the different concepts and techniques used throughout this thesis. It is not intended to explain the matter in depth but rather to give sufficient background for a reader with a basic knowledge of \acrlong{ml} to understand the contributions. This chapter also presents works related to ours. More precisely, we discuss how similar techniques are used for general purpose problems (\ie not specific to medical imaging). Chapter \ref{chap:backdp} focuses on \acrlong{dp} and presents the field from the perspective of a computer scientist. It presents how a biological sample is transformed and ultimately becomes a \acrlong{wsi} in order to explain how this crucial preparation step can impact the image analysis down the line. We present three example diagnosis tasks that would greatly benefit from automation with computer vision techniques. We also introduce the challenge that is data scarcity more in depth and present works related to ours. Unlike in Chapter \ref{chap:backml}, the related works are focused on medical and pathology application of methods similar to ours.
 
@@ -33,17 +33,18 @@ The manuscript ends with Chapter \ref{chap:conclusions} which presents our concl
 
 \section{Publications}
 
-This thesis is based on the following publications:
+This thesis is based on the following publications, considered respectively in Chapters \ref{chap:comp}, \ref{chap:mtask} and \ref{chap:strain}:
 \begin{itemize}
   \item \fullcite{mormont2018comparison}
   \item \fullcite{mormont2020multi}
   \item \fullcite{mormont2022self}
 \end{itemize}
 
-During the course of the PhD, I have contributed to the development of Biaflows (\url{biaflows-doc.neubias.org}), a platform build on top of Cytomine designed for standardized benchmarking of bioimage analysis workflows. This work is not presented in the thesis but resulted in the following publication: 
+During the course of my PhD, I have contributed to the development of Biaflows (\url{biaflows-doc.neubias.org}), a platform built on top of Cytomine designed for standardized benchmarking of bioimage analysis workflows. This work resulted in the following publication: 
 \begin{itemize}
-  \item \AtNextCite{\defcounter{minnames}{2}}\fullcite{rubens2020biaflows}
+  \item Ulysse Rubens$^\ast$, Romain Mormont$^\ast$, et al. ``BIAFLOWS: A collaborative framework to reproducibly deploy and benchmark bioimage analysis workflows''. In: \textit{Patterns}  1.3 (2020), p. 100040 ($\ast$These authors contributed equally).
 \end{itemize}
+Although I consider this work as a significant contribution of my PhD, it will not be discussed in this manuscript as it does not fit into our narrative around data scarcity in \acrlong{dp}. The abstract of this article is however provided in Appendix \ref{app:biaflows}, together with a link to the full paper. 
 
 Throughout my PhD, I have frequently used and updated the SLDC framework which was originally created in the context of my master thesis:
 \begin{itemize}
