@@ -21,12 +21,12 @@ Our self-training workflow consists of two separate phases. During the ``\textit
 
 Our main contributions and conclusions are as follows: \textbf{(1)} We design a self-training pipeline for binary segmentation to handle datasets composed on both exhaustively and sparsely annotated images (Section \ref{sec:strain:methods}). \textbf{(2)} We show on three public datasets that this self-training approach is beneficial as, even in significant scarcity conditions, it improves over using only exhaustively-labeled data (see Section \ref{ssec:strain:fixednl}). \textbf{(3)} We confirm the interest of the approach in a real-world scenario, where a significant improvement of performance is achieved by exploiting sparse annotations (see Section \ref{ssec:strain:thyroid_exp}). \textbf{(4)} We show that, at fixed annotation budget, it is not necessarily better to focus the annotation effort on exhaustive labels rather than sparse labels (see Section \ref{ssec:strain:sparsevsexhaustive}).
 
-Related works for this chapter can be found in Sections \ref{ssec:backml:dl:selftraining} and \ref{ssec:backdp:st}.
+Related self-training works can be found in Sections \ref{ssec:backml:dl:selftraining} and \ref{ssec:backdp:st}. Beyond self-training, we would also like to point out that there exist methods, implemented in software such as QuPath \cite{bankhead2017qupath}, Ilastik \cite{berg2019} or Cytomine \cite{maree2016collaborative} and based on traditional computer vision or machine learning, that allow users to interactively complete a partial hand-drawn annotation of a given image. Among these methods are, for instance, Graph Cut \cite{kwatra2003graphcut} and GrabCut \cite{rother2004grabcut}, or more recently DEXTRE \cite{maninis2018deep} and NuClick \cite{koohbanani2020nuclick}. While the self-training approach explored in this chapter can certainly be exploited in an interactive mode, this question will be left as future work.
 
 \begin{figure}
   \centering
   \includegraphics[width=\textwidth]{strain/method-diagram.pdf}
-  \caption{Illustration of our self-training approach}
+  \caption{Our approach illustrated. The model is first warmed-up on the exhaustively-labeled data then further traind by self-training on the combined sparsely- and exhaustively-labeled sets. A more formal definition is provided in Algorithm \ref{algo:strain:selftraining}.}
   \label{fig:strain:method_diagram}
 \end{figure}
 
