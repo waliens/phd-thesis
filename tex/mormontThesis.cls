@@ -688,7 +688,8 @@ Constants}
 bookmarksopen=true,
 bookmarksopenlevel=0,
 hypertexnames=false,
-colorlinks=true,% Set to false to disable coloring links
+hidelinks=true,
+colorlinks=false,% Set to false to disable coloring links
 citecolor=ternary,% The color of citations
 linkcolor=primary,% The color of references to document elements (sections, %figures, etc)
 urlcolor=primary,% The color of hyperlinks (URLs)
