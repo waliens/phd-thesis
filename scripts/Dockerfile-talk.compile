@@ -1,0 +1,6 @@
+FROM rmormont/thesis-tex-compile:1.4
+
+RUN tlmgr install beamer moreverb fancyvrb eulervm
+RUN tlmgr install catchfile
+
+VOLUME ["/data"]

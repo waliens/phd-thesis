@@ -1,0 +1,559 @@
+\documentclass{beamer}
+
+%\usetheme{Boxes}
+%\usetheme{boxes}
+\usetheme{Boadilla}
+%\usetheme{Madrid}
+
+\usepackage[utf8]{inputenc}
+\usepackage[english,british]{babel}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{color}
+\usepackage{hyperref}
+\usepackage{verbatim}
+\usepackage{url}
+\usepackage{moreverb}
+\usepackage{fancyvrb}
+\usepackage{natbib}
+\usepackage{eulervm}
+\usepackage{multirow}
+\usepackage{subcaption}
+
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
+
+\title{{\bf Addressing data scarcity with deep transfer learning and self-training in digital pathology}}
+\author{Romain Mormont}
+\institute{Montefiore Institute, University of Liège, Belgium}
+\date{October 21, 2022}
+
+\newcommand{\todo}[1]{\textcolor{red}{[TODO] #1}}
+
+\definecolor{primary}{RGB}{0,91,144}
+\colorlet{primary-lgt}{primary!50!white}
+\colorlet{primary-drk}{primary!50!black}
+\definecolor{secondary}{RGB}{176,43,59} 
+\colorlet{secondary-lgt}{secondary!50!white}
+\colorlet{secondary-drk}{secondary!50!black}
+\definecolor{ternary}{RGB}{131,154,40}
+\colorlet{ternary-lgt}{ternary!50!white}
+\colorlet{ternary-drk}{ternary!50!black}
+
+\beamertemplatenavigationsymbolsempty
+\setbeamertemplate{sections/subsections in toc}[circle]
+\setbeamertemplate{itemize items}[circle]
+\setbeamertemplate{itemize subitem}[square]
+
+\setbeamertemplate{footline}
+{
+  \leavevmode%
+  \hbox{%
+    \begin{beamercolorbox}[wd=.66666\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
+      \usebeamerfont{section in head/foot}\insertsection
+    \end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+      \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+      \usebeamertemplate{page number in head/foot}\hspace*{2ex}
+    \end{beamercolorbox}
+  }%
+  \vskip0pt%
+}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\newcommand{\X}[1]{\textcolor{blue}{#1}}
+\newcommand{\y}[1]{\textcolor{red}{#1}}
+\newcommand{\model}[1]{\textcolor{mygreen}{#1}}
+\newcommand{\loss}[1]{\textcolor{lightblue}{#1}}
+
+
+
+\begin{document}
+\setbeamertemplate{caption}{\raggedright\insertcaption\par}
+\renewcommand{\inserttotalframenumber}{20}
+\section{PhD defense}
+% Title page ==================================================================
+
+\begin{frame}
+\titlepage
+
+\begin{center}
+PhD defense
+\end{center}
+\end{frame}
+
+%\begin{frame}{Outline}
+%
+%\begin{itemize}
+%	\item Context: digital pathology and Cytomine
+%	\item Datasets: what problems are we tackling ? 
+%	\item Deep transfer learning
+%	\item State of the art
+%	\item Framework
+%	\item Strategies: 
+%	\begin{itemize}
+%		\item Last layer features
+%		\item Features selection with random forest
+%		\item Merging networks features
+%		\item Merging layers features
+%		\item Inner layer features
+%		\item Fine-tuning
+%	\end{itemize}
+%	\item Conclusion 
+%\end{itemize}
+%\end{frame}
+
+\section{Introduction}
+\begin{frame}{Introduction}
+	\hfill
+	\begin{figure}
+		\begin{subfigure}{0.27\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/old_microscope.jpg}
+		\end{subfigure}
+		\begin{subfigure}{0.27\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/new_microscope.jpg}
+		\end{subfigure}
+		\begin{subfigure}{0.27\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/dpath_microscope.jpg}
+		\end{subfigure}
+	\end{figure}
+	\begin{center}
+	``\textit{Digital pathology incorporates the acquisition, management, sharing and \textbf{interpretation} of pathology information — including slides and data — in a digital environment}" 
+	\end{center}
+	\hfill
+	{\tiny\textit{left:} institutions.ville-geneve.ch, \textit{center:} verywellhealth.com, \textit{right:} healthcare-in-europe.com}
+\end{frame}
+	
+\begin{frame}{From the body to the computer}
+	\vfill
+
+	A pathology workflow: from a biopsy...
+	\begin{figure}[h]
+		\centering
+		\includegraphics[width=\textwidth]{images/pathology_workflow.png}
+	\end{figure}
+	
+	\vfill
+	
+	... to a whole-slide image and computer-assisted pathology.
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/whole-slide-to-cap.png}
+		\caption*{\small Left image: 163840 x 95744 pixels$^2$, 2.3 Gb.}
+	\end{figure}
+	
+	\vfill
+\end{frame}
+
+\begin{frame}{Why computer-aided pathology}
+
+\vfill
+
+Some pathology analysis tasks are \textbf{tedious}, \textbf{time-consuming} and \textbf{costly}. Proper computational methods can therefore help to alleviate these issues.
+
+\vfill
+
+\begin{figure}
+	\begin{subfigure}{0.25\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/mitosis_zoomout.png}
+		\caption{Counting}
+	\end{subfigure}
+	\begin{subfigure}{0.25\textwidth}
+		\centering
+		\vfill
+		\includegraphics[width=\textwidth]{images/highdatavolume.png}
+		\vfill
+		\caption{Multi-slide analysis}
+	\end{subfigure}
+	\begin{subfigure}{0.25\textwidth}
+		\centering
+		\includegraphics[height=0.2\textheight]{images/thyroid_needle_haystack.png}
+		\caption{Needle in a haystack}
+	\end{subfigure}
+\end{figure}
+
+\vfill
+The field concerned with these methods is called \textbf{computational pathology}.
+
+\vfill
+\end{frame}
+
+\begin{frame}{Computational pathology is challenging}
+	Few of the challenges:
+	\begin{itemize}
+		\item {high variability}: content, staining, acquisition,...
+		\item {data scarcity}: annotating data is expensive and tedious
+		\item {big data}: up to millions of biological objects per multi-gigapixel image
+	\end{itemize}
+	\vfill
+	\begin{center}
+		\large
+		\textbf{Machine learning methods} are excellent candidates for tackling these !
+	\end{center}
+\end{frame}
+
+\begin{frame}{More on data scarcity}
+Causes:
+\begin{itemize}
+	\item highly specialized annotators required
+	\item simplification of the underlying medical problems
+	\item privacy concerns
+	\item deep learning methods are data hungry 
+\end{itemize}
+
+Consequences:
+\begin{itemize}
+	\item small datasets (compared to natural image domain)
+	\item lack of variety on the problem targets 
+	\item weakly- or sparsely-labeled datasets 
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Working around data scarcity}
+Making more annotations within the same budget:
+\begin{itemize}
+	\item AI-assisted annotation
+	\item appropriate UI/UX tools 
+	\item citizen science/crowdsourcing
+\end{itemize}
+
+Using proper computational methods:
+\begin{itemize}
+	\item transfer learning
+	\item self-training
+	\item weakly-supervised learning
+	\item self-supervised learning
+\end{itemize}
+\end{frame}
+
+\begin{frame}{Deep transfer learning}
+	
+	\begin{center}
+		\large
+		Because of {data scarcity}, {deep transfer learning} is a {promising approach} for digital pathology.
+	\end{center}
+	
+	\vfill
+	{Deep transfer learning} alleviates {deep learning} requirements: 
+	
+	
+	\begin{itemize}
+		\item requires {less data}
+		\item requires {less computing resources} and {time}
+	\end{itemize}
+
+\end{frame}
+
+\section{Transfer from ImageNet}
+
+\begin{frame}{Using pre-trained networks}	
+
+
+	There are mainly two ways of using {pre-trained networks}:
+\vfill		
+	\begin{itemize}
+		\item[1.] using pre-trained {features off-the-shelf} (OTS)
+	\end{itemize}
+		\begin{figure}
+			\includegraphics[scale=0.35]{images/offtheshelf_schema.png}
+		\end{figure}
+	
+	\begin{itemize}
+		\item[2.] {fine-tuning} the networks
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Deep transfer learning: how to ?}
+
+\textbf{Goal}: devising {guidelines and best practices} for deep transfer learning in digital pathology:
+\vfill
+
+\begin{itemize}
+	\item {Fine-tuning \textit{vs.} OTS features}: which one works better ? 
+ 	\item Which {network} works better ? 
+ 	\item {Where to extract} OTS features ? 
+ 	\item ...
+\end{itemize} 
+\end{frame}
+
+
+
+\begin{frame}{Deep transfer learning: how to ?}
+\vfill
+We have carried out {several experiments} with {ImageNet} as source task:
+\vfill
+\begin{itemize}
+	 \item {OTS} vs. {fine-tuning}
+	 \item {Networks}: ResNet50, DenseNet201, VGG16/19, InceptionResNetV2,...
+	 \item {Features classifiers}: SVM , extra-trees (ET),...
+	 \item OTS features extraction at {increasing depth}
+	 \item ...
+\end{itemize}
+\vfill
+%\begin{columns}
+%\begin{ccolumn}{0.28\linewidth}{orange}{Last layer feature}\end{ccolumn}
+%\begin{ccolumn}{0.28\linewidth}{green}{Feature selection}\end{ccolumn}
+%\begin{ccolumn}{0.28\linewidth}{red}{Merging models}\end{ccolumn}
+%\end{columns}
+%\begin{columns}
+%\begin{ccolumn}{0.28\linewidth}{purple}{Merging networks}\end{ccolumn}
+%\begin{ccolumn}{0.28\linewidth}{brown}{Fine-tuning}\end{ccolumn}
+%\begin{ccolumn}{0.28\linewidth}{blue}{Inner layers}\end{ccolumn}
+%\end{columns}
+%\vfill
+\end{frame}
+
+
+\begin{frame}{Cytomine}
+	\vspace*{-0.1in}
+\center
+	\includegraphics[scale=0.09]{images/cytomine_typo.png} is an open-source web-based environment enabling collaborative multi-gigapixel image analysis (\url{uliege.cytomine.org}) \\
+	 \footnotesize{Marée \& al., Bioinformatics; 2016}\\
+	\vspace*{0.02in}
+	\hspace*{-1.5in}\includegraphics[scale=0.24]{images/cytomine.png}
+\end{frame}
+
+\begin{frame}{Datasets}
+8 image classification datasets. 
+
+\begin{table}
+    \center 
+    \footnotesize
+    \begin{tabular}{|c|c|c|cc|}
+        \hline
+        \multirow{2}{*}{Dataset} & \multirow{2}{*}{Domain} & \multirow{2}{*}{Cls} & \multicolumn{2}{c|}{Total} \\
+        \cline{4-5}
+        & & & Images & Slides \\
+        \hline
+        Necrosis (N) & Histo & 2 & 882 & 13 \\ % ulg_lbtd2_chimio_necrose
+        ProliferativePattern (P) & Cyto & 2 & 1857 & 36 \\ % patterns_no_aug
+        CellInclusion (C) & Cyto & 2 & 3638 & 45 \\ % cells_no_aug
+        MouseLba  (M) & Cyto & 8 & 4284 & 20 \\ % ulg_lbtd_lba
+        HumanLba (H) & Cyto & 9 & 5420 & 64 \\ % ulb_anapath_lba
+        Lung (L) & Histo & 10 & 6331 & 882 \\ % ulg_lbtd_tissus
+        Breast (B) & Histo & 2 & 23032 & 34 \\ % ulg_lbtd2_chimio_necrose
+        Glomeruli (G) & Histo & 2 & 29213 & 205 \\ % glomeruli_no_aug
+        \hline
+    \end{tabular}
+\end{table}
+\begin{figure}
+    \center
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_necrose.png}\end{subfigure}
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_patterns.png}\end{subfigure}
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_cells.png}\end{subfigure}
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_lbtd_lba.png}\end{subfigure}
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_anapath.png}\end{subfigure}
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_tissus.png}\end{subfigure}
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_breast.png}\end{subfigure}
+    \begin{subfigure}{0.1\textwidth}\includegraphics[scale=0.35]{images/illus_glomeruli.png}\end{subfigure}
+\end{figure}
+
+\end{frame}
+
+\begin{frame}{Results}
+\framesubtitle{Fine-tuning is the best performing strategy}
+
+\begin{center}
+	{Fine-tuning} is often the best performing method \\
+	... but {OTS features} are {close} on most problems and {less computationally expensive} !
+\end{center}
+\vfill
+\begin{table}
+	\center
+	\tiny
+	\begin{tabular}{l|ccccc|ccc}   
+	  & \multicolumn{8}{c}{\textbf{Datasets}} \\
+	  \hline 
+	  \textbf{Strategy} & \textbf{Cell} & \textbf{Prolif} & \textbf{Glom} & \textbf{Necro} & \textbf{Breast} & \textbf{Mouse} & \textbf{Lung} & \textbf{Human} \\
+	  \hline
+	  Baseline (ET-FL)      & {0.9250} & {0.8268} & {0.9551} & {0.9805}	& {0.9345} & {0.7568} & {0.8547} & {0.6960} \\
+	  Last layer    & {0.9822} & {0.8893} & {0.9938} & \textit{0.9982} & {0.9603} & {0.7996} & {0.9133}	& {0.7820} \\
+	  Feat. select.	& {0.9676}	& {0.8861}	& {0.9843}	& \textbf{0.9994}	& {0.9597}	& {0.7438}	& {0.8941}	& {0.7703} \\
+	  Merg. networks	& \textit{0.9897}	& \textbf{0.8984}	& {0.9948}	& {0.9864}	& {0.9549}	& \textit{0.8169}	& {0.9155}	& {0.7928} \\
+	  Merg. layers	& {0.9808}	& {0.8906}	& {0.9944}	& {0.9964}	& {0.9639}	& {0.7941}	& {0.9268}	& {0.7977} \\
+	  Inner ResNet	& {0.9748}	& \textit{0.8959}	& {0.9949}	& {0.9964}	& {0.9664}	& {0.8131}	& \textit{0.9291}	& \textit{0.8113} \\
+	  Inner DenseNet	& {0.9862}	& \textbf{0.8984}	& \textit{0.9962}	& {0.9917}	& {0.9699}	& {0.8012}	& {0.9268}	& {0.7967} \\
+	  Inner IncResV2	& {0.9873}	& {0.8948}	& \textit{0.9962}	& \textit{0.9982}	& \textit{0.9720}	& {0.8137}	& {0.9234}	& {0.7713} \\
+%       Inner IncV3		& {0.9836}	& {0.8899}	& {0.9951}	& {0.9964}	& {0.9731}	& {0.8104}	& {0.9201}	& {0.7507} \\
+	   {Fine-tuning}		& \textbf{0.9926}	& {0.8797}	& \textbf{0.9977}	& {0.9970}	& \textbf{0.9873}	& \textbf{0.8727}	& \textbf{0.9405}	& \textbf{0.8641} \\
+%%      \hline
+%%      \textbf{Best} & 0.9926 & 0.8984 & 0.9977 & 0.9994 & 0.9873 & 0.8727 & 0.9405 & 0.8641 \\
+	  \hline
+	  \textbf{Metric} & \multicolumn{5}{c|}{Roc AUC} & \multicolumn{3}{c}{Accuracy (multi-class)} \\
+	\end{tabular}
+	\caption{\footnotesize Best in \textbf{bold}, second best in \textit{italic}}
+\end{table}
+\end{frame}
+
+
+\begin{frame}{Results}
+\framesubtitle{When working with OTS features, use some inner layer features}
+	\vfill	
+	\begin{figure}
+		\center
+		\includegraphics[scale=0.7]{images/all_per_layer_hori_bars.png}
+	\end{figure}
+	\vfill
+\end{frame}
+
+
+\begin{frame}{Results}
+\framesubtitle{More recent networks like DenseNet or ResNet work better}
+\begin{figure}
+	\center
+	\includegraphics[scale=0.65]{images/last_baseline_bars.png}
+\end{figure}
+
+{\footnotesize
+	\textbf{See also:} Kornblith, S., Shlens, J., \& Le, Q. V. (2018). \textit{Do Better ImageNet Models Transfer Better?}. arXiv preprint arXiv:1805.08974.
+} 
+\end{frame}
+
+\begin{frame}{Conclusion}
+	\vfill
+	Main {takeaways}:
+	\vfill
+	\begin{itemize}
+		\item {Fine tuning} is the best performing method
+		\item {OTS features} often close to fine-tuning and less computationally expensive
+		\item Prefer {inner layers OTS features} to last layers OTS features
+		\item Use {more recent networks} such as DenseNet and ResNet
+	\end{itemize}
+	\vfill
+	
+\end{frame}
+
+\section{Transfer from pathology data}
+
+\begin{frame}
+	\vfill
+	\begin{center}
+		\large
+		\textbf{Thank you !}
+	\end{center}
+	\vfill
+	\begin{center}
+	{Meet me at poster \textbf{FP249}} for more information !	
+	\end{center}
+\end{frame}
+
+\section{Self-training}
+
+\begin{frame}
+	\vfill
+	\begin{center}
+		\large
+		\textbf{Thank you !}
+	\end{center}
+	\vfill
+	\begin{center}
+	{Meet me at poster \textbf{FP249}} for more information !	
+	\end{center}
+\end{frame}
+%\begin{frame}{Deep learning}
+%\vspace*{-0.5cm}
+%\begin{columns}
+%
+%
+%   \begin{ccolumn}{0.48\textwidth}{blue}{Training from scratch}
+%   		Initialize weights randomly and train as usual.
+%        \begin{itemize}
+%			\item[$-$] Needs lots of data
+%			\item[$-$] Needs much computing resources 
+%		\end{itemize}
+%    \end{ccolumn}
+%
+%
+%\end{columns}
+%\begin{columns}
+%
+%	\begin{ccolumn}{0.48\textwidth}   {red}{Off-the-shelf}
+%		Use pre-trained weight, then use features off-the-shelf.
+%		\begin{itemize}
+%			\item[$+$] Needs less data then training from scratch
+%			\item[$+$] Needs less computing resources 
+%		\end{itemize}
+%	\end{ccolumn}
+%
+%
+%
+%	\begin{ccolumn}{0.48\textwidth}{green}{Fine-tuning}
+%		Initialize with pre-trained weigths, and train for few epochs.
+%		\begin{itemize}
+%			\item[$+$] Needs less data than training from scratch
+%			\item[$-$] Needs much computing resources 
+%		\end{itemize}
+%	\end{ccolumn}
+%
+%\end{columns}	
+%
+%\end{frame}
+%\begin{frame}{Deep transfer learning: how to ?}
+%\textbf{Aim}: evaluate which \textbf{deep transfer learning} strategy yields best results using the 8 datasets.
+%
+%\begin{itemize}
+%	\item Deep learning works well with images 
+%	\item Transfer learning usually requires less data and computing resources {\color{red} (cite)}
+%	\item DTL has been applied to biomedical problems since 2015 {\color{red} (cite)}
+%\end{itemize} 
+%
+%But... \textbf{few people have actually studied how DTL should be applied} !
+%
+%\begin{itemize}
+%	\item most publications use "old" networks (AlexNet, VGGs, GoogLeNet,...)
+%	\item studies which do are often too small scale to draw general conclusions 
+%\end{itemize}
+%\end{frame}
+%
+%\begin{frame}{Framework}
+%\begin{figure}
+%	\includegraphics[scale=0.35]{images/offtheshelf_schema.png}
+%\end{figure}
+%\end{frame}
+%
+%\begin{frame}{Transfer strategies}
+%\begin{columns}
+%
+%\begin{column}{0.31\textwidth} 
+%	\begin{orangebox}{Last layer features}
+%		
+%	\end{orangebox}
+%\end{column}
+%
+%\begin{column}{0.31\textwidth} 
+%	\begin{greenbox}{Feature selection}
+%		
+%	\end{greenbox}
+%\end{column}
+%
+%\begin{column}{0.31\textwidth}
+%	\begin{redbox}{Merging models}
+%		
+%	\end{redbox} 
+%\end{column}
+%
+%\end{columns}
+%
+%\begin{columns}
+%
+%\begin{column}{0.31\textwidth} 
+%	\begin{purplebox}{Merging networks}
+%		
+%	\end{purplebox}
+%\end{column}
+%
+%\begin{column}{0.31\textwidth} 
+%	\begin{brownbox}{Fine-tuning}
+%		
+%	\end{brownbox}
+%\end{column}
+%
+%\begin{colorbox}{0.31\textwidth}{bluebox}{Inner layers}
+%\end{colorbox}
+%
+%\end{columns}
+%\end{frame}
+\end{document}
