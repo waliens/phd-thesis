@@ -1,0 +1,9 @@
+[0] Config.pm:306> INFO - This is Biber 2.18
+[0] Config.pm:309> INFO - Logfile is 'thesis_full.blg'
+[124] biber:340> INFO - === Wed Sep 28, 2022, 13:03:58
+[144] Biber.pm:418> INFO - Reading 'thesis_full.bcf'
+[337] Biber.pm:978> INFO - Found 0 citekeys in bib section 0
+[370] bbl.pm:654> INFO - Writing 'thesis_full.bbl' with encoding 'UTF-8'
+[370] bbl.pm:757> INFO - Output to thesis_full.bbl
+[370] Biber.pm:130> WARN - The file 'thesis_full.bcf' does not contain any citations!
+[371] Biber.pm:132> INFO - WARNINGS: 1

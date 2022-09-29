@@ -15,10 +15,18 @@
 \usepackage{url}
 \usepackage{moreverb}
 \usepackage{fancyvrb}
-\usepackage{natbib}
 \usepackage{eulervm}
 \usepackage{multirow}
 \usepackage{subcaption}
+
+\usepackage[
+  backend=biber,
+  maxbibnames=4, 
+  natbib=true,
+  citestyle=numeric
+]{biblatex}
+
+\addbibresource{thesis.bib} % The filename of the bibliography
 
 \hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
 
@@ -151,7 +159,9 @@ PhD defense
 
 \vfill
 
-Some pathology analysis tasks are \textbf{tedious}, \textbf{time-consuming} and \textbf{costly}. Proper computational methods can therefore help to alleviate these issues.
+Some pathology analysis tasks are \textbf{tedious}, \textbf{time-consuming} and/or \textbf{costly}. 
+
+Computational methods has the potential of making them faster, more reliable therefore \textbf{improving costs and patient outcome}. 
 
 \vfill
 
@@ -222,57 +232,47 @@ Making more annotations within the same budget:
 
 Using proper computational methods:
 \begin{itemize}
-	\item transfer learning
-	\item self-training
+	\item \textbf{transfer learning}
+	\item \textbf{self-training}
 	\item weakly-supervised learning
 	\item self-supervised learning
 \end{itemize}
 \end{frame}
 
-\begin{frame}{Deep transfer learning}
-	
-	\begin{center}
-		\large
-		Because of {data scarcity}, {deep transfer learning} is a {promising approach} for digital pathology.
-	\end{center}
-	
-	\vfill
-	{Deep transfer learning} alleviates {deep learning} requirements: 
-	
-	
-	\begin{itemize}
-		\item requires {less data}
-		\item requires {less computing resources} and {time}
-	\end{itemize}
 
+\section{Contributions}
+
+\begin{frame}{Contributions}
+	All contributions address digital patholog:
+	\begin{itemize}
+		\item Comparison of deep transfer learning strategies from ImageNet
+		\item Multi-task pre-training of deep neural networks on pathology tasks
+		\item Self-training for segmentation from sparsely-labeled data
+	\end{itemize}
 \end{frame}
 
 \section{Transfer from ImageNet}
 
-\begin{frame}{Using pre-trained networks}	
-
-
-	There are mainly two ways of using {pre-trained networks}:
-\vfill		
-	\begin{itemize}
-		\item[1.] using pre-trained {features off-the-shelf} (OTS)
-	\end{itemize}
-		\begin{figure}
-			\includegraphics[scale=0.35]{images/offtheshelf_schema.png}
-		\end{figure}
-	
-	\begin{itemize}
-		\item[2.] {fine-tuning} the networks
-	\end{itemize}
+\begin{frame}{Deep transfer learning}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{images/transfer-fe.pdf}
+		\caption*{Feature extraction}
+	\end{figure}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{images/transfer-ft.pdf}
+		\caption*{Fine tuning}
+	\end{figure}
 \end{frame}
 
-\begin{frame}{Deep transfer learning: how to ?}
+\begin{frame}{Deep transfer learning in pathology: how to ?}
 
 \textbf{Goal}: devising {guidelines and best practices} for deep transfer learning in digital pathology:
 \vfill
 
 \begin{itemize}
-	\item {Fine-tuning \textit{vs.} OTS features}: which one works better ? 
+	\item {Fine-tuning \textit{vs.}  features}: which one works better ? 
  	\item Which {network} works better ? 
  	\item {Where to extract} OTS features ? 
  	\item ...
@@ -307,14 +307,14 @@ We have carried out {several experiments} with {ImageNet} as source task:
 \end{frame}
 
 
-\begin{frame}{Cytomine}
-	\vspace*{-0.1in}
-\center
-	\includegraphics[scale=0.09]{images/cytomine_typo.png} is an open-source web-based environment enabling collaborative multi-gigapixel image analysis (\url{uliege.cytomine.org}) \\
-	 \footnotesize{Marée \& al., Bioinformatics; 2016}\\
-	\vspace*{0.02in}
-	\hspace*{-1.5in}\includegraphics[scale=0.24]{images/cytomine.png}
-\end{frame}
+% \begin{frame}{Cytomine}
+% 	\vspace*{-0.1in}
+% \center
+% 	\includegraphics[scale=0.09]{images/cytomine_typo.png} is an open-source web-based environment enabling collaborative multi-gigapixel image analysis (\url{uliege.cytomine.org}) \\
+% 	 \footnotesize{Marée \& al., Bioinformatics; 2016}\\
+% 	\vspace*{0.02in}
+% 	\hspace*{-1.5in}\includegraphics[scale=0.24]{images/cytomine.png}
+% \end{frame}
 
 \begin{frame}{Datasets}
 8 image classification datasets. 
