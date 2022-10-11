@@ -18,22 +18,7 @@
 \usepackage{eulervm}
 \usepackage{multirow}
 \usepackage{subcaption}
-
-\usepackage[
-  backend=biber,
-  maxbibnames=4, 
-  natbib=true,
-  citestyle=numeric
-]{biblatex}
-
-\addbibresource{thesis.bib} % The filename of the bibliography
-
-\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue}
-
-\title{{\bf Addressing data scarcity with deep transfer learning and self-training in digital pathology}}
-\author{Romain Mormont}
-\institute{Montefiore Institute, University of Liège, Belgium}
-\date{October 21, 2022}
+\usepackage{setspace}
 
 \newcommand{\todo}[1]{\textcolor{red}{[TODO] #1}}
 
@@ -46,6 +31,29 @@
 \definecolor{ternary}{RGB}{131,154,40}
 \colorlet{ternary-lgt}{ternary!50!white}
 \colorlet{ternary-drk}{ternary!50!black}
+\definecolor{grey}{RGB}{175,175,175}
+
+\newenvironment<>{cblock}[1]{%
+  \setbeamercolor{block title}{fg=white,bg=secondary}%
+  \begin{block}#2{#1}}{\end{block}}
+
+\newenvironment<>{ccolumn}[2]{\begin{column}{#1}\begin{cblock}{#2}}{\end{cblock}\end{column}}
+
+\usepackage[
+  backend=biber,
+  maxbibnames=4,
+  natbib=true,
+  citestyle=numeric
+]{biblatex}
+
+\addbibresource{thesis.bib} % The filename of the bibliography
+
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=primary, citecolor=ternary}
+
+\title{{\bf Addressing data scarcity with deep transfer learning and self-training in digital pathology}}
+\author{Romain Mormont}
+\institute{Montefiore Institute, University of Liège, Belgium}
+\date{October 21, 2022}
 
 \beamertemplatenavigationsymbolsempty
 \setbeamertemplate{sections/subsections in toc}[circle]
@@ -252,70 +260,48 @@ Using proper computational methods:
 \end{frame}
 
 \section{Transfer from ImageNet}
+\subsection{Introduction}
 
-\begin{frame}{Deep transfer learning}
+\begin{frame}{Deep transfer learning: how to?}
 	\begin{figure}
 		\centering
-		\includegraphics[width=\textwidth]{images/transfer-fe.pdf}
+		\includegraphics[width=0.9\textwidth]{images/transfer-fe.pdf}
 		\caption*{Feature extraction}
 	\end{figure}
 	\begin{figure}
 		\centering
-		\includegraphics[width=\textwidth]{images/transfer-ft.pdf}
+		\includegraphics[width=0.9\textwidth]{images/transfer-ft.pdf}
 		\caption*{Fine tuning}
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Deep transfer learning in pathology: how to ?}
+\begin{frame}{Our contribution}
 
-\textbf{Goal}: devising {guidelines and best practices} for deep transfer learning in digital pathology:
+\textbf{Goal}: devise \textbf{guidelines and best practices} for deep transfer learning in computational pathology
+
 \vfill
 
 \begin{itemize}
-	\item {Fine-tuning \textit{vs.}  features}: which one works better ? 
- 	\item Which {network} works better ? 
- 	\item {Where to extract} OTS features ? 
+	\item {Fine-tuning \textit{vs.} feature extraction}: which one works better ? 
+ 	\item Which {pre-trained network} works better ? 
+ 	\item {Where to extract} features ? 
  	\item ...
 \end{itemize} 
-\end{frame}
 
-
-
-\begin{frame}{Deep transfer learning: how to ?}
 \vfill
-We have carried out {several experiments} with {ImageNet} as source task:
+We have carried out several experiments \textbf{with ImageNet} as source task:
 \vfill
 \begin{itemize}
-	 \item {OTS} vs. {fine-tuning}
-	 \item {Networks}: ResNet50, DenseNet201, VGG16/19, InceptionResNetV2,...
-	 \item {Features classifiers}: SVM , extra-trees (ET),...
-	 \item OTS features extraction at {increasing depth}
-	 \item ...
+	 \item \textbf{Feature extraction} vs. \textbf{fine-tuning}
+	 \item \textbf{Networks}: ResNet50, DenseNet201, VGG16/19, InceptionResNetV2, \textit{etc}.
+	 \item \textbf{Features classifiers}: SVM , extra-trees (ET), \textit{etc}.
+	 \item Features extraction at {increasing depth}
+	 \item Feature relevance evaluation
 \end{itemize}
-\vfill
-%\begin{columns}
-%\begin{ccolumn}{0.28\linewidth}{orange}{Last layer feature}\end{ccolumn}
-%\begin{ccolumn}{0.28\linewidth}{green}{Feature selection}\end{ccolumn}
-%\begin{ccolumn}{0.28\linewidth}{red}{Merging models}\end{ccolumn}
-%\end{columns}
-%\begin{columns}
-%\begin{ccolumn}{0.28\linewidth}{purple}{Merging networks}\end{ccolumn}
-%\begin{ccolumn}{0.28\linewidth}{brown}{Fine-tuning}\end{ccolumn}
-%\begin{ccolumn}{0.28\linewidth}{blue}{Inner layers}\end{ccolumn}
-%\end{columns}
-%\vfill
 \end{frame}
 
 
-% \begin{frame}{Cytomine}
-% 	\vspace*{-0.1in}
-% \center
-% 	\includegraphics[scale=0.09]{images/cytomine_typo.png} is an open-source web-based environment enabling collaborative multi-gigapixel image analysis (\url{uliege.cytomine.org}) \\
-% 	 \footnotesize{Marée \& al., Bioinformatics; 2016}\\
-% 	\vspace*{0.02in}
-% 	\hspace*{-1.5in}\includegraphics[scale=0.24]{images/cytomine.png}
-% \end{frame}
-
+\subsection{Data}
 \begin{frame}{Datasets}
 8 image classification datasets. 
 
@@ -353,12 +339,13 @@ We have carried out {several experiments} with {ImageNet} as source task:
 
 \end{frame}
 
+\subsection{Experiments and results}
 \begin{frame}{Results}
 \framesubtitle{Fine-tuning is the best performing strategy}
 
 \begin{center}
 	{Fine-tuning} is often the best performing method \\
-	... but {OTS features} are {close} on most problems and {less computationally expensive} !
+	... but {extracted features} are {close} on most problems and {less computationally expensive} !
 \end{center}
 \vfill
 \begin{table}
@@ -369,16 +356,16 @@ We have carried out {several experiments} with {ImageNet} as source task:
 	  \hline 
 	  \textbf{Strategy} & \textbf{Cell} & \textbf{Prolif} & \textbf{Glom} & \textbf{Necro} & \textbf{Breast} & \textbf{Mouse} & \textbf{Lung} & \textbf{Human} \\
 	  \hline
-	  Baseline (ET-FL)      & {0.9250} & {0.8268} & {0.9551} & {0.9805}	& {0.9345} & {0.7568} & {0.8547} & {0.6960} \\
-	  Last layer    & {0.9822} & {0.8893} & {0.9938} & \textit{0.9982} & {0.9603} & {0.7996} & {0.9133}	& {0.7820} \\
-	  Feat. select.	& {0.9676}	& {0.8861}	& {0.9843}	& \textbf{0.9994}	& {0.9597}	& {0.7438}	& {0.8941}	& {0.7703} \\
-	  Merg. networks	& \textit{0.9897}	& \textbf{0.8984}	& {0.9948}	& {0.9864}	& {0.9549}	& \textit{0.8169}	& {0.9155}	& {0.7928} \\
-	  Merg. layers	& {0.9808}	& {0.8906}	& {0.9944}	& {0.9964}	& {0.9639}	& {0.7941}	& {0.9268}	& {0.7977} \\
-	  Inner ResNet	& {0.9748}	& \textit{0.8959}	& {0.9949}	& {0.9964}	& {0.9664}	& {0.8131}	& \textit{0.9291}	& \textit{0.8113} \\
-	  Inner DenseNet	& {0.9862}	& \textbf{0.8984}	& \textit{0.9962}	& {0.9917}	& {0.9699}	& {0.8012}	& {0.9268}	& {0.7967} \\
-	  Inner IncResV2	& {0.9873}	& {0.8948}	& \textit{0.9962}	& \textit{0.9982}	& \textit{0.9720}	& {0.8137}	& {0.9234}	& {0.7713} \\
-%       Inner IncV3		& {0.9836}	& {0.8899}	& {0.9951}	& {0.9964}	& {0.9731}	& {0.8104}	& {0.9201}	& {0.7507} \\
-	   {Fine-tuning}		& \textbf{0.9926}	& {0.8797}	& \textbf{0.9977}	& {0.9970}	& \textbf{0.9873}	& \textbf{0.8727}	& \textbf{0.9405}	& \textbf{0.8641} \\
+	  Baseline (ET-FL)      & {\color{grey}0.9250} & {\color{grey}0.8268} & {\color{grey}0.9551} & {\color{grey}0.9805}	& {\color{grey}0.9345} & {\color{grey}0.7568} & {\color{grey}0.8547} & {\color{grey}0.6960} \\
+	  Last layer    & {\color{grey}0.9822} & {\color{grey}0.8893} & {\color{grey}0.9938} & \textit{0.9982} & {\color{grey}0.9603} & {\color{grey}0.7996} & {\color{grey}0.9133}	& {\color{grey}0.7820} \\
+	  Feat. select.	& {\color{grey}0.9676}	& {\color{grey}0.8861}	& {\color{grey}0.9843}	& \textbf{0.9994}	& {\color{grey}0.9597}	& {\color{grey}0.7438}	& {\color{grey}0.8941}	& {\color{grey}0.7703} \\
+	  Merg. networks	& \textit{0.9897}	& \textbf{0.8984}	& {\color{grey}0.9948}	& {\color{grey}0.9864}	& {\color{grey}0.9549}	& \textit{0.8169}	& {\color{grey}0.9155}	& {\color{grey}0.7928} \\
+	  Merg. layers	& {\color{grey}0.9808}	& {\color{grey}0.8906}	& {\color{grey}0.9944}	& {\color{grey}0.9964}	& {\color{grey}0.9639}	& {\color{grey}0.7941}	& {\color{grey}0.9268}	& {\color{grey}0.7977} \\
+	  Inner ResNet	& {\color{grey}0.9748}	& \textit{0.8959}	& {\color{grey}0.9949}	& {\color{grey}0.9964}	& {\color{grey}0.9664}	& {\color{grey}0.8131}	& \textit{0.9291}	& \textit{0.8113} \\
+	  Inner DenseNet	& {\color{grey}0.9862}	& \textbf{0.8984}	& \textit{0.9962}	& {\color{grey}0.9917}	& {\color{grey}0.9699}	& {\color{grey}0.8012}	& {\color{grey}0.9268}	& {\color{grey}0.7967} \\
+	  Inner IncResV2	& {\color{grey}0.9873}	& {\color{grey}0.8948}	& \textit{0.9962}	& \textit{0.9982}	& \textit{0.9720}	& {\color{grey}0.8137}	& {\color{grey}0.9234}	& {\color{grey}0.7713} \\
+%       Inner IncV3		& {\color{grey}0.9836}	& {\color{grey}0.8899}	& {\color{grey}0.9951}	& {\color{grey}0.9964}	& {\color{grey}0.9731}	& {\color{grey}0.8104}	& {\color{grey}0.9201}	& {\color{grey}0.7507} \\
+	   {Fine-tuning}		& \textbf{0.9926}	& {\color{grey}0.8797}	& \textbf{0.9977}	& {\color{grey}0.9970}	& \textbf{0.9873}	& \textbf{0.8727}	& \textbf{0.9405}	& \textbf{0.8641} \\
 %%      \hline
 %%      \textbf{Best} & 0.9926 & 0.8984 & 0.9977 & 0.9994 & 0.9873 & 0.8727 & 0.9405 & 0.8641 \\
 	  \hline
@@ -390,7 +377,7 @@ We have carried out {several experiments} with {ImageNet} as source task:
 
 
 \begin{frame}{Results}
-\framesubtitle{When working with OTS features, use some inner layer features}
+\framesubtitle{When working with extracted features, use some inner layer features}
 	\vfill	
 	\begin{figure}
 		\center
@@ -408,8 +395,8 @@ We have carried out {several experiments} with {ImageNet} as source task:
 \end{figure}
 
 {\footnotesize
-	\textbf{See also:} Kornblith, S., Shlens, J., \& Le, Q. V. (2018). \textit{Do Better ImageNet Models Transfer Better?}. arXiv preprint arXiv:1805.08974.
-} 
+	\textbf{See also:} \fullcite{kornblith2019better}
+}
 \end{frame}
 
 \begin{frame}{Conclusion}
@@ -418,8 +405,8 @@ We have carried out {several experiments} with {ImageNet} as source task:
 	\vfill
 	\begin{itemize}
 		\item {Fine tuning} is the best performing method
-		\item {OTS features} often close to fine-tuning and less computationally expensive
-		\item Prefer {inner layers OTS features} to last layers OTS features
+		\item {Features extraction} often close to fine-tuning and less computationally expensive
+		\item Prefer {inner layers feature extraction} to last layers feature extraction
 		\item Use {more recent networks} such as DenseNet and ResNet
 	\end{itemize}
 	\vfill
@@ -429,35 +416,149 @@ We have carried out {several experiments} with {ImageNet} as source task:
 \section{Transfer from pathology data}
 
 \begin{frame}
-	\vfill
-	\begin{center}
-		\large
-		\textbf{Thank you !}
-	\end{center}
-	\vfill
-	\begin{center}
-	{Meet me at poster \textbf{FP249}} for more information !	
-	\end{center}
+
 \end{frame}
 
 \section{Self-training}
-
-\begin{frame}
-	\vfill
-	\begin{center}
-		\large
-		\textbf{Thank you !}
-	\end{center}
-	\vfill
-	\begin{center}
-	{Meet me at poster \textbf{FP249}} for more information !	
-	\end{center}
+\begin{frame}{An imperfect cytology dataset: thyroid nodules}
+	
 \end{frame}
+
+\begin{frame}{Binary segmentation with a sparse dataset ?}
+	\vfill
+	\begin{center}
+		Let's generate pseudo-labels for unlabelled pixels before training !
+	\end{center}
+	\vfill
+	\begin{center}
+	  How ? With a \textbf{self-training} algorithm !
+	\end{center}
+	\vfill
+\end{frame}
+
+\subsection{Problem settings}
+\begin{frame}{Problem settings}
+\framesubtitle{A sparsely-labelled dataset}
+	\begin{columns}[t]
+		\begin{ccolumn}{0.48\textwidth}{$\mathcal{D}_l$ - exhaustively-labelled set}
+			
+			\begin{figure}
+				\center
+				\includegraphics[width=\textwidth]{images/exhaustive_set.png}
+				\caption*{$n_l$ images and masks. All pixels have a 0 (background) or 1 (foreground) label.}
+			\end{figure}
+		\end{ccolumn}
+		% --------------------------
+		\begin{ccolumn}{0.48\textwidth}{$\mathcal{D}_s$ - sparsely-labelled set}
+			\begin{figure}
+				\center
+				\includegraphics[width=\textwidth]{images/sparse_set.png}
+				\caption*{$n_s$ images and masks. Unlabelled pixels have label 0 (background) and labelled pixels are exclusively foreground.}
+			\end{figure}
+		\end{ccolumn}
+	\end{columns}
+\end{frame}
+
+\begin{frame}{Problem settings}
+\framesubtitle{A segmentation architecture}
+	\vfill
+	A downscaled UNet \cite{ronneberger2015unet} architecture: reduce the number of parameters by a factor 8. 
+	\vfill
+	\begin{figure}
+		\centering
+		\includegraphics[height=0.7\textheight]{images/unet.png}
+	\end{figure}
+	\vfill
+\end{frame}
+
+\subsection{Our algorithm}
+\begin{frame}{Our self-training algorithm}
+	\centering
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/selftrain-algo.png}
+	\end{figure}
+\end{frame}
+
+\subsection{Experiments}
+\begin{frame}{Experiments}
+\framesubtitle{3 public datasets}
+	\centering
+	\begin{columns}
+		\begin{ccolumn}{0.30\textwidth}{MoNuSeg \cite{kumar2019multi}}
+			\centering \includegraphics[width=\textwidth]{images/monuseg_rep.png}
+		\end{ccolumn}
+		% --------------------------
+		\begin{ccolumn}{0.30\textwidth}{SegPC \cite{gupta2021segpc}}
+			\centering \includegraphics[width=\textwidth]{images/segpc_rep.png}
+		\end{ccolumn}
+		% --------------------------
+		\begin{ccolumn}{0.30\textwidth}{GlaS \cite{sirinukunwattana2017gland}}
+			\centering \includegraphics[width=\textwidth]{images/glas_rep.png}
+		\end{ccolumn}
+	\end{columns}
+	\vfill
+	Sparsity is simulated by randomly removing $\rho \%$ of annotations in $n_s$ images.
+	\vfill
+\end{frame}
+
+\begin{frame}{Experiments}
+\framesubtitle{3 public baselines}
+	\vfill
+	\begin{columns}[t]
+		\begin{ccolumn}{0.30\textwidth}{(1) $|\mathcal{D}_s| = 0$ }
+			\begin{figure} \centering \includegraphics[height=0.3\textheight]{images/baseline1.png} \end{figure}%
+\vspace{-0.8cm}
+\begin{flushright}{\tiny (orignal dataset)}\end{flushright}
+		\end{ccolumn}
+		\begin{ccolumn}{0.30\textwidth}{(2) $\mathcal{D}_l$ only}
+			\begin{figure} \centering \includegraphics[height=0.3\textheight]{images/baseline2.png} \end{figure}
+		\end{ccolumn}
+		\begin{ccolumn}{0.30\textwidth}{(3) $\mathcal{D}_l \cup \mathcal{D}_s$}
+			\begin{figure} \centering \includegraphics[height=0.3\textheight]{images/baseline3.png} \end{figure}%
+\vspace{-0.5cm}
+\begin{raggedright}{\tiny (unlab. pixels assigned to background)}\end{raggedright}%
+		\end{ccolumn}
+	\end{columns}
+	\vfill
+	\begin{center}
+		To be considered of interest, our method should be as close as possible to (1) (upper bound) and outperform baselines (2) and (3).
+	\end{center}
+	\vfill
+\end{frame}
+
+\subsection{Results}
+\begin{frame}{Results}
+\framesubtitle{Hard vs. soft labeling}
+\end{frame}
+
+\begin{frame}{Results}
+\framesubtitle{Self-training at fixed $n_l$}
+\end{frame}
+
+\begin{frame}{Results}
+\framesubtitle{Label sparsely or exhaustively ?}
+\end{frame}
+
+\begin{frame}{Results}
+\framesubtitle{Tuning the segmentation threshold}
+\end{frame}
+
+\begin{frame}{Results}
+\framesubtitle{An actually sparse dataset: Thyroid FNAB}
+% present the application of the model
+\end{frame}
+
+\begin{frame}{Self-training: conclusion}
+\end{frame}
+
+\begin{frame}{Using the model for Thyroid FNAB}
+	% present the results 
+\end{frame}
+
 %\begin{frame}{Deep learning}
 %\vspace*{-0.5cm}
 %\begin{columns}
-%
-%
+%%
 %   \begin{ccolumn}{0.48\textwidth}{blue}{Training from scratch}
 %   		Initialize weights randomly and train as usual.
 %        \begin{itemize}
