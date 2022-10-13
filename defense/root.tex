@@ -19,6 +19,7 @@
 \usepackage{multirow}
 \usepackage{subcaption}
 \usepackage{setspace}
+\usepackage{mathpazo}
 
 \newcommand{\todo}[1]{\textcolor{red}{[TODO] #1}}
 
@@ -34,7 +35,7 @@
 \definecolor{grey}{RGB}{175,175,175}
 
 \newenvironment<>{cblock}[1]{%
-  \setbeamercolor{block title}{fg=white,bg=secondary}%
+  \setbeamercolor{block title}{fg=white,bg=primary}%
   \begin{block}#2{#1}}{\end{block}}
 
 \newenvironment<>{ccolumn}[2]{\begin{column}[t]{#1}\begin{cblock}{#2}}{\end{cblock}\end{column}}
@@ -48,7 +49,7 @@
 
 \addbibresource{thesis.bib} % The filename of the bibliography
 
-\hypersetup{colorlinks=true, linkcolor=black, urlcolor=primary, citecolor=ternary}
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=primary, citecolor=black}
 
 \title{{\bf Addressing data scarcity with deep transfer learning and self-training in digital pathology}}
 \author{Romain Mormont}
@@ -243,11 +244,11 @@ Using proper computational methods:
 \end{frame}
 
 \begin{frame}{Contributions}
-	All contributions address digital pathology:
+	All contributions address data scarcity in digital pathology:
 	\begin{itemize}
-		\item Comparison of deep transfer learning strategies from ImageNet
-		\item Multi-task pre-training of deep neural networks on pathology tasks
-		\item Self-training for segmentation from sparsely-labeled data
+		\item \fullcite{mormont2018comparison}
+		\item \fullcite{mormont2020multi}
+		\item \fullcite{mormont2022self}
 	\end{itemize}
 \end{frame}
 
@@ -306,7 +307,7 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 	 \item \textbf{Feature extraction} vs. \textbf{fine-tuning}
 	 \item \textbf{Networks}: ResNet50, DenseNet201, VGG16/19, InceptionResNetV2, \textit{etc}.
 	 \item \textbf{Features classifiers}: SVM , extra-trees (ET), \textit{etc}.
-	 \item Features extraction at {increasing depth}
+	 \item Feature extraction at {increasing depth}
 	 \item Feature relevance evaluation
 \end{itemize}
 \end{frame}
@@ -416,7 +417,7 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 	\vfill
 	\begin{itemize}
 		\item {Fine tuning} is the best performing method
-		\item {Features extraction} often close to fine-tuning and less computationally expensive
+		\item {Feature extraction} often close to fine-tuning and less computationally expensive
 		\item Prefer {inner layers feature extraction} to last layers feature extraction
 		\item Use {more recent networks} such as DenseNet and ResNet
 	\end{itemize}
@@ -628,23 +629,12 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 		\includegraphics[width=\textwidth]{images/multitask-training.pdf}
 	\end{figure}
 	\begin{itemize}
-		\item A shared backbone $\theta_s$ 
+		\item A shared backbone $\theta_s$ (\textit{e.g.}~: ResNet50, DenseNet121)
 		\item A task-specific head $\theta_t$ for each task $t$
+		\item Training batch sampling: one batch contains samples from different tasks. 
+		\item Hyperparameters: learning rate $\gamma$, head learning rate multiplier $\tau_\gamma$
 		\item \textbf{Transfer}: after pre-training, $\theta_s$ can be fine-tuned or used as a feature extractor
 	\end{itemize}
-\end{frame}
-
-\begin{frame}{Pre-training the model in multi-task}
-	Hyperparameters: 
-	\begin{itemize}
-		\item choice of backbone $\theta_s$ architecture: ResNet50, DenseNet121
-		\item learning rate $\gamma$
-		\item head learning rate multiplier $\tau_\gamma$
-	\end{itemize}
-
-	\textbf{Batch sampling}: a single batch contains samples from different tasks.     
-
-	{\color{red}TODO: illustrate batch sampling} 
 \end{frame}
 
 \subsection{Evaluation protocol}
@@ -712,11 +702,12 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \begin{frame}{Results}
 	\framesubtitle{Comparing to training from scratch and joint training}
 
-	This experiment confirms previously published results including ours:
+	Joint training only improves over fine-tuning on small datasets \\
+	
+	This experiment a	also confirms previously published results including ours:
 	\begin{itemize}
 		\item fine-tuning outperforms feature extraction
 		\item training from scratch is subpar compared to all other approaches
-		\item joint training only improves over fine-tuning on small datasets 
 	\end{itemize}
 
 	\begin{figure}
@@ -732,10 +723,10 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \subsection{Conclusion}
 \begin{frame}{Conclusion}
 	Compared to ImageNet pretrained models, our models:
- 	\begin{enumerate}
+ 	\begin{itemize}
 		\item used as \textbf{feature extractors} yield comparable or better performance
 		\item \textbf{fine-tuned} yield comparable performance
-	\end{enumerate}
+	\end{itemize}
 	\vfill
 	Also \textbf{training from scratch underperforms} compared to all other evaluated transfer approaches on our tasks.
 \end{frame}
@@ -762,7 +753,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	}	
 \end{frame}
 
-\begin{frame}{An imperfectly-annotated cytology dataset}
+\begin{frame}{Thyroid FNAB: an imperfectly-annotated cytology dataset}
 	\vfill
 	\begin{center}
 	A sparsely annotated dataset from the Erasme Hospital, Brussels (Dr. Isabelle Salmon's team) for thyroid nodule malignancy assessment.
@@ -839,12 +830,56 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Hard and soft pseudo-labeling}
-	TODO
+\begin{frame}{Pseudo-labeling: hard \textit{vs.} soft}
+	Generating a pseudo-label $y^{({pl})}_{ij}$ for a pixel from the model prediction $\hat{y}_{ij}$ for this pixel:
+	\[
+		y^{({pl})}_{ij} = \begin{cases}
+			1,\,\text{if}\, y_{ij} = 1 \\
+			g(\hat{y}_{ij}),\,\text{otherwise}
+		\end{cases}
+	\]
+
+	\begin{columns}
+		\begin{ccolumn}{0.48\textwidth}{Soft labeling}
+			\tiny
+			Use the output of the model as-is:
+			\[
+				g(x) = x
+			\]
+			The pseudo-label can be seen as a probability in $\left]0,1\right[$ .
+		\end{ccolumn}
+		\begin{ccolumn}{0.48\textwidth}{Hard labeling}
+			\tiny
+			Binarize the model output with the threshold:
+			\[
+				g(x) = \begin{cases}
+				1,\,\text{if}\, x > T_e\\
+				0,\,\text{otherwise}
+				\end{cases}
+			\]
+			Determine the threshold by optimizing the Dice coefficient on the exhaustively-labeled set $\mathcal{D}_l$: 
+			\begin{align*}
+			Dice_T(\mathbf{y},\hat{\mathbf{y}}) = \dfrac{2 \times \sum_{i,j} \left[\mathbb{1}_{\hat{y}_{ij} \geq T} \times y_{ij}\right]}{\sum_{i,j} \mathbb{1}_{\hat{y}_{ij} \geq T} + \sum_{i,j} y_{ij}} \\
+			T_e = \arg \underset{T}{\max} \sum_{(\mathbf{x}, \mathbf{y}) \in \mathcal{D}_l} \text{Dice}_T\left(\mathbf{y},h( \mathbf{x}; \theta_{e})\right)
+			\end{align*}
+		
+		\end{ccolumn}
+	\end{columns}
 \end{frame}
 
 \begin{frame}{Weighting strategies}
-	TODO
+	We weight the pixel contribution in the loss:
+	\[
+		\mathcal{L} = \frac{1}{|\mathbf{y}|}\sum_{i}\sum_{j} w_{ij} \ell(\hat{y}_{ij}; y_{ij}) 
+	\] 
+	The weighting strategy is an hyperparameter:
+	\begin{itemize}
+		\item \textbf{Constant}: $w^{(cst)}_{ij} = C > 0$ where $C$ is an hyperparameter
+		\item \textbf{Entropy}: $w^{(ent)}_{ij}$ is the entropy of the model prediction $\hat{y}_{ij}$
+		\item \textbf{Consistency}: $w^{(cty)}_{ij}$ is a consistency score between model predictions of pixel $(i,j)$ and close pixels
+		\item \textbf{Merged}: $w^{(mgd)}_{ij}$ combines the \textit{entropy} and \textit{consistency} strategies
+	\end{itemize}
+	Eventually, $w_{ij}$ is obtained by normalizing the weights computed over a patch so that they sum to 1.
 \end{frame}
 
 \subsection{Experiments}
@@ -902,10 +937,10 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \framesubtitle{Hard vs. soft labeling}
 	\vfill
 	For the given data scarcity regime ($\rho = 90\%$):
-	\begin{enumerate}
+	\begin{itemize}
 		\item The best performance are obtained with hard labels.  
 		\item Soft labeling yields more stability as performance are less impacted by the choice of a weighting strategy  
-	\end{enumerate}
+	\end{itemize}
 
 	\vfill
 
@@ -918,11 +953,11 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \begin{frame}{Results}
 \framesubtitle{Self-training at fixed $n_l$ - MoNuSeg}
 	\vfill
-	\begin{enumerate}
+	\begin{itemize}
 		\item There is always a cut-off point at which \textbf{exploiting additional sparse annotations with self-training becomes beneficial} !
 		\item Self-training struggles at very high data scarcity
 		\item Using $\mathcal{D}_s$ as if it was exhaustively annotated is a bad idea
-	\end{enumerate}
+	\end{itemize}
 	\begin{center}
 		For MoNuSeg, the upper baseline is reached with only $\sim 30\%$ of the original annotations. \\
 		{\tiny (70\% of the annotations were useless ??)}
@@ -955,7 +990,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \framesubtitle{Label sparsely or exhaustively ?}
 	\begin{itemize}
 		\item The answser is dataset-dependant !
-		\item MoNuSeg: annotation budget better spent on sparse labeling and using self-training
+		\item MoNuSeg: annotation budget better spent on sparse labeling with self-training
 		\item Others: annotation better spent on exhaustive labeling and using supervised training
 	\end{itemize}
 	\begin{figure}
@@ -976,13 +1011,51 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \end{frame}
 
 \begin{frame}{Results}
-\framesubtitle{An actually sparse dataset: Thyroid FNAB}
-% present the application of the model
+\framesubtitle{Application to Thyroid FNAB}
+
+\vfill
+\begin{center}
+	Self-training significantly outperforms the ``$\mathcal{D}_l$ only'' and ``$\mathcal{D}_l \cup \mathcal{D}_s$'' baselines.
+\end{center}
+
+\vfill
+\begin{table}[t]
+  \centering 
+  \begin{tabular}{|c|c|}
+    \hline
+    Method & $\text{Dice}^*$ (\%)\\
+    \hline
+    Self-training & $89.05 \pm 0.85$ \\
+    $\mathcal{D}_l$ only & $80.30 \pm 5.39$\\  
+    $\mathcal{D}_l \cup \mathcal{D}_s$ & $83.62 \pm 3.52$\\
+    \hline
+  \end{tabular}
+\end{table}
+\vfill
+
+\begin{figure}
+	\centering
+	\begin{subfigure}{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/thyroid_wsi_example1.png}	
+	\end{subfigure}
+	\begin{subfigure}{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/thyroid_wsi_example2.png}	
+	\end{subfigure}
+	\begin{subfigure}{0.32\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{images/thyroid_wsi_example3.png}	
+	\end{subfigure}
+\end{figure}
 \end{frame}
 
 
-\begin{frame}{Using the model for Thyroid FNAB}
-	% present the results 
+\begin{frame}{Self-trained model integration in a workflow}
+	Workflow to detect atypical cells.  
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/pipeline.pdf}		
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Self-training: conclusion}
