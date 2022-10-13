@@ -37,13 +37,13 @@
   \setbeamercolor{block title}{fg=white,bg=secondary}%
   \begin{block}#2{#1}}{\end{block}}
 
-\newenvironment<>{ccolumn}[2]{\begin{column}{#1}\begin{cblock}{#2}}{\end{cblock}\end{column}}
+\newenvironment<>{ccolumn}[2]{\begin{column}[t]{#1}\begin{cblock}{#2}}{\end{cblock}\end{column}}
 
 \usepackage[
   backend=biber,
-  maxbibnames=4,
+  maxbibnames=1,
   natbib=true,
-  citestyle=numeric
+  citestyle=authoryear
 ]{biblatex}
 
 \addbibresource{thesis.bib} % The filename of the bibliography
@@ -60,14 +60,27 @@
 \setbeamertemplate{itemize items}[circle]
 \setbeamertemplate{itemize subitem}[square]
 
+
+\setbeamercolor{section in head/foot}{parent=palette primary}
+\setbeamercolor{date in head/foot}{parent=palette primary}
+
 \setbeamertemplate{footline}
 {
   \leavevmode%
   \hbox{%
-    \begin{beamercolorbox}[wd=.66666\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
-      \usebeamerfont{section in head/foot}\insertsection
+    \begin{beamercolorbox}[wd=.3\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
+      \usebeamerfont{section in head/foot} \hfill \insertsection%
     \end{beamercolorbox}%
-    \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+		\begin{beamercolorbox}[wd=.05\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
+			\ifx\insertsubsection\empty%
+			\else%
+			\usebeamerfont{section in head/foot} $\vartriangleright$
+			\fi%
+		\end{beamercolorbox}%
+		\begin{beamercolorbox}[wd=0.3\paperwidth,ht=2.25ex,dp=1ex,center]{section in head/foot}%
+			\usebeamerfont{subsection in head/foot} \insertsubsection
+		\end{beamercolorbox}%
+    \begin{beamercolorbox}[wd=.35\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
       \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
       \usebeamertemplate{page number in head/foot}\hspace*{2ex}
     \end{beamercolorbox}
@@ -98,26 +111,6 @@ PhD defense
 \end{center}
 \end{frame}
 
-%\begin{frame}{Outline}
-%
-%\begin{itemize}
-%	\item Context: digital pathology and Cytomine
-%	\item Datasets: what problems are we tackling ? 
-%	\item Deep transfer learning
-%	\item State of the art
-%	\item Framework
-%	\item Strategies: 
-%	\begin{itemize}
-%		\item Last layer features
-%		\item Features selection with random forest
-%		\item Merging networks features
-%		\item Merging layers features
-%		\item Inner layer features
-%		\item Fine-tuning
-%	\end{itemize}
-%	\item Conclusion 
-%\end{itemize}
-%\end{frame}
 
 \section{Introduction}
 \begin{frame}{Introduction}
@@ -142,7 +135,8 @@ PhD defense
 	\hfill
 	{\tiny\textit{left:} institutions.ville-geneve.ch, \textit{center:} verywellhealth.com, \textit{right:} healthcare-in-europe.com}
 \end{frame}
-	
+
+\subsection{Pathology workflow}
 \begin{frame}{From the body to the computer}
 	\vfill
 
@@ -163,13 +157,14 @@ PhD defense
 	\vfill
 \end{frame}
 
+\subsection{Computer-aided pathology}
 \begin{frame}{Why computer-aided pathology}
 
 \vfill
 
-Some pathology analysis tasks are \textbf{tedious}, \textbf{time-consuming} and/or \textbf{costly}. 
+\begin{center} Some pathology analysis tasks are \textbf{tedious}, \textbf{time-consuming} and/or \textbf{costly}. \end{center} 
 
-Computational methods has the potential of making them faster, more reliable therefore \textbf{improving costs and patient outcome}. 
+Computational methods can make improve analysis reliability and speed therefore \textbf{improving patient outcome and costs}. 
 
 \vfill
 
@@ -188,7 +183,7 @@ Computational methods has the potential of making them faster, more reliable the
 	\end{subfigure}
 	\begin{subfigure}{0.25\textwidth}
 		\centering
-		\includegraphics[height=0.2\textheight]{images/thyroid_needle_haystack.png}
+		\includegraphics[height=0.2\textheight]{images/whole-slide-dim.png}
 		\caption{Needle in a haystack}
 	\end{subfigure}
 \end{figure}
@@ -247,11 +242,8 @@ Using proper computational methods:
 \end{itemize}
 \end{frame}
 
-
-\section{Contributions}
-
 \begin{frame}{Contributions}
-	All contributions address digital patholog:
+	All contributions address digital pathology:
 	\begin{itemize}
 		\item Comparison of deep transfer learning strategies from ImageNet
 		\item Multi-task pre-training of deep neural networks on pathology tasks
@@ -261,6 +253,25 @@ Using proper computational methods:
 
 \section{Transfer from ImageNet}
 \subsection{Introduction}
+
+\begin{frame}{}
+	\vfill
+	\begin{center}
+		\Large
+		Contribution \#1 \\
+		\vspace{0.75cm}
+		\textbf{Transfer learning from ImageNet} \\
+		\vspace{0.75cm}
+		{\small (thesis chapter 4)}
+	\end{center}
+	 
+	\vfill
+
+	{
+		\footnotesize
+		\textbf{Article}: \fullcite{mormont2018comparison}
+	}	
+\end{frame}
 
 \begin{frame}{Deep transfer learning: how to?}
 	\begin{figure}
@@ -414,20 +425,365 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 \end{frame}
 
 \section{Transfer from pathology data}
+\subsection{Introduction}
 
-\begin{frame}
+\begin{frame}{}
+	\vfill
+	\begin{center}
+		\Large
+		Contribution \#2 \\
+		\vspace{0.75cm}
+		\textbf{Multi-task pre-training from pathology data} \\
+		\vspace{0.75cm}
+		{\small (thesis chapter 5)}
+	\end{center}
+	 
+	\vfill
+
+	{
+		\footnotesize
+		\textbf{Article}: \fullcite{mormont2020multi}
+	}	
+\end{frame}
+
+\begin{frame}{Using a pathology problem as a source task ?}
+	\vfill
+	We have shown that, with ImageNet as a source task, fine-tuning was often a better approach than feature extraction.
+	\vfill 
+	This suggests that ImageNet features are not perfect and appear to lack specificity.
+	\vfill
+	\begin{center}
+	What about \textbf{using pathology data for the source task} to close the specificity gap ?
+	\end{center}
+	\vfill
+\end{frame}
+
+
+\begin{frame}{Challenge ?}
+	\vfill
+	Data scarcity $\rightarrow$ no ImageNet-like dataset in pathology ! 
+	\vfill
+	\begin{columns}
+		\begin{column}[t]{0.49\textwidth}
+			\begin{figure}
+				\includegraphics[width=.5\textwidth]{images/illuimagenet.jpg}
+			\end{figure}
+		\end{column}
+		\begin{column}[t]{0.49\textwidth}
+			\begin{figure}
+				\includegraphics[width=.5\textwidth]{images/lizard.png}
+			\end{figure}
+		\end{column}
+	\end{columns}
+	\begin{columns}
+		\begin{column}[t]{0.49\textwidth}
+			{
+			  \footnotesize
+				ImageNet \parencite{deng2009imagenet}:
+				\begin{itemize}
+					\item \textbf{Images}: $1.281$ million pictures
+					\item \textbf{Annot.}: one label per image
+					\item \textbf{Classes}: 1000
+				\end{itemize}
+			}
+		\end{column}
+		\begin{column}[t]{0.49\textwidth}
+			{
+				\footnotesize
+				Lizard \parencite{graham2021lizard}:
+				\begin{itemize}
+					\item \textbf{Images}: 291 regions
+					\item \textbf{Annot.}: 500k nuclei
+					\item \textbf{Classes}: 6 type of cells
+				\end{itemize}
+			}
+		\end{column}
+	\end{columns}
+	\vfill
+	\begin{center}
+		\textbf{Question}: how to pretrain a model on a sufficiently large and versatile source pathology dataset ? 
+	\end{center}
+\end{frame}
+
+\subsection{Data}
+\begin{frame}{Several source tasks?}
+	No single large dataset ? Let us use many small datasets ! 
+
+	\begin{figure}
+		\captionsetup{font={tiny}}
+    \center
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_necrose.png}
+        \caption{Necrosis}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_patterns.png}
+        \caption{ProliferativePattern}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_cells.png}
+        \caption{CellInclusion}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_breast.png}
+        \caption{Breast}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_glomeruli.png}
+        \caption{Glomeruli}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_lbtd_lba.png}
+        \caption{MouseLba}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_anapath.png}
+        \caption{HumanLba}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_tissus.png}
+        \caption{Lung}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_bonemarrow.png}
+        \caption{BoneMarrow}
+    \end{subfigure}    
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_camelyon16.png}
+        \caption{Camelyon 16}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_bach18.png}
+        \caption{BACH18 Micro}
+    \end{subfigure} \\
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_janowczyk1.png}
+        \caption{Janowczyk1}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_janowczyk2.png}
+        \caption{Janowczyk2}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_janowczyk5.png}
+        \caption{Janowczyk5}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_janowczyk6.png}
+        \caption{Janowczyk6}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_janowczyk7.png}
+        \caption{Janowczyk7}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_lbpstroma.png}
+        \caption{Stroma LBP}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_mitos14.png}
+        \caption{MITOS-ATYPIA}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_tupac.png}
+        \caption{TUPAC2016 Mitosis}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_umcm.png}
+        \caption{UMCM Colorectal}
+    \end{subfigure}
+    \begin{subfigure}[t]{0.079\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/illus/illus_warwick.png}
+        \caption{Warwick CRC}
+    \end{subfigure}
+	\end{figure}
 
 \end{frame}
 
-\section{Self-training}
-\begin{frame}{An imperfect cytology dataset: thyroid nodules}
+\subsection{Our approach}
+\begin{frame}{Multi-task pre-training architecture}
+	Use all source classification tasks simultaneously to train the model.
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/multitask-training.pdf}
+	\end{figure}
+	\begin{itemize}
+		\item A shared backbone $\theta_s$ 
+		\item A task-specific head $\theta_t$ for each task $t$
+		\item \textbf{Transfer}: after pre-training, $\theta_s$ can be fine-tuned or used as a feature extractor
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Pre-training the model in multi-task}
+	Hyperparameters: 
+	\begin{itemize}
+		\item choice of backbone $\theta_s$ architecture: ResNet50, DenseNet121
+		\item learning rate $\gamma$
+		\item head learning rate multiplier $\tau_\gamma$
+	\end{itemize}
+
+	\textbf{Batch sampling}: a single batch contains samples from different tasks.     
+
+	{\color{red}TODO: illustrate batch sampling} 
+\end{frame}
+
+\subsection{Evaluation protocol}
+\begin{frame}{Evaluation protocol}
+\framesubtitle{Leave-one-task-out}
+	We want to evaluate how a pre-trained model transfers to a new unseen tasks. 
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/transfer-score-process.pdf}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Evaluation protocol}
+\framesubtitle{Best model selection and evaluation}
+	\begin{figure}
+		\includegraphics[width=\textwidth]{images/final-perf-process.pdf}
+	\end{figure}
+\end{frame}
+
+\subsection{Results}
+\begin{frame}{Experiments and results}
+\framesubtitle{\textbf{Feature extraction} with multi-task pre-trained models}
+\vfill
+Compared to ImageNet feature extractors, ours either improve or provide comparable results. 
+\vfill
+\begin{figure}
+	\begin{subfigure}{0.48\textwidth}
+		\center
+		\includegraphics[width=\textwidth]{images/resnet_fe.png}
+		\caption{DenseNet121}
+	\end{subfigure}
+	\begin{subfigure}{0.48\textwidth}
+		\center
+		\includegraphics[width=\textwidth]{images/dense_fe.png}
+		\caption{ResNet50}
+	\end{subfigure}
+\end{figure}
+\vfill
+\end{frame}
+
+\begin{frame}{Results}
+	\framesubtitle{\textbf{Fine tuning} with multi-task pre-trained models}
+	\vfill
+	Compared to fine-tuned ImageNet models, ours provide comparable results 
 	
+	\begin{center}
+		Fine-tuning is able to recover lack of specificity of ImageNet features. 
+	\end{center}
+	
+	\vfill
+	
+	\begin{figure}
+		\begin{subfigure}{0.48\textwidth}
+			\center
+			\includegraphics[width=\textwidth]{images/resnet_ft.png}
+			\caption{DenseNet121}
+		\end{subfigure}
+		\begin{subfigure}{0.48\textwidth}
+			\center
+			\includegraphics[width=\textwidth]{images/dense_ft.png}
+			\caption{ResNet50}
+		\end{subfigure}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results}
+	\framesubtitle{Comparing to training from scratch and joint training}
+
+	This experiment confirms previously published results including ours:
+	\begin{itemize}
+		\item fine-tuning outperforms feature extraction
+		\item training from scratch is subpar compared to all other approaches
+		\item joint training only improves over fine-tuning on small datasets 
+	\end{itemize}
+
+	\begin{figure}
+		\begin{subfigure}{\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/densenet_all.png}
+			\caption{DenseNet121}
+		\end{subfigure}
+	\end{figure}
+
+\end{frame}
+
+\subsection{Conclusion}
+\begin{frame}{Conclusion}
+	Compared to ImageNet pretrained models, our models:
+ 	\begin{enumerate}
+		\item used as \textbf{feature extractors} yield comparable or better performance
+		\item \textbf{fine-tuned} yield comparable performance
+	\end{enumerate}
+	\vfill
+	Also \textbf{training from scratch underperforms} compared to all other evaluated transfer approaches on our tasks.
+\end{frame}
+
+\section{Self-training}
+\subsection{Introduction}
+
+\begin{frame}{}
+	\vfill
+	\begin{center}
+		\Large
+		Contribution \#3 \\
+		\vspace{0.75cm}
+		\textbf{Self-training for segmentation from sparsely-labeled data} \\
+		\vspace{0.75cm}
+		{\small (thesis chapter 6)}
+	\end{center}
+	 
+	\vfill
+
+	{
+		\footnotesize
+		\textbf{Article}: \fullcite{mormont2022self}
+	}	
+\end{frame}
+
+\begin{frame}{An imperfectly-annotated cytology dataset}
+	\vfill
+	\begin{center}
+	A sparsely annotated dataset from the Erasme Hospital, Brussels (Dr. Isabelle Salmon's team) for thyroid nodule malignancy assessment.
+	\end{center}
+	\vfill
+	\begin{columns}
+		\begin{column}[t]{0.48\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/sparse_thyroid_example1.png}
+		\end{column}
+		\begin{column}[t]{0.48\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/sparse_thyroid_example2.png}
+		\end{column}
+	\end{columns}
 \end{frame}
 
 \begin{frame}{Binary segmentation with a sparse dataset ?}
 	\vfill
 	\begin{center}
-		Let's generate pseudo-labels for unlabelled pixels before training !
+		Let's generate pseudo-labels for unlabeled pixels before training !
 	\end{center}
 	\vfill
 	\begin{center}
@@ -438,23 +794,27 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 
 \subsection{Problem settings}
 \begin{frame}{Problem settings}
-\framesubtitle{A sparsely-labelled dataset}
+\framesubtitle{A sparsely-labeled dataset}
 	\begin{columns}[t]
-		\begin{ccolumn}{0.48\textwidth}{$\mathcal{D}_l$ - exhaustively-labelled set}
+		\begin{ccolumn}{0.48\textwidth}{$\mathcal{D}_l$ - exhaustively-labeled set}
 			
 			\begin{figure}
 				\center
 				\includegraphics[width=\textwidth]{images/exhaustive_set.png}
-				\caption*{$n_l$ images and masks. All pixels have a 0 (background) or 1 (foreground) label.}
 			\end{figure}
+		\begin{center}
+				{\footnotesize $n_l$ images and masks. All pixels have a 0 (background) or 1 (foreground) label.}
+		\end{center}
 		\end{ccolumn}
 		% --------------------------
-		\begin{ccolumn}{0.48\textwidth}{$\mathcal{D}_s$ - sparsely-labelled set}
+		\begin{ccolumn}{0.48\textwidth}{$\mathcal{D}_s$ - sparsely-labeled set}
 			\begin{figure}
 				\center
 				\includegraphics[width=\textwidth]{images/sparse_set.png}
-				\caption*{$n_s$ images and masks. Unlabelled pixels have label 0 (background) and labelled pixels are exclusively foreground.}
 			\end{figure}
+		\begin{center}
+				{\footnotesize $n_s$ images and masks. Unlabeled pixels have label 0 (background) and labeled pixels are exclusively foreground.}
+		\end{center}
 		\end{ccolumn}
 	\end{columns}
 \end{frame}
@@ -462,7 +822,7 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 \begin{frame}{Problem settings}
 \framesubtitle{A segmentation architecture}
 	\vfill
-	A downscaled UNet \cite{ronneberger2015unet} architecture: reduce the number of parameters by a factor 8. 
+	A downscaled UNet \parencite{ronneberger2015unet} architecture: reduce the number of parameters by a factor 8. 
 	\vfill
 	\begin{figure}
 		\centering
@@ -473,10 +833,18 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 
 \subsection{Our algorithm}
 \begin{frame}{Our self-training algorithm}
-	\centering
 	\begin{figure}
+		\centering
 		\includegraphics[width=\textwidth]{images/selftrain-algo.png}
 	\end{figure}
+\end{frame}
+
+\begin{frame}{Hard and soft pseudo-labeling}
+	TODO
+\end{frame}
+
+\begin{frame}{Weighting strategies}
+	TODO
 \end{frame}
 
 \subsection{Experiments}
@@ -484,16 +852,19 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 \framesubtitle{3 public datasets}
 	\centering
 	\begin{columns}
-		\begin{ccolumn}{0.30\textwidth}{MoNuSeg \cite{kumar2019multi}}
+		\begin{ccolumn}{0.30\textwidth}{MoNuSeg}
 			\centering \includegraphics[width=\textwidth]{images/monuseg_rep.png}
+			\begin{raggedright} \tiny \parencite{kumar2019multi} \end{raggedright}
 		\end{ccolumn}
 		% --------------------------
-		\begin{ccolumn}{0.30\textwidth}{SegPC \cite{gupta2021segpc}}
+		\begin{ccolumn}{0.30\textwidth}{SegPC}
 			\centering \includegraphics[width=\textwidth]{images/segpc_rep.png}
+			\begin{raggedright} \tiny \parencite{gupta2021segpc} \end{raggedright}
 		\end{ccolumn}
 		% --------------------------
-		\begin{ccolumn}{0.30\textwidth}{GlaS \cite{sirinukunwattana2017gland}}
+		\begin{ccolumn}{0.30\textwidth}{GlaS}
 			\centering \includegraphics[width=\textwidth]{images/glas_rep.png}
+			\begin{raggedright} \tiny \parencite{sirinukunwattana2017gland} \end{raggedright}
 		\end{ccolumn}
 	\end{columns}
 	\vfill
@@ -502,7 +873,7 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 \end{frame}
 
 \begin{frame}{Experiments}
-\framesubtitle{3 public baselines}
+\framesubtitle{3 baselines}
 	\vfill
 	\begin{columns}[t]
 		\begin{ccolumn}{0.30\textwidth}{(1) $|\mathcal{D}_s| = 0$ }
@@ -529,18 +900,79 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 \subsection{Results}
 \begin{frame}{Results}
 \framesubtitle{Hard vs. soft labeling}
+	\vfill
+	For the given data scarcity regime ($\rho = 90\%$):
+	\begin{enumerate}
+		\item The best performance are obtained with hard labels.  
+		\item Soft labeling yields more stability as performance are less impacted by the choice of a weighting strategy  
+	\end{enumerate}
+
+	\vfill
+
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{images/plot_hard_vs_soft_test_pxl_self_hard_dice.pdf}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Results}
-\framesubtitle{Self-training at fixed $n_l$}
+\framesubtitle{Self-training at fixed $n_l$ - MoNuSeg}
+	\vfill
+	\begin{enumerate}
+		\item There is always a cut-off point at which \textbf{exploiting additional sparse annotations with self-training becomes beneficial} !
+		\item Self-training struggles at very high data scarcity
+		\item Using $\mathcal{D}_s$ as if it was exhaustively annotated is a bad idea
+	\end{enumerate}
+	\begin{center}
+		For MoNuSeg, the upper baseline is reached with only $\sim 30\%$ of the original annotations. \\
+		{\tiny (70\% of the annotations were useless ??)}
+	\end{center}	
+	\vfill
+	\begin{figure}
+		\centering
+		\includegraphics[width=\textwidth]{images/monuseg_test_pxl_self_hard_dice_rho.pdf}
+	\end{figure}
+\end{frame}
+
+
+\begin{frame}{Results}
+	\framesubtitle{Self-training at fixed $n_l$ - SegPC and GlaS}
+	\begin{figure}
+		\begin{subfigure}{\textwidth}
+			\centering
+			\caption{Glas}
+			\includegraphics[width=\textwidth]{images/glas_test_pxl_self_hard_dice_rho.pdf}
+		\end{subfigure}
+		\begin{subfigure}{\textwidth}
+			\centering
+			\caption{SegPC}
+			\includegraphics[width=\textwidth]{images/segpc_test_pxl_self_hard_dice_rho.pdf}
+		\end{subfigure}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Results}
 \framesubtitle{Label sparsely or exhaustively ?}
-\end{frame}
-
-\begin{frame}{Results}
-\framesubtitle{Tuning the segmentation threshold}
+	\begin{itemize}
+		\item The answser is dataset-dependant !
+		\item MoNuSeg: annotation budget better spent on sparse labeling and using self-training
+		\item Others: annotation better spent on exhaustive labeling and using supervised training
+	\end{itemize}
+	\begin{figure}
+		\centering
+		\begin{subfigure}{0.32\textwidth}
+			\includegraphics[width=\textwidth]{images/annot_strat_monuseg.pdf}
+			\caption{MoNuSeg}
+		\end{subfigure}
+		\begin{subfigure}{0.32\textwidth}
+			\includegraphics[width=\textwidth]{images/annot_strat_glas.pdf}
+			\caption{GlaS}
+		\end{subfigure}
+		\begin{subfigure}{0.32\textwidth}
+			\includegraphics[width=\textwidth]{images/annot_strat_segpc.pdf}
+			\caption{SegPC}
+		\end{subfigure}
+	\end{figure}
 \end{frame}
 
 \begin{frame}{Results}
@@ -548,11 +980,25 @@ We have carried out several experiments \textbf{with ImageNet} as source task:
 % present the application of the model
 \end{frame}
 
-\begin{frame}{Self-training: conclusion}
-\end{frame}
 
 \begin{frame}{Using the model for Thyroid FNAB}
 	% present the results 
+\end{frame}
+
+\begin{frame}{Self-training: conclusion}
+\end{frame}
+
+\section{Conclusions and future works}
+\begin{frame}{Conclusions}
+\end{frame}
+
+\begin{frame}{Future works}
+\end{frame}
+
+\begin{frame}
+	\vfill
+	{\Large Thank you !}
+	\vfill
 \end{frame}
 
 %\begin{frame}{Deep learning}
