@@ -1058,14 +1058,38 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Self-training: conclusion}
+\begin{frame}{Conclusion}
+	\begin{itemize}
+		\item Self-training can be used to obtain competitive segmentation performance with less annotations !
+		\item Some datasets might benefit more from sparse labeling then exhaustive labeling
+	\end{itemize}
+
+	Future works:
+	\begin{itemize}
+		\item From binary to multi-class segmentation
+		\item How does the type of dataset impact the performance ?
+		\item Study the interest of the method in low scarcity conditions
+	\end{itemize}
 \end{frame}
 
-\section{Conclusions and future works}
-\begin{frame}{Conclusions}
+\section{Conclusion of the thesis}
+\begin{frame}{Conclusion of the thesis}
+	\begin{exampleblock}{}
+		Data scarcity in digital pathology is not an inextricable issue and there exists algorithmic solutions to at least alleviate it.
+	\end{exampleblock}
+	\vfill
+	\begin{itemize}
+		\item Transfer learning is an effective approach: feature extraction is a strong baseline, fine-tuning is better
+		\item Multi-task pre-training is a viable strategy to pre-train a model on pathology data
+		\item Self-training with sparsely-labeled datasets can be used to cut down the dataset size requirements for training a segmentation model 
+	\end{itemize}
 \end{frame}
 
-\begin{frame}{Future works}
+\section{Future works}
+\begin{frame}{Perspectives}
+	\begin{itemize}
+		\item 
+	\end{itemize}
 \end{frame}
 
 \begin{frame}
