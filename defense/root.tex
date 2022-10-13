@@ -702,9 +702,11 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \begin{frame}{Results}
 	\framesubtitle{Comparing to training from scratch and joint training}
 
-	Joint training only improves over fine-tuning on small datasets \\
+	\vfill
+	Joint training only improves over fine-tuning on small datasets. \\
+	\vfill 
 	
-	This experiment a	also confirms previously published results including ours:
+	This experiment also confirms previously published results including ours:
 	\begin{itemize}
 		\item fine-tuning outperforms feature extraction
 		\item training from scratch is subpar compared to all other approaches
@@ -842,7 +844,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\begin{columns}
 		\begin{ccolumn}{0.48\textwidth}{Soft labeling}
 			\tiny
-			Use the output of the model as-is:
+			Use the sigmoid output of the model as-is:
 			\[
 				g(x) = x
 			\]
@@ -850,7 +852,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 		\end{ccolumn}
 		\begin{ccolumn}{0.48\textwidth}{Hard labeling}
 			\tiny
-			Binarize the model output with the threshold:
+			Binarize the model output with a threshold:
 			\[
 				g(x) = \begin{cases}
 				1,\,\text{if}\, x > T_e\\
@@ -990,7 +992,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \framesubtitle{Label sparsely or exhaustively ?}
 	\begin{itemize}
 		\item The answser is dataset-dependant !
-		\item MoNuSeg: annotation budget better spent on sparse labeling with self-training
+		\item MoNuSeg: annotation budget better spent on sparse labeling (later used with self-training)
 		\item Others: annotation better spent on exhaustive labeling and using supervised training
 	\end{itemize}
 	\begin{figure}
@@ -1063,7 +1065,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 		\item Self-training can be used to obtain competitive segmentation performance with less annotations !
 		\item Some datasets might benefit more from sparse labeling then exhaustive labeling
 	\end{itemize}
-
+	\vfill
 	Future works:
 	\begin{itemize}
 		\item From binary to multi-class segmentation
@@ -1074,6 +1076,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 
 \section{Conclusion of the thesis}
 \begin{frame}{Conclusion of the thesis}
+	\vfill
 	\begin{exampleblock}{}
 		Data scarcity in digital pathology is not an inextricable issue and there exists algorithmic solutions to at least alleviate it.
 	\end{exampleblock}
@@ -1083,12 +1086,16 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 		\item Multi-task pre-training is a viable strategy to pre-train a model on pathology data
 		\item Self-training with sparsely-labeled datasets can be used to cut down the dataset size requirements for training a segmentation model 
 	\end{itemize}
+	\vfill
 \end{frame}
 
 \section{Future works}
 \begin{frame}{Perspectives}
 	\begin{itemize}
-		\item 
+		\item Transfer learning with new architectures 
+		\item Consider more tasks and type of tasks (\textit{e.g.}~ detection, segmentation)
+		\item Self-training as an interactive annotation algorithm
+		\item Systematic benchmarking of representation leraning in pathology
 	\end{itemize}
 \end{frame}
 
