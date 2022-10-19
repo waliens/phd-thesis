@@ -62,7 +62,7 @@
 \setbeamertemplate{itemize items}[circle]
 \setbeamertemplate{itemize subitem}[square]
 
-
+\setbeamertemplate{enumerate items}[circle]
 \setbeamercolor{section in head/foot}{parent=palette primary}
 \setbeamercolor{date in head/foot}{parent=palette primary}
 
@@ -194,9 +194,12 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 \vfill
 \end{frame}
 
+\begin{frame}{Cytomine}
+\end{frame}
+
 \begin{frame}{Using machine and deep learning}
 	\begin{center}
-	Machine learning methods are often preferred to classical computer vision methods for tackling computer-aided pathology tasks.
+	Machine learning methods are often preferred to classical computer vision methods for tackling complex pathology tasks.
 	\end{center}
 	\vfill
 	\begin{figure}
@@ -227,8 +230,8 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 	Few of the challenges:
 	\begin{itemize}
 		\item {high variability}: slide preparation process, artefacts, staining, acquisition,...
-		\item {data scarcity}: annotating data is expensive and tedious
 		\item {big data}: up to millions of biological objects per multi-gigapixel image
+		\item {data scarcity}: annotating data is expensive and tedious
 	\end{itemize}
 \end{frame}
 
@@ -243,67 +246,75 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 	\vfill
 
 	\begin{figure}
-		\begin{subfigure}{0.20\textwidth}
+		\begin{subfigure}{0.32\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{images/variability.png}
 			\caption*{\tiny Variability}
 		\end{subfigure}
 		\hfill
-		\begin{subfigure}{0.20\textwidth}
+		\begin{subfigure}{0.32\textwidth}
 			\centering
 			\includegraphics[width=\textwidth]{images/gdpr.png}
 			\caption*{\tiny Privacy}
 		\end{subfigure}
 		\hfill
-		\begin{subfigure}{0.22\textwidth}
+		\begin{subfigure}{0.32\textwidth}
 			\centering
 			\includegraphics[width=0.9091\textwidth]{images/graduate.png}
 			\caption*{\tiny Need for skilled annotators}
 		\end{subfigure}
-		\hfill
-		\begin{subfigure}{0.25\textwidth}
-			\centering
-			\includegraphics[width=\textwidth]{images/simplification.png}
-			\caption*{\tiny Task simplification}
-		\end{subfigure}
+		% \hfill
+		% \begin{subfigure}{0.25\textwidth}
+		% 	\centering
+		% 	\includegraphics[width=\textwidth]{images/simplification.png}
+		% 	\caption*{\tiny Task simplification}
+		% \end{subfigure}
 	\end{figure}
 
-	\vfill
-
+\end{frame}
+\begin{frame}{Natural images \textit{vs.} pathology datasets}
+	\vspace{-0.5cm}
 	\begin{columns}
 		\column{.25\linewidth}
 		\begin{figure}
 			\centering
-			\includegraphics[width=0.8\textwidth]{images/illuimagenet.jpg}
+			\caption*{\footnotesize \textbf{Natural images}}
+			\vspace{-0.25cm}
+			\includegraphics[width=\textwidth]{images/illuimagenet.jpg}
 		\end{figure}
-		\column{.25\linewidth}
-		{
-			\tiny
-			\noindent ImageNet \parencite{deng2009imagenet}:
-			\setlength{\leftmargini}{0pt}
-			\begin{itemize}
-				\item \textbf{Task}: classif.
-				\item \textbf{Images}: $1.3$M (now $14$M)
-				\item \textbf{Annot.}: one label/image
-				\item \textbf{Classes}: 1000
-			\end{itemize}
+		\column{.4\linewidth}
+		{%
+\vfill
+\footnotesize \noindent ImageNet \parencite{deng2009imagenet}:
+\begin{itemize}
+\item \textbf{Task}: classif.
+\item \textbf{Images}: $1.3$M images (now $14$M)
+\item \textbf{Annot.}: one label/image
+\item \textbf{Classes}: 1000
+\end{itemize}
+\vfill
 		}
+		
+	\end{columns}
+	\begin{columns}
 		\column{.25\linewidth}
 		\begin{figure}
 			\centering
-			\includegraphics[width=0.8\textwidth]{images/lizard.png}
-		\end{figure}
-		\column{.25\linewidth}
+			\caption*{\footnotesize \textbf{Pathology images}}
+			\vspace{-0.25cm}
+			\includegraphics[width=\textwidth]{images/lizard.png}
+		\end{figure} 
+		\column{.4\linewidth}
 		{%
-			\tiny%
-			\noindent Lizard \parencite{graham2021lizard}:%
-			\setlength{\leftmargini}{0pt}
-			\begin{itemize}
-				\item \textbf{Task}: classif/seg
-				\item \textbf{Images}: 291 (regions)
-				\item \textbf{Annot.}: 500k nuclei
-				\item \textbf{Classes}: 6
-			\end{itemize}
+\vfill
+\footnotesize \noindent Lizard \parencite{graham2021lizard}:%
+\begin{itemize}
+	\item \textbf{Task}: classif/seg
+	\item \textbf{Images}: 291 images/regions
+	\item \textbf{Annot.}: 500k nuclei
+	\item \textbf{Classes}: 6
+\end{itemize}
+\vfill
 		}
 	\end{columns}
 
@@ -316,53 +327,68 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 \end{frame}
 
 \begin{frame}{Working around data scarcity}
-	\vfill
-	\textbf{Option 1}: make labeling more efficient.
-	\vfill
-	\begin{columns}
-	\begin{column}[t]{0.33\linewidth}
-		\begin{figure}
-			\includegraphics[width=0.9\textwidth]{images/haii.jpg}
-			\caption*{AI-assisted labeling}
-		\end{figure}
-	\end{column}
-	\hfill
-	\begin{column}[t]{0.33\linewidth}
-		\begin{figure}
-			\includegraphics[width=0.9\textwidth]{images/drawing_tools.png}
-			\caption*{AI-assisted labeling}
-		\end{figure}
-	\end{column}
-	\hfill
-	\begin{column}[t]{0.33\linewidth}
-		\begin{figure}
-			\includegraphics[width=0.9\textwidth]{images/crowdsourcing.jpg}
-			\caption*{Crowdsourcing}
-		\end{figure}
-	\end{column}
-\end{columns}
-\vfill
-\textbf{Option 2}: use appropriate computational methods. In this thesis:
-\begin{columns}
-	\begin{column}[t]{0.49\linewidth}
-		\begin{figure}
-			\includegraphics[width=\textwidth]{images/transfer-fe.pdf}
-			\caption*{Transfer learning}
-		\end{figure}
-	\end{column}
-	\begin{column}[t]{0.49\linewidth}
-		\begin{figure}
-			\includegraphics[width=\textwidth]{images/selftraining.png}
-			\caption*{Self-training}
-		\end{figure}
-	\end{column}
-\end{columns}
-\vfill
+% 	\textbf{Option 1}: make labeling more efficient.
+% 	\vfill
+% 	\begin{columns}
+% 	\begin{column}[t]{0.33\linewidth}
+% 		\begin{figure}
+% 			\includegraphics[width=0.9\textwidth]{images/haii.jpg}
+% 			\caption*{AI-assisted labeling}
+% 		\end{figure}
+% 	\end{column}
+% 	\hfill
+% 	\begin{column}[t]{0.33\linewidth}
+% 		\begin{figure}
+% 			\includegraphics[width=0.9\textwidth]{images/drawing_tools.png}
+% 			\caption*{AI-assisted labeling}
+% 		\end{figure}
+% 	\end{column}
+% 	\hfill
+% 	\begin{column}[t]{0.33\linewidth}
+% 		\begin{figure}
+% 			\includegraphics[width=0.9\textwidth]{images/crowdsourcing.jpg}
+% 			\caption*{Crowdsourcing}
+% 		\end{figure}
+% 	\end{column}
+% \end{columns}
+
+\begin{figure}
+	\begin{subfigure}{\linewidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{images/transfer-fe.pdf}
+		\caption*{Transfer learning}
+	\end{subfigure}
+
+	\begin{subfigure}{\linewidth}
+		\centering
+		\includegraphics[width=0.7\textwidth]{images/selftraining.pdf}
+		\caption*{Self-training}
+	\end{subfigure}
+\end{figure}
 \end{frame}
 
 \subsection{Outline}
 \begin{frame}{Outline}
-	\tableofcontents
+	\vfill
+	Contributions:
+	\begin{enumerate}
+		\item \textbf{Transfer from ImageNet}
+		\begin{figure}
+			\centering
+			\includegraphics[height=0.15\textheight]{images/transfer-fe.pdf}
+		\end{figure}
+		\item \textbf{Transfer from pathology data}
+		\begin{figure}
+			\centering
+			\includegraphics[height=0.15\textheight]{images/multitask-training.pdf}
+		\end{figure}
+		\item \textbf{Self-training for segmentation from sparsely-labeled data}
+		\begin{figure}
+			\centering
+			\includegraphics[height=0.2\textheight]{images/selftrain-algo.png}
+		\end{figure}
+	\end{enumerate}
+	\vfill
 \end{frame}
 
 \section{Transfer from ImageNet}
@@ -402,14 +428,14 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 
 \begin{frame}{Our contribution}
 
-\textbf{Goal}: devise \textbf{guidelines and best practices} for deep transfer learning with \textbf{ImageNet as a source task}
+\textbf{Goal}: devise \textbf{guidelines and best practices} for deep transfer learning with \textbf{ImageNet as a source task} in \textbf{digital pathology}:
 
 \vfill
 
 \begin{itemize}
 	\item {Fine-tuning \textit{vs.} feature extraction}: which one works better ? 
- 	\item Which {pre-trained network} works better ? 
- 	\item {Where to extract} features ? 
+ 	\item Which {pre-trained architecture} works better ? {\tiny (ResNet, DenseNet, VGG...)}
+ 	\item {Where to extract} features ? {\tiny (last layer, inside the network)}
  	\item ...
 \end{itemize} 
 
@@ -436,7 +462,7 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
     \begin{tabular}{|c|c|c|c|cc|}
         \hline
         \multirow{2}{*}{} & \multirow{2}{*}{Dataset} & \multirow{2}{*}{Domain} & \multirow{2}{*}{Cls} & \multicolumn{2}{c|}{Total} \\
-        \cline{4-5}
+        \cline{5-6}
         & & & & Images & Slides \\
         \hline
         (a) & Necrosis (N) & Histo & 2 & 882 & 13 \\ % ulg_lbtd2_chimio_necrose
@@ -482,16 +508,9 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 	  \textbf{Strategy} & \textbf{Cell} & \textbf{Prolif} & \textbf{Glom} & \textbf{Necro} & \textbf{Breast} & \textbf{Mouse} & \textbf{Lung} & \textbf{Human} \\
 	  \hline
 	  Baseline (ET-FL)      & {\color{grey}0.9250} & {\color{grey}0.8268} & {\color{grey}0.9551} & {\color{grey}0.9805}	& {\color{grey}0.9345} & {\color{grey}0.7568} & {\color{grey}0.8547} & {\color{grey}0.6960} \\
-	  Last layer    & {\color{grey}0.9822} & {\color{grey}0.8893} & {\color{grey}0.9938} & \textit{0.9982} & {\color{grey}0.9603} & {\color{grey}0.7996} & {\color{grey}0.9133}	& {\color{grey}0.7820} \\
-	  Feat. select.	& {\color{grey}0.9676}	& {\color{grey}0.8861}	& {\color{grey}0.9843}	& \textbf{0.9994}	& {\color{grey}0.9597}	& {\color{grey}0.7438}	& {\color{grey}0.8941}	& {\color{grey}0.7703} \\
-	  Merg. networks	& \textit{0.9897}	& \textbf{0.8984}	& {\color{grey}0.9948}	& {\color{grey}0.9864}	& {\color{grey}0.9549}	& \textit{0.8169}	& {\color{grey}0.9155}	& {\color{grey}0.7928} \\
-	  Merg. layers	& {\color{grey}0.9808}	& {\color{grey}0.8906}	& {\color{grey}0.9944}	& {\color{grey}0.9964}	& {\color{grey}0.9639}	& {\color{grey}0.7941}	& {\color{grey}0.9268}	& {\color{grey}0.7977} \\
-	  Inner ResNet	& {\color{grey}0.9748}	& \textit{0.8959}	& {\color{grey}0.9949}	& {\color{grey}0.9964}	& {\color{grey}0.9664}	& {\color{grey}0.8131}	& \textit{0.9291}	& \textit{0.8113} \\
-	  Inner DenseNet	& {\color{grey}0.9862}	& \textbf{0.8984}	& \textit{0.9962}	& {\color{grey}0.9917}	& {\color{grey}0.9699}	& {\color{grey}0.8012}	& {\color{grey}0.9268}	& {\color{grey}0.7967} \\
-	  Inner IncResV2	& {\color{grey}0.9873}	& {\color{grey}0.8948}	& \textit{0.9962}	& \textit{0.9982}	& \textit{0.9720}	& {\color{grey}0.8137}	& {\color{grey}0.9234}	& {\color{grey}0.7713} \\
-%       Inner IncV3		& {\color{grey}0.9836}	& {\color{grey}0.8899}	& {\color{grey}0.9951}	& {\color{grey}0.9964}	& {\color{grey}0.9731}	& {\color{grey}0.8104}	& {\color{grey}0.9201}	& {\color{grey}0.7507} \\
-		\hdashline
- {\color{red}\textbf{Fine-tuning}}		& \textbf{0.9926}	& {\color{grey}0.8797}	& \textbf{0.9977}	& {\color{grey}0.9970}	& \textbf{0.9873}	& \textbf{0.8727}	& \textbf{0.9405}	& \textbf{0.8641} \\
+	  Feature extrac.	& {\color{grey}0.9897} & \textbf{0.8984} & {\color{grey}0.9962} & \textbf{0.9994} & {\color{grey}0.9720} & {\color{grey}0.8169} & {\color{grey}0.9291} & {\color{grey}0.8113} \\
+%     
+	 Fine-tuning		& \textbf{0.9926} & {\color{grey}0.8797} & \textbf{0.9977} & {\color{grey}0.9970} & \textbf{0.9873}	& \textbf{0.8727} & \textbf{0.9405}	& \textbf{0.8641} \\
 %%      \hline
 %%      \textbf{Best} & 0.9926 & 0.8984 & 0.9977 & 0.9994 & 0.9873 & 0.8727 & 0.9405 & 0.8641 \\
 	  \hline
@@ -507,7 +526,7 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 	\vfill	
 	\begin{figure}
 		\center
-		\includegraphics[scale=0.7]{images/all_per_layer_hori_bars.png}
+		\includegraphics[width=0.7\textwidth]{images/all_per_layer_hori_bars.pdf}
 	\end{figure}
 	\vfill
 \end{frame}
@@ -562,20 +581,13 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 \end{frame}
 
 \begin{frame}{Using a pathology problem as a source task ?}
-	\vfill
-	\begin{center}
-	Transfer from ImageNet works well !
-	\end{center}
 	\vfill 
-	\begin{center}
-		... but \textbf{transfer learning has been show to work better when target and source tasks are close} !
-	\end{center}
+	\textbf{Transfer learning} has been shown to \textbf{work better} when \textbf{target and source tasks are close}. {\tiny \parencite{yosinski2014transferable} }
 	\vfill
-	No ImageNet-like dataset in pathology so how can we pre-train a model ? 
+	Problem: \textbf{no ImageNet-like dataset in pathology} so how can we pre-train a model ? 
 	\vfill
-	\begin{center}
-	\Large We propose \textbf{multi-task pre-training} with many samll datasets rather than a large one. 
-	\end{center}
+	Our proposal: \textbf{multi-task pre-training} with many small datasets rather than a large one. 
+	\vfill
 \end{frame}
 
 \subsection{Data}
@@ -695,34 +707,35 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 	\begin{table}[t]
     \centering
     \tiny
-    \begin{tabular}{|r|c|c|l|c|c|c|c|}
+    \begin{tabular}{|c|c|c|c|c|}
         \hline
-        Ref. & \textbf{Name} & Type & \multicolumn{1}{c|}{Task} & Organ \& pathology & Stains & Images & Classes \\
+        \textbf{Name} & Organ \& pathology & Stains & Images & Classes \\
         \hline
- 				& MITOS-ATYPIA 14 & DET & & breast cancer & H\&E & 64873 & 3 \\
- 				& Warwick CRC & DET & & colorectal cancer & H\&E & 2500 & 2 \\
- 				& Janowczyk1 & SEG & & breast cancer & H\&E & 31725 & 2 \\
- 				& Janowczyk2 & SEG & & breast cancer & H\&E & 3402 & 2 \\
- 				& Janowczyk5 & DET & &  breast cancer & H\&E & 24870 & 2 \\
- 				& Janowczyk6 & CLF & & breast, invasive ductal carci. & H\&E & 277524 & 2 \\
- 				& Janowczyk7 & CLF & & breast, lymphoma & H\&E & 2244 & 3 \\
- 				& Stroma LBP & CLF & & colorectal cancer & IHC & 2313 & 2 \\
- 				& TUPAC2016 Mitosis & DET & & breast cancer & H\&E & 77853 & 2 \\
- 				& BACH18 Micro & CLF & & breast cancer & H\&E & 4800 & 4 \\ 
- 				& Camelyon16 & SEG & & breast cancer & H\&E & 2922216 & 2 \\
- 				& UMCM Colorectal & CLF & & colorectal cancer & H\&E& 5000 & 8 \\
- 				& Necrosis & CLF & & breast cancer & IHC & 882 & 2 \\
- 				& ProliferativePattern & CLF & & thyroid cancer & Diff-Quik & 1857 & 2 \\
- 				& CellInclusion & CLF & & thyroid cancer & Diff-Quik & 3637 & 2 \\
- 				& MouseLba & DET & & lung cancer & MGG & 4284 & 8 \\
- 				& HumanLba & DET & & lung cancer & MGG & 5420 & 9 \\
- 				& Lung & CLF & & lung & H\&E & 6331 & 10 \\
- 				& Breast1 & CLF & & breast cancer & H\&E & 23032 & 2 \\
- 				& Breast2 & CLF & & breast cancer & H\&E & 17523 & 2 \\
- 				& Glomeruli & CLF & & kidney & M3C & 29213 & 2 \\
- 				& Bone marrow & CLF & & bone marrow & H\&E & 1291 & 9 \\
+		Necrosis & breast cancer & IHC & 882 & 2 \\
+		Bone marrow & bone marrow & H\&E & 1291 & 9 \\
+		ProliferativePattern & thyroid cancer & Diff-Quik & 1857 & 2 \\
+		Janowczyk7 & breast, lymphoma & H\&E & 2244 & 3 \\
+		Stroma LBP & colorectal cancer & IHC & 2313 & 2 \\
+		Warwick CRC & colorectal cancer & H\&E & 2500 & 2 \\
+		Janowczyk2 & breast cancer & H\&E & 3402 & 2 \\
+		CellInclusion & thyroid cancer & Diff-Quik & 3637 & 2 \\
+		MouseLba & lung cancer & MGG & 4284 & 8 \\
+		BACH18 Micro & breast cancer & H\&E & 4800 & 4 \\ 
+		UMCM Colorectal & colorectal cancer & H\&E& 5000 & 8 \\
+		HumanLba & lung cancer & MGG & 5420 & 9 \\
+		Lung & lung & H\&E & 6331 & 10 \\
+		Breast2 & breast cancer & H\&E & 17523 & 2 \\
+		Breast1 & breast cancer & H\&E & 23032 & 2 \\
+		Janowczyk5 &  breast cancer & H\&E & 24870 & 2 \\
+		Glomeruli & kidney & M3C & 29213 & 2 \\
+		Janowczyk1 & breast cancer & H\&E & 31725 & 2 \\
+		MITOS-ATYPIA 14 & breast cancer & H\&E & 64873 & 3 \\
+		TUPAC2016 Mitosis & breast cancer & H\&E & 77853 & 2 \\
+		Janowczyk6 & breast, invasive ductal carci. & H\&E & 277524 & 2 \\
+		Camelyon16 & breast cancer & H\&E & 292226 & 2 \\
         \hline 
-\multicolumn{5}{|c|}{} & \textbf{Total} & 882800 & 81 \\
+		
+\multicolumn{2}{|c|}{} & \textbf{Total} & {\color{red}\textbf{882800}} & {\color{red}\textbf{81}} \\
 \hline
     \end{tabular}
 \end{table}
@@ -738,7 +751,6 @@ Computational methods can improve analysis \textbf{reliability and speed} theref
 		\item A shared backbone $\theta_s$ (\textit{e.g.}~: ResNet50, DenseNet121)
 		\item A task-specific head $\theta_t$ for each task $t$
 		\item Training batch sampling: one batch contains samples from different tasks. 
-		\item Hyperparameters: learning rate $\gamma$, head learning rate multiplier $\tau_\gamma$
 		\item \textbf{Transfer}: after pre-training, $\theta_s$ can be fine-tuned or used as a feature extractor
 	\end{itemize}
 \end{frame}
@@ -806,14 +818,16 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 
 \begin{frame}{Results}
 	\framesubtitle{Comparing to training from scratch and joint training}
+	\begin{figure}
+		\centering
+		\includegraphics[width=\linewidth]{images/joint-banner.pdf}
+		\hspace{-0.25cm}
+		\caption*{\textit{From scratch - feature extraction - fine-tuning - joint training}}
+	\end{figure}
 
-	\vfill
-	Joint training only improves over fine-tuning on small datasets. \\
-	\vfill 
-	
-	This experiment also confirms previously published results including ours:
 	\begin{itemize}
-		\item fine-tuning outperforms feature extraction
+		\item joint training only improves over fine-tuning on small datasets
+		\item fine-tuning outperforms feature extraction {\tiny (contrib. \#1)}
 		\item training from scratch is subpar compared to all other approaches
 	\end{itemize}
 
@@ -862,7 +876,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \begin{frame}{Thyroid FNAB: an imperfectly-annotated cytology dataset}
 	\vfill
 	\begin{center}
-	A sparsely annotated dataset from the Erasme Hospital, Brussels (Dr. Isabelle Salmon's team) for thyroid nodule malignancy assessment.
+	A sparsely annotated dataset for thyroid nodule malignancy assessment.
 	\end{center}
 	\vfill
 	\begin{columns}
@@ -875,9 +889,15 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 			\includegraphics[width=\textwidth]{images/sparse_thyroid_example2.png}
 		\end{column}
 	\end{columns}
+
+	\begin{flushright}
+		\tiny
+		Annotated by the team of Prof. Isabelle Salmon from Erasme hospital (Université Libre de Bruxelles, BE).
+	\end{flushright}
+	\vfill
 \end{frame}
 
-\begin{frame}{Using sparsely-labeled data ?}
+\begin{frame}{Using sparsely-labeled data}
 	\vfill
 	\begin{center}
 		How to exploit such a sparse/incomplete segmentation dataset in a supervised learning settings ? 
@@ -885,14 +905,17 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\vfill
 	\begin{figure}
 		\centering
-		\includegraphics[height=0.2\textheight]{images/unet.png}
+		\includegraphics[height=0.4\textheight]{images/unet.png}
 	\end{figure}
 	\begin{flushright}
-		\parencite{ronneberger2015unet}
+		\tiny \parencite{ronneberger2015unet}
 	\end{flushright}
 	\vfill
+	\textbf{Our proposal}: use the segmentation model being trained to generate the missing information
 	\begin{center}
-		We propose to use \textbf{self-training} $\Rightarrow$ use the segmentation model being train to generate the missing information.
+		
+
+		$\Rightarrow$ \textbf{self-training} $\Leftarrow$
 	\end{center}
 	\vfill
 \end{frame}
@@ -930,14 +953,9 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\end{figure}
 \end{frame}
 
-\begin{frame}{Pseudo-labels and weighting startegies}
-	\textbf{Generating a pseudo-label} $y^{({pl})}_{ij}$ for an unlabeled pixel from the model prediction $\hat{y}_{ij}$ for this pixel:
-	\begin{itemize}
-		\item Soft label: use $\hat{y}_{ij}$ as-is 
-		\item Hard label: 1 if $\hat{y}_{ij} > T$, 0 otherwise. $T$ is an auto-calibrated threshold. 
-	\end{itemize}
-	\vfill 
-	We \textbf{weight the pixel contribution} in the loss:
+\begin{frame}{Weighting startegies}
+
+	We \textbf{weigh the pixel contribution} in the loss:
 	\[
 		\mathcal{L} = \frac{1}{|\mathbf{y}|}\sum_{i}\sum_{j} w_{ij} \ell(\hat{y}_{ij}; y_{ij}) 
 	\] 
@@ -1323,4 +1341,12 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 %
 %\end{columns}
 %\end{frame}
+
+\begin{frame}{Pseudo-labels}
+	\textbf{Generating a pseudo-label} $y^{({pl})}_{ij}$ for an unlabeled pixel from the model prediction $\hat{y}_{ij}$ for this pixel:
+	\begin{itemize}
+		\item Soft label: use $\hat{y}_{ij}$ as-is 
+		\item Hard label: 1 if $\hat{y}_{ij} > T$, 0 otherwise. $T$ is an auto-calibrated threshold. 
+	\end{itemize}
+\end{frame}
 \end{document}
