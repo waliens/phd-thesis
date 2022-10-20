@@ -1094,73 +1094,37 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 		\item There is always a cut-off point at which \textbf{exploiting additional sparse annotations with self-training becomes beneficial} !
 		\item Self-training struggles at very high data scarcity
 		\item Using $\mathcal{D}_s$ as if it was exhaustively annotated is a bad idea
+		\item For MoNuSeg, the upper baseline is reached with only $\sim 30\%$ of the original annotations.
 	\end{itemize}
-	\begin{center}
-		For MoNuSeg, the upper baseline is reached with only $\sim 30\%$ of the original annotations. \\
-	\end{center}	
 	\vfill
 	\begin{figure}
-		\begin{subfigure}{\linewidth}
+		\begin{subfigure}{0.27\linewidth}
 			\centering
 			\includegraphics[width=\textwidth]{images/monusef_test_pxl_self_hard_dice_rho_entropy.pdf}
 			\caption{MoNuSeg}
 		\end{subfigure}
-		\begin{subfigure}{\linewidth}
+		\begin{subfigure}{0.27\linewidth}
 			\centering
 			\includegraphics[width=\textwidth]{images/segpc_test_pxl_self_hard_dice_rho_entropy.pdf}
 			\caption{SegPC}
 		\end{subfigure}
-		\begin{subfigure}{\linewidth}
+		\begin{subfigure}{0.27\linewidth}
 			\centering
 			\includegraphics[width=\textwidth]{images/glas_test_pxl_self_hard_dice_rho_entropy.pdf}
 			\caption{GlaS}
+		\end{subfigure}
+		\begin{subfigure}{0.16\linewidth}
+			\centering
+			\raisebox{2cm}{\includegraphics[width=\textwidth]{images/legende.pdf}}
 		\end{subfigure}
 	\end{figure}
 \end{frame}
 
 
-% \begin{frame}{Results}
-% 	\framesubtitle{Self-training at fixed $n_l$ - SegPC and GlaS}
-% 	\begin{figure}
-% 		\begin{subfigure}{\textwidth}
-% 			\centering
-% 			\caption{Glas}
-% 			\includegraphics[width=\textwidth]{images/glas_test_pxl_self_hard_dice_rho.pdf}
-% 		\end{subfigure}
-% 		\begin{subfigure}{\textwidth}
-% 			\centering
-% 			\caption{SegPC}
-% 			\includegraphics[width=\textwidth]{images/segpc_test_pxl_self_hard_dice_rho.pdf}
-% 		\end{subfigure}
-% 	\end{figure}
-% \end{frame}
 
-% \begin{frame}{Results}
-% \framesubtitle{Label sparsely or exhaustively ?}
-% 	\begin{itemize}
-% 		\item The answser is dataset-dependant !
-% 		\item MoNuSeg: annotation budget better spent on sparse labeling (later used with self-training)
-% 		\item Others: annotation better spent on exhaustive labeling and using supervised training
-% 	\end{itemize}
-% 	\begin{figure}
-% 		\centering
-% 		\begin{subfigure}{0.32\textwidth}
-% 			\includegraphics[width=\textwidth]{images/annot_strat_monuseg.pdf}
-% 			\caption{MoNuSeg}
-% 		\end{subfigure}
-% 		\begin{subfigure}{0.32\textwidth}
-% 			\includegraphics[width=\textwidth]{images/annot_strat_glas.pdf}
-% 			\caption{GlaS}
-% 		\end{subfigure}
-% 		\begin{subfigure}{0.32\textwidth}
-% 			\includegraphics[width=\textwidth]{images/annot_strat_segpc.pdf}
-% 			\caption{SegPC}
-% 		\end{subfigure}
-% 	\end{figure}
-% \end{frame}
 
 \begin{frame}{Results}
-\framesubtitle{Application to Thyroid FNAB}
+\framesubtitle{Application to Thyroid FNAB - quantitative}
 
 \vfill
 \begin{center}
@@ -1180,41 +1144,30 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
     \hline
   \end{tabular}
 \end{table}
-\vfill
 
-\begin{figure}
-	\centering
-	\begin{subfigure}{0.32\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{images/thyroid_wsi_example1.png}	
-	\end{subfigure}
-	\begin{subfigure}{0.32\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{images/thyroid_wsi_example2.png}	
-	\end{subfigure}
-	\begin{subfigure}{0.32\textwidth}
-		\centering
-		\includegraphics[width=\textwidth]{images/thyroid_wsi_example3.png}	
-	\end{subfigure}
-\end{figure}
 \end{frame}
 
+\begin{frame}{Results}
+	\framesubtitle{Application to Thyroid FNAB - qualitative}
+	
+	\begin{figure}
+		\centering
+		\begin{subfigure}{0.32\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/thyroid_wsi_example1.png}	
+		\end{subfigure}
+		\begin{subfigure}{0.32\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/thyroid_wsi_example2.png}	
+		\end{subfigure}
+		\begin{subfigure}{0.32\textwidth}
+			\centering
+			\includegraphics[width=\textwidth]{images/thyroid_wsi_example3.png}	
+		\end{subfigure}
+	\end{figure}
+	\end{frame}
 
-\begin{frame}{Conclusion}
-	\begin{itemize}
-		\item Self-training can be used to obtain competitive segmentation performance with less annotations !
-		\item Some datasets might benefit more from sparse labeling then exhaustive labeling
-	\end{itemize}
-	\vfill
-	Future works:
-	\begin{itemize}
-		\item From binary to multi-class segmentation
-		\item How does the type of dataset impact the performance ?
-		\item Study the interest of the method in low scarcity conditions
-	\end{itemize}
-\end{frame}
-
-\section{Conclusion of the thesis}
+\section{Conclusions of the thesis}
 \begin{frame}{Conclusion of the thesis}
 	\vfill
 	\begin{exampleblock}{}
@@ -1230,27 +1183,32 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 \end{frame}
 
 \section{Future works}
-\begin{frame}{Perspectives}
+\begin{frame}{Future perspectives}
+	\vfill
 	\begin{itemize}
 		\item Transfer learning with new architectures 
 		\item Consider more tasks and type of tasks (\textit{e.g.}~ detection, segmentation)
 		\item Self-training as an interactive annotation algorithm
-		\item Systematic benchmarking of representation learning in pathology
+		\item Systematic review and benchmarking of representation learning in pathology
+		\item Integration of our algorithms for actual applications:
 	\end{itemize}
-\end{frame}
-
-\begin{frame}{Self-trained model integration in a workflow}
-	Workflow to detect atypical cells.  
 	\begin{figure}
-		\includegraphics[width=\textwidth]{images/pipeline.pdf}		
+		\includegraphics[width=\linewidth]{images/pipeline.pdf}		
+		\caption*{\tiny Segment with self-training - classify with a multi-task pre-trained model.}
 	\end{figure}
+	\vfill
 \end{frame}
 
+{
+\usebackgroundtemplate{\includegraphics[height=\paperheight]{images/th-1024x0-illus_thesis_rmormont.png}}
 \begin{frame}
 	\vfill
-	{\Large Thank you !}
+	\begin{center}
+	{\Large \bf Thank you !}
+	\end{center}
 	\vfill
 \end{frame}
+}
 
 %\begin{frame}{Deep learning}
 %\vspace*{-0.5cm}
@@ -1361,5 +1319,45 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 		\item Soft label: use $\hat{y}_{ij}$ as-is 
 		\item Hard label: 1 if $\hat{y}_{ij} > T$, 0 otherwise. $T$ is an auto-calibrated threshold. 
 	\end{itemize}
+\end{frame}
+
+\begin{frame}{Results}
+	\framesubtitle{Self-training at fixed $n_l$ - SegPC and GlaS}
+	\begin{figure}
+		\begin{subfigure}{\textwidth}
+			\centering
+			\caption{Glas}
+			\includegraphics[width=\textwidth]{images/glas_test_pxl_self_hard_dice_rho.pdf}
+		\end{subfigure}
+		\begin{subfigure}{\textwidth}
+			\centering
+			\caption{SegPC}
+			\includegraphics[width=\textwidth]{images/segpc_test_pxl_self_hard_dice_rho.pdf}
+		\end{subfigure}
+	\end{figure}
+\end{frame}
+
+\begin{frame}{Results}
+\framesubtitle{Label sparsely or exhaustively ?}
+	\begin{itemize}
+		\item The answser is dataset-dependant !
+		\item MoNuSeg: annotation budget better spent on sparse labeling (later used with self-training)
+		\item Others: annotation better spent on exhaustive labeling and using supervised training
+	\end{itemize}
+	\begin{figure}
+		\centering
+		\begin{subfigure}{0.32\textwidth}
+			\includegraphics[width=\textwidth]{images/annot_strat_monuseg.pdf}
+			\caption{MoNuSeg}
+		\end{subfigure}
+		\begin{subfigure}{0.32\textwidth}
+			\includegraphics[width=\textwidth]{images/annot_strat_glas.pdf}
+			\caption{GlaS}
+		\end{subfigure}
+		\begin{subfigure}{0.32\textwidth}
+			\includegraphics[width=\textwidth]{images/annot_strat_segpc.pdf}
+			\caption{SegPC}
+		\end{subfigure}
+	\end{figure}
 \end{frame}
 \end{document}
