@@ -61,6 +61,7 @@
 \setbeamertemplate{sections/subsections in toc}[circle]
 \setbeamertemplate{itemize items}[circle]
 \setbeamertemplate{itemize subitem}[square]
+\setbeamertemplate{page number in head/foot}[appendixframenumber]
 
 \setbeamertemplate{enumerate items}[circle]
 \setbeamercolor{section in head/foot}{parent=palette primary}
@@ -116,7 +117,7 @@
 
 \section{Introduction}
 \begin{frame}{Introduction}
-	\hfill
+	\vfill
 	\begin{figure}
 		\begin{subfigure}{0.27\textwidth}
 			\centering
@@ -134,8 +135,7 @@
 	\begin{center}
 	``\textit{Digital pathology incorporates the acquisition, management, sharing and \textbf{interpretation} of pathology information — including slides and data — in a digital environment}" 
 	\end{center}
-	\hfill
-	{\tiny\textit{left:} institutions.ville-geneve.ch, \textit{center:} verywellhealth.com, \textit{right:} healthcare-in-europe.com}
+	\vfill
 \end{frame}
 
 \subsection{Pathology workflow}
@@ -158,6 +158,14 @@
 	
 	\vfill
 \end{frame}
+
+
+
+
+\begin{frame}{Cytomine}
+\includegraphics[width=\linewidth]{images/cytomine.png}
+\end{frame}
+
 
 \subsection{Computer-aided pathology}
 \begin{frame}{Why computer-aided pathology}
@@ -192,9 +200,6 @@
 Computational methods can improve analysis \textbf{reliability and speed} therefore \textbf{improving patient outcome and costs}. 
 \end{center}
 \vfill
-\end{frame}
-
-\begin{frame}{Cytomine}
 \end{frame}
 
 \begin{frame}{Using machine and deep learning}
@@ -1187,9 +1192,9 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\vfill
 	\begin{itemize}
 		\item Transfer learning with new architectures 
+		\item Systematic review and benchmarking of representation learning in pathology
 		\item Consider more tasks and type of tasks (\textit{e.g.}~ detection, segmentation)
 		\item Self-training as an interactive annotation algorithm
-		\item Systematic review and benchmarking of representation learning in pathology
 		\item Integration of our algorithms for actual applications:
 	\end{itemize}
 	\begin{figure}
@@ -1199,6 +1204,7 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\vfill
 \end{frame}
 
+\section{Thank you}
 {
 \usebackgroundtemplate{\includegraphics[height=\paperheight]{images/th-1024x0-illus_thesis_rmormont.png}}
 \begin{frame}
@@ -1209,6 +1215,8 @@ Compared to ImageNet feature extractors, ours either improve or provide comparab
 	\vfill
 \end{frame}
 }
+
+\appendix
 
 %\begin{frame}{Deep learning}
 %\vspace*{-0.5cm}
