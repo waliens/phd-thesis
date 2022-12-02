@@ -1,7 +1,0 @@
-\babel@toc {british}{}\relax 
-\beamer@sectionintoc {1}{PhD defense}{1}{0}{1}
-\beamer@sectionintoc {2}{Introduction}{2}{0}{2}
-\beamer@sectionintoc {3}{Contributions}{8}{0}{3}
-\beamer@sectionintoc {4}{Transfer from ImageNet}{9}{0}{4}
-\beamer@sectionintoc {5}{Transfer from pathology data}{17}{0}{5}
-\beamer@sectionintoc {6}{Self-training}{18}{0}{6}
