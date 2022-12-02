@@ -118,8 +118,8 @@ The number of rounds $W$ and $E$ and the number of training iteration per round 
 
 As a training loss, we average the per-pixel binary cross-entropy $\ell$ over all pixels of the batch, as defined in:
 \begin{align}
-\ell(\hat{y}; y) = y \log \hat{y} + (1 - y) \log (1 - \hat{y}) \label{eqn:strain:perpixel_crossentropy} \\
-\mathcal{L} = - \frac{1}{B} \sum_{b=1}^B \frac{1}{|\mathbf{y}_b|}\sum_{i}\sum_{j} w_{ij, b} \ell(\hat{y}_{ij, b}; y_{ij,b }) 
+\ell(\hat{y}; y) = y \log \hat{y} + (1 - y) \log (1 - \hat{y}) \label{eqn:strain:perpixel_crossentropy}, \\
+\mathcal{L} = - \frac{1}{B} \sum_{b=1}^B \frac{1}{|\mathbf{y}_b|}\sum_{i}\sum_{j} w_{ij, b} \ell(\hat{y}_{ij, b}; y_{ij,b }). 
 \label{eqn:strain:overallloss}
 \end{align}
 
@@ -130,7 +130,7 @@ We use Adam \cite{kingma2014adam} as an optimizer with initial learning rate $\g
 \subsubsection{Weighting schemes}
 \label{sssec:strain:weights}
 
-Different strategies are evaluated for generating the per-pixel weight $w_{ij,b}$ in Equation \ref{eqn:strain:overallloss}. For the sake of simplicity, we will drop the batch identifier $b$ in the subsequent equations and denote this weight by $w_{ij}$. We introduced this weight term to have the possibility to tune the contribution of pseudo-labeled pixels when computing the loss. It is important to note that this weight only applies to pseudo-labeled pixels and, therefore, the ground truth pixels will always be attributed a weight of $w_{ij} = 1$. It is also important to note that the weight is inserted as a constant in our loss and the weight function is not differentiated during back-propagation. 
+Different strategies are evaluated for generating the per-pixel weight $w_{ij,b}$ in Equation \ref{eqn:strain:overallloss}. For the sake of simplicity, we will drop the batch sample identifier $b$ in the subsequent equations and denote this weight by $w_{ij}$. We introduced this weight term to have the possibility to tune the contribution of pseudo-labeled pixels when computing the loss. It is important to note that this weight only applies to pseudo-labeled pixels and, therefore, the ground truth pixels will always be attributed a weight of $w_{ij} = 1$. It is also important to note that the weight is inserted as a constant in our loss and the weight function is not differentiated during back-propagation. 
 
 We study five different weighting strategies each producing an intermediate weight $w^{\xi}_{ij}$ where $\xi$ is the strategy identifier. Because we want to avoid the amplitude of the loss and gradients to be impacted by the weighting strategy, we normalize it to obtain the final weight $w_{ij} = w^{\xi}_{ij}/\overline{w}^{\xi},$
 %\begin{equation}
